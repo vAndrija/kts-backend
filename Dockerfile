@@ -13,6 +13,6 @@ FROM openjdk:16-alpine3.13
 
 WORKDIR /app
 
-COPY --from=MAVEN_BUILD /build/target/demo-0.0.1-SNAPSHOT.jar /app/
+COPY --from=MAVEN_BUILD /build/target/restaurant-0.0.1-SNAPSHOT.jar /app/
 
-ENTRYPOINT ["java", "-jar", "demo-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "restaurant-0.0.1-SNAPSHOT.jar"]
