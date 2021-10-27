@@ -1,1 +1,1 @@
-# kts-backend project
+# kts-backend
