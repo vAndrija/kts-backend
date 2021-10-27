@@ -12,6 +12,6 @@ public class Test {
 
     @GetMapping("")
     public String hello(){
-        return "Gdje ste sokolovi";
+        return "Gdje ste sokolovii";
     }
 }
