@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "cook")
-@PrimaryKeyJoinColumn(name = "user")
+@PrimaryKeyJoinColumn(name = "users")
 @SQLDelete(sql = "UPDATE cook SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 public class Cook extends User {

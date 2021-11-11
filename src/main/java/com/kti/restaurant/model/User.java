@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Inheritance(strategy=InheritanceType.JOINED)
 @SQLDelete(sql = "UPDATE user SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
