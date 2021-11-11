@@ -1,4 +1,4 @@
-package model;
+package com.kti.restaurant.model;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -8,10 +8,10 @@ import javax.persistence.Table;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "price_item")
-@SQLDelete(sql = "UPDATE price_item SET deleted = true WHERE id=?")
+@Table(name = "salary")
+@SQLDelete(sql = "UPDATE salary SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
-public class PriceItem {
+public class Salary {
     @Version
     @Column(name = "version", columnDefinition = "integer DEFAULT 0", nullable = false)
     private Long version;
@@ -21,8 +21,6 @@ public class PriceItem {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    private Boolean deleted = Boolean.FALSE;
-
     private Double value;
 
     private LocalDate startDate;
@@ -30,20 +28,17 @@ public class PriceItem {
     private LocalDate endDate;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private MenuItem menuItem;
+    private User user;
 
-    private Boolean isCurrent;
+    private Boolean deleted = Boolean.FALSE;
 
-    public PriceItem(Boolean deleted, Double value, LocalDate startDate, LocalDate endDate, MenuItem menuItem, Boolean isCurrent) {
-        this.deleted = deleted;
+    public Salary(Double value, LocalDate startDate, LocalDate endDate) {
         this.value = value;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.menuItem = menuItem;
-        this.isCurrent = isCurrent;
     }
 
-    public PriceItem() {
+    public Salary() {
 
     }
 
@@ -61,14 +56,6 @@ public class PriceItem {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
     }
 
     public Double getValue() {
@@ -93,21 +80,5 @@ public class PriceItem {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
-    }
-
-    public MenuItem getMenuItem() {
-        return menuItem;
-    }
-
-    public void setMenuItem(MenuItem menuItem) {
-        this.menuItem = menuItem;
-    }
-
-    public Boolean getCurrent() {
-        return isCurrent;
-    }
-
-    public void setCurrent(Boolean current) {
-        isCurrent = current;
     }
 }

@@ -1,7 +1,7 @@
-package model;
+package com.kti.restaurant.model;
 
-import model.enums.MenuItemCategory;
-import model.enums.MenuItemType;
+import com.kti.restaurant.model.enums.MenuItemCategory;
+import com.kti.restaurant.model.enums.MenuItemType;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 

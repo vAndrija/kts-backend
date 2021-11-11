@@ -1,15 +1,16 @@
-package model;
+package com.kti.restaurant.model;
 
+import com.kti.restaurant.model.enums.OrderItemStatus;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "notification")
-@SQLDelete(sql = "UPDATE notification SET deleted = true WHERE id=?")
+@Table(name = "order_item")
+@SQLDelete(sql = "UPDATE order_item SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
-public class Notification {
+public class OrderItem {
     @Version
     @Column(name = "version", columnDefinition = "integer DEFAULT 0", nullable = false)
     private Long version;
@@ -21,10 +22,19 @@ public class Notification {
 
     private Boolean deleted = Boolean.FALSE;
 
-    private String message;
+    private Integer quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private String note;
+
+    private OrderItemStatus status;
+
+    private Integer priority;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private Order order;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private MenuItem menuItem;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Bartender bartender;
@@ -32,14 +42,18 @@ public class Notification {
     @ManyToOne(fetch = FetchType.LAZY)
     private Cook cook;
 
-    public Notification(String message, Order order, Bartender bartender, Cook cook) {
-        this.message = message;
+    public OrderItem(Integer quantity, String note, OrderItemStatus status, Integer priority, Order order, MenuItem menuItem, Bartender bartender, Cook cook) {
+        this.quantity = quantity;
+        this.note = note;
+        this.status = status;
+        this.priority = priority;
         this.order = order;
+        this.menuItem = menuItem;
         this.bartender = bartender;
         this.cook = cook;
     }
 
-    public Notification() {
+    public OrderItem() {
 
     }
 
@@ -67,12 +81,36 @@ public class Notification {
         this.deleted = deleted;
     }
 
-    public String getMessage() {
-        return message;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public OrderItemStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderItemStatus status) {
+        this.status = status;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 
     public Order getOrder() {
@@ -81,6 +119,14 @@ public class Notification {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public MenuItem getMenuItem() {
+        return menuItem;
+    }
+
+    public void setMenuItem(MenuItem menuItem) {
+        this.menuItem = menuItem;
     }
 
     public Bartender getBartender() {

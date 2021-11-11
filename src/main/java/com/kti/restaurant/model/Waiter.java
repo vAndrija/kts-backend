@@ -1,4 +1,4 @@
-package model;
+package com.kti.restaurant.model;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -8,10 +8,10 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "admin")
+@Table(name = "waiter")
 @PrimaryKeyJoinColumn(name = "user")
-@SQLDelete(sql = "UPDATE admin SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE waiter SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
-public class Admin extends User {
+public class Waiter extends User {
 
 }

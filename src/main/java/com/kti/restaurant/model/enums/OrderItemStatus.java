@@ -1,4 +1,4 @@
-package model.enums;
+package com.kti.restaurant.model.enums;
 
 public enum OrderItemStatus {
     ORDERED,

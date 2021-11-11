@@ -1,6 +1,6 @@
-package model;
+package com.kti.restaurant.model;
 
-import model.enums.OrderStatus;
+import com.kti.restaurant.model.enums.OrderStatus;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 

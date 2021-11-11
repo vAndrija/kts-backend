@@ -1,4 +1,4 @@
-package model;
+package com.kti.restaurant.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;

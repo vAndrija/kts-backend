@@ -1,4 +1,4 @@
-package model;
+package com.kti.restaurant.model;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
