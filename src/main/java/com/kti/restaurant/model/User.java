@@ -1,12 +1,18 @@
 package com.kti.restaurant.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.Table;
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -14,7 +20,7 @@ import java.util.List;
 @Inheritance(strategy=InheritanceType.JOINED)
 @SQLDelete(sql = "UPDATE user SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
-public abstract class User {
+public abstract class User implements UserDetails {
     @Version
     @Column(name = "version", columnDefinition = "integer DEFAULT 0", nullable = false)
     private Long version;
@@ -39,17 +45,19 @@ public abstract class User {
 
     private Boolean deleted = Boolean.FALSE;
 
+    @Column(name = "last_password_reset_date")
+    private Timestamp lastPasswordResetDate;
+
+    @Column(name = "enabled")
+    private boolean enabled;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 
-//    @JsonIgnore
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return this.roles;
-//    }
+
 
     public User(String lastName, String name, String phoneNumber, String emailAddress, String password, String accountNumber) {
         this.lastName = lastName;
@@ -62,6 +70,12 @@ public abstract class User {
 
     public User() {
 
+    }
+
+    @JsonIgnore
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles;
     }
 
     public Long getVersion() {
@@ -127,4 +141,53 @@ public abstract class User {
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
+
+    public Timestamp getLastPasswordResetDate() {
+        return lastPasswordResetDate;
+    }
+
+    public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getUsername() {
+        return emailAddress;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+
 }

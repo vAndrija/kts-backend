@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "order")
+@Table(name = "restaurant_order")
 @SQLDelete(sql = "UPDATE order SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 public class Order {
