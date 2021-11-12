@@ -1,5 +1,6 @@
 package com.kti.restaurant.model;
 
+import com.kti.restaurant.dto.MenuItemDto;
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
 import org.hibernate.annotations.SQLDelete;
@@ -38,18 +39,24 @@ public class MenuItem {
     private Menu menu;
 
     public MenuItem(String name, String description, Boolean accepted, MenuItemType type, MenuItemCategory category,
-                    Boolean deleted, Menu menu) {
+                    Menu menu) {
         this.name = name;
         this.description = description;
         this.accepted = accepted;
         this.type = type;
         this.category = category;
-        this.deleted = deleted;
         this.menu = menu;
     }
 
     public MenuItem() {
 
+    }
+
+    public MenuItem(MenuItemDto menuItemDto) {
+        this.name = menuItemDto.getName();
+        this.description = menuItemDto.getDescription();
+        this.type = menuItemDto.getType();
+        this.category = menuItemDto.getCategory();
     }
 
     public Long getVersion() {
