@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "menu_item")
-@SQLDelete(sql = "UPDATE menu_item SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE menu_item SET deleted = true WHERE id=? AND version = ?")
 @Where(clause = "deleted=false")
 public class MenuItem {
     @Version
@@ -38,18 +38,33 @@ public class MenuItem {
     private Menu menu;
 
     public MenuItem(String name, String description, Boolean accepted, MenuItemType type, MenuItemCategory category,
-                    Boolean deleted, Menu menu) {
+                    Menu menu) {
         this.name = name;
         this.description = description;
         this.accepted = accepted;
         this.type = type;
         this.category = category;
-        this.deleted = deleted;
         this.menu = menu;
     }
 
     public MenuItem() {
 
+    }
+
+    public MenuItem(String name, String description, MenuItemCategory category, MenuItemType type) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.type = type;
+    }
+
+    public MenuItem(Integer id, String name, String description, Boolean accepted, MenuItemType type, MenuItemCategory category, Menu menu) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.type = type;
+        this.id = id;
+        this.accepted = accepted;
     }
 
     public Long getVersion() {
