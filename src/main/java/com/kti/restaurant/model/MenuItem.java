@@ -1,6 +1,5 @@
 package com.kti.restaurant.model;
 
-import com.kti.restaurant.dto.MenuItemDto;
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
 import org.hibernate.annotations.SQLDelete;
@@ -11,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "menu_item")
-@SQLDelete(sql = "UPDATE menu_item SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE menu_item SET deleted = true WHERE id=? AND version = ?")
 @Where(clause = "deleted=false")
 public class MenuItem {
     @Version
@@ -52,11 +51,20 @@ public class MenuItem {
 
     }
 
-    public MenuItem(MenuItemDto menuItemDto) {
-        this.name = menuItemDto.getName();
-        this.description = menuItemDto.getDescription();
-        this.type = menuItemDto.getType();
-        this.category = menuItemDto.getCategory();
+    public MenuItem(String name, String description, MenuItemCategory category, MenuItemType type) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.type = type;
+    }
+
+    public MenuItem(Integer id, String name, String description, Boolean accepted, MenuItemType type, MenuItemCategory category, Menu menu) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.type = type;
+        this.id = id;
+        this.accepted = accepted;
     }
 
     public Long getVersion() {

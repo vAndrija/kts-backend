@@ -1,9 +1,10 @@
 package com.kti.restaurant.controller;
 
-import com.kti.restaurant.dto.MenuItemDto;
-import com.kti.restaurant.dto.UpdateMenuItemDto;
+import com.kti.restaurant.dto.menuitem.CreateMenuItemDto;
+import com.kti.restaurant.dto.menuitem.UpdateMenuItemDto;
+import com.kti.restaurant.mapper.MenuItemMapper;
 import com.kti.restaurant.model.MenuItem;
-import com.kti.restaurant.service.MenuItemService;
+import com.kti.restaurant.service.contract.IMenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,21 +14,25 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "api/menu-items")
+@RequestMapping(value = "api/v1/menu-items")
 public class MenuItemController {
+
+    private IMenuItemService menuItemService;
+    private MenuItemMapper menuItemMapper;
+
     @Autowired
-    private MenuItemService menuItemService;
+    MenuItemController(IMenuItemService menuItemService, MenuItemMapper menuItemMapper) {
+        this.menuItemService = menuItemService;
+        this.menuItemMapper = menuItemMapper;
+    }
 
     @PostMapping("")
-    public ResponseEntity<?> createMenuItem(@RequestBody MenuItemDto menuItemDto) {
+    public ResponseEntity<?> createMenuItem(@RequestBody CreateMenuItemDto menuItemDto) {
         try {
-            System.out.println("CAO");
-
-            MenuItem menuItem = menuItemService.create(menuItemDto);
-            System.out.println("CAO");
+            MenuItem menuItem = menuItemService.create(menuItemMapper.fromCreateMenuItemDtoToMenuItem(menuItemDto));
 
             if(menuItem != null) {
-                return new ResponseEntity<>(menuItem, HttpStatus.OK);
+                return new ResponseEntity<>(menuItem, HttpStatus.CREATED);
             }
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -38,7 +43,7 @@ public class MenuItemController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MenuItem> getMenuItemById(@PathVariable Integer id) {
-        return new ResponseEntity<>(menuItemService.findOne(id), HttpStatus.OK);
+        return new ResponseEntity<>(menuItemService.findById(id), HttpStatus.OK);
     }
 
     @GetMapping("")
@@ -49,16 +54,17 @@ public class MenuItemController {
     @PutMapping("")
     public ResponseEntity<MenuItem> updateMenuItem(@RequestBody UpdateMenuItemDto updateMenuItemDto) {
         try {
-            return new ResponseEntity<>(menuItemService.update(updateMenuItemDto), HttpStatus.OK);
+            return new ResponseEntity<>(menuItemService.update(menuItemMapper.fromUpdateMenuItemDtoToMenuItem(updateMenuItemDto)),
+                    HttpStatus.OK);
         }
         catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @DeleteMapping("/{id}")
+    @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
     public ResponseEntity<?> deleteMenuItem(@PathVariable Integer id) {
         menuItemService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

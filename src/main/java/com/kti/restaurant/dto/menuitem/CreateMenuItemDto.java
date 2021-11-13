@@ -1,9 +1,9 @@
-package com.kti.restaurant.dto;
+package com.kti.restaurant.dto.menuitem;
 
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
 
-public class UpdateMenuItemDto {
+public class CreateMenuItemDto {
     private String name;
 
     private String description;
@@ -12,24 +12,14 @@ public class UpdateMenuItemDto {
 
     private MenuItemCategory category;
 
-    private Integer id;
-
-    private Integer menu;
-
-    private Boolean accepted;
-
-    public UpdateMenuItemDto(Integer id, String name, String description, MenuItemType type, MenuItemCategory category,
-                             Integer menu, Boolean accepted) {
-        this.id = id;
+    public CreateMenuItemDto(String name, String description, MenuItemType type, MenuItemCategory category) {
         this.name = name;
         this.description = description;
         this.type = type;
         this.category = category;
-        this.accepted = accepted;
-        this.menu = menu;
     }
 
-    public UpdateMenuItemDto() {
+    public CreateMenuItemDto() {
 
     }
 
@@ -63,29 +53,5 @@ public class UpdateMenuItemDto {
 
     public void setCategory(MenuItemCategory category) {
         this.category = category;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getMenu() {
-        return menu;
-    }
-
-    public void setMenu(Integer menu) {
-        this.menu = menu;
-    }
-
-    public Boolean getAccepted() {
-        return accepted;
-    }
-
-    public void setAccepted(Boolean accepted) {
-        this.accepted = accepted;
     }
 }
