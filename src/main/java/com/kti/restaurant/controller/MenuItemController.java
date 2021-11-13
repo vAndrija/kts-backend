@@ -47,14 +47,9 @@ public class MenuItemController {
     }
 
     @PutMapping("")
-    public ResponseEntity<MenuItem> updateMenuItem(@RequestBody UpdateMenuItemDto updateMenuItemDto) {
-        try {
+    public ResponseEntity<?> updateMenuItem(@RequestBody UpdateMenuItemDto updateMenuItemDto) throws Exception {
             return new ResponseEntity<>(menuItemService.update(menuItemMapper.fromUpdateMenuItemDtoToMenuItem(updateMenuItemDto)),
                     HttpStatus.OK);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
