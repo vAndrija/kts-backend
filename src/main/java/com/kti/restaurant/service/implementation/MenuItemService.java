@@ -28,7 +28,7 @@ public class MenuItemService implements IMenuItemService {
     }
 
     @Override
-    public MenuItem create(MenuItem menuItem) throws Exception {
+    public MenuItem create(MenuItem menuItem) {
         return menuItemRepository.save(menuItem);
     }
 

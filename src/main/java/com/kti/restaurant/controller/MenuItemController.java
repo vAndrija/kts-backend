@@ -28,17 +28,12 @@ public class MenuItemController {
 
     @PostMapping("")
     public ResponseEntity<?> createMenuItem(@RequestBody CreateMenuItemDto menuItemDto) {
-        try {
-            MenuItem menuItem = menuItemService.create(menuItemMapper.fromCreateMenuItemDtoToMenuItem(menuItemDto));
+        MenuItem menuItem = menuItemService.create(menuItemMapper.fromCreateMenuItemDtoToMenuItem(menuItemDto));
 
-            if(menuItem != null) {
-                return new ResponseEntity<>(menuItem, HttpStatus.CREATED);
-            }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if(menuItem != null) {
+            return new ResponseEntity<>(menuItem, HttpStatus.CREATED);
         }
-        catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/{id}")

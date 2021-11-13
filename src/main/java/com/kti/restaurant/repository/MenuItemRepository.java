@@ -1,9 +1,7 @@
 package com.kti.restaurant.repository;
 
 import com.kti.restaurant.model.MenuItem;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.UUID;
-
-public interface MenuItemRepository extends PagingAndSortingRepository<MenuItem, Integer> {
+public interface MenuItemRepository extends JpaRepository<MenuItem, Integer> {
 }
