@@ -29,7 +29,6 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
 
 
-
     @Autowired
     public AuthenticationController(UserService userService, TokenUtils tokenUtils, AuthenticationManager authenticationManager){
         this.userService = userService;
