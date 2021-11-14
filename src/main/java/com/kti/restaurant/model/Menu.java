@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "menu")
-@SQLDelete(sql = "UPDATE menu SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE menu SET deleted = true WHERE id=? AND version = ?")
 @Where(clause = "deleted=false")
 public class Menu {
     @Version
@@ -23,17 +23,23 @@ public class Menu {
 
     private Boolean deleted = Boolean.FALSE;
 
-    private String Name;
+    private String name;
 
     private LocalDateTime durationStart;
 
     private LocalDateTime durationEnd;
 
-    public Menu(Boolean deleted, String name, LocalDateTime durationStart, LocalDateTime durationEnd) {
-        this.deleted = deleted;
-        Name = name;
+    public Menu(String name, LocalDateTime durationStart, LocalDateTime durationEnd) {
+        this.name = name;
         this.durationStart = durationStart;
         this.durationEnd = durationEnd;
+    }
+
+    public Menu(String name, LocalDateTime durationStart, LocalDateTime durationEnd, Integer id) {
+        this.name = name;
+        this.durationStart = durationStart;
+        this.durationEnd = durationEnd;
+        this.id = id;
     }
 
     public Menu() {
@@ -65,11 +71,11 @@ public class Menu {
     }
 
     public String getName() {
-        return Name;
+        return this.name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public LocalDateTime getDurationStart() {

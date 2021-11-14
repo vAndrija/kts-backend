@@ -65,6 +65,7 @@ public class MenuItem {
         this.type = type;
         this.id = id;
         this.accepted = accepted;
+        this.menu = menu;
     }
 
     public Long getVersion() {

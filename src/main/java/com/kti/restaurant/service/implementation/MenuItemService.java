@@ -1,5 +1,6 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.repository.MenuItemRepository;
 import com.kti.restaurant.service.contract.IMenuItemService;
@@ -39,14 +40,13 @@ public class MenuItemService implements IMenuItemService {
 
     @Override
     public MenuItem update(MenuItem menuItem) throws Exception {
-        MenuItem menuItemToUpdate = menuItemRepository.findById(menuItem.getId()).get();
+        MenuItem menuItemToUpdate = menuItemRepository.findById(menuItem.getId()).orElse(null);
 
         if(menuItemToUpdate == null) {
-            throw new Exception("Entity with given id does not exist in the system.");
+            throw new MissingEntityException("Menu item with given id does not exist in the system.");
         }
 
-//        kad dodas menu servis ovde staviti pronalazenje menija i njegovo umetanje
-//        menuItemToUpdate.setMenu(updateMenuItemDto.getMenu());
+        menuItemToUpdate.setMenu(menuItem.getMenu());
         menuItemToUpdate.setAccepted(menuItem.getAccepted());
         menuItemToUpdate.setCategory(menuItem.getCategory());
         menuItemToUpdate.setDescription(menuItem.getDescription());
