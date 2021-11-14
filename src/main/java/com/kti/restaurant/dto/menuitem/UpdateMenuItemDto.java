@@ -3,19 +3,30 @@ package com.kti.restaurant.dto.menuitem;
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+
 public class UpdateMenuItemDto {
+    @NotEmpty(message = "Name should not be null or empty")
     private String name;
 
+    @NotEmpty(message = "Description should not be null or empty")
     private String description;
 
+    @NotNull(message = "Type should not be null")
     private MenuItemType type;
 
+    @NotNull(message = "Category should not be null")
     private MenuItemCategory category;
 
+    @NotNull(message = "Id should not be null or empty")
     private Integer id;
 
-    private Integer menu;
+    @NotNull(message = "Menu id should not be null or empty")
+    private Integer menuId;
 
+    @NotNull(message = "Accepted should not be null or empty")
     private Boolean accepted;
 
     public UpdateMenuItemDto(Integer id, String name, String description, MenuItemType type, MenuItemCategory category,
@@ -26,7 +37,7 @@ public class UpdateMenuItemDto {
         this.type = type;
         this.category = category;
         this.accepted = accepted;
-        this.menu = menu;
+        this.menuId = menu;
     }
 
     public UpdateMenuItemDto() {
@@ -73,12 +84,12 @@ public class UpdateMenuItemDto {
         this.id = id;
     }
 
-    public Integer getMenu() {
-        return menu;
+    public Integer getMenuId() {
+        return menuId;
     }
 
-    public void setMenu(Integer menu) {
-        this.menu = menu;
+    public void setMenuId(Integer menu) {
+        this.menuId = menu;
     }
 
     public Boolean getAccepted() {

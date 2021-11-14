@@ -3,13 +3,21 @@ package com.kti.restaurant.dto.menuitem;
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+
 public class CreateMenuItemDto {
+    @NotEmpty(message = "Name should not be null or empty")
     private String name;
 
+    @NotEmpty(message = "Description should not be null or empty")
     private String description;
 
+    @NotNull(message = "Type should not be null")
     private MenuItemType type;
 
+    @NotNull(message = "Category should not be null")
     private MenuItemCategory category;
 
     public CreateMenuItemDto(String name, String description, MenuItemType type, MenuItemCategory category) {

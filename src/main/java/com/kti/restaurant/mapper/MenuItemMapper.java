@@ -2,10 +2,14 @@ package com.kti.restaurant.mapper;
 
 import com.kti.restaurant.dto.menuitem.CreateMenuItemDto;
 import com.kti.restaurant.dto.menuitem.UpdateMenuItemDto;
+import com.kti.restaurant.exception.MissingEntityException;
+import com.kti.restaurant.model.Menu;
 import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.service.contract.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.validation.Valid;
 
 @Component
 public class MenuItemMapper {
@@ -21,9 +25,18 @@ public class MenuItemMapper {
                 menuItemDto.getType());
     }
 
-    //promeniti kada se dogovorimo sta cemo u vezi menija
     public MenuItem fromUpdateMenuItemDtoToMenuItem(UpdateMenuItemDto menuItemDto) {
         return new MenuItem(menuItemDto.getId(), menuItemDto.getName(), menuItemDto.getDescription(), menuItemDto.getAccepted(),
-                menuItemDto.getType(), menuItemDto.getCategory(), menuService.findById(menuItemDto.getMenu()));
+                menuItemDto.getType(), menuItemDto.getCategory(), findMenuById(menuItemDto.getMenuId()));
+    }
+
+    private Menu findMenuById(Integer id) {
+        Menu menu = menuService.findById(id);
+
+        if (menu == null) {
+            throw new MissingEntityException("The menu with given id does not exist in the system.");
+        }
+
+        return menu;
     }
 }

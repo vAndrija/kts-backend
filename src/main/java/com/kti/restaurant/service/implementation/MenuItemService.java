@@ -25,7 +25,7 @@ public class MenuItemService implements IMenuItemService {
 
     @Override
     public MenuItem findById(Integer id) {
-        return menuItemRepository.findById(id).orElseGet(null);
+        return menuItemRepository.findById(id).orElse(null);
     }
 
     @Override
