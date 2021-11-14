@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "restaurant_order")
-@SQLDelete(sql = "UPDATE order SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE restaurant_order SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 public class Order {
     @Version
