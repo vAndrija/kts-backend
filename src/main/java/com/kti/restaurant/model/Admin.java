@@ -14,4 +14,15 @@ import javax.persistence.Table;
 @Where(clause = "deleted=false")
 public class Admin extends User {
 
+    public Admin(String lastName, String name, String phoneNumber, String emailAddress, String password, String accountNumber) {
+        super(lastName, name, phoneNumber, emailAddress, password, accountNumber);
+    }
+
+    public Admin(String lastName, String name, String phoneNumber, String emailAddress, String accountNumber) {
+        super(lastName, name, phoneNumber, emailAddress, accountNumber);
+    }
+
+    public Admin() {
+        super();
+    }
 }
