@@ -24,12 +24,12 @@ public class PriceItemService implements IPriceItemService {
     }
 
     @Override
-    public PriceItem findById(Integer id) {
+    public PriceItem findById(Integer id) throws Exception {
         return priceItemRepository.findById(id).orElse(null);
     }
 
     @Override
-    public PriceItem create(PriceItem entity) {
+    public PriceItem create(PriceItem entity) throws Exception {
         return priceItemRepository.save(entity);
     }
 
@@ -37,7 +37,7 @@ public class PriceItemService implements IPriceItemService {
     public PriceItem update(PriceItem entity) throws Exception {
         PriceItem priceItemToUpdate = priceItemRepository.getById(entity.getId());
 
-        if(priceItemToUpdate == null) {
+        if (priceItemToUpdate == null) {
             throw new MissingEntityException("The price item with given id does not exist in the system.");
         }
 
@@ -51,7 +51,7 @@ public class PriceItemService implements IPriceItemService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Integer id) throws Exception {
         priceItemRepository.deleteById(id);
     }
 }

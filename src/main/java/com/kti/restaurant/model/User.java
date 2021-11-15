@@ -68,6 +68,22 @@ public abstract class User implements UserDetails {
         this.accountNumber = accountNumber;
     }
 
+    public User(String lastName, String name, String phoneNumber, String emailAddress, String accountNumber) {
+        this.lastName = lastName;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.emailAddress = emailAddress;
+        this.accountNumber = accountNumber;
+    }
+
+    public User(Integer id, String name, String lastName, String accountNumber, String phoneNumber){
+        this.id = id;
+        this.lastName = lastName;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.accountNumber = accountNumber;
+    }
+
     public User() {
 
     }

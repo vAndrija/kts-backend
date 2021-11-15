@@ -28,7 +28,7 @@ public class MenuItemController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createMenuItem(@Valid @RequestBody CreateMenuItemDto menuItemDto) {
+    public ResponseEntity<?> createMenuItem(@Valid @RequestBody CreateMenuItemDto menuItemDto) throws Exception {
         MenuItem menuItem = menuItemService.create(menuItemMapper.fromCreateMenuItemDtoToMenuItem(menuItemDto));
 
         if(menuItem != null) {
@@ -38,7 +38,7 @@ public class MenuItemController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MenuItem> getMenuItemById(@PathVariable Integer id) {
+    public ResponseEntity<MenuItem> getMenuItemById(@PathVariable Integer id) throws Exception {
         return new ResponseEntity<>(menuItemService.findById(id), HttpStatus.OK);
     }
 
@@ -54,7 +54,7 @@ public class MenuItemController {
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
-    public ResponseEntity<?> deleteMenuItem(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteMenuItem(@PathVariable Integer id) throws Exception {
         menuItemService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
