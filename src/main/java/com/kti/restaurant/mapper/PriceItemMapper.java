@@ -20,7 +20,7 @@ public class PriceItemMapper {
         this.menuItemService = menuItemService;
     }
 
-    public PriceItem fromCreatePriceItemDtoToPriceItem(CreatePriceItemDto priceItemDto) {
+    public PriceItem fromCreatePriceItemDtoToPriceItem(CreatePriceItemDto priceItemDto) throws Exception {
         MenuItem menuItem = findMenuItemById(priceItemDto.getMenuItemId());
 
         return new PriceItem(priceItemDto.getValue(), priceItemDto.getStartDate(), priceItemDto.getEndDate(),
@@ -28,14 +28,14 @@ public class PriceItemMapper {
     }
 
     @Valid
-    public PriceItem fromUpdatePriceItemDtoToPriceItem(UpdatePriceItemDto priceItemDto) {
+    public PriceItem fromUpdatePriceItemDtoToPriceItem(UpdatePriceItemDto priceItemDto) throws Exception {
         MenuItem menuItem = findMenuItemById(priceItemDto.getMenuItemId());
 
         return new PriceItem(priceItemDto.getValue(), priceItemDto.getStartDate(), priceItemDto.getEndDate(),
                 menuItem, priceItemDto.getCurrent(), priceItemDto.getId());
     }
 
-    private MenuItem findMenuItemById(Integer id) {
+    private MenuItem findMenuItemById(Integer id) throws Exception {
         MenuItem menuItem = menuItemService.findById(id);
 
         if(menuItem == null) {

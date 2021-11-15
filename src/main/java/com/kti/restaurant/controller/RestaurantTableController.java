@@ -21,7 +21,7 @@ public class RestaurantTableController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RestaurantTable> getRestaurantTable(@PathVariable Integer id) {
+    public ResponseEntity<RestaurantTable> getRestaurantTable(@PathVariable Integer id) throws Exception {
         return new ResponseEntity<>(restaurantTableService.findById(id), HttpStatus.OK);
     }
 
@@ -31,7 +31,7 @@ public class RestaurantTableController {
     }
 
     @PostMapping("")
-    public ResponseEntity<RestaurantTable> createRestaurantTable(@RequestBody RestaurantTable restaurantTable) {
+    public ResponseEntity<RestaurantTable> createRestaurantTable(@RequestBody RestaurantTable restaurantTable) throws Exception {
         RestaurantTable restaurantTableToCreate = restaurantTableService.create(restaurantTable);
 
         if(restaurantTableToCreate != null) {
@@ -47,7 +47,7 @@ public class RestaurantTableController {
     }
 
     @RequestMapping(value="{id}", method=RequestMethod.DELETE)
-    public ResponseEntity<?> deleteRestaurantTable(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteRestaurantTable(@PathVariable Integer id) throws Exception {
         restaurantTableService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
