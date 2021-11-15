@@ -1,5 +1,6 @@
 package com.kti.restaurant.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
 import org.hibernate.annotations.SQLDelete;
@@ -35,6 +36,7 @@ public class MenuItem {
     private Boolean deleted = Boolean.FALSE;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Menu menu;
 
     public MenuItem(String name, String description, Boolean accepted, MenuItemType type, MenuItemCategory category,
