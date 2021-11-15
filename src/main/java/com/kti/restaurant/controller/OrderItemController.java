@@ -42,7 +42,7 @@ public class OrderItemController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<OrderItem> getOrderItem(@PathVariable("id") Integer id) {
+    public ResponseEntity<OrderItem> getOrderItem(@PathVariable("id") Integer id) throws Exception {
         OrderItem orderItem = orderItemService.findById(id);
         if (orderItem == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -52,7 +52,7 @@ public class OrderItemController {
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
-    public ResponseEntity<OrderItem> deleteOrderItem(@PathVariable("id") Integer id) {
+    public ResponseEntity<OrderItem> deleteOrderItem(@PathVariable("id") Integer id) throws Exception {
         orderItemService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

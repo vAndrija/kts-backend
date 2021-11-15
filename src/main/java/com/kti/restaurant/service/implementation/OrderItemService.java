@@ -18,18 +18,24 @@ public class OrderItemService implements IOrderItemService {
     }
 
     @Override
-    public List<OrderItem> findAll() { return orderItemRepository.findAll();}
+    public List<OrderItem> findAll() {
+        return orderItemRepository.findAll();
+    }
 
     @Override
-    public OrderItem findById(Integer id) { return orderItemRepository.findById(id).orElseGet(null);}
+    public OrderItem findById(Integer id) throws Exception {
+        return orderItemRepository.findById(id).orElseGet(null);
+    }
 
     @Override
-    public OrderItem create(OrderItem orderItem) { return orderItemRepository.save(orderItem); }
+    public OrderItem create(OrderItem orderItem) throws Exception {
+        return orderItemRepository.save(orderItem);
+    }
 
     @Override
     public OrderItem update(OrderItem orderItem) throws Exception {
         OrderItem orderItemToUpdate = orderItemRepository.findById(orderItem.getId()).get();
-        if(orderItemToUpdate == null){
+        if (orderItemToUpdate == null) {
             throw new Exception("Entity with given id does not exist in the system.");
         }
         orderItemToUpdate.setStatus(orderItem.getStatus());
@@ -42,5 +48,7 @@ public class OrderItemService implements IOrderItemService {
     }
 
     @Override
-    public void delete(Integer id) {orderItemRepository.deleteById(id);}
+    public void delete(Integer id) throws Exception {
+        orderItemRepository.deleteById(id);
+    }
 }

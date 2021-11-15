@@ -24,17 +24,17 @@ public class MenuItemService implements IMenuItemService {
     }
 
     @Override
-    public MenuItem findById(Integer id) {
+    public MenuItem findById(Integer id) throws Exception {
         return menuItemRepository.findById(id).orElse(null);
     }
 
     @Override
-    public MenuItem create(MenuItem menuItem) {
+    public MenuItem create(MenuItem menuItem) throws Exception {
         return menuItemRepository.save(menuItem);
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Integer id) throws Exception {
         menuItemRepository.deleteById(id);
     }
 
@@ -42,7 +42,7 @@ public class MenuItemService implements IMenuItemService {
     public MenuItem update(MenuItem menuItem) throws Exception {
         MenuItem menuItemToUpdate = menuItemRepository.findById(menuItem.getId()).orElse(null);
 
-        if(menuItemToUpdate == null) {
+        if (menuItemToUpdate == null) {
             throw new MissingEntityException("Menu item with given id does not exist in the system.");
         }
 
