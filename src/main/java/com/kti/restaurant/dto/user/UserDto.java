@@ -11,13 +11,16 @@ public class UserDto {
 
     private String emailAddress;
 
+    private String accountNumber;
+
     public UserDto(){}
 
-    public UserDto(String name, String lastName, String phoneNumber, String emailAddress) {
+    public UserDto(String name, String lastName, String phoneNumber, String emailAddress,String accountNumber) {
         this.name = name;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
+        this.accountNumber = accountNumber;
     }
 
     public String getName() {
@@ -58,6 +61,14 @@ public class UserDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 }
 
