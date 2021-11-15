@@ -39,8 +39,8 @@ public class TableReservationService implements ITableReservationService {
     }
 
     @Override
-    public TableReservation update(TableReservation tableReservation) throws Exception {
-        TableReservation tableReservationToUpdate = this.findById(tableReservation.getId());
+    public TableReservation update(TableReservation tableReservation, Integer id) throws Exception {
+        TableReservation tableReservationToUpdate = this.findById(id);
 
         tableReservationToUpdate.setTable(tableReservation.getTable());
         tableReservationToUpdate.setDurationStart(tableReservation.getDurationStart());

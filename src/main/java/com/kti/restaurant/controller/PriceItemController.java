@@ -1,8 +1,7 @@
 package com.kti.restaurant.controller;
 
 
-import com.kti.restaurant.dto.priceitem.CreatePriceItemDto;
-import com.kti.restaurant.dto.priceitem.UpdatePriceItemDto;
+import com.kti.restaurant.dto.priceitem.PriceItemDto;
 import com.kti.restaurant.mapper.PriceItemMapper;
 import com.kti.restaurant.model.PriceItem;
 import com.kti.restaurant.service.contract.IPriceItemService;
@@ -28,8 +27,8 @@ public class PriceItemController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createPriceItem(@Valid @RequestBody CreatePriceItemDto priceItemDto) throws Exception {
-        PriceItem priceItem = priceItemService.create(priceItemMapper.fromCreatePriceItemDtoToPriceItem(priceItemDto));
+    public ResponseEntity<?> createPriceItem(@Valid @RequestBody PriceItemDto priceItemDto) throws Exception {
+        PriceItem priceItem = priceItemService.create(priceItemMapper.fromPriceItemDtoToPriceItem(priceItemDto));
 
         if(priceItem != null) {
             return new ResponseEntity<>(priceItem, HttpStatus.CREATED);
@@ -47,10 +46,10 @@ public class PriceItemController {
         return new ResponseEntity<>((List<PriceItem>) priceItemService.findAll(), HttpStatus.OK);
     }
 
-    @PutMapping("")
-    public ResponseEntity<?> updatePriceItem(@Valid @RequestBody UpdatePriceItemDto updatePriceItemDto) throws Exception {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePriceItem(@Valid @RequestBody PriceItemDto priceItemDto, @PathVariable Integer id) throws Exception {
         return new ResponseEntity<>(priceItemService.update
-                (priceItemMapper.fromUpdatePriceItemDtoToPriceItem(updatePriceItemDto)),
+                (priceItemMapper.fromPriceItemDtoToPriceItem(priceItemDto), id),
                 HttpStatus.OK);
     }
 

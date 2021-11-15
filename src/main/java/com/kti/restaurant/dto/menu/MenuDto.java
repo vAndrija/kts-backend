@@ -4,7 +4,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-public class UpdateMenuDto {
+public class MenuDto {
     @NotEmpty(message = "Name should not be null or empty")
     private String name;
 
@@ -14,17 +14,13 @@ public class UpdateMenuDto {
     @NotNull(message = "End date should not be null or empty")
     private LocalDateTime endDuration;
 
-    @NotEmpty(message = "Id should not be null or empty")
-    private Integer id;
-
-    public UpdateMenuDto(String name, LocalDateTime startDuration, LocalDateTime endDuration, Integer id) {
+    public MenuDto(String name, LocalDateTime startDuration, LocalDateTime endDuration) {
         this.name = name;
         this.startDuration = startDuration;
         this.endDuration = endDuration;
-        this.id = id;
     }
 
-    public UpdateMenuDto() {
+    public MenuDto() {
 
     }
 
@@ -50,13 +46,5 @@ public class UpdateMenuDto {
 
     public void setEndDuration(LocalDateTime endDuration) {
         this.endDuration = endDuration;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 }

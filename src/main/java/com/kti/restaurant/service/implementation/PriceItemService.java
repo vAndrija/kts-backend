@@ -25,7 +25,13 @@ public class PriceItemService implements IPriceItemService {
 
     @Override
     public PriceItem findById(Integer id) throws Exception {
-        return priceItemRepository.findById(id).orElse(null);
+        PriceItem priceItem = priceItemRepository.findById(id).orElse(null);
+
+        if (priceItem == null) {
+            throw new MissingEntityException("The price item with given id does not exist in the system.");
+        }
+
+        return priceItem;
     }
 
     @Override
@@ -34,12 +40,8 @@ public class PriceItemService implements IPriceItemService {
     }
 
     @Override
-    public PriceItem update(PriceItem entity) throws Exception {
-        PriceItem priceItemToUpdate = priceItemRepository.getById(entity.getId());
-
-        if (priceItemToUpdate == null) {
-            throw new MissingEntityException("The price item with given id does not exist in the system.");
-        }
+    public PriceItem update(PriceItem entity, Integer id) throws Exception {
+        PriceItem priceItemToUpdate = this.findById(id);
 
         priceItemToUpdate.setCurrent(entity.getCurrent());
         priceItemToUpdate.setStartDate(entity.getStartDate());
@@ -52,6 +54,7 @@ public class PriceItemService implements IPriceItemService {
 
     @Override
     public void delete(Integer id) throws Exception {
+        this.findById(id);
         priceItemRepository.deleteById(id);
     }
 }

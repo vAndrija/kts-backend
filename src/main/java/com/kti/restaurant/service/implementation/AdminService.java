@@ -47,10 +47,8 @@ public class AdminService implements IAdminService {
     }
 
     @Override
-    public Admin update(Admin entity) throws Exception {
-        Admin admin = adminRepository.findById(entity.getId()).orElse(null);
-        if (admin == null)
-            throw new MissingEntityException("Admin with given id does not exist in the system.");
+    public Admin update(Admin entity, Integer id) throws Exception {
+        Admin admin = this.findById(id);
         admin.setName(entity.getName());
         admin.setLastName(entity.getLastName());
         admin.setPhoneNumber(entity.getPhoneNumber());
@@ -61,9 +59,7 @@ public class AdminService implements IAdminService {
 
     @Override
     public void delete(Integer id) throws Exception {
-        Admin admin = adminRepository.findById(id).orElse(null);
-        if (admin == null)
-            throw new MissingEntityException("Admin with given id does not exist in the system.");
+        Admin admin = this.findById(id);
         adminRepository.delete(admin);
     }
 }

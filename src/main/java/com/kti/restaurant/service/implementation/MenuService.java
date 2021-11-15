@@ -25,7 +25,13 @@ public class MenuService implements IMenuService {
 
     @Override
     public Menu findById(Integer id) throws Exception {
-        return menuRepository.findById(id).orElse(null);
+        Menu menu = menuRepository.findById(id).orElse(null);
+
+        if (menu == null) {
+            throw new MissingEntityException("Menu with given id does not exist in the system.");
+        }
+
+        return menu;
     }
 
     @Override
@@ -34,12 +40,8 @@ public class MenuService implements IMenuService {
     }
 
     @Override
-    public Menu update(Menu entity) throws Exception {
-        Menu menuToUpdate = menuRepository.findById(entity.getId()).orElse(null);
-
-        if (menuToUpdate == null) {
-            throw new MissingEntityException("Menu with given id does not exist in the system.");
-        }
+    public Menu update(Menu entity, Integer id) throws Exception {
+        Menu menuToUpdate = this.findById(id);
 
         menuToUpdate.setName(entity.getName());
         menuToUpdate.setDurationStart(entity.getDurationStart());
@@ -52,6 +54,7 @@ public class MenuService implements IMenuService {
 
     @Override
     public void delete(Integer id) throws Exception {
+        this.findById(id);
         menuRepository.deleteById(id);
     }
 }
