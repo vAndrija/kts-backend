@@ -15,13 +15,14 @@ public class CreateOrderItemDto {
 
     private Integer menuItem;
 
-    //dodati i order
-    public CreateOrderItemDto(Integer quantity, String note, OrderItemStatus status, Integer priority, Integer menuItem) {
+    public CreateOrderItemDto(Integer quantity, String note, OrderItemStatus status, Integer priority,
+                              Integer menuItem, Integer order) {
         this.quantity = quantity;
         this.note = note;
         this.status = status;
         this.priority = priority;
         this.menuItem = menuItem;
+        this.order = order;
     }
 
     public CreateOrderItemDto(){

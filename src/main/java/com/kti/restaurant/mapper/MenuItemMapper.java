@@ -25,12 +25,12 @@ public class MenuItemMapper {
                 menuItemDto.getType());
     }
 
-    public MenuItem fromUpdateMenuItemDtoToMenuItem(UpdateMenuItemDto menuItemDto) {
+    public MenuItem fromUpdateMenuItemDtoToMenuItem(UpdateMenuItemDto menuItemDto) throws Exception {
         return new MenuItem(menuItemDto.getId(), menuItemDto.getName(), menuItemDto.getDescription(), menuItemDto.getAccepted(),
                 menuItemDto.getType(), menuItemDto.getCategory(), findMenuById(menuItemDto.getMenuId()));
     }
 
-    private Menu findMenuById(Integer id) {
+    private Menu findMenuById(Integer id) throws Exception {
         Menu menu = menuService.findById(id);
 
         if (menu == null) {

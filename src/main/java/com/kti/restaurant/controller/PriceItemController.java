@@ -28,7 +28,7 @@ public class PriceItemController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createPriceItem(@Valid @RequestBody CreatePriceItemDto priceItemDto) {
+    public ResponseEntity<?> createPriceItem(@Valid @RequestBody CreatePriceItemDto priceItemDto) throws Exception {
         PriceItem priceItem = priceItemService.create(priceItemMapper.fromCreatePriceItemDtoToPriceItem(priceItemDto));
 
         if(priceItem != null) {
@@ -38,7 +38,7 @@ public class PriceItemController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PriceItem> getPriceItemById(@PathVariable Integer id) {
+    public ResponseEntity<PriceItem> getPriceItemById(@PathVariable Integer id) throws Exception {
         return new ResponseEntity<>(priceItemService.findById(id), HttpStatus.OK);
     }
 
@@ -55,7 +55,7 @@ public class PriceItemController {
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
-    public ResponseEntity<?> deletePriceItem(@PathVariable Integer id) {
+    public ResponseEntity<?> deletePriceItem(@PathVariable Integer id) throws Exception {
         priceItemService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

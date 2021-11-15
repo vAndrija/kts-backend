@@ -3,6 +3,8 @@ package com.kti.restaurant.dto.orderitem;
 import com.kti.restaurant.model.enums.OrderItemStatus;
 
 public class OrderItemDto {
+    private Integer id;
+
     private Integer quantity;
 
     private String note;
@@ -11,15 +13,28 @@ public class OrderItemDto {
 
     private Integer priority;
 
-    public OrderItemDto(Integer quantity, String note, OrderItemStatus status, Integer priority) {
+    private Integer order;
+
+    public OrderItemDto(Integer id, Integer quantity, String note, OrderItemStatus status, Integer priority,
+                        Integer order) {
+        this.id = id;
         this.quantity = quantity;
         this.note = note;
         this.status = status;
         this.priority = priority;
+        this.order = order;
     }
 
     public OrderItemDto(){
 
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getQuantity() {
@@ -52,5 +67,13 @@ public class OrderItemDto {
 
     public void setPriority(Integer priority) {
         this.priority = priority;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 }

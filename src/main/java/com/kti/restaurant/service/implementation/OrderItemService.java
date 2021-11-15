@@ -24,7 +24,7 @@ public class OrderItemService implements IOrderItemService {
 
     @Override
     public OrderItem findById(Integer id) throws Exception {
-        return orderItemRepository.findById(id).orElseGet(null);
+        return orderItemRepository.findById(id).orElse(null);
     }
 
     @Override

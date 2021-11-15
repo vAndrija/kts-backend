@@ -10,11 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value= "/api/order-items")
+@RequestMapping(value= "/api/v1/order-items")
 public class OrderItemController {
 
     private IOrderItemService orderItemService;
@@ -27,12 +28,12 @@ public class OrderItemController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createOrderItem(@RequestBody CreateOrderItemDto newOrderItem) throws Exception {
+    public ResponseEntity<?> createOrderItem(@Valid @RequestBody CreateOrderItemDto newOrderItem) throws Exception {
       OrderItem orderItem = orderItemService.create(orderItemMapper.fromCreateOrderItemDtoToOrderItem(newOrderItem));
       if(orderItem == null){
           return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
       }
-      return new ResponseEntity<>(orderItem,HttpStatus.CREATED);
+      return new ResponseEntity<>(orderItemMapper.fromOrderItemToOrderItemDto(orderItem),HttpStatus.CREATED);
     }
 
     @GetMapping("")
@@ -58,7 +59,7 @@ public class OrderItemController {
     }
 
     @PutMapping("")
-    public ResponseEntity<OrderItem> updateOrderItem(@RequestBody UpdateOrderItemDto updateOrderItemDto) {
+    public ResponseEntity<OrderItem> updateOrderItem(@Valid @RequestBody UpdateOrderItemDto updateOrderItemDto) {
         try {
             return new ResponseEntity<>(orderItemService.update(orderItemMapper.fromUpdateOrderItemDtoToOrderItem(updateOrderItemDto)),
                     HttpStatus.OK);

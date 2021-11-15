@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "restaurant_order")
-@SQLDelete(sql = "UPDATE restaurant_order SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE restaurant_order SET deleted = true WHERE id=? AND version=?")
 @Where(clause = "deleted=false")
 public class Order {
     @Version
@@ -35,12 +35,26 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     private Waiter waiter;
 
+    public Order(Integer id, OrderStatus status, LocalDateTime dateOfOrder, Double price) {
+        this.id = id;
+        this.status = status;
+        this.dateOfOrder = dateOfOrder;
+        this.price = price;
+    }
+
     public Order(OrderStatus status, LocalDateTime dateOfOrder, Double price, RestaurantTable table, Waiter waiter) {
         this.status = status;
         this.dateOfOrder = dateOfOrder;
         this.price = price;
         this.table = table;
         this.waiter = waiter;
+    }
+
+    public Order(OrderStatus status, LocalDateTime dateOfOrder, Double price, RestaurantTable table) {
+        this.status = status;
+        this.dateOfOrder = dateOfOrder;
+        this.price = price;
+        this.table = table;
     }
 
     public Order() {
