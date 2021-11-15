@@ -25,7 +25,13 @@ public class RestaurantTableService implements IRestaurantTableService {
 
     @Override
     public RestaurantTable findById(Integer id) throws Exception {
-        return restaurantTableRepository.findById(id).orElseGet(null);
+        RestaurantTable table = restaurantTableRepository.findById(id).orElse(null);
+
+        if (table == null) {
+            throw new MissingEntityException("Restaurant with given id does not exist in the system.");
+        }
+
+        return table;
     }
 
     @Override
@@ -35,11 +41,7 @@ public class RestaurantTableService implements IRestaurantTableService {
 
     @Override
     public RestaurantTable update(RestaurantTable restaurantTable) throws Exception {
-        RestaurantTable restaurantTableToUpdate = restaurantTableRepository.findById(restaurantTable.getId()).orElse(null);
-
-        if (restaurantTableToUpdate == null) {
-            throw new MissingEntityException("Restaurant table with given id does not exist in the system.");
-        }
+        RestaurantTable restaurantTableToUpdate = this.findById(restaurantTable.getId());
 
         restaurantTableToUpdate.setTableNumber(restaurantTable.getTableNumber());
         restaurantTableToUpdate.setCapacity(restaurantTable.getCapacity());
@@ -53,6 +55,7 @@ public class RestaurantTableService implements IRestaurantTableService {
 
     @Override
     public void delete(Integer id) throws Exception {
+        this.findById(id);
         restaurantTableRepository.deleteById(id);
     }
 }

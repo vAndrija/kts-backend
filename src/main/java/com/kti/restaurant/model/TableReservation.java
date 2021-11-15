@@ -26,15 +26,12 @@ public class TableReservation {
 
     private LocalDateTime durationStart;
 
-    private LocalDateTime durationEnd;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private RestaurantTable table;
 
-    public TableReservation(String name, LocalDateTime durationStart, LocalDateTime durationEnd, RestaurantTable table) {
+    public TableReservation(String name, LocalDateTime durationStart, RestaurantTable table) {
         this.name = name;
         this.durationStart = durationStart;
-        this.durationEnd = durationEnd;
         this.table = table;
     }
 
@@ -80,14 +77,6 @@ public class TableReservation {
 
     public void setDurationStart(LocalDateTime durationStart) {
         this.durationStart = durationStart;
-    }
-
-    public LocalDateTime getDurationEnd() {
-        return durationEnd;
-    }
-
-    public void setDurationEnd(LocalDateTime durationEnd) {
-        this.durationEnd = durationEnd;
     }
 
     public RestaurantTable getTable() {
