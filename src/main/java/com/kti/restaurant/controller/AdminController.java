@@ -2,6 +2,7 @@ package com.kti.restaurant.controller;
 
 import com.kti.restaurant.dto.admin.AdminCreateDto;
 import com.kti.restaurant.dto.admin.AdminDto;
+import com.kti.restaurant.dto.admin.AdminUpdateDto;
 import com.kti.restaurant.mapper.AdminMapper;
 import com.kti.restaurant.model.Admin;
 import com.kti.restaurant.service.contract.IAdminService;
@@ -28,7 +29,7 @@ public class AdminController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createAdmin(@RequestBody AdminCreateDto adminCreateDto){
+    public ResponseEntity<?> createAdmin(@RequestBody AdminCreateDto adminCreateDto) throws Exception {
         Admin admin =  adminService.create(adminMapper.fromAdminCreateDtoToAdmin(adminCreateDto));
         return new ResponseEntity<>(adminMapper.fromAdminToAdminDto(admin), HttpStatus.CREATED);
     }
@@ -41,17 +42,20 @@ public class AdminController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAdminByEmail(@PathVariable Integer id){
-
+    public ResponseEntity<?> getAdmin(@PathVariable Integer id) throws Exception {
+        Admin admin =  adminService.findById(id);
+        return new ResponseEntity<>(adminMapper.fromAdminToAdminDto(admin), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateAdmin(@PathVariable Integer id){
-
+    @PutMapping("")
+    public ResponseEntity<?> updateAdmin(@RequestBody AdminUpdateDto adminUpdateDto) throws Exception {
+        Admin admin = adminService.update(adminMapper.fromAdminUpdateDtoToAdmin(adminUpdateDto));
+        return new ResponseEntity<>(adminMapper.fromAdminToAdminDto(admin),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id")
-    public ResponseEntity<?> deleteAdmin(@PathVariable Integer id){
-
+    public ResponseEntity<?> deleteAdmin(@PathVariable Integer id) throws Exception {
+        adminService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -1,5 +1,7 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.exception.ConflictException;
+import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Admin;
 import com.kti.restaurant.repository.AdminRepository;
 import com.kti.restaurant.service.contract.IAdminService;
@@ -23,29 +25,45 @@ public class AdminService implements IAdminService {
 
     @Override
     public List<Admin> findAll() {
-        return null;
+        return adminRepository.findAll();
     }
 
     @Override
-    public Admin findById(Integer id) {
-        return null;
+    public Admin findById(Integer id)  throws Exception{
+        Admin admin =  adminRepository.findById(id).orElse(null);
+        if(admin==null)
+            throw new MissingEntityException("Admin with given id does not exist in the system.");
+        return admin;
     }
 
     @Override
-    public Admin create(Admin entity) {
-            //TODO promjeniti kada uvedemo global exception zastitit od pucanja zbog istom mejla
-            entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-            adminRepository.save(entity);
-            return entity;
+    public Admin create(Admin entity)  throws Exception{
+        Admin admin  = adminRepository.findByEmailAddress(entity.getEmailAddress());
+        if(admin!=null)
+            throw new ConflictException("Admin with entered email already exists.");
+        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        adminRepository.save(entity);
+        return entity;
     }
 
     @Override
-    public Admin update(Admin entity) throws Exception {
-        return null;
+    public Admin update(Admin entity) throws Exception{
+        Admin admin =  adminRepository.findById(entity.getId()).orElse(null);
+        if(admin==null)
+            throw new MissingEntityException("Admin with given id does not exist in the system.");
+        admin.setName(entity.getName());
+        admin.setLastName(entity.getLastName());
+        admin.setPhoneNumber(entity.getPhoneNumber());
+        admin.setAccountNumber(entity.getAccountNumber());
+        adminRepository.save(admin);
+        return admin;
     }
 
     @Override
-    public void delete(Integer id) {
-
+    public void delete(Integer id)  throws Exception{
+        Admin admin =  adminRepository.findById(id).orElse(null);
+        if(admin==null)
+            throw new MissingEntityException("Admin with given id does not exist in the system.");
+        adminRepository.delete(admin);
     }
 }

@@ -1,6 +1,7 @@
 package com.kti.restaurant.dto.user;
 
 public class UserDto {
+    private Integer id;
 
     private String name;
 
@@ -49,6 +50,14 @@ public class UserDto {
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
 

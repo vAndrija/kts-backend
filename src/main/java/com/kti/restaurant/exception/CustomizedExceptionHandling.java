@@ -28,4 +28,13 @@ public class CustomizedExceptionHandling extends ResponseEntityExceptionHandler 
         ResponseEntity<Object> entity = new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         return entity;
     }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<Object> handleExceptions(ConflictException exception, WebRequest webRequest) {
+        ExceptionResponse response = new ExceptionResponse();
+        response.setDateTime(LocalDateTime.now());
+        response.setMessage(exception.getMessage());
+        ResponseEntity<Object> entity = new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        return entity;
+    }
 }

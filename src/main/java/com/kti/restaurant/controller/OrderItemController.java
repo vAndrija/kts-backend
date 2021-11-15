@@ -27,7 +27,7 @@ public class OrderItemController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createOrderItem(@RequestBody CreateOrderItemDto newOrderItem) {
+    public ResponseEntity<?> createOrderItem(@RequestBody CreateOrderItemDto newOrderItem) throws Exception {
       OrderItem orderItem = orderItemService.create(orderItemMapper.fromCreateOrderItemDtoToOrderItem(newOrderItem));
       if(orderItem == null){
           return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

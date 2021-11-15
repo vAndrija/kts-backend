@@ -1,6 +1,7 @@
 package com.kti.restaurant.dto.user;
 
 public class UserUpdateDto {
+    private Integer id;
 
     private String name;
 
@@ -43,5 +44,20 @@ public class UserUpdateDto {
         this.phoneNumber = phoneNumber;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
 }
 
