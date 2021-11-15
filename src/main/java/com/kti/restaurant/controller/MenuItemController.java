@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,7 +28,7 @@ public class MenuItemController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createMenuItem(@RequestBody CreateMenuItemDto menuItemDto) {
+    public ResponseEntity<?> createMenuItem(@Valid @RequestBody CreateMenuItemDto menuItemDto) {
         MenuItem menuItem = menuItemService.create(menuItemMapper.fromCreateMenuItemDtoToMenuItem(menuItemDto));
 
         if(menuItem != null) {
@@ -47,7 +48,7 @@ public class MenuItemController {
     }
 
     @PutMapping("")
-    public ResponseEntity<?> updateMenuItem(@RequestBody UpdateMenuItemDto updateMenuItemDto) throws Exception {
+    public ResponseEntity<?> updateMenuItem(@Valid @RequestBody UpdateMenuItemDto updateMenuItemDto) throws Exception {
             return new ResponseEntity<>(menuItemService.update(menuItemMapper.fromUpdateMenuItemDtoToMenuItem(updateMenuItemDto)),
                     HttpStatus.OK);
     }

@@ -1,11 +1,20 @@
 package com.kti.restaurant.dto.menu;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public class UpdateMenuDto {
+    @NotEmpty(message = "Name should not be null or empty")
     private String name;
+
+    @NotNull(message = "Start date should not be null or empty")
     private LocalDateTime startDuration;
+
+    @NotNull(message = "End date should not be null or empty")
     private LocalDateTime endDuration;
+
+    @NotEmpty(message = "Id should not be null or empty")
     private Integer id;
 
     public UpdateMenuDto(String name, LocalDateTime startDuration, LocalDateTime endDuration, Integer id) {

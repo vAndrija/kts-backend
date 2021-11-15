@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "restaurant_table")
-@SQLDelete(sql = "UPDATE restaurant_table SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE restaurant_table SET deleted = true WHERE id=? AND version=?")
 @Where(clause = "deleted=false")
 public class RestaurantTable {
     @Version
