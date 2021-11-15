@@ -16,7 +16,7 @@ public class OrderItemMapper {
         this.menuItemService = menuItemService;
     }
 
-    public OrderItem fromCreateOrderItemDtoToOrderItem(CreateOrderItemDto orderItemDto) {
+    public OrderItem fromCreateOrderItemDtoToOrderItem(CreateOrderItemDto orderItemDto) throws Exception {
         //ubaciti i order kad se napravi
         return new OrderItem(orderItemDto.getQuantity(),orderItemDto.getNote(), orderItemDto.getStatus(),
                 orderItemDto.getPriority(), menuItemService.findById(orderItemDto.getMenuItem()));

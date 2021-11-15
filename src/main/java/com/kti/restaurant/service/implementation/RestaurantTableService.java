@@ -25,7 +25,7 @@ public class RestaurantTableService implements IRestaurantTableService {
 
     @Override
     public RestaurantTable findById(Integer id) throws Exception {
-        return restaurantTableRepository.findById(id).orElseGet(null);
+        return restaurantTableRepository.findById(id).orElse(null);
     }
 
     @Override
