@@ -25,7 +25,12 @@ public class TableReservationService implements ITableReservationService {
 
     @Override
     public TableReservation findById(Integer id) throws Exception {
-        return tableReservationRepository.findById(id).orElse(null);
+        TableReservation tableReservation = tableReservationRepository.findById(id).orElse(null);
+
+        if (tableReservation == null) {
+            throw new MissingEntityException("Table reservation with given id does not exist in the system.");
+        }
+        return tableReservation;
     }
 
     @Override
@@ -35,11 +40,7 @@ public class TableReservationService implements ITableReservationService {
 
     @Override
     public TableReservation update(TableReservation tableReservation) throws Exception {
-        TableReservation tableReservationToUpdate = tableReservationRepository.findById(tableReservation.getId()).orElse(null);
-
-        if (tableReservationToUpdate == null) {
-            throw new MissingEntityException("Table reservation with given id does not exist in the system");
-        }
+        TableReservation tableReservationToUpdate = this.findById(tableReservation.getId());
 
         tableReservationToUpdate.setTable(tableReservation.getTable());
         tableReservationToUpdate.setDurationStart(tableReservation.getDurationStart());
@@ -51,6 +52,7 @@ public class TableReservationService implements ITableReservationService {
 
     @Override
     public void delete(Integer id) throws Exception {
+        this.findById(id);
         tableReservationRepository.deleteById(id);
     }
 }
