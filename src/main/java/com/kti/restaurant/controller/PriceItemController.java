@@ -43,7 +43,7 @@ public class PriceItemController {
 
     @GetMapping("")
     public ResponseEntity<List<PriceItem>> gePriceItems() {
-        return new ResponseEntity<>((List<PriceItem>) priceItemService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(priceItemService.findAll(), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

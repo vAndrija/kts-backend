@@ -44,7 +44,7 @@ public class MenuItemController {
 
     @GetMapping("")
     public ResponseEntity<List<MenuItem>> getMenuItems() {
-        return new ResponseEntity<>((List<MenuItem>) menuItemService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(menuItemService.findAll(), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
