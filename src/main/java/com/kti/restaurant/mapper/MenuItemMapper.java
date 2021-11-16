@@ -26,7 +26,7 @@ public class MenuItemMapper {
     }
 
     public MenuItem fromUpdateMenuItemDtoToMenuItem(UpdateMenuItemDto menuItemDto) throws Exception {
-        return new MenuItem(menuItemDto.getId(), menuItemDto.getName(), menuItemDto.getDescription(), menuItemDto.getAccepted(),
+        return new MenuItem(menuItemDto.getName(), menuItemDto.getDescription(), menuItemDto.getAccepted(),
                 menuItemDto.getType(), menuItemDto.getCategory(), findMenuById(menuItemDto.getMenuId()));
     }
 

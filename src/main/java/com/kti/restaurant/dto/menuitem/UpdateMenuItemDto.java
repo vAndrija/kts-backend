@@ -20,18 +20,14 @@ public class UpdateMenuItemDto {
     @NotNull(message = "Category should not be null")
     private MenuItemCategory category;
 
-    @NotNull(message = "Id should not be null or empty")
-    private Integer id;
-
     @NotNull(message = "Menu id should not be null or empty")
     private Integer menuId;
 
     @NotNull(message = "Accepted should not be null or empty")
     private Boolean accepted;
 
-    public UpdateMenuItemDto(Integer id, String name, String description, MenuItemType type, MenuItemCategory category,
+    public UpdateMenuItemDto(String name, String description, MenuItemType type, MenuItemCategory category,
                              Integer menu, Boolean accepted) {
-        this.id = id;
         this.name = name;
         this.description = description;
         this.type = type;
@@ -74,14 +70,6 @@ public class UpdateMenuItemDto {
 
     public void setCategory(MenuItemCategory category) {
         this.category = category;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Integer getMenuId() {

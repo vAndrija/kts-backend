@@ -40,8 +40,8 @@ public class RestaurantTableService implements IRestaurantTableService {
     }
 
     @Override
-    public RestaurantTable update(RestaurantTable restaurantTable) throws Exception {
-        RestaurantTable restaurantTableToUpdate = this.findById(restaurantTable.getId());
+    public RestaurantTable update(RestaurantTable restaurantTable, Integer id) throws Exception {
+        RestaurantTable restaurantTableToUpdate = this.findById(id);
 
         restaurantTableToUpdate.setTableNumber(restaurantTable.getTableNumber());
         restaurantTableToUpdate.setCapacity(restaurantTable.getCapacity());
