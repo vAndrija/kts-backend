@@ -47,9 +47,9 @@ public class MenuItemController {
         return new ResponseEntity<>((List<MenuItem>) menuItemService.findAll(), HttpStatus.OK);
     }
 
-    @PutMapping("")
-    public ResponseEntity<?> updateMenuItem(@Valid @RequestBody UpdateMenuItemDto updateMenuItemDto) throws Exception {
-            return new ResponseEntity<>(menuItemService.update(menuItemMapper.fromUpdateMenuItemDtoToMenuItem(updateMenuItemDto)),
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateMenuItem(@Valid @RequestBody UpdateMenuItemDto updateMenuItemDto, @PathVariable Integer id) throws Exception {
+            return new ResponseEntity<>(menuItemService.update(menuItemMapper.fromUpdateMenuItemDtoToMenuItem(updateMenuItemDto), id),
                     HttpStatus.OK);
     }
 

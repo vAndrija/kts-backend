@@ -1,5 +1,6 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.repository.OrderItemRepository;
 import com.kti.restaurant.service.contract.IOrderItemService;
@@ -24,7 +25,14 @@ public class OrderItemService implements IOrderItemService {
 
     @Override
     public OrderItem findById(Integer id) throws Exception {
-        return orderItemRepository.findById(id).orElse(null);
+        OrderItem orderItem = orderItemRepository.findById(id).orElse(null);
+
+        if (orderItem == null) {
+            throw new MissingEntityException("Order item with given id does not exist in the system.");
+        }
+
+        return orderItem;
+
     }
 
     @Override
@@ -33,11 +41,8 @@ public class OrderItemService implements IOrderItemService {
     }
 
     @Override
-    public OrderItem update(OrderItem orderItem) throws Exception {
-        OrderItem orderItemToUpdate = orderItemRepository.findById(orderItem.getId()).get();
-        if (orderItemToUpdate == null) {
-            throw new Exception("Entity with given id does not exist in the system.");
-        }
+    public OrderItem update(OrderItem orderItem, Integer id) throws Exception {
+        OrderItem orderItemToUpdate = this.findById(id);
         orderItemToUpdate.setStatus(orderItem.getStatus());
         orderItemToUpdate.setQuantity(orderItem.getQuantity());
         orderItemToUpdate.setPriority(orderItem.getPriority());
@@ -49,6 +54,7 @@ public class OrderItemService implements IOrderItemService {
 
     @Override
     public void delete(Integer id) throws Exception {
+        this.findById(id);
         orderItemRepository.deleteById(id);
     }
 }

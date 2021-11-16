@@ -41,9 +41,9 @@ public class RestaurantTableController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("")
-    public ResponseEntity<RestaurantTable> updateRestaurantTable(@RequestBody RestaurantTable restaurantTable) throws Exception {
-        return new ResponseEntity<>(restaurantTableService.update(restaurantTable), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<RestaurantTable> updateRestaurantTable(@RequestBody RestaurantTable restaurantTable, @PathVariable Integer id) throws Exception {
+        return new ResponseEntity<>(restaurantTableService.update(restaurantTable, id), HttpStatus.OK);
     }
 
     @RequestMapping(value="{id}", method=RequestMethod.DELETE)

@@ -51,9 +51,8 @@ public class TableReservationController {
     public ResponseEntity<TableReservation> updateTableReservation(@Valid @RequestBody TableReservationDto tableReservationDto,
                                                                    @PathVariable Integer id) throws Exception {
         TableReservation tableReservation = tableReservationMapper.fromTableReservationDtoToTableReservation(tableReservationDto);
-        tableReservation.setId(id);
 
-        return new ResponseEntity<>(tableReservationService.update(tableReservation),
+        return new ResponseEntity<>(tableReservationService.update(tableReservation, id),
                 HttpStatus.OK);
     }
 

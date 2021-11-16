@@ -4,7 +4,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-public class CreatePriceItemDto {
+public class PriceItemDto {
     @NotEmpty(message = "Value should not be null or empty")
     private Double value;
 
@@ -20,7 +20,7 @@ public class CreatePriceItemDto {
     @NotNull(message = "Is current should not be null or empty")
     private Boolean isCurrent;
 
-    public CreatePriceItemDto(Double value, LocalDate startDate, LocalDate endDate, Integer menuItemId, Boolean isCurrent) {
+    public PriceItemDto(Double value, LocalDate startDate, LocalDate endDate, Integer menuItemId, Boolean isCurrent) {
         this.value = value;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -28,7 +28,7 @@ public class CreatePriceItemDto {
         this.isCurrent = isCurrent;
     }
 
-    public CreatePriceItemDto() {
+    public PriceItemDto() {
 
     }
 

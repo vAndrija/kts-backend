@@ -45,10 +45,6 @@ public class OrderItemController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<OrderItem> getOrderItem(@PathVariable("id") Integer id) throws Exception {
         OrderItem orderItem = orderItemService.findById(id);
-        if (orderItem == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
         return new ResponseEntity<>(orderItem, HttpStatus.OK);
     }
 
@@ -58,14 +54,9 @@ public class OrderItemController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("")
-    public ResponseEntity<OrderItem> updateOrderItem(@Valid @RequestBody UpdateOrderItemDto updateOrderItemDto) {
-        try {
-            return new ResponseEntity<>(orderItemService.update(orderItemMapper.fromUpdateOrderItemDtoToOrderItem(updateOrderItemDto)),
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderItem> updateOrderItem(@Valid @RequestBody UpdateOrderItemDto updateOrderItemDto, @PathVariable Integer id) throws Exception {
+        return new ResponseEntity<>(orderItemService.update(orderItemMapper.fromUpdateOrderItemDtoToOrderItem(updateOrderItemDto), id),
                     HttpStatus.OK);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 }

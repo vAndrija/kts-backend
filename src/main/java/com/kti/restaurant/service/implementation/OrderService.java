@@ -1,5 +1,6 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Order;
 import com.kti.restaurant.repository.OrderRepository;
 import com.kti.restaurant.service.contract.IOrderService;
@@ -21,7 +22,11 @@ public class OrderService implements IOrderService {
 
     @Override
     public Order findById(Integer id) throws Exception {
-        return orderRepository.findById(id).orElse(null);
+        Order order = orderRepository.findById(id).orElse(null);
+        if (order == null) {
+            throw new MissingEntityException("Order with given id does not exist in the system.");
+        }
+        return order;
     }
 
     @Override
@@ -30,11 +35,8 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Order update(Order order) throws Exception {
-        Order orderToUpdate = orderRepository.findById(order.getId()).get();
-        if (orderToUpdate == null) {
-            throw new Exception("Entity with given id does not exist in the system.");
-        }
+    public Order update(Order order, Integer id) throws Exception {
+        Order orderToUpdate = this.findById(id);
         // videti da li treba sto i konobar, mada mislim da ne
         orderToUpdate.setStatus(order.getStatus());
         orderToUpdate.setDateOfOrder(order.getDateOfOrder());
@@ -45,6 +47,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public void delete(Integer id) throws Exception {
+        this.findById(id);
         orderRepository.deleteById(id);
     }
 }

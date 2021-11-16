@@ -1,7 +1,6 @@
 package com.kti.restaurant.controller;
 
-import com.kti.restaurant.dto.menu.CreateMenuDto;
-import com.kti.restaurant.dto.menu.UpdateMenuDto;
+import com.kti.restaurant.dto.menu.MenuDto;
 import com.kti.restaurant.mapper.MenuMapper;
 import com.kti.restaurant.model.Menu;
 import com.kti.restaurant.service.contract.IMenuService;
@@ -27,8 +26,8 @@ public class MenuController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createMenu(@Valid @RequestBody CreateMenuDto menuDto) throws Exception {
-        Menu menu = menuService.create(menuMapper.fromCreateMenuDtoToMenu(menuDto));
+    public ResponseEntity<?> createMenu(@Valid @RequestBody MenuDto menuDto) throws Exception {
+        Menu menu = menuService.create(menuMapper.fromMenuDtoToMenu(menuDto));
 
         if(menu != null) {
             return new ResponseEntity<>(menu, HttpStatus.CREATED);
@@ -46,9 +45,9 @@ public class MenuController {
         return new ResponseEntity<>((List<Menu>) menuService.findAll(), HttpStatus.OK);
     }
 
-    @PutMapping("")
-    public ResponseEntity<Menu> updateMenuItem(@Valid @RequestBody UpdateMenuDto updateMenuDto) throws Exception {
-        return new ResponseEntity<Menu>(menuService.update(menuMapper.fromUpdateMenuDtoToMenu(updateMenuDto)),
+    @PutMapping("/{id}")
+    public ResponseEntity<Menu> updateMenuItem(@Valid @RequestBody MenuDto menuDto, @PathVariable Integer id) throws Exception {
+        return new ResponseEntity<Menu>(menuService.update(menuMapper.fromMenuDtoToMenu(menuDto), id),
                 HttpStatus.OK);
     }
 

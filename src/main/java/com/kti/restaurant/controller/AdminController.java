@@ -47,9 +47,9 @@ public class AdminController {
         return new ResponseEntity<>(adminMapper.fromAdminToAdminDto(admin), HttpStatus.OK);
     }
 
-    @PutMapping("")
-    public ResponseEntity<?> updateAdmin(@RequestBody AdminUpdateDto adminUpdateDto) throws Exception {
-        Admin admin = adminService.update(adminMapper.fromAdminUpdateDtoToAdmin(adminUpdateDto));
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateAdmin(@RequestBody AdminUpdateDto adminUpdateDto, @PathVariable Integer id) throws Exception {
+        Admin admin = adminService.update(adminMapper.fromAdminUpdateDtoToAdmin(adminUpdateDto), id);
         return new ResponseEntity<>(adminMapper.fromAdminToAdminDto(admin),HttpStatus.OK);
     }
 

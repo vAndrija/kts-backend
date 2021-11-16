@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 @RestController
@@ -28,7 +29,7 @@ public class OrderController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createOrder(@RequestBody CreateOrderDto newOrder) throws Exception {
+    public ResponseEntity<?> createOrder(@Valid @RequestBody CreateOrderDto newOrder) throws Exception {
         Order order = orderService.create(orderMapper.fromCreateOrderDtoToOrder(newOrder));
         if(order == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -45,10 +46,6 @@ public class OrderController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Order> getOrder(@PathVariable("id") Integer id) throws Exception {
         Order order= orderService.findById(id);
-        if (order == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
@@ -59,14 +56,11 @@ public class OrderController {
     }
 
     @PutMapping("")
-    public ResponseEntity<Order> updateOrder(@RequestBody UpdateOrderDto updateOrderDto) {
-        try {
-            return new ResponseEntity<>(orderService.update(orderMapper.fromUpdateOrderDtoToOrder(updateOrderDto)),
+    public ResponseEntity<Order> updateOrder(@Valid  @RequestBody UpdateOrderDto updateOrderDto) throws Exception {
+            return new ResponseEntity<>(orderService.update(orderMapper.fromUpdateOrderDtoToOrder(updateOrderDto),
+                    updateOrderDto.getId()),
                     HttpStatus.OK);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
     }
 
 }
