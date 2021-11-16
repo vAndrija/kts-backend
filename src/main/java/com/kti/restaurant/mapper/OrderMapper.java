@@ -1,8 +1,8 @@
 package com.kti.restaurant.mapper;
 
 import com.kti.restaurant.dto.order.CreateOrderDto;
+import com.kti.restaurant.dto.order.OrderDto;
 import com.kti.restaurant.dto.order.UpdateOrderDto;
-import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.RestaurantTable;
 import com.kti.restaurant.service.contract.IRestaurantTableService;
@@ -20,20 +20,18 @@ public class OrderMapper {
 
     public Order fromCreateOrderDtoToOrder(CreateOrderDto createOrderDto) throws Exception {
         return new Order(createOrderDto.getStatus(), createOrderDto.getDateOfOrder(), createOrderDto.getPrice(),
-                findRestaurantTableById(createOrderDto.getTable()));
+                findRestaurantTableById(createOrderDto.getTableId()));
+    }
+    public OrderDto fromOrderToOrderDto(Order order) {
+        return new OrderDto(order.getStatus(), order.getDateOfOrder(),
+                order.getPrice(),order.getTable().getId());
     }
 
     public Order fromUpdateOrderDtoToOrder(UpdateOrderDto orderDto) {
-        return new Order(orderDto.getId(), orderDto.getStatus(),orderDto.getDateOfOrder(),orderDto.getPrice());
+        return new Order(orderDto.getStatus(),orderDto.getDateOfOrder(),orderDto.getPrice());
     }
 
     private RestaurantTable findRestaurantTableById(Integer id) throws Exception {
-        RestaurantTable restaurantTable = restaurantTableService.findById(id);
-
-        if(restaurantTable == null){
-            throw new MissingEntityException("The restaurant table with given id does not exist in the system.");
-        }
-
-        return restaurantTable;
+        return restaurantTableService.findById(id);
     }
 }

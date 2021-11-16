@@ -1,6 +1,7 @@
 package com.kti.restaurant.controller;
 
 import com.kti.restaurant.dto.order.CreateOrderDto;
+import com.kti.restaurant.dto.order.OrderDto;
 import com.kti.restaurant.dto.order.UpdateOrderDto;
 import com.kti.restaurant.mapper.OrderMapper;
 import com.kti.restaurant.model.Order;
@@ -11,7 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -34,19 +36,20 @@ public class OrderController {
         if(order == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(order,HttpStatus.CREATED);
+        return new ResponseEntity<>(orderMapper.fromOrderToOrderDto(order),HttpStatus.CREATED);
     }
 
     @GetMapping("")
-    public ResponseEntity<Collection<Order>> getOrders(){
-        Collection<Order> orders = orderService.findAll();
+    public ResponseEntity<?> getOrders(){
+        List<OrderDto> orders = orderService.findAll().stream()
+                .map(order->this.orderMapper.fromOrderToOrderDto(order)).collect(Collectors.toList());
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Order> getOrder(@PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<?> getOrder(@PathVariable("id") Integer id) throws Exception {
         Order order= orderService.findById(id);
-        return new ResponseEntity<>(order, HttpStatus.OK);
+        return new ResponseEntity<>(orderMapper.fromOrderToOrderDto(order), HttpStatus.OK);
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
@@ -55,10 +58,11 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("")
-    public ResponseEntity<Order> updateOrder(@Valid  @RequestBody UpdateOrderDto updateOrderDto) throws Exception {
-            return new ResponseEntity<>(orderService.update(orderMapper.fromUpdateOrderDtoToOrder(updateOrderDto),
-                    updateOrderDto.getId()),
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateOrder(@Valid  @RequestBody UpdateOrderDto updateOrderDto,
+                                             @PathVariable Integer id) throws Exception {
+            return new ResponseEntity<>(orderMapper.fromOrderToOrderDto(orderService.update(orderMapper.fromUpdateOrderDtoToOrder(updateOrderDto),
+                   id)),
                     HttpStatus.OK);
 
     }

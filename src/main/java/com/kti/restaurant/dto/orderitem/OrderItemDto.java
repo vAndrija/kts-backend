@@ -2,39 +2,36 @@ package com.kti.restaurant.dto.orderitem;
 
 import com.kti.restaurant.model.enums.OrderItemStatus;
 
-public class OrderItemDto {
-    private Integer id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
+public class OrderItemDto {
+    @NotEmpty(message = "Quantity should not be null or empty")
     private Integer quantity;
 
+    @NotEmpty(message = "Note should not be null or empty")
     private String note;
 
+    @NotNull(message = "Status should not be null")
     private OrderItemStatus status;
 
+    @NotEmpty(message = "Priority should not be null or empty")
     private Integer priority;
 
-    private Integer order;
+    @NotNull(message = "Order id should not be null or empty")
+    private Integer orderId;
 
-    public OrderItemDto(Integer id, Integer quantity, String note, OrderItemStatus status, Integer priority,
-                        Integer order) {
-        this.id = id;
+    public OrderItemDto( Integer quantity, String note, OrderItemStatus status, Integer priority,
+                        Integer orderId) {
         this.quantity = quantity;
         this.note = note;
         this.status = status;
         this.priority = priority;
-        this.order = order;
+        this.orderId = orderId;
     }
 
     public OrderItemDto(){
 
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Integer getQuantity() {
@@ -69,11 +66,11 @@ public class OrderItemDto {
         this.priority = priority;
     }
 
-    public Integer getOrder() {
-        return order;
+    public Integer getOrderId() {
+        return orderId;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 }

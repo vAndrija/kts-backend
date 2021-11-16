@@ -2,43 +2,41 @@ package com.kti.restaurant.dto.orderitem;
 
 import com.kti.restaurant.model.enums.OrderItemStatus;
 
-public class UpdateOrderItemDto {
-    private Integer id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
+public class UpdateOrderItemDto {
+    @NotNull(message = "Quantity should not be null or empty")
     private Integer quantity;
 
+    @NotEmpty(message = "Note should not be null or empty")
     private String note;
 
+    @NotNull(message = "Status should not be null")
     private OrderItemStatus status;
 
+    @NotNull(message = "Priority should not be null or empty")
     private Integer priority;
 
-    private Integer order;
-    //mislim da mi menuitem ne treba
-    private Integer menuItem;
+    @NotNull(message = "Menu item id should not be null or empty")
+    private Integer menuItemId;
 
-    private Integer bartender;
+    private Integer bartenderId;
 
-    private Integer cook;
-    //dodati cook barteneder i order
-    public UpdateOrderItemDto(Integer id, Integer quantity, String note, OrderItemStatus status, Integer priority) {
-        this.id = id;
+    private Integer cookId;
+
+    //dodati cook barteneder
+    public UpdateOrderItemDto( Integer quantity, String note, OrderItemStatus status, Integer priority,Integer menuItemId
+                               ) {
         this.quantity = quantity;
         this.note = note;
         this.status = status;
         this.priority = priority;
+        this.menuItemId = menuItemId;
     }
 
     public UpdateOrderItemDto(){
 
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Integer getQuantity() {
@@ -73,35 +71,27 @@ public class UpdateOrderItemDto {
         this.priority = priority;
     }
 
-    public Integer getOrder() {
-        return order;
+    public Integer getBartenderId() {
+        return bartenderId;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setBartenderId(Integer bartenderId) {
+        this.bartenderId = bartenderId;
     }
 
-    public Integer getMenuItem() {
-        return menuItem;
+    public Integer getCookId() {
+        return cookId;
     }
 
-    public void setMenuItem(Integer menuItem) {
-        this.menuItem = menuItem;
+    public void setCookId(Integer cookId) {
+        this.cookId = cookId;
     }
 
-    public Integer getBartender() {
-        return bartender;
+   public Integer getMenuItemId() {
+        return menuItemId;
     }
 
-    public void setBartender(Integer bartender) {
-        this.bartender = bartender;
-    }
-
-    public Integer getCook() {
-        return cook;
-    }
-
-    public void setCook(Integer cook) {
-        this.cook = cook;
+    public void setMenuItemId(Integer menuItemId) {
+        this.menuItemId = menuItemId;
     }
 }

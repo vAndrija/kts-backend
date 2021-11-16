@@ -5,7 +5,8 @@ import com.kti.restaurant.model.enums.OrderStatus;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-public class UpdateOrderDto {
+public class OrderDto {
+
     @NotNull(message = "Status should not be null")
     private OrderStatus status;
 
@@ -15,14 +16,18 @@ public class UpdateOrderDto {
     @NotNull(message = "Price should not be null")
     private Double price;
 
-    public UpdateOrderDto( OrderStatus status, LocalDateTime dateOfOrder, Double price) {
+    @NotNull(message = "Table id should not be null")
+    private Integer tableId;
+
+    public OrderDto(){
+
+    }
+
+    public OrderDto(OrderStatus status, LocalDateTime dateOfOrder, Double price, Integer tableId) {
         this.status = status;
         this.dateOfOrder = dateOfOrder;
         this.price = price;
-    }
-
-    public UpdateOrderDto(){
-
+        this.tableId = tableId;
     }
 
     public OrderStatus getStatus() {
@@ -49,4 +54,11 @@ public class UpdateOrderDto {
         this.price = price;
     }
 
+    public Integer getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(Integer tableId) {
+        this.tableId = tableId;
+    }
 }
