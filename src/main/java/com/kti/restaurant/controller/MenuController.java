@@ -36,23 +36,23 @@ public class MenuController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Menu> getMenuItemById(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<Menu> getMenuById(@PathVariable Integer id) throws Exception {
         return new ResponseEntity<Menu>(menuService.findById(id), HttpStatus.OK);
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Menu>> getMenuItems() {
-        return new ResponseEntity<>((List<Menu>) menuService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<Menu>> getMenus() {
+        return new ResponseEntity<>(menuService.findAll(), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Menu> updateMenuItem(@Valid @RequestBody MenuDto menuDto, @PathVariable Integer id) throws Exception {
+    public ResponseEntity<Menu> updateMenu(@Valid @RequestBody MenuDto menuDto, @PathVariable Integer id) throws Exception {
         return new ResponseEntity<Menu>(menuService.update(menuMapper.fromMenuDtoToMenu(menuDto), id),
                 HttpStatus.OK);
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
-    public ResponseEntity<?> deleteMenuItem(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> deleteMenu(@PathVariable Integer id) throws Exception {
         menuService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

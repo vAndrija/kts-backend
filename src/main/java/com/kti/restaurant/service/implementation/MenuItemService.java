@@ -20,7 +20,7 @@ public class MenuItemService implements IMenuItemService {
 
     @Override
     public List<MenuItem> findAll() {
-        return (List<MenuItem>) menuItemRepository.findAll();
+        return menuItemRepository.findAll();
     }
 
     @Override
