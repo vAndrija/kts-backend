@@ -10,8 +10,17 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "waiter")
 @PrimaryKeyJoinColumn(name = "users")
-@SQLDelete(sql = "UPDATE waiter SET deleted = true WHERE id=?")
-@Where(clause = "deleted=false")
 public class Waiter extends User {
 
+    public Waiter(String lastName, String name, String phoneNumber, String emailAddress, String accountNumber, String password) {
+        super(lastName, name, phoneNumber, emailAddress, password, accountNumber);
+    }
+
+    public Waiter(Integer id, String name, String lastName, String accountNumber, String phoneNumber){
+        super(id,name,lastName,accountNumber,phoneNumber);
+    }
+
+    public Waiter() {
+        super();
+    }
 }

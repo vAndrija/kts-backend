@@ -11,6 +11,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.Table;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy=InheritanceType.JOINED)
-@SQLDelete(sql = "UPDATE user SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE users SET deleted = true WHERE id=? AND version = ?")
 @Where(clause = "deleted=false")
 public abstract class User implements UserDetails {
     @Version
@@ -66,6 +67,7 @@ public abstract class User implements UserDetails {
         this.emailAddress = emailAddress;
         this.password = password;
         this.accountNumber = accountNumber;
+        this.roles = new ArrayList<>();
     }
 
     public User(String lastName, String name, String phoneNumber, String emailAddress, String accountNumber) {
@@ -74,6 +76,7 @@ public abstract class User implements UserDetails {
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
         this.accountNumber = accountNumber;
+        this.roles = new ArrayList<>();
     }
 
     public User(Integer id, String name, String lastName, String accountNumber, String phoneNumber){
@@ -82,6 +85,7 @@ public abstract class User implements UserDetails {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.accountNumber = accountNumber;
+        this.roles = new ArrayList<>();
     }
 
     public User() {

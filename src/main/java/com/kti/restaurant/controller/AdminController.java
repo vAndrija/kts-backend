@@ -53,7 +53,7 @@ public class AdminController {
         return new ResponseEntity<>(adminMapper.fromAdminToAdminDto(admin),HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAdmin(@PathVariable Integer id) throws Exception {
         adminService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

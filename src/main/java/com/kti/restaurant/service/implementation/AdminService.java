@@ -3,7 +3,11 @@ package com.kti.restaurant.service.implementation;
 import com.kti.restaurant.exception.ConflictException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Admin;
+import com.kti.restaurant.model.Role;
+import com.kti.restaurant.model.User;
 import com.kti.restaurant.repository.AdminRepository;
+import com.kti.restaurant.repository.RoleRepository;
+import com.kti.restaurant.repository.UserRepository;
 import com.kti.restaurant.service.contract.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,11 +20,15 @@ public class AdminService implements IAdminService {
 
     private AdminRepository adminRepository;
     private PasswordEncoder passwordEncoder;
+    private RoleRepository roleRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    public AdminService(AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
+    public AdminService(AdminRepository adminRepository, PasswordEncoder passwordEncoder,
+                        RoleRepository roleRepository,UserRepository userRepository) {
         this.adminRepository = adminRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -38,10 +46,12 @@ public class AdminService implements IAdminService {
 
     @Override
     public Admin create(Admin entity) throws Exception {
-        Admin admin = adminRepository.findByEmailAddress(entity.getEmailAddress());
-        if (admin != null)
+        User user = userRepository.findByEmailAddress(entity.getEmailAddress());
+        if (user != null)
             throw new ConflictException("Admin with entered email already exists.");
+        System.out.println(entity.getPassword());
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        entity.getRoles().add(roleRepository.getById(1L));
         adminRepository.save(entity);
         return entity;
     }
@@ -60,6 +70,8 @@ public class AdminService implements IAdminService {
     @Override
     public void delete(Integer id) throws Exception {
         Admin admin = this.findById(id);
+        System.out.println(admin.getId());
+        System.out.println("ANdrijaaaaaaaaaa");
         adminRepository.delete(admin);
     }
 }

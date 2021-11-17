@@ -10,8 +10,17 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "manager")
 @PrimaryKeyJoinColumn(name = "users")
-@SQLDelete(sql = "UPDATE manager SET deleted = true WHERE id=?")
-@Where(clause = "deleted=false")
 public class Manager extends User {
 
+    public Manager(String lastName, String name, String phoneNumber, String emailAddress, String accountNumber,String password) {
+        super(lastName, name, phoneNumber, emailAddress,password, accountNumber);
+    }
+
+    public Manager(Integer id, String name, String lastName, String accountNumber, String phoneNumber){
+        super(id,name,lastName,accountNumber,phoneNumber);
+    }
+
+    public Manager() {
+        super();
+    }
 }

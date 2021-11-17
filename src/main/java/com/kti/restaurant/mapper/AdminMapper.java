@@ -8,13 +8,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AdminMapper {
+
     public Admin fromAdminCreateDtoToAdmin(AdminCreateDto adminCreateDto) {
         return new Admin(adminCreateDto.getLastName(),adminCreateDto.getName(),
-                adminCreateDto.getPhoneNumber(),adminCreateDto.getEmailAddress(),adminCreateDto.getAccountNumber());
+                adminCreateDto.getPhoneNumber(),adminCreateDto.getEmailAddress(),adminCreateDto.getAccountNumber(),adminCreateDto.getPassword());
     }
 
     public AdminDto fromAdminToAdminDto(Admin admin) {
-        return new AdminDto(admin.getName(),admin.getLastName(),admin.getPhoneNumber(),admin.getEmailAddress(),admin.getAccountNumber());
+        return new AdminDto(admin.getId(),admin.getName(),admin.getLastName(),admin.getPhoneNumber(),admin.getEmailAddress(),admin.getAccountNumber());
     }
 
     public Admin fromAdminUpdateDtoToAdmin(AdminUpdateDto adminUpdateDto) {
