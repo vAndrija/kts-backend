@@ -53,7 +53,6 @@ public class SalaryController {
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
     public ResponseEntity<?> deleteSalary(@PathVariable Integer id) throws Exception {
-        System.out.println(id);
         salaryService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
