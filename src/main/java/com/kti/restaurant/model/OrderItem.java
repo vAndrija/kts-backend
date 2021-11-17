@@ -57,20 +57,21 @@ public class OrderItem {
 
     }
 
-    public OrderItem(Integer id, Integer quantity, String note, OrderItemStatus status, Integer priority) {
-        this.id = id;
-        this.quantity = quantity;
-        this.note = note;
-        this.status = status;
-        this.priority = priority;
-    }
-
-    public OrderItem(Integer quantity, String note, OrderItemStatus status, Integer priority,MenuItem menuItem) {
+    public OrderItem(Integer quantity, String note, OrderItemStatus status, Integer priority, MenuItem menuItem) {
         this.quantity = quantity;
         this.note = note;
         this.status = status;
         this.priority = priority;
         this.menuItem = menuItem;
+    }
+
+    public OrderItem(Integer quantity, String note, OrderItemStatus status, Integer priority,MenuItem menuItem, Order order) {
+        this.quantity = quantity;
+        this.note = note;
+        this.status = status;
+        this.priority = priority;
+        this.menuItem = menuItem;
+        this.order = order;
 
     }
 

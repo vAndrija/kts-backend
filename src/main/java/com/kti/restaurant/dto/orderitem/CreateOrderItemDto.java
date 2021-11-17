@@ -2,26 +2,36 @@ package com.kti.restaurant.dto.orderitem;
 
 import com.kti.restaurant.model.enums.OrderItemStatus;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class CreateOrderItemDto {
+    @NotNull(message = "Quantity should not be null")
     private Integer quantity;
 
+    @NotEmpty(message = "Note should not be null or empty")
     private String note;
 
+    @NotNull(message = "Status should not be null")
     private OrderItemStatus status;
 
+    @NotNull(message = "Priority should not be null")
     private Integer priority;
 
-    private Integer order;
+    @NotNull(message = "Order id should not be null")
+    private Integer orderId;
 
-    private Integer menuItem;
+    @NotNull(message = "Menu item id should not be null")
+    private Integer menuItemId;
 
-    //dodati i order
-    public CreateOrderItemDto(Integer quantity, String note, OrderItemStatus status, Integer priority, Integer menuItem) {
+    public CreateOrderItemDto(Integer quantity, String note, OrderItemStatus status, Integer priority,
+                              Integer menuItemId, Integer orderId) {
         this.quantity = quantity;
         this.note = note;
         this.status = status;
         this.priority = priority;
-        this.menuItem = menuItem;
+        this.menuItemId = menuItemId;
+        this.orderId = orderId;
     }
 
     public CreateOrderItemDto(){
@@ -60,11 +70,19 @@ public class CreateOrderItemDto {
         this.priority = priority;
     }
 
-    public Integer getOrder() {return order;}
+    public Integer getOrderId() {
+        return orderId;
+    }
 
-    public void setOrder(Integer order) {this.order = order;}
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
 
-    public Integer getMenuItem() {return menuItem;}
+    public Integer getMenuItemId() {
+        return menuItemId;
+    }
 
-    public void setMenuItem(Integer menuItem) {this.menuItem = menuItem;}
+    public void setMenuItemId(Integer menuItemId) {
+        this.menuItemId = menuItemId;
+    }
 }

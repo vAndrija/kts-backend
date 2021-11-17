@@ -5,11 +5,12 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.persistence.Table;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "discount")
-@SQLDelete(sql = "UPDATE discount SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE discount SET deleted = true WHERE id=? AND version = ?")
 @Where(clause = "deleted=false")
 public class Discount {
     @Version
