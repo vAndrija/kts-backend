@@ -70,8 +70,6 @@ public class AdminService implements IAdminService {
     @Override
     public void delete(Integer id) throws Exception {
         Admin admin = this.findById(id);
-        System.out.println(admin.getId());
-        System.out.println("ANdrijaaaaaaaaaa");
         adminRepository.delete(admin);
     }
 }

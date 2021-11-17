@@ -35,26 +35,26 @@ public class ManagerController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAdmins(){
+    public ResponseEntity<?> getManagers(){
         List<ManagerDto> managerDtos = managerService.findAll().stream()
                 .map(manager->this.managerMapper.fromManagerToManagerDto(manager)).collect(Collectors.toList());
         return new ResponseEntity<>(managerDtos,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAdmin(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> getManager(@PathVariable Integer id) throws Exception {
         Manager manager =  managerService.findById(id);
         return new ResponseEntity<>(managerMapper.fromManagerToManagerDto(manager), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateAdmin(@RequestBody ManagerUpdateDto managerUpdateDto, @PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> updateManager(@RequestBody ManagerUpdateDto managerUpdateDto, @PathVariable Integer id) throws Exception {
         Manager manager = managerService.update(managerMapper.fromManagerUpdateDtoToManager(managerUpdateDto), id);
         return new ResponseEntity<>(managerMapper.fromManagerToManagerDto(manager),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAdmin(@PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> deleteManager(@PathVariable Integer id) throws Exception {
         managerService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
