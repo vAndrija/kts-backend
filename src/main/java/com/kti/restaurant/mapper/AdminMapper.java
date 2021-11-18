@@ -19,7 +19,7 @@ public class AdminMapper {
     }
 
     public Admin fromAdminUpdateDtoToAdmin(AdminUpdateDto adminUpdateDto) {
-        return new Admin(adminUpdateDto.getId(),adminUpdateDto.getName(),adminUpdateDto.getLastName(),
+        return new Admin(adminUpdateDto.getName(),adminUpdateDto.getLastName(),
                 adminUpdateDto.getAccountNumber(),adminUpdateDto.getPhoneNumber());
     }
 }

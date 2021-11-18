@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public class BartenderController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createBartender(@RequestBody BartenderCreateDto bartenderCreateDto) throws Exception {
+    public ResponseEntity<?> createBartender(@Valid @RequestBody BartenderCreateDto bartenderCreateDto) throws Exception {
         Bartender bartender =  bartenderService.create(bartenderMapper.fromBartenderCreateDtoToBartender(bartenderCreateDto));
         return new ResponseEntity<>(bartenderMapper.fromBartenderToBartenderDto(bartender), HttpStatus.CREATED);
     }
@@ -48,7 +49,7 @@ public class BartenderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateBartender(@RequestBody BartenderUpdateDto bartenderUpdateDto, @PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> updateBartender(@Valid @RequestBody BartenderUpdateDto bartenderUpdateDto, @PathVariable Integer id) throws Exception {
         Bartender bartender = bartenderService.update(bartenderMapper.fromBartenderUpdateDtoToBartender(bartenderUpdateDto), id);
         return new ResponseEntity<>(bartenderMapper.fromBartenderToBartenderDto(bartender),HttpStatus.OK);
     }

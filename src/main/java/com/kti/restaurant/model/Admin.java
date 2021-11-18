@@ -16,8 +16,8 @@ public class Admin extends User {
         super(lastName, name, phoneNumber, emailAddress, password,accountNumber);
     }
 
-    public Admin(Integer id, String name, String lastName, String accountNumber, String phoneNumber){
-        super(id,name,lastName,accountNumber,phoneNumber);
+    public Admin(String name, String lastName, String accountNumber, String phoneNumber){
+        super(name,lastName,accountNumber,phoneNumber);
     }
 
     public Admin() {

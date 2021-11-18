@@ -20,7 +20,7 @@ public class BartenderMapper {
     }
 
     public Bartender fromBartenderUpdateDtoToBartender(BartenderUpdateDto bartenderUpdateDto) {
-        return new Bartender(bartenderUpdateDto.getId(),bartenderUpdateDto.getName(),bartenderUpdateDto.getLastName(),
+        return new Bartender(bartenderUpdateDto.getName(),bartenderUpdateDto.getLastName(),
                 bartenderUpdateDto.getAccountNumber(),bartenderUpdateDto.getPhoneNumber(),bartenderUpdateDto.getPriority());
     }
 }

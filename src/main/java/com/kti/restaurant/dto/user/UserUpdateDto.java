@@ -1,14 +1,19 @@
 package com.kti.restaurant.dto.user;
 
-public class UserUpdateDto {
-    private Integer id;
+import javax.validation.constraints.NotEmpty;
 
+public class UserUpdateDto {
+
+    @NotEmpty(message = "name should not be null or empty")
     private String name;
 
+    @NotEmpty(message = "lastName should not be null or empty")
     private String lastName;
 
+    @NotEmpty(message = "phoneNumber should not be null or empty")
     private String phoneNumber;
 
+    @NotEmpty(message = "accountNumber should not be null or empty")
     private String accountNumber;
 
     public UserUpdateDto(){}
@@ -42,14 +47,6 @@ public class UserUpdateDto {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getAccountNumber() {

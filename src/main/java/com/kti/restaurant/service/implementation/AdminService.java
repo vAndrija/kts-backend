@@ -29,6 +29,7 @@ public class AdminService implements IAdminService {
         this.adminRepository = adminRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
     }
 
     @Override

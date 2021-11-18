@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ public class CookController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createCook(@RequestBody CookCreateDto cookCreateDto) throws Exception {
+    public ResponseEntity<?> createCook(@Valid @RequestBody CookCreateDto cookCreateDto) throws Exception {
         Cook cook = cookService.create(cookMapper.fromCookCreateDtoToCook(cookCreateDto));
         return new ResponseEntity<>(cookMapper.fromCookToCookDto(cook), HttpStatus.CREATED);
     }
@@ -49,7 +50,7 @@ public class CookController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCook(@RequestBody CookUpdateDto cookUpdateDto, @PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> updateCook(@Valid @RequestBody CookUpdateDto cookUpdateDto, @PathVariable Integer id) throws Exception {
         Cook cook = cookService.update(cookMapper.fromCookUpdateDtoToCook(cookUpdateDto), id);
         return new ResponseEntity<>(cookMapper.fromCookToCookDto(cook), HttpStatus.OK);
     }

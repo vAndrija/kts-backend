@@ -21,8 +21,8 @@ public class Cook extends User {
         this.priority = priority;
     }
 
-    public Cook(Integer id, String name, String lastName, String accountNumber, String phoneNumber, Boolean priority) {
-        super(id, name, lastName, accountNumber, phoneNumber);
+    public Cook(String name, String lastName, String accountNumber, String phoneNumber, Boolean priority) {
+        super(name, lastName, accountNumber, phoneNumber);
         this.priority = priority;
     }
 

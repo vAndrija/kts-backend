@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public class AdminController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createAdmin(@RequestBody AdminCreateDto adminCreateDto) throws Exception {
+    public ResponseEntity<?> createAdmin(@Valid  @RequestBody AdminCreateDto adminCreateDto) throws Exception {
         Admin admin =  adminService.create(adminMapper.fromAdminCreateDtoToAdmin(adminCreateDto));
         return new ResponseEntity<>(adminMapper.fromAdminToAdminDto(admin), HttpStatus.CREATED);
     }
@@ -48,7 +49,7 @@ public class AdminController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateAdmin(@RequestBody AdminUpdateDto adminUpdateDto, @PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> updateAdmin(@Valid @RequestBody AdminUpdateDto adminUpdateDto, @PathVariable Integer id) throws Exception {
         Admin admin = adminService.update(adminMapper.fromAdminUpdateDtoToAdmin(adminUpdateDto), id);
         return new ResponseEntity<>(adminMapper.fromAdminToAdminDto(admin),HttpStatus.OK);
     }

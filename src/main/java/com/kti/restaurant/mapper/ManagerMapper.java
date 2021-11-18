@@ -21,7 +21,7 @@ public class ManagerMapper {
     }
 
     public Manager fromManagerUpdateDtoToManager(ManagerUpdateDto managerUpdateDto) {
-        return new Manager(managerUpdateDto.getId(),managerUpdateDto.getName(),managerUpdateDto.getLastName(),
+        return new Manager(managerUpdateDto.getName(),managerUpdateDto.getLastName(),
                 managerUpdateDto.getAccountNumber(),managerUpdateDto.getPhoneNumber());
     }
 }

@@ -23,8 +23,8 @@ public class Bartender extends User {
         this.priority = priority;
     }
 
-    public Bartender(Integer id, String name, String lastName, String accountNumber, String phoneNumber, Boolean priority) {
-        super(id, name, lastName, accountNumber, phoneNumber);
+    public Bartender(String name, String lastName, String accountNumber, String phoneNumber, Boolean priority) {
+        super(name, lastName, accountNumber, phoneNumber);
         this.priority = priority;
     }
 

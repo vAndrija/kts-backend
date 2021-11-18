@@ -20,7 +20,7 @@ public class CookMapper {
     }
 
     public Cook fromCookUpdateDtoToCook(CookUpdateDto cookUpdateDto) {
-        return new Cook(cookUpdateDto.getId(),cookUpdateDto.getName(),cookUpdateDto.getLastName(),
+        return new Cook(cookUpdateDto.getName(),cookUpdateDto.getLastName(),
                 cookUpdateDto.getAccountNumber(),cookUpdateDto.getPhoneNumber(),cookUpdateDto.getPriority());
     }
 }

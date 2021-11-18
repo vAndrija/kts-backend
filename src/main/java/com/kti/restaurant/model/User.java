@@ -79,8 +79,7 @@ public abstract class User implements UserDetails {
         this.roles = new ArrayList<>();
     }
 
-    public User(Integer id, String name, String lastName, String accountNumber, String phoneNumber){
-        this.id = id;
+    public User(String name, String lastName, String accountNumber, String phoneNumber){
         this.lastName = lastName;
         this.name = name;
         this.phoneNumber = phoneNumber;

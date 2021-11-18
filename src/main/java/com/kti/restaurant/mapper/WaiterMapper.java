@@ -19,7 +19,7 @@ public class WaiterMapper {
     }
 
     public Waiter fromWaiterUpdateDtoToWaiter(WaiterUpdateDto waiterUpdateDto) {
-        return new Waiter(waiterUpdateDto.getId(),waiterUpdateDto.getName(),waiterUpdateDto.getLastName(),
+        return new Waiter(waiterUpdateDto.getName(),waiterUpdateDto.getLastName(),
                 waiterUpdateDto.getAccountNumber(),waiterUpdateDto.getPhoneNumber());
     }
 }

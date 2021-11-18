@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ public class WaiterController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createWaiter(@RequestBody WaiterCreateDto waiterCreateDto) throws Exception {
+    public ResponseEntity<?> createWaiter(@Valid @RequestBody WaiterCreateDto waiterCreateDto) throws Exception {
         Waiter waiter =  waiterService.create(waiterMapper.fromWaiterCreateDtoToWaiter(waiterCreateDto));
         return new ResponseEntity<>(waiterMapper.fromWaiterToWaiterDto(waiter), HttpStatus.CREATED);
     }
@@ -49,7 +50,7 @@ public class WaiterController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateWaiter(@RequestBody WaiterUpdateDto waiterUpdateDto, @PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> updateWaiter(@Valid @RequestBody WaiterUpdateDto waiterUpdateDto, @PathVariable Integer id) throws Exception {
         Waiter waiter = waiterService.update(waiterMapper.fromWaiterUpdateDtoToWaiter(waiterUpdateDto), id);
         return new ResponseEntity<>(waiterMapper.fromWaiterToWaiterDto(waiter),HttpStatus.OK);
     }

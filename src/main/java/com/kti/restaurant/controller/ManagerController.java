@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public class ManagerController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createManger(@RequestBody ManagerCreateDto managerCreateDto) throws Exception {
+    public ResponseEntity<?> createManger(@Valid @RequestBody ManagerCreateDto managerCreateDto) throws Exception {
         Manager manager =  managerService.create(managerMapper.fromManagerCreateDtoToManger(managerCreateDto));
         return new ResponseEntity<>(managerMapper.fromManagerToManagerDto(manager), HttpStatus.CREATED);
     }
@@ -48,7 +49,7 @@ public class ManagerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateManager(@RequestBody ManagerUpdateDto managerUpdateDto, @PathVariable Integer id) throws Exception {
+    public ResponseEntity<?> updateManager(@Valid @RequestBody ManagerUpdateDto managerUpdateDto, @PathVariable Integer id) throws Exception {
         Manager manager = managerService.update(managerMapper.fromManagerUpdateDtoToManager(managerUpdateDto), id);
         return new ResponseEntity<>(managerMapper.fromManagerToManagerDto(manager),HttpStatus.OK);
     }
