@@ -1,17 +1,25 @@
 package com.kti.restaurant.dto.user;
 
+import javax.validation.constraints.NotEmpty;
+
 public class UserCreateDto {
 
+    @NotEmpty(message = "name should not be null or empty")
     private String name;
 
+    @NotEmpty(message = "lastName should not be null or empty")
     private String lastName;
 
+    @NotEmpty(message = "phoneNumber should not be null or empty")
     private String phoneNumber;
 
+    @NotEmpty(message = "accountNumber should not be null or empty")
     private String accountNumber;
 
+    @NotEmpty(message = "emailAddress should not be null or empty")
     private String emailAddress;
 
+    @NotEmpty(message = "password should not be null or empty")
     private String password;
 
     public UserCreateDto(){}

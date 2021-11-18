@@ -10,8 +10,27 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "cook")
 @PrimaryKeyJoinColumn(name = "users")
-@SQLDelete(sql = "UPDATE cook SET deleted = true WHERE id=?")
-@Where(clause = "deleted=false")
 public class Cook extends User {
+    private Boolean priority;
 
+    public Cook() {
+    }
+
+    public Cook(String lastName, String name, String phoneNumber, String emailAddress, String accountNumber, Boolean priority,String password) {
+        super(lastName, name, phoneNumber, emailAddress,password, accountNumber);
+        this.priority = priority;
+    }
+
+    public Cook(String name, String lastName, String accountNumber, String phoneNumber, Boolean priority) {
+        super(name, lastName, accountNumber, phoneNumber);
+        this.priority = priority;
+    }
+
+    public Boolean getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Boolean priority) {
+        this.priority = priority;
+    }
 }
