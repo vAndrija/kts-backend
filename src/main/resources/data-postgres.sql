@@ -6,7 +6,177 @@ INSERT INTO roles (name) values ('ROLE_WAITER');
 
 
 INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
-    ('prva@prva','mirko','miric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','225883','2131231231231',true,false);
-INSERT INTO USER_ROLE (user_id, role_id) VALUES (1, 1);
-INSERT INTO bartender (users) values (1);
+    ('mirkomiric@gmail.com','mirko','miric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0608963214','2131231231231',true,false);
+INSERT INTO user_role (user_id, role_id) VALUES (1, 1);
+INSERT INTO admin (users) values (1);
 
+
+INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
+    ('lukaperic@gmail.com','luka','peric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0632589641','6332238931255',true,false);
+INSERT INTO user_role (user_id, role_id) VALUES (1, 2);
+INSERT INTO bartender (users, priority) values (2, false);
+
+INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
+    ('milossaric@gmail.com','milos','saric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0645599641','1132258931278',true,false);
+INSERT INTO user_role (user_id, role_id) VALUES (1, 2);
+INSERT INTO bartender (users, priority) values (3, true);
+
+
+INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
+    ('kristinamisic@gmail.com','kristina','misic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0697425831','85315612318963',true,false);
+INSERT INTO user_role (user_id, role_id) VALUES (1, 3);
+INSERT INTO cook (users, priority) values (4, false);
+
+INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
+    ('urosmatic@gmail.com','uros','matic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0698620031','42318612311963',true,false);
+INSERT INTO user_role (user_id, role_id) VALUES (1, 3);
+INSERT INTO cook (users, priority) values (5, true);
+
+
+INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
+    ('sarajovic@gmail.com','sara','jovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0647456821','78615616918959',true,false);
+INSERT INTO user_role (user_id, role_id) VALUES (1, 4);
+INSERT INTO manager (users) values (6);
+
+
+INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
+    ('jovanpetrovic@gmail.com','jovan','petrovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0607425922','22365612316263',true,false);
+INSERT INTO user_role (user_id, role_id) VALUES (1, 5);
+INSERT INTO waiter (users) values (7);
+
+INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
+    ('anapopovic@gmail.com','ana','popovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0627412922','22005612314563',true,false);
+INSERT INTO user_role (user_id, role_id) VALUES (1, 5);
+INSERT INTO waiter (users) values (8);
+
+INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (45000.00, '2021-11-18', '2022-11-18', 1, false);
+INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (50000.00, '2021-10-05', '2022-10-05', 2, false);
+INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (60000.00, '2021-08-18', '2022-08-18', 3, false);
+INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (50000.00, '2021-11-18', '2022-11-18', 4, false);
+INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (65000.00, '2021-02-01', '2022-02-01', 5, false);
+INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (70000.00, '2021-01-05', '2022-01-05', 6, false);
+INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (62000.00, '2021-11-18', '2022-11-18', 7, false);
+INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (62000.00, '2021-11-18', '2022-11-18', 8, false);
+
+
+INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (1, 4, 0, 1, false);
+INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (2, 6, 2, 1, false);
+INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (3, 2, 2, 3, false);
+INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (4, 4, 4, 1, false);
+
+
+INSERT INTO table_reservation (name, duration_start, table_id, deleted) values ('Milica Petric', '2021-11-18T16:00', 1, false);
+INSERT INTO table_reservation (name, duration_start, table_id, deleted) values ('Ana Jojic', '2021-11-20T19:00', 2, false);
+
+
+INSERT INTO menu (name, duration_start, duration_end, deleted) values ('standardni', '2021-11-18T08:00', '2022-11-18T08:00', false);
+INSERT INTO menu (name, duration_start, duration_end, deleted) values ('letnji', '2021-06-01T08:00', '2021-08-31T23:59', false);
+
+
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
+    ('coca cola', 'bezalkoholno gazirano pice', 0, 7, 1, true, false);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
+    ('mohito', 'koktel  od belog kubanskog ruma, soka limetе, sveze nane i mineralne vode', 0, 5, 1, true, false);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
+    ('domaca kafa', 'topli napitak', 0, 6, 1, true, false);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
+    ('limunada', 'bezalkoholno pice', 0, 7, 1, true, false);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
+    ('domaca supa', 'pileca supa sa rezancima', 1, 0, 1, true, false);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
+    ('paradajz corba', 'paradajz corba sa slaninicom', 1, 0, 1, true, false);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
+    ('dimljeni saran', 'dimljeni saran sa grilovanim povrcem', 1, 3, 1, true, false);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
+    ('lignje sa zara', 'lignje sa zara, prilog krompir sa blitvom', 1, 3, 1, true, false);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
+    ('pileci file u senfu i medu', 'pileci file u senfu i medu, prilog grilovano povrce ', 1, 3, 1, true, false);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
+    ('punjeni pileci batak na zaru', 'pileci batak punjen sirom i slaninom, prilog peceni krompir', 1, 3, 1, true, false);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
+    ('strudla sa makom', 'strudla sa makom', 1, 4, 1, true, false);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
+    ('baklava', 'baklava sa orasima', 1, 4, 1, true, false);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
+    ('krempita', 'krempita sa dodatkom visnje', 1, 4, 1, true, false);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
+    ('pita sa visnjama', 'pita sa visnjama, belom cokoladom i sladoledom od vannile', 1, 4, null, false, false);
+
+
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
+    ( 180.00, '2021-11-18', null, 1, true, false);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
+    ( 600.00, '2021-11-18', null, 2, true, false);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
+    ( 100.00, '2021-11-18', null, 3, true, false);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
+    ( 150.00, '2021-11-18', null, 4, true, false);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
+    ( 265.00, '2021-11-18', null, 5, true, false);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
+    ( 290.00, '2021-11-18', null, 6, true, false);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
+    ( 990.00, '2021-11-18', null, 7, true, false);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
+    ( 1070.00, '2021-11-18', null, 8, true, false);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
+    ( 820.00, '2021-11-18', null, 9, true, false);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
+    ( 760.00, '2021-11-18', null, 10, true, false);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
+    ( 250.00, '2021-11-18', null, 11, true, false);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
+    ( 250.00, '2021-11-18', null, 12, true, false);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
+    ( 280.00, '2021-11-18', null, 13, true, false);
+
+
+INSERT INTO discount (value, start_date, end_date, menu_item_id, is_current, deleted) values
+    (10, '2021-11-20', '2021-11-25', 8, false, false);
+
+
+INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
+    (0, '2022-11-18T14:15', 1520, 3, 7, false);
+INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
+    (1, '2022-11-18T13:00', 1830, 4, 8, false);
+INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
+    (1, '2022-11-18T12:48', 810, 2, 7, false);
+
+INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
+    ('', 1, 2, 0, null, null ,1, 1, false);
+INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
+    ('', 2, 1, 0, null, null, 7, 1, false);
+INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
+    ('', 2, 1, 0, null, null, 8, 1, false);
+INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
+    ('', 1, 1, 1, 2, null, 3, 2, false);
+INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
+    ('', 1, 1, 1, 3 , null, 4, 2, false);
+INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
+    ('', 2, 1, 1, null, 4, 9, 1, false);
+INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
+    ('', 2, 1, 1, null, 5, 10, 1, false);
+
+INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
+    ('', 1, 1, 2, 2, null, 1, 1, false);
+INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
+    ('', 1, 1, 2, 3 , null, 3, 1, false);
+INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
+    ('', 2, 1, 1, null, 5, 12, 1, false);
+INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
+    ('', 2, 1, 1, null, 4, 13, 1, false);
+
+INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
+    ('Napravljena je nova porudzbina.', 2, 4, 1, false);
+INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
+    ('Napravljena je nova porudzbina.', 3, 5, 1, false);
+INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
+    ('Pileci file u senfu i medu je u pripremi.', null, 4, 2, false);
+INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
+    ('Punjeni pileci batak na zaru je u pripremi.', null, 5, 2, false);
+INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
+    ('Domaca kafa je pripremljena.', 3, null, 3, false);
+INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
+    ('Baklava je u pripremi.', 3, null, 3, false);
+INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
+    ('Krempita je u pipremi.', 3, null, 3, false);
