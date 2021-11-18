@@ -7,12 +7,14 @@ import com.kti.restaurant.model.User;
 import com.kti.restaurant.repository.CookRepository;
 import com.kti.restaurant.repository.RoleRepository;
 import com.kti.restaurant.repository.UserRepository;
+import com.kti.restaurant.service.EmailService;
 import com.kti.restaurant.service.contract.ICookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CookService implements ICookService {
@@ -21,14 +23,16 @@ public class CookService implements ICookService {
     private PasswordEncoder passwordEncoder;
     private RoleRepository roleRepository;
     private UserRepository userRepository;
+    private EmailService emailService;
 
     @Autowired
     public CookService(CookRepository cookRepository, PasswordEncoder passwordEncoder,
-                       RoleRepository roleRepository, UserRepository userRepository){
+                       RoleRepository roleRepository, UserRepository userRepository, EmailService emailService){
         this.cookRepository = cookRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -49,7 +53,9 @@ public class CookService implements ICookService {
         User user = userRepository.findByEmailAddress(entity.getEmailAddress());
         if (user != null)
             throw new ConflictException("Cook with entered email already exists.");
-        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        String tempPassword = UUID.randomUUID().toString();
+        emailService.sendRegistrationMail(entity.getEmailAddress(),"Nalog kreiran", tempPassword);
+        entity.setPassword(passwordEncoder.encode(tempPassword));
         entity.getRoles().add(roleRepository.getById(3L));
         cookRepository.save(entity);
         return entity;

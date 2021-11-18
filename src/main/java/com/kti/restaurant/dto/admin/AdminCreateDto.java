@@ -8,7 +8,7 @@ public class AdminCreateDto extends UserCreateDto {
         super();
     }
 
-    public AdminCreateDto(String name, String lastName, String phoneNumber, String accountNumber,String password, String emailAddress) {
-        super(name, lastName, phoneNumber, accountNumber,password,emailAddress);
+    public AdminCreateDto(String name, String lastName, String phoneNumber, String accountNumber, String emailAddress) {
+        super(name, lastName, phoneNumber, accountNumber,emailAddress);
     }
 }

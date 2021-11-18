@@ -8,12 +8,14 @@ import com.kti.restaurant.model.Waiter;
 import com.kti.restaurant.repository.RoleRepository;
 import com.kti.restaurant.repository.UserRepository;
 import com.kti.restaurant.repository.WaiterRepository;
+import com.kti.restaurant.service.EmailService;
 import com.kti.restaurant.service.contract.IWaiterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class WaiterService  implements IWaiterService {
@@ -22,10 +24,11 @@ public class WaiterService  implements IWaiterService {
     private PasswordEncoder passwordEncoder;
     private RoleRepository roleRepository;
     private UserRepository userRepository;
+    private EmailService emailService;
 
     @Autowired
     public WaiterService(WaiterRepository waiterRepository, PasswordEncoder passwordEncoder,
-                         RoleRepository roleRepository, UserRepository userRepository) {
+                         RoleRepository roleRepository, UserRepository userRepository, EmailService emailService) {
         this.waiterRepository = waiterRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
@@ -50,7 +53,9 @@ public class WaiterService  implements IWaiterService {
         User user = userRepository.findByEmailAddress(entity.getEmailAddress());
         if (user != null)
             throw new ConflictException("Waiter with entered email already exists.");
-        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        String tempPassword = UUID.randomUUID().toString();
+        emailService.sendRegistrationMail(entity.getEmailAddress(),"Nalog kreiran", tempPassword);
+        entity.setPassword(passwordEncoder.encode(tempPassword));
         entity.getRoles().add(roleRepository.getById(5L));
         waiterRepository.save(entity);
         return entity;

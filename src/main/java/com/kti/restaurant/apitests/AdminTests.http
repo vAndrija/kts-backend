@@ -19,7 +19,7 @@ Authorization: Bearer {{auth_token}}
   "lastName" : "Vojnovic",
   "phoneNumber" : "225883",
   "accountNumber" : "12345663434",
-  "emailAddress" : "druga@druga",
+  "emailAddress" : "andrijavojnovicpa@gmail.com",
   "password" : "123"
 }
 

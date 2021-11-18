@@ -8,7 +8,7 @@ public class WaiterCreateDto extends UserCreateDto {
         super();
     }
 
-    public WaiterCreateDto(String name, String lastName, String phoneNumber, String accountNumber,String password, String emailAddress) {
-        super(name, lastName, phoneNumber, accountNumber,password,emailAddress);
+    public WaiterCreateDto(String name, String lastName, String phoneNumber, String accountNumber, String emailAddress) {
+        super(name, lastName, phoneNumber, accountNumber,emailAddress);
     }
 }

@@ -11,7 +11,7 @@ public class AdminMapper {
 
     public Admin fromAdminCreateDtoToAdmin(AdminCreateDto adminCreateDto) {
         return new Admin(adminCreateDto.getLastName(),adminCreateDto.getName(),
-                adminCreateDto.getPhoneNumber(),adminCreateDto.getEmailAddress(),adminCreateDto.getAccountNumber(),adminCreateDto.getPassword());
+                adminCreateDto.getPhoneNumber(),adminCreateDto.getEmailAddress(),adminCreateDto.getAccountNumber());
     }
 
     public AdminDto fromAdminToAdminDto(Admin admin) {

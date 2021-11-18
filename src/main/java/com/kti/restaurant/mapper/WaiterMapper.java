@@ -11,7 +11,7 @@ public class WaiterMapper {
 
     public Waiter fromWaiterCreateDtoToWaiter(WaiterCreateDto waiterCreateDto) {
         return new Waiter(waiterCreateDto.getLastName(),waiterCreateDto.getName(), waiterCreateDto.getPhoneNumber(),
-                waiterCreateDto.getEmailAddress(),waiterCreateDto.getAccountNumber(),waiterCreateDto.getPassword());
+                waiterCreateDto.getEmailAddress(),waiterCreateDto.getAccountNumber());
     }
 
     public WaiterDto fromWaiterToWaiterDto(Waiter waiter) {

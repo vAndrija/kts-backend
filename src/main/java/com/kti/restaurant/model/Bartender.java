@@ -18,8 +18,8 @@ public class Bartender extends User {
 
     }
 
-    public Bartender(String lastName, String name, String phoneNumber, String emailAddress, String accountNumber, Boolean priority,String password) {
-        super(lastName, name, phoneNumber, emailAddress,password, accountNumber);
+    public Bartender(String lastName, String name, String phoneNumber, String emailAddress, String accountNumber, Boolean priority) {
+        super(lastName, name, phoneNumber, emailAddress, accountNumber);
         this.priority = priority;
     }
 

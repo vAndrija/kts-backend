@@ -9,9 +9,9 @@ public class CookCreateDto extends UserCreateDto {
         super();
     }
 
-    public CookCreateDto(String name, String lastName, String phoneNumber, String accountNumber,String password,
+    public CookCreateDto(String name, String lastName, String phoneNumber, String accountNumber,
                               String emailAddress, Boolean priority) {
-        super(name, lastName, phoneNumber, accountNumber,password,emailAddress);
+        super(name, lastName, phoneNumber, accountNumber,emailAddress);
         this.priority = priority;
     }
 

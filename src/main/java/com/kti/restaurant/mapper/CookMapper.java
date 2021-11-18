@@ -11,7 +11,7 @@ public class CookMapper {
     public Cook fromCookCreateDtoToCook(CookCreateDto cookCreateDto) {
         return new Cook(cookCreateDto.getLastName(),cookCreateDto.getName(),
                 cookCreateDto.getPhoneNumber(),cookCreateDto.getEmailAddress(),
-                cookCreateDto.getAccountNumber(),cookCreateDto.getPriority(),cookCreateDto.getPassword());
+                cookCreateDto.getAccountNumber(),cookCreateDto.getPriority());
     }
 
     public CookDto fromCookToCookDto(Cook cook) {

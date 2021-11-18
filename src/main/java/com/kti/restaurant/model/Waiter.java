@@ -12,8 +12,8 @@ import javax.persistence.Table;
 @PrimaryKeyJoinColumn(name = "users")
 public class Waiter extends User {
 
-    public Waiter(String lastName, String name, String phoneNumber, String emailAddress, String accountNumber, String password) {
-        super(lastName, name, phoneNumber, emailAddress, password, accountNumber);
+    public Waiter(String lastName, String name, String phoneNumber, String emailAddress, String accountNumber) {
+        super(lastName, name, phoneNumber, emailAddress, accountNumber);
     }
 
     public Waiter(String name, String lastName, String accountNumber, String phoneNumber){
