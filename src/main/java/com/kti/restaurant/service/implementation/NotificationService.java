@@ -33,8 +33,8 @@ public class NotificationService implements INotificationService {
     }
 
     @Override
-    public Notification update(Notification notification) throws Exception {
-        Notification notificationToUpdate = notificationRepository.findById(notification.getId()).orElseGet(null);
+    public Notification update(Notification notification, Integer id) throws Exception {
+        Notification notificationToUpdate = notificationRepository.findById(id).orElse(null);
 
         if(notificationToUpdate == null) {
             throw new Exception("Entity with given id does not exist in the system.");

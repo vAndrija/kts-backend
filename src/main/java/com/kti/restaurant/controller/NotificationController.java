@@ -1,6 +1,7 @@
 package com.kti.restaurant.controller;
 
 import com.kti.restaurant.dto.notification.CreateUpdateNotificationDto;
+import com.kti.restaurant.dto.notification.NotificationDto;
 import com.kti.restaurant.mapper.NotificationMapper;
 import com.kti.restaurant.model.Notification;
 import com.kti.restaurant.service.contract.INotificationService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -26,39 +28,44 @@ public class NotificationController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Notification>> getAllNotifications() {
-        return new ResponseEntity<>(notificationService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<NotificationDto>> getAllNotifications() {
+        List<NotificationDto> notificationDtos = notificationService.findAll().stream()
+                .map(notification -> this.notificationMapper.fromNotificationToNotificationDto(notification)).collect(Collectors.toList());
+
+        return new ResponseEntity<>(notificationDtos, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Notification> getNotificationById(@PathVariable Integer id) {
-        return new ResponseEntity<>(notificationService.findById(id), HttpStatus.OK);
+    public ResponseEntity<NotificationDto> getNotificationById(@PathVariable Integer id) throws Exception {
+        Notification notification = notificationService.findById(id);
+
+        return new ResponseEntity<>(notificationMapper.fromNotificationToNotificationDto(notification), HttpStatus.OK);
     }
 
     @PostMapping("")
-    public ResponseEntity<Notification> createNotification(@RequestBody CreateUpdateNotificationDto notificationDto) throws Exception {
+    public ResponseEntity<NotificationDto> createNotification(@RequestBody CreateUpdateNotificationDto notificationDto) throws Exception {
         Notification notification = notificationService.create(notificationMapper.fromCreateNotificationDtoToNotification(notificationDto));
 
         if(notification != null) {
-            return new ResponseEntity<>(notification, HttpStatus.CREATED);
+            return new ResponseEntity<>(notificationMapper.fromNotificationToNotificationDto(notification), HttpStatus.CREATED);
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("")
-    public ResponseEntity<Notification> updateNotification(@RequestBody CreateUpdateNotificationDto notificationDto) throws Exception {
-        Notification notification = notificationService.update((notificationMapper.fromUpdateNotificationDtoToNotification(notificationDto)));
+    @PutMapping("/{id}")
+    public ResponseEntity<NotificationDto> updateNotification(@RequestBody CreateUpdateNotificationDto notificationDto, @PathVariable Integer id) throws Exception {
+        Notification notification = notificationService.update((notificationMapper.fromUpdateNotificationDtoToNotification(notificationDto)), id);
 
         if(notification != null) {
-            return new ResponseEntity<>(notification, HttpStatus.OK);
+            return new ResponseEntity<>(notificationMapper.fromNotificationToNotificationDto(notification), HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
-    public ResponseEntity<?> deleteNotification(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteNotification(@PathVariable Integer id) throws Exception {
         notificationService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

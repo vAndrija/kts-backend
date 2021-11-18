@@ -3,11 +3,11 @@ package com.kti.restaurant.dto.notification;
 public class CreateUpdateNotificationDto {
     private String message;
 
-    private Integer orderId;
+    private Integer orderItemId;
 
-    public CreateUpdateNotificationDto(String message, Integer orderId) {
+    public CreateUpdateNotificationDto(String message, Integer orderItemId) {
         this.message = message;
-        this.orderId = orderId;
+        this.orderItemId = orderItemId;
     }
 
     public CreateUpdateNotificationDto() {
@@ -22,11 +22,11 @@ public class CreateUpdateNotificationDto {
         this.message = message;
     }
 
-    public Integer getOrderId() {
-        return orderId;
+    public Integer getOrderItemId() {
+        return orderItemId;
     }
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
+    public void setOrderItemId(Integer orderItemId) {
+        this.orderItemId = orderItemId;
     }
 }

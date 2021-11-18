@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "order_item")
-@SQLDelete(sql = "UPDATE order_item SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE order_item SET deleted = true WHERE id=? AND version=?")
 @Where(clause = "deleted=false")
 public class OrderItem {
     @Version
@@ -54,6 +54,24 @@ public class OrderItem {
     }
 
     public OrderItem() {
+
+    }
+
+    public OrderItem(Integer quantity, String note, OrderItemStatus status, Integer priority, MenuItem menuItem) {
+        this.quantity = quantity;
+        this.note = note;
+        this.status = status;
+        this.priority = priority;
+        this.menuItem = menuItem;
+    }
+
+    public OrderItem(Integer quantity, String note, OrderItemStatus status, Integer priority,MenuItem menuItem, Order order) {
+        this.quantity = quantity;
+        this.note = note;
+        this.status = status;
+        this.priority = priority;
+        this.menuItem = menuItem;
+        this.order = order;
 
     }
 
