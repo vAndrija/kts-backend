@@ -1,5 +1,6 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Notification;
 import com.kti.restaurant.repository.NotificationRepository;
 import com.kti.restaurant.service.contract.INotificationService;
@@ -24,7 +25,13 @@ public class NotificationService implements INotificationService {
 
     @Override
     public Notification findById(Integer id) {
-        return notificationRepository.findById(id).orElseGet(null);
+        Notification notification = notificationRepository.findById(id).orElse(null);
+
+        if (notification == null) {
+             throw new MissingEntityException("Notification with given id does not exist in the system.");
+        }
+
+        return notification;
     }
 
     @Override
@@ -34,11 +41,7 @@ public class NotificationService implements INotificationService {
 
     @Override
     public Notification update(Notification notification, Integer id) throws Exception {
-        Notification notificationToUpdate = notificationRepository.findById(id).orElse(null);
-
-        if(notificationToUpdate == null) {
-            throw new Exception("Entity with given id does not exist in the system.");
-        }
+        Notification notificationToUpdate = this.findById(id);
 
         notificationToUpdate.setSeen(notification.getSeen());
 
@@ -49,6 +52,7 @@ public class NotificationService implements INotificationService {
 
     @Override
     public void delete(Integer id) {
+        this.findById(id);
         notificationRepository.deleteById(id);
     }
 }
