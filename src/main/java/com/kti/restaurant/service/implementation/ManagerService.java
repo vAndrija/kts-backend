@@ -8,12 +8,14 @@ import com.kti.restaurant.model.User;
 import com.kti.restaurant.repository.ManagerRepository;
 import com.kti.restaurant.repository.RoleRepository;
 import com.kti.restaurant.repository.UserRepository;
+import com.kti.restaurant.service.EmailService;
 import com.kti.restaurant.service.contract.IManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ManagerService implements IManagerService {
@@ -22,10 +24,11 @@ public class ManagerService implements IManagerService {
     private PasswordEncoder passwordEncoder;
     private RoleRepository roleRepository;
     private UserRepository userRepository;
+    private EmailService emailService;
 
     @Autowired
     public ManagerService(ManagerRepository managerRepository, PasswordEncoder passwordEncoder,
-                          RoleRepository roleRepository, UserRepository userRepository) {
+                          RoleRepository roleRepository, UserRepository userRepository, EmailService emailService) {
         this.managerRepository = managerRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
@@ -51,7 +54,9 @@ public class ManagerService implements IManagerService {
         User user = userRepository.findByEmailAddress(entity.getEmailAddress());
         if (user != null)
             throw new ConflictException("Manager with entered email already exists.");
-        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        String tempPassword = UUID.randomUUID().toString();
+        emailService.sendRegistrationMail(entity.getEmailAddress(),"Nalog kreiran", tempPassword);
+        entity.setPassword(passwordEncoder.encode(tempPassword));
         entity.getRoles().add(roleRepository.getById(4L));
         managerRepository.save(entity);
         return entity;

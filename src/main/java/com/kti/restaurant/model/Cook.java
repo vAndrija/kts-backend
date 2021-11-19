@@ -16,8 +16,8 @@ public class Cook extends User {
     public Cook() {
     }
 
-    public Cook(String lastName, String name, String phoneNumber, String emailAddress, String accountNumber, Boolean priority,String password) {
-        super(lastName, name, phoneNumber, emailAddress,password, accountNumber);
+    public Cook(String lastName, String name, String phoneNumber, String emailAddress, String accountNumber, Boolean priority) {
+        super(lastName, name, phoneNumber, emailAddress, accountNumber);
         this.priority = priority;
     }
 

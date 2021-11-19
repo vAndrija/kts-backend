@@ -12,7 +12,7 @@ public class ManagerMapper {
 
     public Manager fromManagerCreateDtoToManger(ManagerCreateDto managerCreateDto) {
         return new Manager(managerCreateDto.getLastName(),managerCreateDto.getName(), managerCreateDto.getPhoneNumber(),
-                managerCreateDto.getEmailAddress(),managerCreateDto.getAccountNumber(),managerCreateDto.getPassword());
+                managerCreateDto.getEmailAddress(),managerCreateDto.getAccountNumber());
     }
 
     public ManagerDto fromManagerToManagerDto(Manager manager) {

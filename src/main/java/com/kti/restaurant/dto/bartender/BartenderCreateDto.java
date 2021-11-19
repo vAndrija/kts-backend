@@ -9,9 +9,9 @@ public class BartenderCreateDto extends UserCreateDto {
         super();
     }
 
-    public BartenderCreateDto(String name, String lastName, String phoneNumber, String accountNumber,String password,
+    public BartenderCreateDto(String name, String lastName, String phoneNumber, String accountNumber,
                               String emailAddress, Boolean priority) {
-        super(name, lastName, phoneNumber, accountNumber,password,emailAddress);
+        super(name, lastName, phoneNumber, accountNumber, emailAddress);
         this.priority = priority;
     }
 

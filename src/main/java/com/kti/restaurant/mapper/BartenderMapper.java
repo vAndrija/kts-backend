@@ -11,7 +11,7 @@ public class BartenderMapper {
     public Bartender fromBartenderCreateDtoToBartender(BartenderCreateDto bartenderCreateDto) {
         return new Bartender(bartenderCreateDto.getLastName(),bartenderCreateDto.getName(),
                 bartenderCreateDto.getPhoneNumber(),bartenderCreateDto.getEmailAddress(),
-                bartenderCreateDto.getAccountNumber(),bartenderCreateDto.getPriority(),bartenderCreateDto.getPassword());
+                bartenderCreateDto.getAccountNumber(),bartenderCreateDto.getPriority());
     }
 
     public BartenderDto fromBartenderToBartenderDto(Bartender bartender) {

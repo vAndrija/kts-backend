@@ -19,18 +19,15 @@ public class UserCreateDto {
     @NotEmpty(message = "emailAddress should not be null or empty")
     private String emailAddress;
 
-    @NotEmpty(message = "password should not be null or empty")
-    private String password;
 
     public UserCreateDto(){}
 
-    public UserCreateDto(String name, String lastName, String phoneNumber, String accountNumber,String password, String emailAddress) {
+    public UserCreateDto(String name, String lastName, String phoneNumber, String accountNumber,String emailAddress) {
         this.name = name;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.accountNumber = accountNumber;
         this.emailAddress = emailAddress;
-        this.password = password;
     }
 
     public String getName() {
@@ -73,11 +70,4 @@ public class UserCreateDto {
         this.emailAddress = emailAddress;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

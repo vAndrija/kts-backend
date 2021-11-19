@@ -12,8 +12,8 @@ import javax.persistence.Table;
 @PrimaryKeyJoinColumn(name = "users")
 public class Manager extends User {
 
-    public Manager(String lastName, String name, String phoneNumber, String emailAddress, String accountNumber,String password) {
-        super(lastName, name, phoneNumber, emailAddress,password, accountNumber);
+    public Manager(String lastName, String name, String phoneNumber, String emailAddress, String accountNumber) {
+        super(lastName, name, phoneNumber, emailAddress,accountNumber);
     }
 
     public Manager(String name, String lastName, String accountNumber, String phoneNumber){
