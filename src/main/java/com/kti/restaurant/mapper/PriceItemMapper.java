@@ -23,6 +23,6 @@ public class PriceItemMapper {
         MenuItem menuItem = menuItemService.findById(priceItemDto.getMenuItemId());
 
         return new PriceItem(priceItemDto.getValue(), priceItemDto.getStartDate(), priceItemDto.getEndDate(),
-                menuItem, priceItemDto.getCurrent());
+                menuItem, priceItemDto.getCurrent(), priceItemDto.getPreparationValue());
     }
 }

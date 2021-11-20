@@ -20,11 +20,15 @@ public class CreateMenuItemDto {
     @NotNull(message = "Category should not be null")
     private MenuItemCategory category;
 
-    public CreateMenuItemDto(String name, String description, MenuItemType type, MenuItemCategory category) {
+    @NotNull(message = "Preparation time should not be null")
+    private Integer preparationTime;
+
+    public CreateMenuItemDto(String name, String description, MenuItemType type, MenuItemCategory category, Integer preparationTime) {
         this.name = name;
         this.description = description;
         this.type = type;
         this.category = category;
+        this.preparationTime = preparationTime;
     }
 
     public CreateMenuItemDto() {
@@ -61,5 +65,13 @@ public class CreateMenuItemDto {
 
     public void setCategory(MenuItemCategory category) {
         this.category = category;
+    }
+
+    public Integer getPreparationTime() {
+        return preparationTime;
+    }
+
+    public void setPreparationTime(Integer preparationTime) {
+        this.preparationTime = preparationTime;
     }
 }

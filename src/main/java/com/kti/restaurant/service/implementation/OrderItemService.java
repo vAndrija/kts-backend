@@ -9,6 +9,8 @@ import com.kti.restaurant.service.contract.IOrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -64,5 +66,10 @@ public class OrderItemService implements IOrderItemService {
     public void delete(Integer id) throws Exception {
         this.findById(id);
         orderItemRepository.deleteById(id);
+    }
+
+    @Override
+    public List<OrderItem> findOrderItemsInPeriod(LocalDateTime startDate, LocalDateTime endDate) {
+        return orderItemRepository.findOrderItemsByDate(startDate, endDate);
     }
 }

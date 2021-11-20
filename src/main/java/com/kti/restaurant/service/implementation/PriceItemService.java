@@ -7,6 +7,8 @@ import com.kti.restaurant.service.contract.IPriceItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -56,5 +58,10 @@ public class PriceItemService implements IPriceItemService {
     public void delete(Integer id) throws Exception {
         this.findById(id);
         priceItemRepository.deleteById(id);
+    }
+
+    @Override
+    public PriceItem findPriceForDate(LocalDate date, Integer menuItemId) {
+        return priceItemRepository.findPriceItemForDate(date, menuItemId);
     }
 }

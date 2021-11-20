@@ -36,22 +36,27 @@ public class PriceItem {
 
     private Boolean isCurrent;
 
-    public PriceItem(Double value, LocalDate startDate, LocalDate endDate, MenuItem menuItem, Boolean isCurrent) {
+    private Double preparationValue;
+
+    public PriceItem(Double value, LocalDate startDate, LocalDate endDate, MenuItem menuItem, Boolean isCurrent,
+                     Double preparationValue) {
         this.value = value;
         this.startDate = startDate;
         this.endDate = endDate;
         this.menuItem = menuItem;
         this.isCurrent = isCurrent;
+        this.preparationValue = preparationValue;
     }
 
     public PriceItem(Double value, LocalDate startDate, LocalDate endDate, MenuItem menuItem, Boolean isCurrent,
-                     Integer id) {
+                     Integer id, Double preparationValue) {
         this.value = value;
         this.startDate = startDate;
         this.endDate = endDate;
         this.menuItem = menuItem;
         this.isCurrent = isCurrent;
         this.id = id;
+        this.preparationValue = preparationValue;
     }
 
     public PriceItem() {
@@ -120,5 +125,13 @@ public class PriceItem {
 
     public void setCurrent(Boolean current) {
         isCurrent = current;
+    }
+
+    public Double getPreparationValue() {
+        return preparationValue;
+    }
+
+    public void setPreparationValue(Double preparationValue) {
+        this.preparationValue = preparationValue;
     }
 }
