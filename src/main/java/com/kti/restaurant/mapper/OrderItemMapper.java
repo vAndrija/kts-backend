@@ -1,6 +1,7 @@
 package com.kti.restaurant.mapper;
 
 import com.kti.restaurant.dto.orderitem.CreateOrderItemDto;
+import com.kti.restaurant.dto.orderitem.NotificationOrderItemDto;
 import com.kti.restaurant.dto.orderitem.OrderItemDto;
 import com.kti.restaurant.dto.orderitem.UpdateOrderItemDto;
 import com.kti.restaurant.model.MenuItem;
@@ -15,10 +16,13 @@ import org.springframework.stereotype.Component;
 public class OrderItemMapper {
     private IMenuItemService menuItemService;
     private IOrderService orderService;
+    private MenuItemMapper menuItemMapper;
+
     @Autowired
-    public OrderItemMapper(IMenuItemService menuItemService, IOrderService orderService) {
+    public OrderItemMapper(IMenuItemService menuItemService, IOrderService orderService, MenuItemMapper menuItemMapper) {
         this.menuItemService = menuItemService;
         this.orderService = orderService;
+        this.menuItemMapper = menuItemMapper;
     }
 
     public OrderItem fromCreateOrderItemDtoToOrderItem(CreateOrderItemDto orderItemDto) throws Exception {
@@ -34,10 +38,14 @@ public class OrderItemMapper {
     }
 
     public OrderItemDto fromOrderItemToOrderItemDto(OrderItem orderItem) {
-        return new OrderItemDto(orderItem.getQuantity(), orderItem.getNote(),
+        return new OrderItemDto(orderItem.getId(), orderItem.getQuantity(), orderItem.getNote(),
                 orderItem.getStatus(), orderItem.getPriority(), orderItem.getOrder().getId());
     }
 
+    public NotificationOrderItemDto fromOrderItemToNotificationOrderItemDto(OrderItem orderItem) {
+        return new NotificationOrderItemDto(orderItem.getId(), orderItem.getNote(), orderItem.getQuantity(),
+                orderItem.getStatus(), menuItemMapper.fromMenuItemToMenuItemDto(orderItem.getMenuItem()));
+    }
     private MenuItem findMenuItemById(Integer id) throws Exception {
         return menuItemService.findById(id);
     }

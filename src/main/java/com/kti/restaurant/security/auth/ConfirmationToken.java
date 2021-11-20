@@ -19,9 +19,6 @@ public class ConfirmationToken {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
-
-    private boolean used;
-
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "abstract_user_id")
     private User user;
@@ -32,7 +29,6 @@ public class ConfirmationToken {
         this.user = user;
         createdDate = new Date();
         confirmationToken = UUID.randomUUID().toString();
-        this.used = false;
     }
 
     public long getTokenId() {
@@ -65,13 +61,5 @@ public class ConfirmationToken {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public boolean isUsed() {
-        return used;
-    }
-
-    public void setUsed(boolean used) {
-        this.used = used;
     }
 }

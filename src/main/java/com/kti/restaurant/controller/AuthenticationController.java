@@ -3,12 +3,15 @@ package com.kti.restaurant.controller;
 
 import antlr.Token;
 import com.kti.restaurant.dto.JwtAuthenticationRequest;
+import com.kti.restaurant.dto.auth.ResetPasswordDTO;
 import com.kti.restaurant.model.User;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.security.TokenUtils;
 import com.kti.restaurant.service.UserService;
 import org.hibernate.annotations.GeneratorType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @CrossOrigin
 @RestController
@@ -49,6 +53,18 @@ public class AuthenticationController {
         String jwt = tokenUtils.generateToken(user.getUsername(),role);
         int expiresIn = tokenUtils.getExpiredIn();
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn,role));
+    }
+
+    @PostMapping("/send-reset-password-link")
+    public ResponseEntity<?> sendResetToken(@RequestBody ResetPasswordDTO resetPasswordDTO) throws Exception {
+        this.userService.sendResetToken(resetPasswordDTO.getEmail());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/reset-password")
+    public void resetPasswordDone(@RequestBody ResetPasswordDTO resetPasswordDTO) throws Exception {
+        this.userService.resetPasswordDone(resetPasswordDTO.getEmail(),
+                resetPasswordDTO.getToken(),resetPasswordDTO.getPassword());
     }
 
 }

@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "notification")
-@SQLDelete(sql = "UPDATE notification SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE notification SET deleted = true WHERE id = ? AND version = ?")
 @Where(clause = "deleted=false")
 public class Notification {
     @Version
@@ -23,24 +23,19 @@ public class Notification {
 
     private String message;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Order order;
+    private Boolean seen = Boolean.FALSE;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Bartender bartender;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Cook cook;
-
-    public Notification(String message, Order order, Bartender bartender, Cook cook) {
-        this.message = message;
-        this.order = order;
-        this.bartender = bartender;
-        this.cook = cook;
-    }
+    @ManyToOne(fetch = FetchType.LAZY /*,cascade = CascadeType.ALL*/)
+    private OrderItem orderItem;
 
     public Notification() {
 
+    }
+
+    public Notification(String message, OrderItem orderItem, Boolean seen) {
+        this.message = message;
+        this.orderItem = orderItem;
+        this.seen = seen;
     }
 
     public Long getVersion() {
@@ -75,27 +70,15 @@ public class Notification {
         this.message = message;
     }
 
-    public Order getOrder() {
-        return order;
+    public OrderItem getOrderItem() {
+        return orderItem;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrderItem(OrderItem orderItem) {
+        this.orderItem = orderItem;
     }
 
-    public Bartender getBartender() {
-        return bartender;
-    }
+    public Boolean getSeen() { return seen; }
 
-    public void setBartender(Bartender bartender) {
-        this.bartender = bartender;
-    }
-
-    public Cook getCook() {
-        return cook;
-    }
-
-    public void setCook(Cook cook) {
-        this.cook = cook;
-    }
+    public void setSeen(Boolean seen) { this.seen = seen; }
 }

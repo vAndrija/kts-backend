@@ -1,6 +1,6 @@
 package com.kti.restaurant.controller;
 
-import com.kti.restaurant.dto.menuitem.CreateMenuItemDto;
+import com.kti.restaurant.dto.menuitem.MenuItemDto;
 import com.kti.restaurant.dto.menuitem.UpdateMenuItemDto;
 import com.kti.restaurant.mapper.MenuItemMapper;
 import com.kti.restaurant.model.MenuItem;
@@ -28,7 +28,7 @@ public class MenuItemController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createMenuItem(@Valid @RequestBody CreateMenuItemDto menuItemDto) throws Exception {
+    public ResponseEntity<?> createMenuItem(@Valid @RequestBody MenuItemDto menuItemDto) throws Exception {
         MenuItem menuItem = menuItemService.create(menuItemMapper.fromCreateMenuItemDtoToMenuItem(menuItemDto));
 
         if(menuItem != null) {
