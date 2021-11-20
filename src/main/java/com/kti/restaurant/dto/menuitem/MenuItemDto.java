@@ -7,7 +7,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 
-public class CreateMenuItemDto {
+public class MenuItemDto {
     @NotEmpty(message = "Name should not be null or empty")
     private String name;
 
@@ -20,14 +20,14 @@ public class CreateMenuItemDto {
     @NotNull(message = "Category should not be null")
     private MenuItemCategory category;
 
-    public CreateMenuItemDto(String name, String description, MenuItemType type, MenuItemCategory category) {
+    public MenuItemDto(String name, String description, MenuItemType type, MenuItemCategory category) {
         this.name = name;
         this.description = description;
         this.type = type;
         this.category = category;
     }
 
-    public CreateMenuItemDto() {
+    public MenuItemDto() {
 
     }
 

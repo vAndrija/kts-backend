@@ -1,11 +1,14 @@
 package com.kti.restaurant.dto.orderitem;
 
+import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.enums.OrderItemStatus;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class OrderItemDto {
+    private Integer id;
+
     @NotEmpty(message = "Quantity should not be null or empty")
     private Integer quantity;
 
@@ -21,8 +24,9 @@ public class OrderItemDto {
     @NotNull(message = "Order id should not be null or empty")
     private Integer orderId;
 
-    public OrderItemDto( Integer quantity, String note, OrderItemStatus status, Integer priority,
+    public OrderItemDto(Integer id, Integer quantity, String note, OrderItemStatus status, Integer priority,
                         Integer orderId) {
+        this.id = id;
         this.quantity = quantity;
         this.note = note;
         this.status = status;
@@ -32,6 +36,14 @@ public class OrderItemDto {
 
     public OrderItemDto(){
 
+    }
+
+    public Integer gerId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getQuantity() {
