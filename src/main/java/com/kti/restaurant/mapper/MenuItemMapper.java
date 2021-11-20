@@ -20,25 +20,15 @@ public class MenuItemMapper {
 
     public MenuItem fromCreateMenuItemDtoToMenuItem(MenuItemDto menuItemDto) {
         return new MenuItem(menuItemDto.getName(), menuItemDto.getDescription(), menuItemDto.getCategory(),
-                menuItemDto.getType());
+                menuItemDto.getType(), menuItemDto.getPreparationTime());
     }
 
     public MenuItem fromUpdateMenuItemDtoToMenuItem(UpdateMenuItemDto menuItemDto) throws Exception {
         return new MenuItem(menuItemDto.getName(), menuItemDto.getDescription(), menuItemDto.getAccepted(),
-                menuItemDto.getType(), menuItemDto.getCategory(), findMenuById(menuItemDto.getMenuId()));
+                menuItemDto.getType(), menuItemDto.getCategory(), menuService.findById(menuItemDto.getMenuId()), menuItemDto.getPreparationTime());
     }
 
     public MenuItemDto fromMenuItemToMenuItemDto(MenuItem menuItem) {
         return new MenuItemDto(menuItem.getName(), menuItem.getDescription(), menuItem.getType(), menuItem.getCategory());
-    }
-
-    private Menu findMenuById(Integer id) throws Exception {
-        Menu menu = menuService.findById(id);
-
-        if (menu == null) {
-            throw new MissingEntityException("The menu with given id does not exist in the system.");
-        }
-
-        return menu;
     }
 }

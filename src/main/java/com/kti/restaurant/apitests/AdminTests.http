@@ -1,8 +1,8 @@
-POST http://localhost:8080/api/v1/auth/login
+POST http://localhost:8081/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "username" : "prva@prva",
+  "username" : "mirkomiric@gmail.com",
   "password" : "123"
 }
 
@@ -10,7 +10,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/api/v1/admin
+POST http://localhost:8081/api/v1/admin
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
@@ -31,7 +31,7 @@ client.test("Request executed successfully", function() {
 
 ###
 
-GET http://localhost:8080/api/v1/admin/
+GET http://localhost:8081/api/v1/admin/
 Authorization: Bearer {{auth_token}}
 
 > {%
