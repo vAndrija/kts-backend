@@ -8,7 +8,7 @@ public class AdminDto extends UserDto {
         super();
     }
 
-    public AdminDto(String name, String lastName, String phoneNumber, String emailAddress,String accountNumber) {
-        super(name, lastName, phoneNumber, emailAddress,accountNumber);
+    public AdminDto(Integer id, String name, String lastName, String phoneNumber, String emailAddress,String accountNumber) {
+        super(id, name, lastName, phoneNumber, emailAddress,accountNumber);
     }
 }

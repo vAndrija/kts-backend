@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "salary")
-@SQLDelete(sql = "UPDATE salary SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE salary SET deleted = true WHERE id=? AND version=?")
 @Where(clause = "deleted=false")
 public class Salary {
     @Version
@@ -26,8 +26,8 @@ public class Salary {
     private LocalDate startDate;
 
     private LocalDate endDate;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //Stavila sam EAGER jer uvijek kad nam bude trebala plata treba ce nam i korisnik vezan za tu platu
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     private Boolean deleted = Boolean.FALSE;
@@ -36,6 +36,13 @@ public class Salary {
         this.value = value;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public Salary(Double value, LocalDate startDate, LocalDate endDate, User user) {
+        this.value = value;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.user = user;
     }
 
     public Salary() {
@@ -80,5 +87,13 @@ public class Salary {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
