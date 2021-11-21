@@ -139,7 +139,7 @@ public class ReportService implements IReportService {
         users.forEach(user -> {
             Salary salary = salaryService.findSalaryForDate(firstDayInMonthLocal.toLocalDate(), user.getId());
             if(salary != null) {
-                ratioForMonths.stream().map(value -> value - salary.getValue()/numberDaysInMonth);
+                ratioForMonths.replaceAll(value -> value - Math.round(salary.getValue()/numberDaysInMonth));
             }
         });
 
