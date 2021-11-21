@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -57,5 +58,19 @@ public class MenuItemController {
     public ResponseEntity<?> deleteMenuItem(@PathVariable Integer id) throws Exception {
         menuItemService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping(value = "/search/{search}")
+    public ResponseEntity<?> searchMenuItems(@PathVariable("search") String s) {
+        List<MenuItemDto> menuItems = menuItemService.search(s).stream()
+                .map(menuItem->this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem)).collect(Collectors.toList());
+        return new ResponseEntity<>(menuItems, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/filter/{filter}")
+    public ResponseEntity<?> filterMenuItems(@PathVariable("filter") String f) {
+        List<MenuItemDto> menuItems = menuItemService.filter(f).stream()
+                .map(menuItem->this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem)).collect(Collectors.toList());
+        return new ResponseEntity<>(menuItems, HttpStatus.OK);
     }
 }

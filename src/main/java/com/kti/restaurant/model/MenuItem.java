@@ -59,6 +59,11 @@ public class MenuItem {
         this.category = category;
         this.type = type;
     }
+    public MenuItem(String name, String description) {
+        this.name = name;
+        this.description = description;
+        this.accepted = true;
+    }
 
     public MenuItem(Integer id, String name, String description, Boolean accepted, MenuItemType type, MenuItemCategory category, Menu menu) {
         this.name = name;
