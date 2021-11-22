@@ -13,40 +13,40 @@ INSERT INTO admin (users) values (1);
 
 INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
     ('lukaperic@gmail.com','luka','peric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0632589641','6332238931255',true,false);
-INSERT INTO user_role (user_id, role_id) VALUES (1, 2);
+INSERT INTO user_role (user_id, role_id) VALUES (2, 2);
 INSERT INTO bartender (users, priority) values (2, false);
 
 INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
     ('milossaric@gmail.com','milos','saric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0645599641','1132258931278',true,false);
-INSERT INTO user_role (user_id, role_id) VALUES (1, 2);
+INSERT INTO user_role (user_id, role_id) VALUES (3, 2);
 INSERT INTO bartender (users, priority) values (3, true);
 
 
 INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
     ('kristinamisic@gmail.com','kristina','misic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0697425831','85315612318963',true,false);
-INSERT INTO user_role (user_id, role_id) VALUES (1, 3);
+INSERT INTO user_role (user_id, role_id) VALUES (4, 3);
 INSERT INTO cook (users, priority) values (4, false);
 
 INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
     ('urosmatic@gmail.com','uros','matic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0698620031','42318612311963',true,false);
-INSERT INTO user_role (user_id, role_id) VALUES (1, 3);
+INSERT INTO user_role (user_id, role_id) VALUES (5, 3);
 INSERT INTO cook (users, priority) values (5, true);
 
 
 INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
     ('sarajovic@gmail.com','sara','jovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0647456821','78615616918959',true,false);
-INSERT INTO user_role (user_id, role_id) VALUES (1, 4);
+INSERT INTO user_role (user_id, role_id) VALUES (6, 4);
 INSERT INTO manager (users) values (6);
 
 
 INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
     ('jovanpetrovic@gmail.com','jovan','petrovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0607425922','22365612316263',true,false);
-INSERT INTO user_role (user_id, role_id) VALUES (1, 5);
+INSERT INTO user_role (user_id, role_id) VALUES (7, 5);
 INSERT INTO waiter (users) values (7);
 
 INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
     ('anapopovic@gmail.com','ana','popovic', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0627412922','22005612314563',true,false);
-INSERT INTO user_role (user_id, role_id) VALUES (1, 5);
+INSERT INTO user_role (user_id, role_id) VALUES (8, 5);
 INSERT INTO waiter (users) values (8);
 
 INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (45000.00, '2021-11-18', '2022-11-18', 1, false);
@@ -73,34 +73,34 @@ INSERT INTO menu (name, duration_start, duration_end, deleted) values ('standard
 INSERT INTO menu (name, duration_start, duration_end, deleted) values ('letnji', '2021-06-01T08:00', '2021-08-31T23:59', false);
 
 
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
-    ('coca cola', 'bezalkoholno gazirano pice', 0, 7, 1, true, false);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
-    ('mohito', 'koktel  od belog kubanskog ruma, soka limetе, sveze nane i mineralne vode', 0, 5, 1, true, false);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
-    ('domaca kafa', 'topli napitak', 0, 6, 1, true, false);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
-    ('limunada', 'bezalkoholno pice', 0, 7, 1, true, false);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
-    ('domaca supa', 'pileca supa sa rezancima', 1, 0, 1, true, false);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
-    ('paradajz corba', 'paradajz corba sa slaninicom', 1, 0, 1, true, false);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
-    ('dimljeni saran', 'dimljeni saran sa grilovanim povrcem', 1, 3, 1, true, false);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
-    ('lignje sa zara', 'lignje sa zara, prilog krompir sa blitvom', 1, 3, 1, true, false);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
-    ('pileci file u senfu i medu', 'pileci file u senfu i medu, prilog grilovano povrce ', 1, 3, 1, true, false);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
-    ('punjeni pileci batak na zaru', 'pileci batak punjen sirom i slaninom, prilog peceni krompir', 1, 3, 1, true, false);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
-    ('strudla sa makom', 'strudla sa makom', 1, 4, 1, true, false);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
-    ('baklava', 'baklava sa orasima', 1, 4, 1, true, false);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
-    ('krempita', 'krempita sa dodatkom visnje', 1, 4, 1, true, false);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted) values
-    ('pita sa visnjama', 'pita sa visnjama, belom cokoladom i sladoledom od vannile', 1, 4, null, false, false);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
+    ('coca cola', 'bezalkoholno gazirano pice', 0, 7, 1, true, false, 2);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
+    ('mohito', 'koktel  od belog kubanskog ruma, soka limetе, sveze nane i mineralne vode', 0, 5, 1, true, false, 8);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
+    ('domaca kafa', 'topli napitak', 0, 6, 1, true, false, 5);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
+    ('limunada', 'bezalkoholno pice', 0, 7, 1, true, false, 2);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
+    ('domaca supa', 'pileca supa sa rezancima', 1, 0, 1, true, false, 10);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
+    ('paradajz corba', 'paradajz corba sa slaninicom', 1, 0, 1, true, false, 12);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
+    ('dimljeni saran', 'dimljeni saran sa grilovanim povrcem', 1, 3, 1, true, false, 15);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
+    ('lignje sa zara', 'lignje sa zara, prilog krompir sa blitvom', 1, 3, 1, true, false, 17);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
+    ('pileci file u senfu i medu', 'pileci file u senfu i medu, prilog grilovano povrce ', 1, 3, 1, true, false, 13);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
+    ('punjeni pileci batak na zaru', 'pileci batak punjen sirom i slaninom, prilog peceni krompir', 1, 3, 1, true, false, 15);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
+    ('strudla sa makom', 'strudla sa makom', 1, 4, 1, true, false, 5);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
+    ('baklava', 'baklava sa orasima', 1, 4, 1, true, false, 5);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
+    ('krempita', 'krempita sa dodatkom visnje', 1, 4, 1, true, false, 5);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
+    ('pita sa visnjama', 'pita sa visnjama, belom cokoladom i sladoledom od vannile', 1, 4, null, false, false, 5);
 
 
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values

@@ -78,4 +78,9 @@ public class CookService implements ICookService {
         Cook cook = this.findById(id);
         cookRepository.delete(cook);
     }
+
+    @Override
+    public Cook findByUserId(Integer userId) {
+        return cookRepository.findById(userId).orElse(null);
+    }
 }
