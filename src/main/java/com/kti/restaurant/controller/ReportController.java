@@ -30,7 +30,7 @@ public class ReportController {
     }
 
     @GetMapping("/yearly/{year}/cost-benefit-ratio")
-    public ResponseEntity<List<Double>> getYearlyConstBenefitRatio(@PathVariable Integer year) {
+    public ResponseEntity<List<Double>> getYearlyCostBenefitRatio(@PathVariable Integer year) {
         return new ResponseEntity<List<Double>>(reportService.costBenefitRatioForYear(year), HttpStatus.OK);
     }
 
