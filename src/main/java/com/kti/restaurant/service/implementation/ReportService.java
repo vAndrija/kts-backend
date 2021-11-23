@@ -1,6 +1,5 @@
 package com.kti.restaurant.service.implementation;
 
-import com.kti.restaurant.dto.report.MenuItemSalesDto;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.PriceItem;
 import com.kti.restaurant.model.Salary;

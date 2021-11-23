@@ -1,7 +1,5 @@
 package com.kti.restaurant.service.contract;
 
-import com.kti.restaurant.dto.report.MenuItemSalesDto;
-
 import java.util.List;
 
 public interface IReportService {
