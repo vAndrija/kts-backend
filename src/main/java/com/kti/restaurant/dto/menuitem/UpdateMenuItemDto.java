@@ -3,6 +3,7 @@ package com.kti.restaurant.dto.menuitem;
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -26,14 +27,19 @@ public class UpdateMenuItemDto {
     @NotNull(message = "Accepted should not be null or empty")
     private Boolean accepted;
 
+    @NotNull(message = "Preparation time should not be null")
+    @Min(message = "Preparation time should be bigger than 0", value = 1 )
+    private Integer preparationTime;
+
     public UpdateMenuItemDto(String name, String description, MenuItemType type, MenuItemCategory category,
-                             Integer menu, Boolean accepted) {
+                             Integer menu, Boolean accepted, Integer preparationTime) {
         this.name = name;
         this.description = description;
         this.type = type;
         this.category = category;
         this.accepted = accepted;
         this.menuId = menu;
+        this.preparationTime = preparationTime;
     }
 
     public UpdateMenuItemDto() {
@@ -86,5 +92,13 @@ public class UpdateMenuItemDto {
 
     public void setAccepted(Boolean accepted) {
         this.accepted = accepted;
+    }
+
+    public Integer getPreparationTime() {
+        return preparationTime;
+    }
+
+    public void setPreparationTime(Integer preparationTime) {
+        this.preparationTime = preparationTime;
     }
 }

@@ -35,29 +35,33 @@ public class MenuItem {
 
     private Boolean deleted = Boolean.FALSE;
 
+    private Integer preparationTime;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Menu menu;
 
     public MenuItem(String name, String description, Boolean accepted, MenuItemType type, MenuItemCategory category,
-                    Menu menu) {
+                    Menu menu, Integer preparationTime) {
         this.name = name;
         this.description = description;
         this.accepted = accepted;
         this.type = type;
         this.category = category;
         this.menu = menu;
+        this.preparationTime = preparationTime;
     }
 
     public MenuItem() {
 
     }
 
-    public MenuItem(String name, String description, MenuItemCategory category, MenuItemType type) {
+    public MenuItem(String name, String description, MenuItemCategory category, MenuItemType type, Integer preparationTime) {
         this.name = name;
         this.description = description;
         this.category = category;
         this.type = type;
+        this.preparationTime = preparationTime;
     }
     public MenuItem(String name, String description) {
         this.name = name;
@@ -65,7 +69,8 @@ public class MenuItem {
         this.accepted = true;
     }
 
-    public MenuItem(Integer id, String name, String description, Boolean accepted, MenuItemType type, MenuItemCategory category, Menu menu) {
+    public MenuItem(Integer id, String name, String description, Boolean accepted, MenuItemType type, MenuItemCategory category,
+                    Menu menu, Integer preparationTime) {
         this.name = name;
         this.description = description;
         this.category = category;
@@ -73,6 +78,7 @@ public class MenuItem {
         this.id = id;
         this.accepted = accepted;
         this.menu = menu;
+        this.preparationTime = preparationTime;
     }
 
     public Long getVersion() {
@@ -145,5 +151,13 @@ public class MenuItem {
 
     public void setMenu(Menu menu) {
         this.menu = menu;
+    }
+
+    public Integer getPreparationTime() {
+        return preparationTime;
+    }
+
+    public void setPreparationTime(Integer preparationTime) {
+        this.preparationTime = preparationTime;
     }
 }

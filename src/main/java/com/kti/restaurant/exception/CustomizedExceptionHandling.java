@@ -64,4 +64,12 @@ public class CustomizedExceptionHandling extends ResponseEntityExceptionHandler 
         response.setMessage(exception.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(BadTokenException.class)
+    public ResponseEntity<Object> handleExceptions(BadTokenException exception, WebRequest webRequest) {
+        ExceptionResponse response = new ExceptionResponse();
+        response.setDateTime(LocalDateTime.now());
+        response.setMessage(exception.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
 }

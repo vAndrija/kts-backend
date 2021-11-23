@@ -1,11 +1,13 @@
 package com.kti.restaurant.dto.priceitem;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public class PriceItemDto {
     @NotEmpty(message = "Value should not be null or empty")
+    @Min(value = 1, message = "Value should be bigger than 0")
     private Double value;
 
     @NotNull(message = "Start date should not be null or empty")
@@ -20,12 +22,17 @@ public class PriceItemDto {
     @NotNull(message = "Is current should not be null or empty")
     private Boolean isCurrent;
 
-    public PriceItemDto(Double value, LocalDate startDate, LocalDate endDate, Integer menuItemId, Boolean isCurrent) {
+    @NotEmpty(message = "Preparation value should not be null or empty")
+    @Min(value = 1, message = "Preparation value should be bigger than 0")
+    private Double preparationValue;
+
+    public PriceItemDto(Double value, LocalDate startDate, LocalDate endDate, Integer menuItemId, Boolean isCurrent, Double preparationValue) {
         this.value = value;
         this.startDate = startDate;
         this.endDate = endDate;
         this.menuItemId = menuItemId;
         this.isCurrent = isCurrent;
+        this.preparationValue = preparationValue;
     }
 
     public PriceItemDto() {
@@ -70,5 +77,13 @@ public class PriceItemDto {
 
     public void setCurrent(Boolean current) {
         isCurrent = current;
+    }
+
+    public Double getPreparationValue() {
+        return preparationValue;
+    }
+
+    public void setPreparationValue(Double preparationValue) {
+        this.preparationValue = preparationValue;
     }
 }

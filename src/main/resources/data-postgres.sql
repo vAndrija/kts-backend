@@ -103,32 +103,32 @@ INSERT INTO menu_item (name, description, type, category, menu_id, accepted, del
     ('pita sa visnjama', 'pita sa visnjama, belom cokoladom i sladoledom od vannile', 1, 4, null, false, false);
 
 
-INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
-    ( 180.00, '2021-11-18', null, 1, true, false);
-INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
-    ( 600.00, '2021-11-18', null, 2, true, false);
-INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
-    ( 100.00, '2021-11-18', null, 3, true, false);
-INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
-    ( 150.00, '2021-11-18', null, 4, true, false);
-INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
-    ( 265.00, '2021-11-18', null, 5, true, false);
-INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
-    ( 290.00, '2021-11-18', null, 6, true, false);
-INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
-    ( 990.00, '2021-11-18', null, 7, true, false);
-INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
-    ( 1070.00, '2021-11-18', null, 8, true, false);
-INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
-    ( 820.00, '2021-11-18', null, 9, true, false);
-INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
-    ( 760.00, '2021-11-18', null, 10, true, false);
-INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
-    ( 250.00, '2021-11-18', null, 11, true, false);
-INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
-    ( 250.00, '2021-11-18', null, 12, true, false);
-INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted) values
-    ( 280.00, '2021-11-18', null, 13, true, false);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
+    ( 180.00, '2021-11-18', '2021-12-18', 1, true, false, 100.00);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
+    ( 600.00, '2021-11-18', '2021-12-18', 2, true, false, 450.00);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
+    ( 100.00, '2021-11-18', '2021-12-18', 3, true, false, 35.00);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
+    ( 150.00, '2021-11-18', '2021-12-18', 4, true, false, 60.00);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
+    ( 265.00, '2021-11-18', '2021-12-18', 5, true, false, 130.00);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
+    ( 290.00, '2021-11-18', '2021-12-18', 6, true, false, 175.00);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
+    ( 990.00, '2021-11-18', '2021-12-18', 7, true, false, 390.00);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
+    ( 1070.00, '2021-11-18', '2021-12-18', 8, true, false, 450.00);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
+    ( 820.00, '2021-11-18', '2021-12-18', 9, true, false, 250.00);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
+    ( 760.00, '2021-11-18', '2021-12-18', 10, true, false, 210.00);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
+    ( 250.00, '2021-11-18', '2021-12-18', 11, true, false, 100.00);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
+    ( 250.00, '2021-11-18', '2021-12-18', 12, true, false, 100.00);
+INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
+    ( 280.00, '2021-11-18', '2021-12-18', 13, true, false, 125.00);
 
 
 INSERT INTO discount (value, start_date, end_date, menu_item_id, is_current, deleted) values
@@ -136,7 +136,7 @@ INSERT INTO discount (value, start_date, end_date, menu_item_id, is_current, del
 
 
 INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
-    (0, '2022-11-18T14:15', 1520, 3, 7, false);
+    (0, '2021-11-19T14:15', 1520, 3, 7, false);
 INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
     (0, '2022-11-18T13:00', 1830, 4, 8, false);
 INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
@@ -180,3 +180,4 @@ INSERT INTO notification (message, order_item_id, seen, deleted) values
     ('Baklava je u pripremi.', 7, false, false);
 INSERT INTO notification (message, order_item_id, seen, deleted) values
     ('Krempita je u pipremi.', 8, false, false);
+
