@@ -165,7 +165,7 @@ INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook
     ('', 2, 1, 1, null, 5, 12, 1, false);
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
     ('', 2, 1, 1, null, 4, 13, 1, false);
-
+/*
 INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
     ('Napravljena je nova porudzbina.', 2, 4, 1, false);
 INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
@@ -179,4 +179,4 @@ INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, del
 INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
     ('Baklava je u pripremi.', 3, null, 3, false);
 INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
-    ('Krempita je u pipremi.', 3, null, 3, false);
+    ('Krempita je u pipremi.', 3, null, 3, false); */

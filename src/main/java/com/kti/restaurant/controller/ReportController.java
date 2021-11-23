@@ -28,4 +28,16 @@ public class ReportController {
     public ResponseEntity<List<Double>> getMonthlyReportForMealAndDrinkCosts(@PathVariable Integer year, @PathVariable Integer month) {
         return new ResponseEntity<List<Double>>(reportService.mealDrinkCostsForMonth(year, month), HttpStatus.OK);
     }
+
+    @GetMapping("/yearly/{year}/meal-drink-sales/{id}")
+    public ResponseEntity<List<Integer>> getYearlyReportForMealAndDrinkSales(@PathVariable Integer year, @PathVariable Integer id) {
+        return new ResponseEntity<List<Integer>>(reportService.mealDrinkSalesForYear(year, id), HttpStatus.OK);
+    }
+
+    @GetMapping("/{year}/monthly/{month}/meal-drink-sales/{id}")
+    public ResponseEntity<List<Integer>> getMonthlyReportForMealAndDrinkSales(@PathVariable Integer year, @PathVariable Integer month, @PathVariable Integer id) {
+        return new ResponseEntity<List<Integer>>(reportService.mealDrinkSalesForMonth(year, month, id), HttpStatus.OK);
+    }
+
+
 }

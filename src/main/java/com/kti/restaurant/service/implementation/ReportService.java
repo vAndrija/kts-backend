@@ -1,5 +1,6 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.dto.report.MenuItemSalesDto;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.PriceItem;
 import com.kti.restaurant.service.contract.IOrderItemService;
@@ -71,6 +72,49 @@ public class ReportService implements IReportService {
         });
 
         return costsPerDays;
+    }
+
+    @Override
+    public List<Integer> mealDrinkSalesForYear(Integer year, Integer menuItemId) {
+        List<Integer> salesPerMonths = new ArrayList<Integer>(Collections.nCopies(12, 0));
+
+        Date firstDayInYear = getDayInYear(year, 0, 1);
+        Date lastDayInYear = getDayInYear(year, 11, 31);
+
+        LocalDateTime firstDayInYearLocal = dateToLocalDateTime(firstDayInYear);
+        LocalDateTime lastDayInYearLocal = dateToLocalDateTime(lastDayInYear);
+
+        List<OrderItem> orderItemsInYear = orderItemService.findOrderItemsInPeriodForMenuItem(firstDayInYearLocal,
+                lastDayInYearLocal, menuItemId);
+
+        orderItemsInYear.forEach(orderItem -> {
+                Integer month = orderItem.getOrder().getDateOfOrder().getMonthValue();
+                salesPerMonths.set(month-1, salesPerMonths.get(month-1) + orderItem.getQuantity());
+        });
+        
+        return salesPerMonths;
+    }
+
+    @Override
+    public List<Integer> mealDrinkSalesForMonth(Integer year, Integer month, Integer menuItemId) {
+        Integer numberDaysInMonth = getNumberDaysInMonth(year, month-1);
+        List<Integer> salesPerDays = new ArrayList<Integer>(Collections.nCopies(numberDaysInMonth, 0));
+
+        Date firstDayInMonth = getDayInYear(year, month-1, 1);
+        Date lastDayInMonth = getDayInYear(year, month-1, numberDaysInMonth);
+
+        LocalDateTime firstDayInMonthLocal = dateToLocalDateTime(firstDayInMonth);
+        LocalDateTime lastDayInMonthLocal = dateToLocalDateTime(lastDayInMonth);
+
+        List<OrderItem> orderItemsInYear = orderItemService.findOrderItemsInPeriodForMenuItem(firstDayInMonthLocal,
+                lastDayInMonthLocal, menuItemId);
+
+        orderItemsInYear.forEach(orderItem -> {
+            Integer day = orderItem.getOrder().getDateOfOrder().getDayOfMonth();
+            salesPerDays.set(day-1, salesPerDays.get(day-1) + orderItem.getQuantity());
+        });
+
+        return salesPerDays;
     }
 
     private Date getDayInYear(Integer year, Integer month, Integer day) {

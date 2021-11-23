@@ -72,4 +72,9 @@ public class OrderItemService implements IOrderItemService {
     public List<OrderItem> findOrderItemsInPeriod(LocalDateTime startDate, LocalDateTime endDate) {
         return orderItemRepository.findOrderItemsByDate(startDate, endDate);
     }
+
+    @Override
+    public List<OrderItem> findOrderItemsInPeriodForMenuItem(LocalDateTime startDate, LocalDateTime endDate, Integer menuItemId) {
+        return orderItemRepository.findSalesForMenuItem(startDate, endDate, menuItemId);
+    }
 }
