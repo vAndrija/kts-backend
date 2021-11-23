@@ -2,11 +2,13 @@ package com.kti.restaurant.service.implementation;
 
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Order;
+import com.kti.restaurant.model.enums.OrderStatus;
 import com.kti.restaurant.repository.OrderRepository;
 import com.kti.restaurant.service.contract.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 @Service
 public class OrderService implements IOrderService {
@@ -49,5 +51,14 @@ public class OrderService implements IOrderService {
     public void delete(Integer id) throws Exception {
         this.findById(id);
         orderRepository.deleteById(id);
+    }
+
+    @Override
+    public Collection<Order> filterByStatus(String status) {
+        Collection<Order> filteredOrders = orderRepository.findOrderByStatus(OrderStatus.valueOf(status));
+        if(filteredOrders == null){
+            throw new MissingEntityException("Order with given status does not exist in the system.");
+        }
+        return filteredOrders;
     }
 }

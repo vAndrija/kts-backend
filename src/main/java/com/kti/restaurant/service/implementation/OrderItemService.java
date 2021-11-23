@@ -56,7 +56,11 @@ public class OrderItemService implements IOrderItemService {
         orderItemToUpdate.setPriority(orderItem.getPriority());
         orderItemToUpdate.setNote(orderItem.getNote());
         orderItemToUpdate.setMenuItem(orderItem.getMenuItem());
-        //treba dodati i kuvara i sankera,
+        if(orderItem.getCook() != null){
+            orderItemToUpdate.setCook(orderItem.getCook());
+        }else if(orderItem.getBartender() != null){
+            orderItemToUpdate.setBartender(orderItem.getBartender());
+        }
         orderItemRepository.save(orderItemToUpdate);
 
         return orderItemToUpdate;

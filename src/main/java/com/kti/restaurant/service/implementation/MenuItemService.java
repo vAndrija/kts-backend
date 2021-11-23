@@ -2,12 +2,16 @@ package com.kti.restaurant.service.implementation;
 
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.MenuItem;
+import com.kti.restaurant.model.enums.MenuItemCategory;
+import com.kti.restaurant.model.enums.MenuItemType;
 import com.kti.restaurant.repository.MenuItemRepository;
 import com.kti.restaurant.service.contract.IMenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class MenuItemService implements IMenuItemService {
@@ -59,5 +63,21 @@ public class MenuItemService implements IMenuItemService {
         menuItemRepository.save(menuItemToUpdate);
 
         return menuItemToUpdate;
+    }
+
+    @Override
+    public Set<MenuItem> search(String search) {
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING).withIgnoreCase();
+        Example<MenuItem> exampleQuery = Example.of(new MenuItem(search, search), matcher);
+        List<MenuItem> concatenated = new ArrayList<>();
+        concatenated.addAll(menuItemRepository.findAll(exampleQuery));
+        concatenated.addAll(menuItemRepository.findByCategory(MenuItemCategory.findCategory(search)));
+        concatenated.addAll(menuItemRepository.findByType(MenuItemType.findType(search)));
+        return new HashSet<>(concatenated);
+    }
+
+    @Override
+    public Set<MenuItem> filter(String filter) {
+        return new HashSet<>(menuItemRepository.findByCategory(MenuItemCategory.findCategory(filter)));
     }
 }

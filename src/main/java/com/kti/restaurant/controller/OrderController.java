@@ -67,4 +67,11 @@ public class OrderController {
 
     }
 
+    @GetMapping(value = "/filter/{status}")
+    public ResponseEntity<?> getFilteredOrdersByStatus(@PathVariable("status") String status) throws Exception {
+        List<OrderDto> orders = orderService.filterByStatus(status).stream()
+                .map(order->this.orderMapper.fromOrderToOrderDto(order)).collect(Collectors.toList());;
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
 }
