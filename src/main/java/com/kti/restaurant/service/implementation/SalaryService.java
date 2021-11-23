@@ -7,6 +7,7 @@ import com.kti.restaurant.service.contract.ISalaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -57,5 +58,10 @@ public class SalaryService implements ISalaryService {
     public void delete(Integer id) throws Exception {
         this.findById(id);
         salaryRepository.deleteById(id);
+    }
+
+    @Override
+    public Salary findSalaryForDate(LocalDate date, Integer userId) {
+        return salaryRepository.findSalaryForDate(date, userId);
     }
 }

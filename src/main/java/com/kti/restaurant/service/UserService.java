@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserService  implements UserDetailsService {
@@ -62,5 +63,9 @@ public class UserService  implements UserDetailsService {
         User user = userRepository.getByEmailAddress(token.getUser().getEmailAddress());
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 }

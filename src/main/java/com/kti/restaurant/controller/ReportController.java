@@ -39,5 +39,13 @@ public class ReportController {
         return new ResponseEntity<List<Integer>>(reportService.mealDrinkSalesForMonth(year, month, id), HttpStatus.OK);
     }
 
+    @GetMapping("/yearly/{year}/cost-benefit-ratio")
+    public ResponseEntity<List<Double>> getYearlyCostBenefitRatio(@PathVariable Integer year) {
+        return new ResponseEntity<List<Double>>(reportService.costBenefitRatioForYear(year), HttpStatus.OK);
+    }
 
+    @GetMapping("{year}/monthly/{month}/cost-benefit-ratio")
+    public ResponseEntity<List<Double>> getMonthlyReportForCostBenefitRatio(@PathVariable Integer year, @PathVariable Integer month) {
+        return new ResponseEntity<List<Double>>(reportService.costBenefitRatioForMonth(year, month), HttpStatus.OK);
+    }
 }

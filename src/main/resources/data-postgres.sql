@@ -138,9 +138,9 @@ INSERT INTO discount (value, start_date, end_date, menu_item_id, is_current, del
 INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
     (0, '2021-11-19T14:15', 1520, 3, 7, false);
 INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
-    (1, '2021-11-19T13:00', 1830, 4, 8, false);
+    (0, '2022-11-18T13:00', 1830, 4, 8, false);
 INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
-    (1, '2021-11-19T12:48', 810, 2, 7, false);
+    (0, '2022-11-18T12:48', 810, 2, 7, false);
 
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
     ('', 1, 2, 0, null, null ,1, 1, false);
@@ -165,18 +165,19 @@ INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook
     ('', 2, 1, 1, null, 5, 12, 1, false);
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
     ('', 2, 1, 1, null, 4, 13, 1, false);
-/*
-INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
-    ('Napravljena je nova porudzbina.', 2, 4, 1, false);
-INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
-    ('Napravljena je nova porudzbina.', 3, 5, 1, false);
-INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
-    ('Pileci file u senfu i medu je u pripremi.', null, 4, 2, false);
-INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
-    ('Punjeni pileci batak na zaru je u pripremi.', null, 5, 2, false);
-INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
-    ('Domaca kafa je pripremljena.', 3, null, 3, false);
-INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
-    ('Baklava je u pripremi.', 3, null, 3, false);
-INSERT INTO notification (message,  bartender_users,  cook_users,  order_id, deleted) values
-    ('Krempita je u pipremi.', 3, null, 3, false); */
+
+INSERT INTO notification (message, order_item_id, seen, deleted) values
+    ('Napravljena je nova porudzbina.', 2, true, false);
+INSERT INTO notification (message, order_item_id, seen, deleted) values
+    ('Napravljena je nova porudzbina.', 3, true, false);
+INSERT INTO notification (message, order_item_id, seen, deleted) values
+    ('Pileci file u senfu i medu je u pripremi.', 4, true, false);
+INSERT INTO notification (message, order_item_id, seen, deleted) values
+    ('Punjeni pileci batak na zaru je u pripremi.', 5, true, false);
+INSERT INTO notification (message, order_item_id, seen, deleted) values
+    ('Domaca kafa je pripremljena.', 6, false, false);
+INSERT INTO notification (message, order_item_id, seen, deleted) values
+    ('Baklava je u pripremi.', 7, false, false);
+INSERT INTO notification (message, order_item_id, seen, deleted) values
+    ('Krempita je u pipremi.', 8, false, false);
+
