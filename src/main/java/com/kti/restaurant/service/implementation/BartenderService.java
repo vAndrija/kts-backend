@@ -78,4 +78,9 @@ public class BartenderService implements IBartenderService {
         Bartender bartender = this.findById(id);
         bartenderRepository.delete(bartender);
     }
+
+    @Override
+    public Bartender findByUserId(Integer userId) {
+        return bartenderRepository.findById(userId).orElse(null);
+    }
 }

@@ -38,4 +38,15 @@ public class ReportController {
     public ResponseEntity<List<Double>> getMonthlyReportForCostBenefitRatio(@PathVariable Integer year, @PathVariable Integer month) {
         return new ResponseEntity<List<Double>>(reportService.costBenefitRatioForMonth(year, month), HttpStatus.OK);
     }
+
+    @GetMapping("/yearly/{year}/time-preparing/{userId}")
+    public ResponseEntity<List<Integer>> getYearlyPreparingTimeReport(@PathVariable Integer year, @PathVariable Integer userId) {
+        return new ResponseEntity<List<Integer>>(reportService.preparationTimeForYear(year, userId), HttpStatus.OK);
+    }
+
+    @GetMapping("{year}/monthly/{month}/time-preparing{userId}")
+    public ResponseEntity<List<Integer>> getMonthlyPreparingTimeReport(@PathVariable Integer year, @PathVariable Integer month,
+                                                                      @PathVariable Integer userId) {
+        return new ResponseEntity<List<Integer>>(reportService.preparationTimeForMonth(year, month, userId), HttpStatus.OK);
+    }
 }

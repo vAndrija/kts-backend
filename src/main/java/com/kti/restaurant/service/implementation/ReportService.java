@@ -1,14 +1,11 @@
 package com.kti.restaurant.service.implementation;
 
-import com.kti.restaurant.model.OrderItem;
-import com.kti.restaurant.model.PriceItem;
-import com.kti.restaurant.model.Salary;
-import com.kti.restaurant.model.User;
+import com.kti.restaurant.exception.BadLogicException;
+import com.kti.restaurant.exception.MissingEntityException;
+import com.kti.restaurant.model.*;
+import com.kti.restaurant.repository.RoleRepository;
 import com.kti.restaurant.service.UserService;
-import com.kti.restaurant.service.contract.IOrderItemService;
-import com.kti.restaurant.service.contract.IPriceItemService;
-import com.kti.restaurant.service.contract.IReportService;
-import com.kti.restaurant.service.contract.ISalaryService;
+import com.kti.restaurant.service.contract.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +21,19 @@ public class ReportService implements IReportService {
     private IPriceItemService priceItemService;
     private ISalaryService salaryService;
     private UserService userService;
+    private ICookService cookService;
+    private IBartenderService bartenderService;
 
     @Autowired
     public  ReportService(IOrderItemService orderItemService, IPriceItemService priceItemService,
-                          ISalaryService salaryService, UserService userService) {
+                          ISalaryService salaryService, UserService userService,
+                          ICookService cookService, IBartenderService bartenderService) {
         this.orderItemService = orderItemService;
         this.priceItemService = priceItemService;
         this.salaryService = salaryService;
         this.userService = userService;
+        this.cookService = cookService;
+        this.bartenderService = bartenderService;
     }
 
     @Override
@@ -144,6 +146,79 @@ public class ReportService implements IReportService {
         });
 
         return ratioForMonths;
+    }
+
+    @Override
+    public List<Integer> preparationTimeForYear(Integer year, Integer employee_id) {
+        User user = userService.findById(employee_id);
+
+        if(user == null) {
+            throw new MissingEntityException("User with given id does not exist in the system.");
+        }
+
+        if(!user.getRoles().get(0).getName().equals("ROLE_COOK") && !user.getRoles().get(0).getName().equals("ROLE_BARTENDER")) {
+            throw new BadLogicException("This report can only show data of cooks and bartenders");
+        }
+
+        List<Integer> minutesForYear = new ArrayList<Integer>(Collections.nCopies(12, 0));
+
+        LocalDateTime firstDayInYearLocal = getDayInYear(year, 0, 1);
+        LocalDateTime lastDayInYearLocal = getDayInYear(year, 11, 31);
+
+        List<OrderItem> orderItems = null;
+        if(user.getRoles().get(0).getName().equals("ROLE_COOK")) {
+            orderItems = orderItemService.findByCook(cookService.findByUserId(employee_id), firstDayInYearLocal,
+                    lastDayInYearLocal);
+        }
+        else {
+            orderItems = orderItemService.findByBartender(bartenderService.findByUserId(employee_id), firstDayInYearLocal,
+                    lastDayInYearLocal);
+        }
+
+        orderItems.forEach(orderItem -> {
+            Integer monthValue = orderItem.getOrder().getDateOfOrder().getMonthValue();
+            minutesForYear.set(monthValue - 1, minutesForYear.get(monthValue - 1) +
+                    orderItem.getMenuItem().getPreparationTime() * orderItem.getQuantity());
+        });
+
+        return minutesForYear;
+    }
+
+    @Override
+    public List<Integer> preparationTimeForMonth(Integer year, Integer month, Integer employee_id) {
+        User user = userService.findById(employee_id);
+
+        if(user == null) {
+            throw new MissingEntityException("User with given id does not exist in the system.");
+        }
+
+        if(!user.getRoles().get(0).getName().equals("ROLE_COOK") && !user.getRoles().get(0).getName().equals("ROLE_BARTENDER")) {
+            throw new BadLogicException("This report can only show data of cooks and bartenders");
+        }
+
+        Integer numberDaysInMonth = getNumberDaysInMonth(year, month-1);
+        List<Integer> minutesForMonth = new ArrayList<Integer>(Collections.nCopies(numberDaysInMonth, 0));
+
+        LocalDateTime firstDayInMonthLocal = getDayInYear(year, month-1, 1);
+        LocalDateTime lastDayInMonthLocal = getDayInYear(year, month-1, numberDaysInMonth);
+
+        List<OrderItem> orderItems = null;
+        if(user.getRoles().get(0).getName().equals("ROLE_COOK")) {
+            orderItems = orderItemService.findByCook(cookService.findByUserId(employee_id), firstDayInMonthLocal,
+                    lastDayInMonthLocal);
+        }
+        else {
+            orderItems = orderItemService.findByBartender(bartenderService.findByUserId(employee_id), firstDayInMonthLocal,
+                    lastDayInMonthLocal);
+        }
+
+        orderItems.forEach(orderItem -> {
+            Integer dayValue = orderItem.getOrder().getDateOfOrder().getDayOfMonth();
+            minutesForMonth.set(dayValue - 1, minutesForMonth.get(dayValue - 1) +
+                    orderItem.getMenuItem().getPreparationTime() * orderItem.getQuantity());
+        });
+
+        return minutesForMonth;
     }
 
     private LocalDateTime getDayInYear(Integer year, Integer month, Integer day) {
