@@ -88,14 +88,14 @@ public class NotificationService implements INotificationService {
     @SuppressWarnings("unchecked")
     private Map<String, String> parseMessage(String message) {
         ObjectMapper mapper = new ObjectMapper();
-        Map<String, String> retVal;
+        Map<String, String> parsedMessage;
 
         try {
-            retVal = mapper.readValue(message, Map.class); // parsiranje JSON stringa
+            parsedMessage = mapper.readValue(message, Map.class);
         } catch (IOException e) {
-            retVal = null;
+            parsedMessage = null;
         }
 
-        return retVal;
+        return parsedMessage;
     }
 }
