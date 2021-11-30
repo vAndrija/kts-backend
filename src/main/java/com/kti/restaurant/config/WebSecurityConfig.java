@@ -18,7 +18,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @Configuration
@@ -50,16 +51,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private TokenUtils tokenUtils;
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
+                .antMatcher("/socket/")
                 .authorizeRequests().antMatchers("/auth/**").permitAll().
                 antMatchers("/h2-console/**").permitAll().
                 antMatchers("/api/v1/auth/login").permitAll()
                 .anyRequest().authenticated().and()
-                .cors().and()
+
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
                         BasicAuthenticationFilter.class);
         http.csrf().disable();
@@ -68,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/auth/login");
-        web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "/favicon.ico", "/**/*.html",
+        web.ignoring().antMatchers(HttpMethod.GET,"/", "/webjars/**", "/*.html", "/favicon.ico", "/**/*.html",
                 "/**/*.css", "/**/*.js");
     }
 
