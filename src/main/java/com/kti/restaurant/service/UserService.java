@@ -68,4 +68,6 @@ public class UserService  implements UserDetailsService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
+    public User findById(Integer id) { return userRepository.findById(id).orElse(null); }
 }

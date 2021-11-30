@@ -2,6 +2,8 @@ package com.kti.restaurant.service.implementation;
 
 import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
+import com.kti.restaurant.model.Bartender;
+import com.kti.restaurant.model.Cook;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.enums.OrderItemStatus;
 import com.kti.restaurant.repository.OrderItemRepository;
@@ -80,5 +82,15 @@ public class OrderItemService implements IOrderItemService {
     @Override
     public List<OrderItem> findOrderItemsInPeriodForMenuItem(LocalDateTime startDate, LocalDateTime endDate, Integer menuItemId) {
         return orderItemRepository.findSalesForMenuItem(startDate, endDate, menuItemId);
+    }
+  
+    @Override
+    public List<OrderItem> findByCook(Cook cook, LocalDateTime startDate, LocalDateTime endDate) {
+        return orderItemRepository.findByCookForDate(cook, startDate, endDate);
+    }
+
+    @Override
+    public List<OrderItem> findByBartender(Bartender bartender, LocalDateTime startDate, LocalDateTime endDate) {
+        return orderItemRepository.findByBartenderForDate(bartender, startDate, endDate);
     }
 }
