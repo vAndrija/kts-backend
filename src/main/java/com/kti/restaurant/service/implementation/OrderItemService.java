@@ -80,6 +80,11 @@ public class OrderItemService implements IOrderItemService {
     }
 
     @Override
+    public List<OrderItem> findOrderItemsInPeriodForMenuItem(LocalDateTime startDate, LocalDateTime endDate, Integer menuItemId) {
+        return orderItemRepository.findSalesForMenuItem(startDate, endDate, menuItemId);
+    }
+  
+    @Override
     public List<OrderItem> findByCook(Cook cook, LocalDateTime startDate, LocalDateTime endDate) {
         return orderItemRepository.findByCookForDate(cook, startDate, endDate);
     }

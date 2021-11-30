@@ -81,6 +81,42 @@ public class ReportService implements IReportService {
     }
 
     @Override
+    public List<Integer> mealDrinkSalesForYear(Integer year, Integer menuItemId) {
+        List<Integer> salesPerMonths = new ArrayList<Integer>(Collections.nCopies(12, 0));
+
+        LocalDateTime firstDayInYearLocal = getDayInYear(year, 0, 1);
+        LocalDateTime lastDayInYearLocal = getDayInYear(year, 11, 31);
+
+        List<OrderItem> orderItemsInYear = orderItemService.findOrderItemsInPeriodForMenuItem(firstDayInYearLocal,
+                lastDayInYearLocal, menuItemId);
+
+        orderItemsInYear.forEach(orderItem -> {
+                Integer month = orderItem.getOrder().getDateOfOrder().getMonthValue();
+                salesPerMonths.set(month-1, salesPerMonths.get(month-1) + orderItem.getQuantity());
+        });
+        
+        return salesPerMonths;
+    }
+
+    @Override
+    public List<Integer> mealDrinkSalesForMonth(Integer year, Integer month, Integer menuItemId) {
+        Integer numberDaysInMonth = getNumberDaysInMonth(year, month-1);
+        List<Integer> salesPerDays = new ArrayList<Integer>(Collections.nCopies(numberDaysInMonth, 0));
+
+        LocalDateTime firstDayInMonthLocal = getDayInYear(year, month-1, 1);
+        LocalDateTime lastDayInMonthLocal = getDayInYear(year, month-1, numberDaysInMonth);
+
+        List<OrderItem> orderItemsInYear = orderItemService.findOrderItemsInPeriodForMenuItem(firstDayInMonthLocal,
+                lastDayInMonthLocal, menuItemId);
+
+        orderItemsInYear.forEach(orderItem -> {
+            Integer day = orderItem.getOrder().getDateOfOrder().getDayOfMonth();
+            salesPerDays.set(day-1, salesPerDays.get(day-1) + orderItem.getQuantity());
+        });
+
+        return salesPerDays;
+    }
+
     public List<Double> costBenefitRatioForYear(Integer year) {
         List<Double> ratioForMonths = new ArrayList<Double>(Collections.nCopies(12, 0.0));
 
