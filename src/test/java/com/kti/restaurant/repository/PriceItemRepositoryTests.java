@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import static com.kti.restaurant.constants.PriceItemConstants.PRICE_ITEM_VALUE;
 
 import com.kti.restaurant.model.PriceItem;
 
@@ -30,7 +31,7 @@ public class PriceItemRepositoryTests {
     @Test
     public void findPriceItemForDate_ValidDate_ExistingPriceItem() {
     	PriceItem priceItem = priceItemRepository.findPriceItemForDate(LocalDate.parse("2021-11-19"), 1);
-    	assertEquals(new Double(180.00), priceItem.getValue());
+    	assertEquals(PRICE_ITEM_VALUE, priceItem.getValue());
     }
     
     @Test
