@@ -45,7 +45,7 @@ public class DiscountServiceUnitTests {
 	}
 
 	@Test
-	public void findById_InvalidId_ThrownMissingEntityException() throws Exception {
+	public void findById_InvalidId_ThrowsMissingEntityException() throws Exception {
 		Assertions.assertThrows(MissingEntityException.class, () -> {
 			discountService.findById(2);
 		});
@@ -68,7 +68,7 @@ public class DiscountServiceUnitTests {
 	}
 
 	@Test
-	public void update_InvalidId_ThrownMissingEntityException() {
+	public void update_InvalidId_ThrowsMissingEntityException() {
 		Assertions.assertThrows(MissingEntityException.class, () -> {
 			discountService.update(null, 2);
 		});
@@ -82,7 +82,7 @@ public class DiscountServiceUnitTests {
 	}
 
 	@Test
-	public void delete_InvalidId_ThrownMissingEntityException() {
+	public void delete_InvalidId_ThrowsMissingEntityException() {
 		Assertions.assertThrows(MissingEntityException.class, () -> {
 			discountService.delete(2);
 		});
