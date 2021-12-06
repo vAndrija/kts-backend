@@ -2,7 +2,7 @@ package com.kti.restaurant.repository;
 
 
 import static com.kti.restaurant.constants.PriceItemConstants.PRICE_ITEM_VALUE;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.kti.restaurant.model.PriceItem;
 
