@@ -32,7 +32,7 @@ public class PriceItemRepositoryTests {
     }
     
     @Test
-    public void findPriceItemForDate_InvalidMenuItemKey_Null() {
+    public void findPriceItemForDate_InvalidMenuItemId_Null() {
     	PriceItem priceItem = priceItemRepository.findPriceItemForDate(LocalDate.parse("2021-11-19"), 100);
     	assertEquals(priceItem, null);
     }
