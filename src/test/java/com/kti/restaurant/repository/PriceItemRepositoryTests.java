@@ -1,29 +1,21 @@
 package com.kti.restaurant.repository;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+
 import static com.kti.restaurant.constants.PriceItemConstants.PRICE_ITEM_VALUE;
+import static org.junit.Assert.assertEquals;
 
 import com.kti.restaurant.model.PriceItem;
 
-import static org.junit.Assert.assertEquals;
-
 import java.time.LocalDate;
 
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.TestPropertySource;
 
-@RunWith(SpringRunner.class)
 @DataJpaTest
 @TestPropertySource("classpath:application-test.properties")
 public class PriceItemRepositoryTests {
-
-    @Autowired
-    private TestEntityManager entityManager;
 
     @Autowired
     private PriceItemRepository priceItemRepository;
