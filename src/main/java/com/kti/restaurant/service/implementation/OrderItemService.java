@@ -2,8 +2,6 @@ package com.kti.restaurant.service.implementation;
 
 import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
-import com.kti.restaurant.model.Bartender;
-import com.kti.restaurant.model.Cook;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.enums.OrderItemStatus;
 import com.kti.restaurant.repository.OrderItemRepository;
@@ -12,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -85,12 +82,12 @@ public class OrderItemService implements IOrderItemService {
     }
   
     @Override
-    public List<OrderItem> findByCook(Cook cook, LocalDateTime startDate, LocalDateTime endDate) {
-        return orderItemRepository.findByCookForDate(cook, startDate, endDate);
+    public List<OrderItem> findByCook(Integer cookId, LocalDateTime startDate, LocalDateTime endDate) {
+        return orderItemRepository.findByCookForDate(cookId, startDate, endDate);
     }
 
     @Override
-    public List<OrderItem> findByBartender(Bartender bartender, LocalDateTime startDate, LocalDateTime endDate) {
-        return orderItemRepository.findByBartenderForDate(bartender, startDate, endDate);
+    public List<OrderItem> findByBartender(Integer bartenderId, LocalDateTime startDate, LocalDateTime endDate) {
+        return orderItemRepository.findByBartenderForDate(bartenderId, startDate, endDate);
     }
 }
