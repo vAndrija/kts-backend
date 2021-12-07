@@ -65,6 +65,8 @@ public class DiscountServiceUnitTests {
 		assertEquals(discount.getStartDate(), LocalDate.parse("2021-11-21"));
 		assertEquals(discount.getEndDate(), LocalDate.parse("2021-11-22"));
 		assertEquals(discount.getCurrent(), true);
+		verify(discountRepository, times(1)).findById(1);
+		verify(discountRepository, times(1)).save(any());
 	}
 
 	@Test
@@ -72,6 +74,8 @@ public class DiscountServiceUnitTests {
 		Assertions.assertThrows(MissingEntityException.class, () -> {
 			discountService.update(null, 2);
 		});
+		verify(discountRepository, times(1)).findById(2);
+		verify(discountRepository, times(0)).save(any());
 	}
 
 	@Test
@@ -79,6 +83,8 @@ public class DiscountServiceUnitTests {
 		Assertions.assertDoesNotThrow(() -> {
 			discountService.delete(1);
 		});
+		verify(discountRepository, times(1)).findById(1);
+		verify(discountRepository, times(1)).deleteById(1);
 	}
 
 	@Test
@@ -86,5 +92,7 @@ public class DiscountServiceUnitTests {
 		Assertions.assertThrows(MissingEntityException.class, () -> {
 			discountService.delete(2);
 		});
+		verify(discountRepository, times(1)).findById(2);
+		verify(discountRepository, times(0)).deleteById(1);
 	}
 }

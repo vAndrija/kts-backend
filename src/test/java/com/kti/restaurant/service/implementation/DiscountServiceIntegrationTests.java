@@ -59,10 +59,10 @@ public class DiscountServiceIntegrationTests {
 
         Discount updatedDiscount = discountService.update(discount, 1);
 
-        assertEquals(25, discount.getValue());
-        assertEquals(LocalDate.parse("2021-05-11"), discount.getStartDate());
-        assertEquals(LocalDate.parse("2021-11-11"), discount.getEndDate());
-        assertEquals(false, discount.getCurrent());
+        assertEquals(25, updatedDiscount.getValue());
+        assertEquals(LocalDate.parse("2021-05-11"), updatedDiscount.getStartDate());
+        assertEquals(LocalDate.parse("2021-11-11"), updatedDiscount.getEndDate());
+        assertEquals(false, updatedDiscount.getCurrent());
     }
 
     @Test
