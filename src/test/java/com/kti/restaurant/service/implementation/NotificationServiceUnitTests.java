@@ -44,7 +44,7 @@ public class NotificationServiceUnitTests {
 	public void findById_ValidId_ExistsNotification() {
 		Notification notification = notificationService.findById(1);
 		
-		assertEquals(notification.getMessage(), "Poruka");
+		assertEquals("Poruka", notification.getMessage());
 	}
 	
 	@Test
@@ -53,7 +53,7 @@ public class NotificationServiceUnitTests {
             notificationService.findById(2);
         });
 		
-		assertEquals(exception.getMessage(), message);
+		assertEquals(message, exception.getMessage());
 	}
 		
 	@Test
@@ -65,8 +65,8 @@ public class NotificationServiceUnitTests {
 		
 		Notification notification = notificationService.update(notificationToUpdate, 1);
 		
-		assertEquals(notification.getSeen(), notificationToUpdate.getSeen());
-		assertEquals(notification.getMessage(), notificationToUpdate.getMessage());
+		assertEquals(notificationToUpdate.getSeen(), notification.getSeen());
+		assertEquals(notificationToUpdate.getMessage(), notification.getMessage());
 		
 	}
 	
@@ -76,7 +76,7 @@ public class NotificationServiceUnitTests {
 			notificationService.update(null, 2);
 		});
 		
-		assertEquals(exception.getMessage(), message);
+		assertEquals(message, exception.getMessage());
 	}
 	
 	@Test
@@ -95,6 +95,6 @@ public class NotificationServiceUnitTests {
 			notificationService.delete(2);
 		});
 		
-		assertEquals(exception.getMessage(), message);	
+		assertEquals(message, exception.getMessage());	
 	}
 }

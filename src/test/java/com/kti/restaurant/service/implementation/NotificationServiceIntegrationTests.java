@@ -33,14 +33,13 @@ public class NotificationServiceIntegrationTests {
 		assertEquals(notifications.size(), 7);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Test
 	public void findById_ValidId_ReturnsValidNotification() {
 		Notification notification = notificationService.findById(1);
 		
-		assertEquals(notification.getId(),new Integer(1));
-		assertEquals(notification.getMessage(), "Napravljena je nova porudzbina.");
-		assertEquals(notification.getSeen(), true);
+		assertEquals(Integer.valueOf(1), notification.getId());
+		assertEquals("Napravljena je nova porudzbina.", notification.getMessage());
+		assertEquals(true, notification.getSeen());
 	}
 	
 	@Test
@@ -49,7 +48,7 @@ public class NotificationServiceIntegrationTests {
 			notificationService.findById(100);
 		});
 		
-		assertEquals(exception.getMessage(), message);
+		assertEquals(message, exception.getMessage());
 	}
 	
 	@Test
@@ -57,8 +56,8 @@ public class NotificationServiceIntegrationTests {
 	public void create_ValidNotification_ReturnsValidNotification() throws Exception {
 		Notification notification = notificationService.create(new Notification("Poruka", new OrderItem(), false));
 		
-		assertEquals(notification.getMessage(), "Poruka");
-		assertEquals(notification.getSeen(), false);
+		assertEquals("Poruka", notification.getMessage());
+		assertEquals(false, notification.getSeen());
 	}
 	
 	@Test
@@ -70,7 +69,7 @@ public class NotificationServiceIntegrationTests {
 		Notification notificationToUpdate = notificationService.update(notification, 1); 
 		
 		//Posto mozemo samo da update seen samo je to testirano.
-		assertEquals(notificationToUpdate.getSeen(), false);
+		assertEquals(false, notificationToUpdate.getSeen());
 	}
 	
 	@Test
@@ -79,7 +78,7 @@ public class NotificationServiceIntegrationTests {
 			notificationService.update(null, 10);
 		});
 		
-		assertEquals(exception.getMessage(), message);
+		assertEquals(message, exception.getMessage());
 	}
 	
 	@Test
@@ -90,7 +89,7 @@ public class NotificationServiceIntegrationTests {
 			notificationService.findById(1);
 		});
 		
-		assertEquals(exception.getMessage(), message);
+		assertEquals(message, exception.getMessage());
 	}
 	
 	@Test
@@ -99,7 +98,7 @@ public class NotificationServiceIntegrationTests {
 			notificationService.delete(10);
 		});
 		
-		assertEquals(exception.getMessage(), message);
+		assertEquals(message, exception.getMessage());
 	}
 	
 	
