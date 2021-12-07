@@ -3,14 +3,15 @@ package com.kti.restaurant.repository;
 import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
 public interface MenuItemRepository extends JpaRepository<MenuItem, Integer> {
-
-    List<MenuItem> findAll(Example exampleQuery);
+    
+    @Query("select mi from MenuItem mi where lower(mi.name) like lower(concat('%', :search, '%')) or lower(mi.description) like lower(concat('%', :search, '%'))")
+    List<MenuItem> findByNameAndDecription(String search);
 
     List<MenuItem> findByCategory(MenuItemCategory category);
 

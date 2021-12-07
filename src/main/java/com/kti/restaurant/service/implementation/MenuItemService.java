@@ -7,8 +7,6 @@ import com.kti.restaurant.model.enums.MenuItemType;
 import com.kti.restaurant.repository.MenuItemRepository;
 import com.kti.restaurant.service.contract.IMenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -67,10 +65,8 @@ public class MenuItemService implements IMenuItemService {
 
     @Override
     public Set<MenuItem> search(String search) {
-        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues().withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING).withIgnoreCase();
-        Example<MenuItem> exampleQuery = Example.of(new MenuItem(search, search), matcher);
         List<MenuItem> concatenated = new ArrayList<>();
-        concatenated.addAll(menuItemRepository.findAll(exampleQuery));
+        concatenated.addAll(menuItemRepository.findByNameAndDecription(search));
         concatenated.addAll(menuItemRepository.findByCategory(MenuItemCategory.findCategory(search)));
         concatenated.addAll(menuItemRepository.findByType(MenuItemType.findType(search)));
         return new HashSet<>(concatenated);
