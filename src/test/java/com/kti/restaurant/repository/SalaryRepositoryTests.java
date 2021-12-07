@@ -3,7 +3,7 @@ package com.kti.restaurant.repository;
 import java.time.LocalDate;
 
 import static com.kti.restaurant.constants.SalaryConstants.SALARY_VALUE;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

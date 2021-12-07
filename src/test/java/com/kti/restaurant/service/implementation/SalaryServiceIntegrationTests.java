@@ -1,7 +1,5 @@
 package com.kti.restaurant.service.implementation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Salary;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional

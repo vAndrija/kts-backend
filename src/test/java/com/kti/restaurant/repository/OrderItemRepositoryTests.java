@@ -1,6 +1,5 @@
 package com.kti.restaurant.repository;
 
-import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,10 +11,12 @@ import org.springframework.test.context.TestPropertySource;
 
 import com.kti.restaurant.model.OrderItem;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 @DataJpaTest
 @TestPropertySource("classpath:application-test.properties")
-public class OrderItemRepositoryTest {
+public class OrderItemRepositoryTests {
 	
 	@Autowired
 	private OrderItemRepository orderItemRepository;
