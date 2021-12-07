@@ -45,7 +45,6 @@ public class WaiterServiceUnitTests {
     private EmailService emailService;
 
     @Mock
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @BeforeEach
@@ -65,7 +64,6 @@ public class WaiterServiceUnitTests {
 
         assertEquals(waiter.getId(), 1);
         assertEquals(waiter.getEmailAddress(), "saramilic@gmail.com");
-        assertTrue(passwordEncoder.matches("123", waiter.getPassword()));
         assertEquals(waiter.getName(), "Sara");
         assertEquals(waiter.getLastName(), "Milic");
         assertEquals(waiter.getPhoneNumber(), "0654123699");
