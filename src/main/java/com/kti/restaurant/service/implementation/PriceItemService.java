@@ -50,6 +50,7 @@ public class PriceItemService implements IPriceItemService {
         priceItemToUpdate.setEndDate(entity.getEndDate());
         priceItemToUpdate.setMenuItem(entity.getMenuItem());
         priceItemToUpdate.setValue(entity.getValue());
+        priceItemToUpdate.setPreparationValue(entity.getPreparationValue());
 
         return priceItemRepository.save(priceItemToUpdate);
     }
