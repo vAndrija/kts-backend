@@ -97,8 +97,20 @@ public class MenuItemServiceIntegrationTests {
     }
 
     @Test
-    public void search_SearchParamName_SetOfMenuItems() {
+    public void search_SearchParamNameDescription_SetOfMenuItems() {
         var menuItems = menuItemService.search("limun");
+        assertEquals(1, menuItems.size());
+    }
+
+    @Test
+    public void search_SearchParamName_SetOfMenuItems() {
+        var menuItems = menuItemService.search("coca cola");
+        assertEquals(1, menuItems.size());
+    }
+
+    @Test
+    public void search_SearchParamDescription_SetOfMenuItems() {
+        var menuItems = menuItemService.search("dimljeni");
         assertEquals(1, menuItems.size());
     }
 
