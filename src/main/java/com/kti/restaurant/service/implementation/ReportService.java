@@ -203,11 +203,11 @@ public class ReportService implements IReportService {
 
         List<OrderItem> orderItems = null;
         if(user.getRoles().get(0).getName().equals("ROLE_COOK")) {
-            orderItems = orderItemService.findByCook(cookService.findByUserId(employee_id), firstDayInYearLocal,
+            orderItems = orderItemService.findByCook(employee_id, firstDayInYearLocal,
                     lastDayInYearLocal);
         }
         else {
-            orderItems = orderItemService.findByBartender(bartenderService.findByUserId(employee_id), firstDayInYearLocal,
+            orderItems = orderItemService.findByBartender(employee_id, firstDayInYearLocal,
                     lastDayInYearLocal);
         }
 
@@ -240,11 +240,11 @@ public class ReportService implements IReportService {
 
         List<OrderItem> orderItems = null;
         if(user.getRoles().get(0).getName().equals("ROLE_COOK")) {
-            orderItems = orderItemService.findByCook(cookService.findByUserId(employee_id), firstDayInMonthLocal,
+            orderItems = orderItemService.findByCook(employee_id, firstDayInMonthLocal,
                     lastDayInMonthLocal);
         }
         else {
-            orderItems = orderItemService.findByBartender(bartenderService.findByUserId(employee_id), firstDayInMonthLocal,
+            orderItems = orderItemService.findByBartender(employee_id, firstDayInMonthLocal,
                     lastDayInMonthLocal);
         }
 

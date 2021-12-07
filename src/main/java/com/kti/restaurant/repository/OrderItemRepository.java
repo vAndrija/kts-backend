@@ -17,9 +17,9 @@ public interface OrderItemRepository extends JpaRepository<OrderItem,Integer> {
             "where o.dateOfOrder > ?1 and o.dateOfOrder < ?2 and mi.id = ?3")
     List<OrderItem> findSalesForMenuItem(LocalDateTime startDate, LocalDateTime endDate, Integer menuItemId);
   
-    @Query("select oi from OrderItem oi join Order o on oi.order.id = o.id where o.dateOfOrder > ?2 and o.dateOfOrder < ?3 and oi.cook = ?1")
-    List<OrderItem> findByCookForDate(Cook cook, LocalDateTime startDate, LocalDateTime endDate);
+    @Query("select oi from OrderItem oi join Order o on oi.order.id = o.id where o.dateOfOrder > ?2 and o.dateOfOrder < ?3 and oi.cook.id = ?1")
+    List<OrderItem> findByCookForDate(Integer cookId, LocalDateTime startDate, LocalDateTime endDate);
 
-    @Query("select oi from OrderItem oi join Order o on oi.order.id = o.id where o.dateOfOrder > ?2 and o.dateOfOrder < ?3 and oi.bartender = ?1")
-    List<OrderItem> findByBartenderForDate(Bartender bartender, LocalDateTime startDate, LocalDateTime endDate);
+    @Query("select oi from OrderItem oi join Order o on oi.order.id = o.id where o.dateOfOrder > ?2 and o.dateOfOrder < ?3 and oi.bartender.id = ?1")
+    List<OrderItem> findByBartenderForDate(Integer bartenderId, LocalDateTime startDate, LocalDateTime endDate);
 }
