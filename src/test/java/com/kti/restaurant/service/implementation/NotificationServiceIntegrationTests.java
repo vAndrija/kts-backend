@@ -19,9 +19,6 @@ import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Notification;
 import com.kti.restaurant.model.OrderItem;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 @SpringBootTest
 @TestPropertySource("classpath:application-test.properties")
 @Transactional

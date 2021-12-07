@@ -3,7 +3,6 @@ package com.kti.restaurant.service.implementation;
 import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.*;
-import com.kti.restaurant.repository.RoleRepository;
 import com.kti.restaurant.service.UserService;
 import com.kti.restaurant.service.contract.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ReportService implements IReportService {
@@ -21,19 +19,16 @@ public class ReportService implements IReportService {
     private IPriceItemService priceItemService;
     private ISalaryService salaryService;
     private UserService userService;
-    private ICookService cookService;
-    private IBartenderService bartenderService;
-
+    private IMenuItemService menuItemService;
+  
     @Autowired
     public  ReportService(IOrderItemService orderItemService, IPriceItemService priceItemService,
-                          ISalaryService salaryService, UserService userService,
-                          ICookService cookService, IBartenderService bartenderService) {
+                          ISalaryService salaryService, UserService userService, MenuItemService menuItemService) {
         this.orderItemService = orderItemService;
         this.priceItemService = priceItemService;
         this.salaryService = salaryService;
         this.userService = userService;
-        this.cookService = cookService;
-        this.bartenderService = bartenderService;
+        this.menuItemService = menuItemService;
     }
 
     @Override
@@ -81,12 +76,18 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public List<Integer> mealDrinkSalesForYear(Integer year, Integer menuItemId) {
-        List<Integer> salesPerMonths = new ArrayList<Integer>(Collections.nCopies(12, 0));
+    public List<Integer> mealDrinkSalesForYear(Integer year, Integer menuItemId) throws Exception {
+        if(year < 0) {
+        	throw new BadLogicException("Year cannot be negative value.");
+        }
+        
+        menuItemService.findById(menuItemId);
+    	
+    	List<Integer> salesPerMonths = new ArrayList<Integer>(Collections.nCopies(12, 0));
 
         LocalDateTime firstDayInYearLocal = getDayInYear(year, 0, 1);
         LocalDateTime lastDayInYearLocal = getDayInYear(year, 11, 31);
-
+ 
         List<OrderItem> orderItemsInYear = orderItemService.findOrderItemsInPeriodForMenuItem(firstDayInYearLocal,
                 lastDayInYearLocal, menuItemId);
 
@@ -99,7 +100,19 @@ public class ReportService implements IReportService {
     }
 
     @Override
-    public List<Integer> mealDrinkSalesForMonth(Integer year, Integer month, Integer menuItemId) {
+    public List<Integer> mealDrinkSalesForMonth(Integer year, Integer month, Integer menuItemId) throws Exception {
+    	if(year < 0) {
+    		throw new BadLogicException("Year cannot be negative value.");
+    	}
+    	
+    	if(month < 1 || month > 12) {
+    		throw new BadLogicException("Month needs to be in range 1 and 12");
+    	}
+    	
+    
+    	menuItemService.findById(menuItemId);
+    	
+        
         Integer numberDaysInMonth = getNumberDaysInMonth(year, month-1);
         List<Integer> salesPerDays = new ArrayList<Integer>(Collections.nCopies(numberDaysInMonth, 0));
 
@@ -271,7 +284,7 @@ public class ReportService implements IReportService {
     private Integer getNumberDaysInMonth(Integer year, Integer month) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month-1);
+        calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
 
         return calendar.getActualMaximum(Calendar.DATE);
