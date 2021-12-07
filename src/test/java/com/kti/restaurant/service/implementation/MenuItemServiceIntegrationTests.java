@@ -95,4 +95,40 @@ public class MenuItemServiceIntegrationTests {
             menuItemService.delete(20);
         });
     }
+
+    @Test
+    public void search_SearchParamName_SetOfMenuItems() {
+        var menuItems = menuItemService.search("limun");
+        assertEquals(1, menuItems.size());
+    }
+
+    @Test
+    public void search_SearchParamCategory_SetOfMenuItems() {
+        var menuItems = menuItemService.search("Dezert");
+        assertEquals(4, menuItems.size());
+    }
+
+    @Test
+    public void search_SearchParamType_SetOfMenuItems() {
+        var menuItems = menuItemService.search("Hrana");
+        assertEquals(10, menuItems.size());
+    }
+
+    @Test
+    public void search_InvalidParam_EmptySet() {
+        var menuItems = menuItemService.search("abcd");
+        assertEquals(0, menuItems.size());
+    }
+
+    @Test
+    public void filter_ValidCategory_SetOfMenuItems() {
+        var menuItems = menuItemService.filter("Glavno jelo");
+        assertEquals(4, menuItems.size());
+    }
+
+    @Test
+    public void filter_InvalidCategory_EmptySet() {
+        var menuItems = menuItemService.filter("abcd");
+        assertEquals(0, menuItems.size());
+    }
 }

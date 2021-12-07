@@ -22,18 +22,18 @@ public class PriceItemRepositoryTests {
     @Test
     public void findPriceItemForDate_ValidDate_ExistingPriceItem() {
     	PriceItem priceItem = priceItemRepository.findPriceItemForDate(LocalDate.parse("2021-11-19"), 1);
-    	assertEquals(new Double(180.00), priceItem.getValue());
+    	assertEquals(Double.valueOf(180.00), priceItem.getValue());
     }
     
     @Test
     public void findPriceItemForDate_InvalidDate_Null() {
     	PriceItem priceItem = priceItemRepository.findPriceItemForDate(LocalDate.parse("2021-11-15"), 1);
-    	assertEquals(priceItem, null);
+    	assertEquals(null, priceItem);
     }
     
     @Test
     public void findPriceItemForDate_InvalidMenuItemId_Null() {
     	PriceItem priceItem = priceItemRepository.findPriceItemForDate(LocalDate.parse("2021-11-19"), 100);
-    	assertEquals(priceItem, null);
+    	assertEquals(null, priceItem);
     }
 }
