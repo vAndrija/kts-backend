@@ -8,6 +8,7 @@ import com.kti.restaurant.service.contract.IPriceItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,6 +28,7 @@ public class PriceItemController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<?> createPriceItem(@Valid @RequestBody PriceItemDto priceItemDto) throws Exception {
         PriceItem priceItem = priceItemService.create(priceItemMapper.fromPriceItemDtoToPriceItem(priceItemDto));
 
@@ -47,6 +49,7 @@ public class PriceItemController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<?> updatePriceItem(@Valid @RequestBody PriceItemDto priceItemDto, @PathVariable Integer id) throws Exception {
         return new ResponseEntity<>(priceItemService.update
                 (priceItemMapper.fromPriceItemDtoToPriceItem(priceItemDto), id),
@@ -54,6 +57,7 @@ public class PriceItemController {
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<?> deletePriceItem(@PathVariable Integer id) throws Exception {
         priceItemService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

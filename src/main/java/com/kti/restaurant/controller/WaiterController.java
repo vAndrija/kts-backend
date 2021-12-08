@@ -10,6 +10,7 @@ import com.kti.restaurant.service.contract.IWaiterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,12 +32,14 @@ public class WaiterController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN')")
     public ResponseEntity<?> createWaiter(@Valid @RequestBody WaiterCreateDto waiterCreateDto) throws Exception {
         Waiter waiter =  waiterService.create(waiterMapper.fromWaiterCreateDtoToWaiter(waiterCreateDto));
         return new ResponseEntity<>(waiterMapper.fromWaiterToWaiterDto(waiter), HttpStatus.CREATED);
     }
 
     @GetMapping("")
+    @PreAuthorize("hasAnyRole('MANAGER', 'SYSTEM_ADMIN')")
     public ResponseEntity<?> getWaiters(){
         List<WaiterDto> waiterDtos = waiterService.findAll().stream()
                 .map(waiter->this.waiterMapper.fromWaiterToWaiterDto(waiter)).collect(Collectors.toList());
@@ -44,18 +47,21 @@ public class WaiterController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER', 'SYSTEM_ADMIN', 'WAITER')")
     public ResponseEntity<?> getWaiter(@PathVariable Integer id) throws Exception {
         Waiter waiter =  waiterService.findById(id);
         return new ResponseEntity<>(waiterMapper.fromWaiterToWaiterDto(waiter), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER', 'WAITER')")
     public ResponseEntity<?> updateWaiter(@Valid @RequestBody WaiterUpdateDto waiterUpdateDto, @PathVariable Integer id) throws Exception {
         Waiter waiter = waiterService.update(waiterMapper.fromWaiterUpdateDtoToWaiter(waiterUpdateDto), id);
         return new ResponseEntity<>(waiterMapper.fromWaiterToWaiterDto(waiter),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER', 'SYSTEM_ADMIN')")
     public ResponseEntity<?> deleteWaiter(@PathVariable Integer id) throws Exception {
         waiterService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

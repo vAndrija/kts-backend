@@ -8,6 +8,7 @@ import com.kti.restaurant.service.contract.IMenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,6 +30,7 @@ public class MenuItemController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('COOK', 'BARTENDER')")
     public ResponseEntity<?> createMenuItem(@Valid @RequestBody MenuItemDto menuItemDto) throws Exception {
         MenuItem menuItem = menuItemService.create(menuItemMapper.fromCreateMenuItemDtoToMenuItem(menuItemDto));
 
@@ -49,12 +51,14 @@ public class MenuItemController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'MANAGER')")
     public ResponseEntity<?> updateMenuItem(@Valid @RequestBody UpdateMenuItemDto updateMenuItemDto, @PathVariable Integer id) throws Exception {
             return new ResponseEntity<>(menuItemService.update(menuItemMapper.fromUpdateMenuItemDtoToMenuItem(updateMenuItemDto), id),
                     HttpStatus.OK);
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+    @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'MANAGER')")
     public ResponseEntity<?> deleteMenuItem(@PathVariable Integer id) throws Exception {
         menuItemService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

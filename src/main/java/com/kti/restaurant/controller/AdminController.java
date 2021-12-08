@@ -9,6 +9,7 @@ import com.kti.restaurant.service.contract.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,12 +31,14 @@ public class AdminController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN')")
     public ResponseEntity<?> createAdmin(@Valid  @RequestBody AdminCreateDto adminCreateDto) throws Exception {
         Admin admin =  adminService.create(adminMapper.fromAdminCreateDtoToAdmin(adminCreateDto));
         return new ResponseEntity<>(adminMapper.fromAdminToAdminDto(admin), HttpStatus.CREATED);
     }
 
     @GetMapping("")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'MANAGER')")
     public ResponseEntity<?> getAdmins(){
         List<AdminDto> adminsDto = adminService.findAll().stream()
                 .map(admin->this.adminMapper.fromAdminToAdminDto(admin)).collect(Collectors.toList());
@@ -43,18 +46,21 @@ public class AdminController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'MANAGER')")
     public ResponseEntity<?> getAdmin(@PathVariable Integer id) throws Exception {
         Admin admin =  adminService.findById(id);
         return new ResponseEntity<>(adminMapper.fromAdminToAdminDto(admin), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'MANAGER')")
     public ResponseEntity<?> updateAdmin(@Valid @RequestBody AdminUpdateDto adminUpdateDto, @PathVariable Integer id) throws Exception {
         Admin admin = adminService.update(adminMapper.fromAdminUpdateDtoToAdmin(adminUpdateDto), id);
         return new ResponseEntity<>(adminMapper.fromAdminToAdminDto(admin),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'MANAGER')")
     public ResponseEntity<?> deleteAdmin(@PathVariable Integer id) throws Exception {
         adminService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

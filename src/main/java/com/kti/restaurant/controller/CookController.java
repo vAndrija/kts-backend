@@ -10,6 +10,7 @@ import com.kti.restaurant.service.contract.ICookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,12 +32,14 @@ public class CookController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN')")
     public ResponseEntity<?> createCook(@Valid @RequestBody CookCreateDto cookCreateDto) throws Exception {
         Cook cook = cookService.create(cookMapper.fromCookCreateDtoToCook(cookCreateDto));
         return new ResponseEntity<>(cookMapper.fromCookToCookDto(cook), HttpStatus.CREATED);
     }
 
     @GetMapping("")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'MANAGER')")
     public ResponseEntity<?> getCooks() {
         List<CookDto> bartenderDtos = cookService.findAll().stream()
                 .map(cook -> this.cookMapper.fromCookToCookDto(cook)).collect(Collectors.toList());
@@ -44,18 +47,21 @@ public class CookController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'MANAGER', 'COOK')")
     public ResponseEntity<?> getCook(@PathVariable Integer id) throws Exception {
         Cook cook = cookService.findById(id);
         return new ResponseEntity<>(cookMapper.fromCookToCookDto(cook), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'MANAGER', 'COOK')")
     public ResponseEntity<?> updateCook(@Valid @RequestBody CookUpdateDto cookUpdateDto, @PathVariable Integer id) throws Exception {
         Cook cook = cookService.update(cookMapper.fromCookUpdateDtoToCook(cookUpdateDto), id);
         return new ResponseEntity<>(cookMapper.fromCookToCookDto(cook), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'MANAGER')")
     public ResponseEntity<?> deleteCook(@PathVariable Integer id) throws Exception {
         cookService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
