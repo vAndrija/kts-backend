@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
@@ -25,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
 public class WaiterServiceUnitTests {
 
@@ -48,7 +47,7 @@ public class WaiterServiceUnitTests {
     private PasswordEncoder passwordEncoder;
 
     @BeforeEach
-    public void setup(){
+    public void setup() {
         Waiter waiter = new Waiter("Milic", "Sara", "0654123699",
                 "saramilic@gmail.com", "02356987451");
         waiter.setId(1);
@@ -62,26 +61,26 @@ public class WaiterServiceUnitTests {
     public void findById_ValidId_ExistingWaiter() throws Exception {
         Waiter waiter = waiterService.findById(1);
 
-        assertEquals(waiter.getId(), 1);
-        assertEquals(waiter.getEmailAddress(), "saramilic@gmail.com");
-        assertEquals(waiter.getName(), "Sara");
-        assertEquals(waiter.getLastName(), "Milic");
-        assertEquals(waiter.getPhoneNumber(), "0654123699");
-        assertEquals(waiter.getAccountNumber(), "02356987451");
+        assertEquals(1, waiter.getId());
+        assertEquals("saramilic@gmail.com", waiter.getEmailAddress());
+        assertEquals("Sara", waiter.getName());
+        assertEquals("Milic", waiter.getLastName());
+        assertEquals("0654123699", waiter.getPhoneNumber());
+        assertEquals("02356987451", waiter.getAccountNumber());
 
     }
 
     @Test
-    public void findById_InvalidId_ThrowsMissingEntityException(){
-        assertThrows(MissingEntityException.class, ()->{
-           waiterService.findById(2);
+    public void findById_InvalidId_ThrowsMissingEntityException() {
+        assertThrows(MissingEntityException.class, () -> {
+            waiterService.findById(2);
         });
     }
 
     @Test
     public void create_UniqueEmail_ValidWaiter() throws Exception {
-        Waiter waiterForCreate = new Waiter("Peric","Ana","065289632",
-                "anaperic@gmail.com","412589632");
+        Waiter waiterForCreate = new Waiter("Peric", "Ana", "065289632",
+                "anaperic@gmail.com", "412589632");
         waiterForCreate.setId(2);
         waiterForCreate.setPassword("456");
 
@@ -99,12 +98,12 @@ public class WaiterServiceUnitTests {
                 .thenAnswer(a -> a.getArgument(0));
 
         Waiter waiter = waiterService.create(waiterForCreate);
-        assertEquals(waiter.getId(),2);
-        assertEquals(waiter.getName(),"Ana");
-        assertEquals(waiter.getLastName(), "Peric");
-        assertEquals(waiter.getPhoneNumber(), "065289632");
-        assertEquals(waiter.getAccountNumber(), "412589632");
-        assertEquals(waiter.getRoles().get(0).getId(), 5L);
+        assertEquals(2, waiter.getId());
+        assertEquals("Ana", waiter.getName());
+        assertEquals("Peric", waiter.getLastName());
+        assertEquals("065289632", waiter.getPhoneNumber());
+        assertEquals("412589632", waiter.getAccountNumber());
+        assertEquals(5L, waiter.getRoles().get(0).getId());
 
     }
 
@@ -114,15 +113,16 @@ public class WaiterServiceUnitTests {
                 "saramilic@gmail.com", "02356987451");
         waiterForCreate.setId(1);
         waiterForCreate.setPassword("123");
-        assertThrows(ConflictException.class, ()->{
-           waiterService.create(waiterForCreate);
+
+        assertThrows(ConflictException.class, () -> {
+            waiterService.create(waiterForCreate);
         });
 
     }
 
     @Test
     public void update_ValidId_ExistingWaiter() throws Exception {
-        Waiter waiterForUpdate =  new Waiter("Jovic", "Tara", "0632589411",
+        Waiter waiterForUpdate = new Waiter("Jovic", "Tara", "0632589411",
                 "saramilic@gmail.com", "0252698741");
         waiterForUpdate.setId(1);
         waiterForUpdate.setPassword(passwordEncoder.encode("123"));
@@ -130,34 +130,38 @@ public class WaiterServiceUnitTests {
         when(waiterRepository.save(any()))
                 .thenAnswer(a -> a.getArgument(0));
 
-        Waiter updatedWaiter = waiterService.update(waiterForUpdate,1);
-        assertEquals(updatedWaiter.getName(), "Tara");
-        assertEquals(updatedWaiter.getLastName(), "Jovic");
-        assertEquals(updatedWaiter.getPhoneNumber(), "0632589411");
-        assertEquals(updatedWaiter.getAccountNumber(), "0252698741");
+        Waiter updatedWaiter = waiterService.update(waiterForUpdate, 1);
+        assertEquals("Tara", updatedWaiter.getName());
+        assertEquals("Jovic", updatedWaiter.getLastName());
+        assertEquals("0632589411", updatedWaiter.getPhoneNumber());
+        assertEquals("0252698741", updatedWaiter.getAccountNumber());
     }
 
     @Test
     public void update_InvalidId_ThrowsMissingEntityException() throws Exception {
-        assertThrows(MissingEntityException.class, ()->{
-            waiterService.update(null,100);
+        assertThrows(MissingEntityException.class, () -> {
+            waiterService.update(null, 100);
         });
     }
 
     @Test
-    public void delete_ValidId_WaiterDeleted(){
-        assertDoesNotThrow(() ->{
+    public void delete_ValidId_WaiterDeleted() {
+        assertDoesNotThrow(() -> {
             waiterService.delete(1);
         });
+
         verify(waiterRepository, times(1)).findById(1);
         verify(waiterRepository, times(1)).delete(any(Waiter.class));
     }
 
     @Test
-    public void delete_InvalidId_ThrowsMissingEntityException(){
-        assertThrows(MissingEntityException.class, ()->{
+    public void delete_InvalidId_ThrowsMissingEntityException() {
+        assertThrows(MissingEntityException.class, () -> {
             waiterService.delete(100);
         });
+
+        verify(waiterRepository, times(1)).findById(100);
+        verify(waiterRepository, times(0)).delete(any(Waiter.class));
 
     }
 }
