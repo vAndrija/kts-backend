@@ -57,7 +57,7 @@ public class OrderService implements IOrderService {
     public Collection<Order> filterByStatus(String status) {
         Collection<Order> filteredOrders = orderRepository.findOrderByStatus(OrderStatus.valueOf(status));
         if(filteredOrders == null){
-            throw new MissingEntityException("Order with given status does not exist in the system.");
+            throw new IllegalArgumentException("Given order status does not exist in the system.");
         }
         return filteredOrders;
     }
