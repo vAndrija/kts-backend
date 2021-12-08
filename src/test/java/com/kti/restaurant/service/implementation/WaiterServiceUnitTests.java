@@ -149,7 +149,8 @@ public class WaiterServiceUnitTests {
         assertDoesNotThrow(() ->{
             waiterService.delete(1);
         });
-
+        verify(waiterRepository, times(1)).findById(1);
+        verify(waiterRepository, times(1)).delete(any(Waiter.class));
     }
 
     @Test
@@ -157,5 +158,6 @@ public class WaiterServiceUnitTests {
         assertThrows(MissingEntityException.class, ()->{
             waiterService.delete(100);
         });
+
     }
 }
