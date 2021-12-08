@@ -22,7 +22,7 @@ import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Salary;
 import com.kti.restaurant.repository.SalaryRepository;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
 public class SalaryServiceUnitTests {
 

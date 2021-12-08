@@ -18,7 +18,7 @@ import com.kti.restaurant.model.Notification;
 import com.kti.restaurant.model.OrderItem;
 
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
 @Transactional
 public class NotificationServiceIntegrationTests {

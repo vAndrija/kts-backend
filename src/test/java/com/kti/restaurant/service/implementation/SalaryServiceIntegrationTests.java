@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Salary;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 public class SalaryServiceIntegrationTests {
 

@@ -22,7 +22,7 @@ import com.kti.restaurant.model.RestaurantTable;
 import com.kti.restaurant.model.TableReservation;
 import com.kti.restaurant.repository.TableReservationRepository;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
 public class TableReservationServiceUnitTests {
 
@@ -69,7 +69,6 @@ public class TableReservationServiceUnitTests {
 
 		TableReservation reservation = reservationService.update(reservationToUpdate, 1);
 		assertEquals(reservationToUpdate.getId(), reservation.getId());
-		assertEquals(reservationToUpdate.getName(), reservation.getName());
 		assertEquals(reservationToUpdate.getDurationStart(), reservation.getDurationStart());
 	}
 	

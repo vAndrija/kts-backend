@@ -19,7 +19,7 @@ import com.kti.restaurant.model.RestaurantTable;
 import com.kti.restaurant.model.TableReservation;
 
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
 @Transactional
 public class TableReservationServiceIntegrationTests {

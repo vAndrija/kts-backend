@@ -20,7 +20,7 @@ import com.kti.restaurant.model.Notification;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.repository.NotificationRepository;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class NotificationServiceUnitTests {
 	
 	@InjectMocks
