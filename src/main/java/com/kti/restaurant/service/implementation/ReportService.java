@@ -231,7 +231,7 @@ public class ReportService implements IReportService {
         }
 
         if(!user.getRoles().get(0).getName().equals("ROLE_COOK") && !user.getRoles().get(0).getName().equals("ROLE_BARTENDER")) {
-            throw new BadLogicException("This report can only show data of cooks and bartenders");
+            throw new BadLogicException("This report can only show data of cooks and bartenders.");
         }
 
         List<Integer> minutesForYear = new ArrayList<Integer>(Collections.nCopies(12, 0));

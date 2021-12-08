@@ -295,7 +295,7 @@ public class ReportServiceUnitTests {
 	}
 
 	@Test
-	public void preparationTimeForMonth_ValidParameters_ReturnsPreparationTimesForDaysForBartender() {
+	public void preparationTimeForMonth_ValidParameters_ReturnsPreparationTimesPerDaysForBartender() {
 		List<Integer> preparationTimes = reportService.preparationTimeForMonth(2021, 10, 1);
 		assertEquals(31, preparationTimes.size());
 		assertEquals(0, preparationTimes.get(0));
@@ -303,7 +303,7 @@ public class ReportServiceUnitTests {
 	}
 
 	@Test
-	public void preparationTimeForMonth_ValidParameters_ReturnsPreparationTimesForDaysForCook() {
+	public void preparationTimeForMonth_ValidParameters_ReturnsPreparationTimesPerDaysForCook() {
 		List<Integer> preparationTimes = reportService.preparationTimeForMonth(2021, 10, 2);
 		assertEquals(31, preparationTimes.size());
 		assertEquals(0, preparationTimes.get(0));
