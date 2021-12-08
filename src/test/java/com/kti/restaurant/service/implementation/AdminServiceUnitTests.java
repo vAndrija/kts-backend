@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
@@ -23,7 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
 public class AdminServiceUnitTests {
 
@@ -98,7 +97,7 @@ public class AdminServiceUnitTests {
     }
 
     @Test
-    public void create_NonUnique_ThrowsConflictException() throws Exception {
+    public void create_NonUnique_ThrowsConflictException() {
         Admin adminForCreate = new Admin("Vojnovic", "Andrija", "333333", "andrija@vojnvo.com", "21312311");
         adminForCreate.setPassword("andrija");
         assertThrows(ConflictException.class, () -> {
@@ -134,7 +133,7 @@ public class AdminServiceUnitTests {
     }
 
     @Test
-    public void delete_ValidId_AdminDeleted() throws Exception {
+    public void delete_ValidId_AdminDeleted() {
         assertDoesNotThrow(() -> {
             this.adminService.delete(1);
         });
@@ -143,7 +142,7 @@ public class AdminServiceUnitTests {
     }
 
     @Test
-    public void delete_InvalidId_ThrowsMissingEntityException() throws Exception {
+    public void delete_InvalidId_ThrowsMissingEntityException() {
         assertThrows(MissingEntityException.class, () -> {
             this.adminService.delete(3);
         });
