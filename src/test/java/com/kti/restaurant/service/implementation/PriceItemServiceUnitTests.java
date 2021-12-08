@@ -3,7 +3,6 @@ package com.kti.restaurant.service.implementation;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.PriceItem;
 import com.kti.restaurant.repository.PriceItemRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,7 +13,7 @@ import org.springframework.test.context.TestPropertySource;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -50,7 +49,7 @@ public class PriceItemServiceUnitTests {
 
     @Test
     public void findById_InvalidPriceItemId_ThrowsMissingEntityException() {
-        Assertions.assertThrows(MissingEntityException.class, () -> {
+        assertThrows(MissingEntityException.class, () -> {
             priceItemService.findById(2);
         });
     }
@@ -74,14 +73,14 @@ public class PriceItemServiceUnitTests {
 
     @Test
     public void update_InvalidPriceItemId_ThrowsMissingEntityException() {
-        Assertions.assertThrows(MissingEntityException.class, () -> {
+        assertThrows(MissingEntityException.class, () -> {
             priceItemService.update(null, 2);
         });
     }
 
     @Test
     public void delete_ValidPriceItemId_DeletedPriceItem() throws Exception {
-        Assertions.assertDoesNotThrow(() -> {
+        assertDoesNotThrow(() -> {
             priceItemService.delete(1);
         });
         verify(priceItemRepository, times(1)).findById(1);
@@ -90,7 +89,7 @@ public class PriceItemServiceUnitTests {
 
     @Test
     public void delete_InvalidPriceItemId_ThrowsMissingEntityException() {
-        Assertions.assertThrows(MissingEntityException.class, () -> {
+        assertThrows(MissingEntityException.class, () -> {
             priceItemService.delete(2);
         });
         verify(priceItemRepository, times(1)).findById(2);

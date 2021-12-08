@@ -2,7 +2,6 @@ package com.kti.restaurant.service.implementation;
 
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.PriceItem;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,8 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestPropertySource("classpath:application-test.properties")
@@ -43,7 +41,7 @@ public class PriceItemServiceIntegrationTests {
 
     @Test
     public void findById_InvalidPriceItemId_ThrowsMissingEntityException() {
-        Assertions.assertThrows(MissingEntityException.class, () -> {
+        assertThrows(MissingEntityException.class, () -> {
             priceItemService.findById(20);
         });
     }
@@ -78,7 +76,7 @@ public class PriceItemServiceIntegrationTests {
 
     @Test
     public void update_InvalidPriceItem_ThrowsMissingEntityException() {
-        Assertions.assertThrows(MissingEntityException.class, () -> {
+        assertThrows(MissingEntityException.class, () -> {
             priceItemService.update(null, 20);
         });
     }
@@ -86,14 +84,14 @@ public class PriceItemServiceIntegrationTests {
     @Test
     public void delete_ValidPriceItemId() throws Exception {
         priceItemService.delete(1);
-        Assertions.assertThrows(MissingEntityException.class, () -> {
+        assertThrows(MissingEntityException.class, () -> {
             priceItemService.findById(1);
         });
     }
 
     @Test
     public void delete_InvalidPriceItemId() {
-        Assertions.assertThrows(MissingEntityException.class, () -> {
+        assertThrows(MissingEntityException.class, () -> {
             priceItemService.delete(20);
         });
     }
