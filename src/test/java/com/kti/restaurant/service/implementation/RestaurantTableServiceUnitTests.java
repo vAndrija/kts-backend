@@ -19,7 +19,7 @@ import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.RestaurantTable;
 import com.kti.restaurant.repository.RestaurantTableRepository;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RestaurantTableServiceUnitTests {
 
 	@InjectMocks

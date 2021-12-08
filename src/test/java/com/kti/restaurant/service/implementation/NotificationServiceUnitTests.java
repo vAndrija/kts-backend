@@ -1,6 +1,5 @@
 package com.kti.restaurant.service.implementation;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -21,7 +20,7 @@ import com.kti.restaurant.model.Notification;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.repository.NotificationRepository;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class NotificationServiceUnitTests {
 	
 	@InjectMocks

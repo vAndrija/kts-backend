@@ -7,7 +7,8 @@ COPY pom.xml /build/
 COPY src /build/src/
 
 WORKDIR /build/
-RUN mvn clean install -DskipTests
+# RUN mvn clean install -DskipTests
+RUN mvn clean install
 
 FROM openjdk:16-alpine3.13
 
