@@ -9,6 +9,7 @@ import com.kti.restaurant.service.contract.IBartenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,12 +31,14 @@ public class BartenderController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN')")
     public ResponseEntity<?> createBartender(@Valid @RequestBody BartenderCreateDto bartenderCreateDto) throws Exception {
         Bartender bartender =  bartenderService.create(bartenderMapper.fromBartenderCreateDtoToBartender(bartenderCreateDto));
         return new ResponseEntity<>(bartenderMapper.fromBartenderToBartenderDto(bartender), HttpStatus.CREATED);
     }
 
     @GetMapping("")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'MANAGER')")
     public ResponseEntity<?> getBartenders(){
         List<BartenderDto> bartenderDtos = bartenderService.findAll().stream()
                 .map(bartender->this.bartenderMapper.fromBartenderToBartenderDto(bartender)).collect(Collectors.toList());
@@ -43,18 +46,21 @@ public class BartenderController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'MANAGER', 'BARTENDER')")
     public ResponseEntity<?> getBartender(@PathVariable Integer id) throws Exception {
         Bartender bartender =  bartenderService.findById(id);
         return new ResponseEntity<>(bartenderMapper.fromBartenderToBartenderDto(bartender), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'MANAGER', 'BARTENDER')")
     public ResponseEntity<?> updateBartender(@Valid @RequestBody BartenderUpdateDto bartenderUpdateDto, @PathVariable Integer id) throws Exception {
         Bartender bartender = bartenderService.update(bartenderMapper.fromBartenderUpdateDtoToBartender(bartenderUpdateDto), id);
         return new ResponseEntity<>(bartenderMapper.fromBartenderToBartenderDto(bartender),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'MANAGER')")
     public ResponseEntity<?> deleteBartender(@PathVariable Integer id) throws Exception {
         bartenderService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

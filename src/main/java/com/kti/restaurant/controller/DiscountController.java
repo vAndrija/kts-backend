@@ -1,14 +1,13 @@
 package com.kti.restaurant.controller;
 
 import com.kti.restaurant.dto.discount.DiscountDto;
-import com.kti.restaurant.dto.menu.MenuDto;
 import com.kti.restaurant.mapper.DiscountMapper;
 import com.kti.restaurant.model.Discount;
-import com.kti.restaurant.model.Menu;
 import com.kti.restaurant.service.contract.IDiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,6 +28,7 @@ public class DiscountController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<?> createDiscount(@Valid @RequestBody DiscountDto discountDto) throws Exception {
         Discount discount = discountService.create(discountMapper.fromDiscountDtoToDiscount(discountDto));
 
@@ -51,12 +51,14 @@ public class DiscountController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<Discount> updateDiscount(@Valid @RequestBody DiscountDto discountDto, @PathVariable Integer id) throws Exception {
         return new ResponseEntity<Discount>(discountService.update(discountMapper.fromDiscountDtoToDiscount(discountDto), id),
                 HttpStatus.OK);
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<?> deleteDiscount(@PathVariable Integer id) throws Exception {
         discountService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

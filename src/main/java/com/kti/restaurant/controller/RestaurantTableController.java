@@ -5,6 +5,7 @@ import com.kti.restaurant.service.contract.IRestaurantTableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class RestaurantTableController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('MANAGER', 'SYSTEM_ADMIN')")
     public ResponseEntity<RestaurantTable> createRestaurantTable(@RequestBody RestaurantTable restaurantTable) throws Exception {
         RestaurantTable restaurantTableToCreate = restaurantTableService.create(restaurantTable);
 
@@ -42,11 +44,13 @@ public class RestaurantTableController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER', 'SYSTEM_ADMIN')")
     public ResponseEntity<RestaurantTable> updateRestaurantTable(@RequestBody RestaurantTable restaurantTable, @PathVariable Integer id) throws Exception {
         return new ResponseEntity<>(restaurantTableService.update(restaurantTable, id), HttpStatus.OK);
     }
 
     @RequestMapping(value="{id}", method=RequestMethod.DELETE)
+    @PreAuthorize("hasAnyRole('MANAGER', 'SYSTEM_ADMIN')")
     public ResponseEntity<?> deleteRestaurantTable(@PathVariable Integer id) throws Exception {
         restaurantTableService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

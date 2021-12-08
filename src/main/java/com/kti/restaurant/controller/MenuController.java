@@ -7,6 +7,7 @@ import com.kti.restaurant.service.contract.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,6 +27,7 @@ public class MenuController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<?> createMenu(@Valid @RequestBody MenuDto menuDto) throws Exception {
         Menu menu = menuService.create(menuMapper.fromMenuDtoToMenu(menuDto));
 
@@ -46,12 +48,14 @@ public class MenuController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<Menu> updateMenu(@Valid @RequestBody MenuDto menuDto, @PathVariable Integer id) throws Exception {
         return new ResponseEntity<Menu>(menuService.update(menuMapper.fromMenuDtoToMenu(menuDto), id),
                 HttpStatus.OK);
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<?> deleteMenu(@PathVariable Integer id) throws Exception {
         menuService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

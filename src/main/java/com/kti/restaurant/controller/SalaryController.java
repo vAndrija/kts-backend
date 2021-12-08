@@ -7,6 +7,7 @@ import com.kti.restaurant.service.contract.ISalaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,16 +27,19 @@ public class SalaryController {
     }
 
     @GetMapping("")
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<List<Salary>> getSalaries() {
         return new ResponseEntity<>(salaryService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER', 'COOK', 'BARTENDER', 'WAITER')")
     public ResponseEntity<Salary> getSalary(@PathVariable Integer id) throws Exception {
         return new ResponseEntity<>(salaryService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<Salary> createSalary(@RequestBody CreateSalaryDto salaryDto) throws Exception {
         Salary salary = salaryService.create(salaryMapper.fromCreateSalaryDtoToSalary(salaryDto));
 
@@ -46,12 +50,14 @@ public class SalaryController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<?> updateSalary(@Valid @RequestBody CreateSalaryDto salaryDto, @PathVariable Integer id) throws Exception {
         return new ResponseEntity<>(salaryService.update(salaryMapper.fromCreateSalaryDtoToSalary(salaryDto), id),
                 HttpStatus.OK);
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+    @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<?> deleteSalary(@PathVariable Integer id) throws Exception {
         salaryService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

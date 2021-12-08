@@ -7,6 +7,7 @@ import com.kti.restaurant.service.contract.ITableReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -37,6 +38,7 @@ public class TableReservationController {
 
 
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('WAITER')")
     public ResponseEntity<TableReservation> createTableReservation(@Valid @RequestBody TableReservationDto tableReservationDto) throws Exception {
         TableReservation tableReservation = tableReservationService.create(tableReservationMapper.fromTableReservationDtoToTableReservation(tableReservationDto));
 
@@ -48,6 +50,7 @@ public class TableReservationController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('WAITER')")
     public ResponseEntity<TableReservation> updateTableReservation(@Valid @RequestBody TableReservationDto tableReservationDto,
                                                                    @PathVariable Integer id) throws Exception {
         TableReservation tableReservation = tableReservationMapper.fromTableReservationDtoToTableReservation(tableReservationDto);
@@ -57,6 +60,7 @@ public class TableReservationController {
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+    @PreAuthorize("hasAnyRole('WAITER')")
     public ResponseEntity<?> deleteTableReservation(@PathVariable Integer id) throws Exception {
         tableReservationService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

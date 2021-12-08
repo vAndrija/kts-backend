@@ -8,6 +8,7 @@ import com.kti.restaurant.service.contract.INotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class NotificationController {
     }
 
     @GetMapping("")
+    @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
     public ResponseEntity<List<NotificationDto>> getAllNotifications() {
         List<NotificationDto> notificationDtos = notificationService.findAll().stream()
                 .map(notification -> this.notificationMapper.fromNotificationToNotificationDto(notification)).collect(Collectors.toList());
@@ -36,6 +38,7 @@ public class NotificationController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
     public ResponseEntity<NotificationDto> getNotificationById(@PathVariable Integer id) throws Exception {
         Notification notification = notificationService.findById(id);
 
@@ -43,6 +46,7 @@ public class NotificationController {
     }
 
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
     public ResponseEntity<NotificationDto> createNotification(@RequestBody CreateUpdateNotificationDto notificationDto) throws Exception {
         Notification notification = notificationService.create(notificationMapper.fromCreateNotificationDtoToNotification(notificationDto));
 
@@ -54,6 +58,7 @@ public class NotificationController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
     public ResponseEntity<NotificationDto> updateNotification(@RequestBody CreateUpdateNotificationDto notificationDto, @PathVariable Integer id) throws Exception {
         Notification notification = notificationService.update((notificationMapper.fromUpdateNotificationDtoToNotification(notificationDto)), id);
 
@@ -65,6 +70,7 @@ public class NotificationController {
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+    @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
     public ResponseEntity<?> deleteNotification(@PathVariable Integer id) throws Exception {
         notificationService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
