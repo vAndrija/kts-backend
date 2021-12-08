@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 public class ReportServiceIntegrationTests {
 
