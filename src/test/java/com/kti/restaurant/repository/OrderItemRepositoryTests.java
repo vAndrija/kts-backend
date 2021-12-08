@@ -24,67 +24,67 @@ public class OrderItemRepositoryTests {
 	@Test
 	public void findOrderItemsByDate_ValidDates_ExistingOrderItems() {
 		List<OrderItem> orderItems = orderItemRepository.findOrderItemsByDate(LocalDateTime.parse("2022-11-18T08:00"), LocalDateTime.parse("2022-11-19T08:00"));
-		assertEquals(orderItems.size(), 2);
+		assertEquals(2, orderItems.size());
 	}
 	
 	@Test
 	public void findOrderItemsByDate_InvalidDates_EmptyList() {
 		List<OrderItem> orderItems = orderItemRepository.findOrderItemsByDate(LocalDateTime.parse("2022-11-18T14:00"), LocalDateTime.parse("2021-01-01T14:00"));
-		assertEquals(orderItems.size(), 0);
+		assertEquals(0, orderItems.size());
 	}
 	
 	@Test
 	public void findSalesForMenuItem_ValidDates_ValidMenuItemId_ExistingOrderItems() {
 		List<OrderItem> orderItems = orderItemRepository.findSalesForMenuItem(LocalDateTime.parse("2021-11-18T08:00"), LocalDateTime.parse("2021-11-19T23:00"), 1);
-		assertEquals(orderItems.size(), 2);
+		assertEquals(2, orderItems.size());
 	}
 	
 	@Test
 	public void findSalesForMenuItem_InvalidDates_ValidMenuItemId_EmptyList() {
 		List<OrderItem> orderItems = orderItemRepository.findSalesForMenuItem(LocalDateTime.parse("2022-11-18T08:00"), LocalDateTime.parse("2022-11-01T23:00"), 1);
-		assertEquals(orderItems.size(), 0);
+		assertEquals(0, orderItems.size());
 	}
 	
 	@Test
 	public void findSalesForMenuItem_ValidDates_InvalidMenuItemId_EmptyList() {
 		List<OrderItem> orderItems = orderItemRepository.findSalesForMenuItem(LocalDateTime.parse("2021-11-18T08:00"), LocalDateTime.parse("2021-11-19T23:00"), 1000);
-		assertEquals(orderItems.size(), 0);
+		assertEquals(0, orderItems.size());
 	}
 	
 	@Test
 	public void findByCookForDate_ValidDate_ValidCookId_ExistingOrderItems() {
 		List<OrderItem> orderItems = orderItemRepository.findByCookForDate(4,LocalDateTime.parse("2021-11-18T08:00"), LocalDateTime.parse("2021-11-19T23:00"));
-		assertEquals(orderItems.size(), 2);
+		assertEquals(2, orderItems.size());
 	}
 
 	@Test
 	public void findByCookForDate_InvalidDate_ValidCookId_EmptyList() {
 		List<OrderItem> orderItems = orderItemRepository.findByCookForDate(4,LocalDateTime.parse("2025-11-18T08:00"), LocalDateTime.parse("2021-11-19T23:00"));
-		assertEquals(orderItems.size(), 0);
+		assertEquals(0, orderItems.size());
 	}
 	
 	@Test
 	public void findByCookForDate_ValidDate_InvalidCookId_EmptyList() {
 		List<OrderItem> orderItems = orderItemRepository.findByCookForDate(1000,LocalDateTime.parse("2021-11-18T08:00"), LocalDateTime.parse("2021-11-19T23:00"));
-		assertEquals(orderItems.size(), 0);
+		assertEquals(0, orderItems.size());
 	}
 	
 	@Test
 	public void findByBartenderForDate_ValidDate_ValidBartenderId_ExistingOrderItems() {
 		List<OrderItem> orderItems = orderItemRepository.findByBartenderForDate(2,LocalDateTime.parse("2022-11-18T08:00"), LocalDateTime.parse("2022-11-28T23:00"));
-		assertEquals(orderItems.size(), 1);
+		assertEquals(1, orderItems.size());
 	}
 
 	@Test
 	public void findByBartenderForDate_InvalidDate_ValidBartenderId_EmptyList() {
 		List<OrderItem> orderItems = orderItemRepository.findByBartenderForDate(2,LocalDateTime.parse("2022-12-22T08:00"), LocalDateTime.parse("2022-11-01T11:45"));
-		assertEquals(orderItems.size(), 0);
+		assertEquals(0, orderItems.size());
 	}
 	
 	@Test
 	public void findByBartenderForDate_ValidDate_InvalidBartenderId_EmptyList() {
 		List<OrderItem> orderItems = orderItemRepository.findByBartenderForDate(200,LocalDateTime.parse("2022-11-18T08:00"), LocalDateTime.parse("2022-11-28T23:00"));
-		assertEquals(orderItems.size(), 0);
+		assertEquals(0, orderItems.size());
 	}
 
 }
