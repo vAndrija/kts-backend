@@ -48,7 +48,6 @@ public class AdminServiceUnitTests {
     public void setup() {
         Admin admin = new Admin("Vojnovic", "Andrija", "213123123", "andrija@vojnvo.com", "21312311");
         admin.setId(1);
-        admin.setPassword(passwordEncoder.encode("andrija"));
         when(adminRepository.findById(1))
                 .thenReturn(Optional.of(admin));
         when(userRepository.findByEmailAddress("andrija@vojnvo.com"))

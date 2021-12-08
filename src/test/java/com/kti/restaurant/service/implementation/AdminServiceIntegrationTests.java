@@ -70,6 +70,7 @@ public class AdminServiceIntegrationTests {
         });
     }
 
+    @Rollback()
     @Test
     public void update_ValidId_ValidAdmin() throws Exception {
         Admin admin = new Admin("Vojnovic", "Andrija", "213123123", "mirkomiric@gmail.com", "21312311");
@@ -82,6 +83,7 @@ public class AdminServiceIntegrationTests {
 
     }
 
+    @Rollback()
     @Test
     void update_InvalidId_ThrowsMissingEntityException() {
         Assertions.assertThrows(MissingEntityException.class, () -> {
