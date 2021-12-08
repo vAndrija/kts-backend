@@ -43,7 +43,6 @@ public class AdminServiceUnitTests {
     private EmailService emailService;
 
     @Mock
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @BeforeEach
@@ -66,7 +65,7 @@ public class AdminServiceUnitTests {
         assertEquals(admin.getPhoneNumber(), "213123123");
         assertEquals(admin.getEmailAddress(), "andrija@vojnvo.com");
         assertEquals(admin.getAccountNumber(), "21312311");
-        assertEquals(passwordEncoder.matches("andrija", admin.getPassword()), true);
+
     }
 
     @Test
@@ -112,7 +111,6 @@ public class AdminServiceUnitTests {
     public void update_ValidAdmin_ValidAdmin() throws Exception {
         Admin adminForUpdate = new Admin("Vojnovic", "Andrija", "333333", "andrija@vojnvo.com", "21312311");
         adminForUpdate.setId(1);
-        adminForUpdate.setPassword(passwordEncoder.encode("marsovac"));
         when(adminRepository.save(any()))
                 .thenAnswer(a -> a.getArgument(0));
         Admin admin = this.adminService.update(adminForUpdate, 1);
