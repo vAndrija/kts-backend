@@ -80,7 +80,7 @@ INSERT INTO menu_item (name, description, type, category, menu_id, accepted, del
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
     ('domaca kafa', 'topli napitak', 0, 6, 1, true, false, 5);
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('limunada', 'bezalkoholno pice', 0, 7, 1, true, false, 2);
+    ('limunada', 'bezalkoholno pice od limuna', 0, 7, 1, true, false, 2);
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
     ('domaca supa', 'pileca supa sa rezancima', 1, 0, 1, true, false, 10);
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
