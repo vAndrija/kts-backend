@@ -33,6 +33,10 @@ public class ReportService implements IReportService {
 
     @Override
     public List<Double> mealDrinkCostsForYear(Integer year) {
+        if(year < 0) {
+            throw new BadLogicException("Year cannot be negative value.");
+        }
+
         List<Double> costsPerMonths = new ArrayList<Double>(Collections.nCopies(12, 0.0));
 
         LocalDateTime firstDayInYearLocal = getDayInYear(year, 0, 1);
@@ -54,6 +58,14 @@ public class ReportService implements IReportService {
 
     @Override
     public List<Double> mealDrinkCostsForMonth(Integer year, Integer month) {
+        if(year < 0) {
+            throw new BadLogicException("Year cannot be negative value.");
+        }
+
+        if(month < 1 || month > 12) {
+            throw new BadLogicException("Month needs to be in range 1 and 12");
+        }
+
         Integer numberDaysInMonth = getNumberDaysInMonth(year, month-1);
 
         List<Double> costsPerDays = new ArrayList<Double>(Collections.nCopies(numberDaysInMonth, 0.0));
@@ -108,10 +120,8 @@ public class ReportService implements IReportService {
     	if(month < 1 || month > 12) {
     		throw new BadLogicException("Month needs to be in range 1 and 12");
     	}
-    	
     
     	menuItemService.findById(menuItemId);
-    	
         
         Integer numberDaysInMonth = getNumberDaysInMonth(year, month-1);
         List<Integer> salesPerDays = new ArrayList<Integer>(Collections.nCopies(numberDaysInMonth, 0));
@@ -131,6 +141,10 @@ public class ReportService implements IReportService {
     }
 
     public List<Double> costBenefitRatioForYear(Integer year) {
+        if(year < 0) {
+            throw new BadLogicException("Year cannot be negative value.");
+        }
+
         List<Double> ratioForMonths = new ArrayList<Double>(Collections.nCopies(12, 0.0));
 
         LocalDateTime firstDayInYearLocal = getDayInYear(year, 0, 1);
@@ -167,6 +181,14 @@ public class ReportService implements IReportService {
 
     @Override
     public List<Double> costBenefitRatioForMonth(Integer year, Integer month) {
+        if(year < 0) {
+            throw new BadLogicException("Year cannot be negative value.");
+        }
+
+        if(month < 1 || month > 12) {
+            throw new BadLogicException("Month needs to be in range 1 and 12");
+        }
+
         Integer numberDaysInMonth = getNumberDaysInMonth(year, month-1);
 
         LocalDateTime firstDayInMonthLocal = getDayInYear(year, month-1, 1);
@@ -199,14 +221,17 @@ public class ReportService implements IReportService {
 
     @Override
     public List<Integer> preparationTimeForYear(Integer year, Integer employee_id) {
-        User user = userService.findById(employee_id);
+        if(year < 0) {
+            throw new BadLogicException("Year cannot be negative value.");
+        }
 
+        User user = userService.findById(employee_id);
         if(user == null) {
             throw new MissingEntityException("User with given id does not exist in the system.");
         }
 
         if(!user.getRoles().get(0).getName().equals("ROLE_COOK") && !user.getRoles().get(0).getName().equals("ROLE_BARTENDER")) {
-            throw new BadLogicException("This report can only show data of cooks and bartenders");
+            throw new BadLogicException("This report can only show data of cooks and bartenders.");
         }
 
         List<Integer> minutesForYear = new ArrayList<Integer>(Collections.nCopies(12, 0));
@@ -235,14 +260,21 @@ public class ReportService implements IReportService {
 
     @Override
     public List<Integer> preparationTimeForMonth(Integer year, Integer month, Integer employee_id) {
-        User user = userService.findById(employee_id);
+        if(year < 0) {
+            throw new BadLogicException("Year cannot be negative value.");
+        }
 
+        if(month < 1 || month > 12) {
+            throw new BadLogicException("Month needs to be in range 1 and 12");
+        }
+
+        User user = userService.findById(employee_id);
         if(user == null) {
             throw new MissingEntityException("User with given id does not exist in the system.");
         }
 
         if(!user.getRoles().get(0).getName().equals("ROLE_COOK") && !user.getRoles().get(0).getName().equals("ROLE_BARTENDER")) {
-            throw new BadLogicException("This report can only show data of cooks and bartenders");
+            throw new BadLogicException("This report can only show data of cooks and bartenders.");
         }
 
         Integer numberDaysInMonth = getNumberDaysInMonth(year, month-1);

@@ -31,7 +31,7 @@ public class NotificationServiceIntegrationTests {
 	public void findAll_ValidNumberOfNotifications() {
 		List<Notification> notifications = notificationService.findAll();
 		
-		assertEquals(notifications.size(), 7);
+		assertEquals(7, notifications.size());
 	}
 	
 	@Test
