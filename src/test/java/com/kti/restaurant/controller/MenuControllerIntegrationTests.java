@@ -29,6 +29,8 @@ public class MenuControllerIntegrationTests {
 
     private String accessToken;
 
+    private HttpHeaders headers;
+
     @BeforeEach
     public void login() {
         ResponseEntity<UserTokenState> responseEntity =
@@ -36,14 +38,14 @@ public class MenuControllerIntegrationTests {
                         new JwtAuthenticationRequest("sarajovic@gmail.com", "123"),
                         UserTokenState.class);
         accessToken = responseEntity.getBody().getAccessToken();
+        headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
     }
 
     @Test
-    public void createMenu_ValidMenu_CreatedMenu() throws Exception {
+    public void createMenu_ValidMenu_ReturnsCreated() throws Exception {
         int size = menuService.findAll().size();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
         HttpEntity<MenuDto> httpEntity = new HttpEntity<>(new MenuDto("Glavni meni", LocalDateTime.parse("2021-11-11T13:00"),
                 LocalDateTime.parse("2022-05-11T13:00")), headers);
         ResponseEntity<Menu> responseEntity =
@@ -65,9 +67,7 @@ public class MenuControllerIntegrationTests {
     }
 
     @Test
-    public void getMenuById_ValidMenuId_Menu() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
+    public void getMenuById_ValidMenuId_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
         ResponseEntity<Menu> responseEntity =
                 restTemplate.exchange("/api/v1/menu/{id}", HttpMethod.GET, httpEntity, Menu.class, 1);
@@ -81,14 +81,70 @@ public class MenuControllerIntegrationTests {
     }
 
     @Test
-    public void getMenuById_InvalidMenu() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
+    public void getMenuById_InvalidMenu_ReturnsNotFound() {
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
         ResponseEntity<Menu> responseEntity =
                 restTemplate.exchange("/api/v1/menu/{id}", HttpMethod.GET, httpEntity, Menu.class, 3);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void updateMenu_ValidMenu_ReturnsOk() throws Exception {
+        HttpEntity<MenuDto> httpEntity = new HttpEntity<MenuDto>(new MenuDto("Glavni", LocalDateTime.parse("2021-11-18T08:00"),
+                LocalDateTime.parse("2022-11-18T08:00")), headers);
+        ResponseEntity<Menu> responseEntity =
+                restTemplate.exchange("/api/v1/menu/{id}", HttpMethod.PUT, httpEntity,
+                        Menu.class, 1);
+
+        Menu menu = responseEntity.getBody();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals("Glavni", menu.getName());
+
+        Menu updatedMenu = menuService.findById(1);
+        assertEquals("Glavni", updatedMenu.getName());
+
+        updatedMenu.setName("standardni");
+        menuService.update(updatedMenu, 1);
+    }
+
+    @Test
+    public void updateMenu_InvalidMenu_ReturnsNotFoundStatus() {
+        HttpEntity<MenuDto> httpEntity = new HttpEntity<MenuDto>(new MenuDto("Glavni", LocalDateTime.parse("2021-11-18T08:00"),
+                LocalDateTime.parse("2022-11-18T08:00")), headers);
+        ResponseEntity<Menu> responseEntity =
+                restTemplate.exchange("/api/v1/menu/{id}", HttpMethod.PUT, httpEntity,
+                        Menu.class, 3);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void deleteMenu_ValidMenuId_ReturnsNoContent() throws Exception {
+        Menu menu = menuService.create(new Menu("Glavni", LocalDateTime.parse("2021-11-08T13:00"),
+                LocalDateTime.parse("2022-11-05T13:00")));
+
+        int size = menuService.findAll().size();
+
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Menu> responseEntity = restTemplate.exchange("/api/v1/menu/{id}", HttpMethod.DELETE, httpEntity,
+                Menu.class, menu.getId());
+
+        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        assertEquals(size - 1, menuService.findAll().size());
+    }
+
+    @Test
+    public void deleteMenu_InvalidMenuId_ReturnsNotFoundStatus() {
+        int size = menuService.findAll().size();
+
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Menu> responseEntity = restTemplate.exchange("/api/v1/menu/{id}", HttpMethod.DELETE, httpEntity,
+                Menu.class, 10);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertEquals(size, menuService.findAll().size());
     }
 }
 
