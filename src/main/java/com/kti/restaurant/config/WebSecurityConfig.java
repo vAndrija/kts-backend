@@ -67,7 +67,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 BasicAuthenticationFilter.class);
     	
     	http.csrf().disable();
-
     }
 
     @Override

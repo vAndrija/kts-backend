@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.web.client.RestClientException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,6 +31,8 @@ public class DiscountControllerIntegrationTests {
 
     private String accessToken;
 
+    private HttpHeaders headers;
+
     @BeforeEach
     public void login() {
         ResponseEntity<UserTokenState> responseEntity =
@@ -37,12 +40,13 @@ public class DiscountControllerIntegrationTests {
                         new JwtAuthenticationRequest("sarajovic@gmail.com", "123"),
                         UserTokenState.class);
         accessToken = responseEntity.getBody().getAccessToken();
+
+        headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
     }
 
     @Test
-    public void getDiscounts_ListOfDiscounts() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
+    public void getDiscounts_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
         ResponseEntity<DiscountDto[]> responseEntity =
                 restTemplate.exchange("/api/v1/discount", HttpMethod.GET, httpEntity, DiscountDto[].class);
@@ -56,9 +60,7 @@ public class DiscountControllerIntegrationTests {
     }
 
     @Test
-    public void getDiscountById_ValidDiscountId_ExistingId() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
+    public void getDiscountById_ValidDiscountId_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
         ResponseEntity<DiscountDto> responseEntity =
                 restTemplate.exchange("/api/v1/discount/{id}", HttpMethod.GET, httpEntity, DiscountDto.class, 1);
@@ -74,9 +76,7 @@ public class DiscountControllerIntegrationTests {
     }
 
     @Test
-    public void getDiscountById_InvalidDiscountId_ThrowsMissingEntityException() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
+    public void getDiscountById_InvalidDiscountId_ReturnsNotFound() {
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
         ResponseEntity<DiscountDto> responseEntity =
                 restTemplate.exchange("/api/v1/discount/{id}", HttpMethod.GET, httpEntity, DiscountDto.class, 2);
@@ -85,11 +85,9 @@ public class DiscountControllerIntegrationTests {
     }
 
     @Test
-    public void create_ValidDiscount_CreatedDiscount() throws Exception {
+    public void create_ValidDiscount_ReturnsCreated() throws Exception {
         int size = discountService.findAll().size();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
         HttpEntity<DiscountDto> httpEntity = new HttpEntity<DiscountDto>(new DiscountDto(15, LocalDate.parse("2021-11-11"),
                 LocalDate.parse("2022-05-11"), 5, true), headers);
         ResponseEntity<Discount> responseEntity =
@@ -98,6 +96,7 @@ public class DiscountControllerIntegrationTests {
 
         Discount discount = responseEntity.getBody();
 
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(15, discount.getValue());
         assertEquals(LocalDate.parse("2021-11-11"), discount.getStartDate());
         assertEquals(LocalDate.parse("2022-05-11"), discount.getEndDate());
@@ -112,9 +111,7 @@ public class DiscountControllerIntegrationTests {
     }
 
     @Test
-    public void updateDiscount_ValidDiscount_UpdatedDiscount() throws Exception {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
+    public void updateDiscount_ValidDiscount_ReturnsOk() throws Exception {
         HttpEntity<DiscountDto> httpEntity = new HttpEntity<DiscountDto>(new DiscountDto(15, LocalDate.parse("2021-11-20"),
                 LocalDate.parse("2021-11-25"), 8, false), headers);
         ResponseEntity<Discount> responseEntity =
@@ -134,9 +131,7 @@ public class DiscountControllerIntegrationTests {
     }
 
     @Test
-    public void updateDiscount_InvalidDiscountId() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
+    public void updateDiscount_InvalidDiscountId_ReturnsNotFound() {
         HttpEntity<DiscountDto> httpEntity = new HttpEntity<DiscountDto>(new DiscountDto(15, LocalDate.parse("2021-11-11"),
                 LocalDate.parse("2022-05-11"), 5, true), headers);
         ResponseEntity<Discount> responseEntity =
@@ -147,14 +142,12 @@ public class DiscountControllerIntegrationTests {
     }
 
     @Test
-    public void deleteDiscount_ValidDiscountIdI() throws Exception {
+    public void deleteDiscount_ValidDiscountIdI_ReturnsNoContent() throws Exception {
         Discount discount = discountService.create(new Discount(15, LocalDate.parse("2021-11-11"),
                 LocalDate.parse("2022-05-11"), true, null));
 
         int size = discountService.findAll().size();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
         ResponseEntity<Discount> responseEntity =
                 restTemplate.exchange("/api/v1/discount/{id}", HttpMethod.DELETE, httpEntity,
@@ -165,10 +158,8 @@ public class DiscountControllerIntegrationTests {
     }
 
     @Test
-    public void deleteDiscount_InvalidDiscountId() {
+    public void deleteDiscount_InvalidDiscountId_ReturnsNotFoundStatus() {
         int size = discountService.findAll().size();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
         ResponseEntity<Discount> responseEntity =
                 restTemplate.exchange("/api/v1/discount/{id}", HttpMethod.DELETE, httpEntity,
