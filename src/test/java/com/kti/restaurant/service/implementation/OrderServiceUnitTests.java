@@ -71,8 +71,8 @@ public class OrderServiceUnitTests {
 
         Order updatedOrder = orderService.update(orderForUpdate, 1);
         assertEquals(OrderStatus.FINISHED, updatedOrder.getStatus());
-        assertEquals(updatedOrder.getDateOfOrder(), LocalDateTime.parse("2022-10-10T14:15"));
-        assertEquals(updatedOrder.getPrice(), 3000.00);
+        assertEquals(LocalDateTime.parse("2022-10-10T14:15"), updatedOrder.getDateOfOrder());
+        assertEquals(3000.00, updatedOrder.getPrice());
 
     }
 
