@@ -81,6 +81,15 @@ public class MenuControllerIntegrationTests {
     }
 
     @Test
+    public void getMenus_ReturnsOk() {
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Menu[]> responseEntity = restTemplate.exchange("/api/v1/menu", HttpMethod.GET, httpEntity, Menu[].class);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(2, List.of(responseEntity.getBody()).size());
+    }
+
+    @Test
     public void getMenuById_InvalidMenu_ReturnsNotFound() {
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
         ResponseEntity<Menu> responseEntity =

@@ -46,7 +46,7 @@ public class DiscountControllerIntegrationTests {
     }
 
     @Test
-    public void getDiscounts_ListOfDiscounts_ReturnsOk() {
+    public void getDiscounts_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
         ResponseEntity<DiscountDto[]> responseEntity =
                 restTemplate.exchange("/api/v1/discount", HttpMethod.GET, httpEntity, DiscountDto[].class);
