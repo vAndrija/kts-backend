@@ -28,7 +28,7 @@ public class DiscountControllerIntegrationTests {
     @Autowired
     private DiscountService discountService;
 
-    private static String accessToken;
+    private String accessToken;
 
     @BeforeEach
     public void login() {
@@ -41,8 +41,6 @@ public class DiscountControllerIntegrationTests {
 
     @Test
     public void getDiscounts_ListOfDiscounts() {
-        System.out.println("METHOD " + Thread.currentThread().getId());
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
