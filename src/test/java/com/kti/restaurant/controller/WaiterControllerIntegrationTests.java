@@ -179,7 +179,7 @@ public class WaiterControllerIntegrationTests {
                 "111111", "152487", "aleksamaric@gmail.com"));
         int size = waiterService.findAll().size();
 
-        HttpEntity<WaiterUpdateDto> httpEntity = new HttpEntity<>(headers);
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<WaiterDto> responseEntity = restTemplate.exchange(URL_PREFIX+"/{id}", HttpMethod.DELETE, httpEntity,
                 WaiterDto.class, waiter.getId());
 
@@ -191,9 +191,9 @@ public class WaiterControllerIntegrationTests {
     public void delete_InvalidId_ReturnsNotFound() throws Exception {
         int size = waiterService.findAll().size();
 
-        HttpEntity<WaiterUpdateDto> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<WaiterDto> responseEntity = restTemplate.exchange(URL_PREFIX+"/{id}", HttpMethod.DELETE, httpEntity,
-                WaiterDto.class, 100);
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Object> responseEntity = restTemplate.exchange(URL_PREFIX+"/{id}", HttpMethod.DELETE, httpEntity,
+                Object.class, 100);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertEquals(size, waiterService.findAll().size());
