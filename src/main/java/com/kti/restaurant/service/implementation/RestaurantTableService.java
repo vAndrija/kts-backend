@@ -1,5 +1,6 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.RestaurantTable;
 import com.kti.restaurant.repository.RestaurantTableRepository;
@@ -36,7 +37,15 @@ public class RestaurantTableService implements IRestaurantTableService {
 
     @Override
     public RestaurantTable create(RestaurantTable restaurantTable) throws Exception {
-        return restaurantTableRepository.save(restaurantTable);
+        if(restaurantTable.getCapacity() == null || restaurantTable.getTableNumber() == null) {
+        	throw new BadLogicException("Capacity and table number cannot be null.");
+        }
+        
+        if(restaurantTable.getCapacity() < 1) {
+        	throw new BadLogicException("Capacity should be greater than 1.");
+        }
+        
+    	return restaurantTableRepository.save(restaurantTable);
     }
 
     @Override
