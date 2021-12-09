@@ -27,7 +27,7 @@ public class RestaurantTableController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<RestaurantTable>> getRestaurantsTables() {
+    public ResponseEntity<List<RestaurantTable>> getRestaurantTables() {
         return new ResponseEntity<>(restaurantTableService.findAll(), HttpStatus.OK);
     }
 
