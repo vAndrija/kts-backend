@@ -33,6 +33,7 @@ public class ManagerService implements IManagerService {
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
 
