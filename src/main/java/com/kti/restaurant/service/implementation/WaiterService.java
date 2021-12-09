@@ -33,6 +33,7 @@ public class WaiterService  implements IWaiterService {
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     @Override

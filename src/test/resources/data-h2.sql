@@ -49,6 +49,28 @@ INSERT INTO users (email_address, name, last_name, password, phone_number, accou
 INSERT INTO user_role (user_id, role_id) VALUES (8, 5);
 INSERT INTO waiter (users) values (8);
 
+
+INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
+('mirkomiric1@gmail.com','mirko','miric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0608963214','2131231231231',true,false);
+INSERT INTO user_role (user_id, role_id) VALUES (9, 1);
+INSERT INTO admin (users) values (9);
+
+INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
+('mirkomiric2@gmail.com','mirko','miric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0608963214','2131231231231',true,false);
+INSERT INTO user_role (user_id, role_id) VALUES (10, 1);
+INSERT INTO admin (users) values (10);
+
+INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
+('mirkomiric3@gmail.com','mirko','miric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0608963214','2131231231231',true,false);
+INSERT INTO user_role (user_id, role_id) VALUES (11, 1);
+INSERT INTO admin (users) values (11);
+
+INSERT INTO users (email_address, name, last_name, password, phone_number, account_number,enabled,deleted) values
+('mirkomiric4@gmail.com','mirko','miric', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra','0608963214','2131231231231',true,false);
+INSERT INTO user_role (user_id, role_id) VALUES (12, 1);
+INSERT INTO admin (users) values (12);
+
+
 INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (45000.00, '2021-11-18', '2022-11-18', 1, false);
 INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (50000.00, '2021-10-05', '2022-10-05', 2, false);
 INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (60000.00, '2021-08-18', '2022-08-18', 3, false);
