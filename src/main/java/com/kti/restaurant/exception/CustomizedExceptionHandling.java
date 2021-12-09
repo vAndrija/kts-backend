@@ -71,4 +71,12 @@ public class CustomizedExceptionHandling extends ResponseEntityExceptionHandler 
         response.setMessage(exception.getMessage());
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleExceptions(IllegalArgumentException exception, WebRequest webRequest) {
+        ExceptionResponse response = new ExceptionResponse();
+        response.setDateTime(LocalDateTime.now());
+        response.setMessage(exception.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+    }
 }
