@@ -18,7 +18,7 @@ import com.kti.restaurant.repository.DiscountRepository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
 public class DiscountServiceUnitTests {
 
@@ -41,7 +41,7 @@ public class DiscountServiceUnitTests {
 	@Test
 	public void findById_ValidId_ExistingDiscount() throws Exception {
 		Discount discount = discountService.findById(1);
-		assertEquals(discount.getValue(), Integer.valueOf(10));
+		assertEquals(Integer.valueOf(10), discount.getValue());
 	}
 
 	@Test
@@ -61,10 +61,10 @@ public class DiscountServiceUnitTests {
 
 		Discount discount = discountService.update(discountForUpdate, 1);
 
-		assertEquals(discount.getValue(), Integer.valueOf(15));
-		assertEquals(discount.getStartDate(), LocalDate.parse("2021-11-21"));
-		assertEquals(discount.getEndDate(), LocalDate.parse("2021-11-22"));
-		assertEquals(discount.getCurrent(), true);
+		assertEquals(Integer.valueOf(15), discount.getValue());
+		assertEquals(LocalDate.parse("2021-11-21"), discount.getStartDate());
+		assertEquals(LocalDate.parse("2021-11-22"), discount.getEndDate());
+		assertEquals(true, discount.getCurrent());
 		verify(discountRepository, times(1)).findById(1);
 		verify(discountRepository, times(1)).save(any());
 	}

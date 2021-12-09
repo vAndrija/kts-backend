@@ -30,7 +30,7 @@ import com.kti.restaurant.service.contract.IOrderItemService;
 import com.kti.restaurant.service.contract.IPriceItemService;
 import com.kti.restaurant.service.contract.ISalaryService;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ReportServiceUnitTests {
 
 	@InjectMocks
