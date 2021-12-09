@@ -45,7 +45,7 @@ public class WaiterControllerIntegrationTests {
     }
 
     @Test
-    public void create_UniqueEmail_ValidWaiter() throws Exception {
+    public void create_UniqueEmail_ReturnsCreated() throws Exception {
         int size = waiterService.findAll().size();
 
         HttpEntity<WaiterCreateDto> httpEntity = new HttpEntity<>(new WaiterCreateDto("Aleksa", "Maric",
@@ -70,7 +70,7 @@ public class WaiterControllerIntegrationTests {
     }
 
     @Test
-    public void create_NonUniqueEmail_ThrowsConflictException() {
+    public void create_NonUniqueEmail_ReturnsConflict() {
         HttpEntity<WaiterCreateDto> httpEntity = new HttpEntity<>(new WaiterCreateDto("Ana", "Popovic",
                 "111111", "152487", "anapopovic@gmail.com"), headers);
         ResponseEntity<Waiter> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Waiter.class);
@@ -79,7 +79,7 @@ public class WaiterControllerIntegrationTests {
     }
 
     @Test
-    public void getWaiters_WaitersList(){
+    public void getWaiters_ReturnsOk(){
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<WaiterDto[]> responseEntity = restTemplate.exchange(URL_PREFIX, HttpMethod.GET, httpEntity,
                 WaiterDto[].class);
@@ -93,7 +93,7 @@ public class WaiterControllerIntegrationTests {
     }
 
     @Test
-    public void getWaiter_ValidId_ExistingWaiter(){
+    public void getWaiter_ValidId_ReturnsOk(){
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<WaiterDto> responseEntity = restTemplate.exchange(URL_PREFIX+"/{id}", HttpMethod.GET,
                 httpEntity, WaiterDto.class,7 );
@@ -110,7 +110,7 @@ public class WaiterControllerIntegrationTests {
     }
 
     @Test
-    public void getWaiter_InvalidId_ThrowsMissingEntityException(){
+    public void getWaiter_InvalidId_ReturnsNotFound(){
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<WaiterDto> responseEntity = restTemplate.exchange(URL_PREFIX+"/{id}", HttpMethod.GET,
                 httpEntity, WaiterDto.class,1 );
@@ -120,7 +120,7 @@ public class WaiterControllerIntegrationTests {
     }
 
     @Test
-    public void updateWaiter_ValidId_ExistingWaiter() throws Exception {
+    public void updateWaiter_ValidId_ReturnsOk() throws Exception {
         HttpHeaders httpHeaders= new HttpHeaders();
         ResponseEntity<UserTokenState> responseEntity =
                 restTemplate.postForEntity("/api/v1/auth/login",
@@ -156,7 +156,7 @@ public class WaiterControllerIntegrationTests {
     }
 
     @Test
-    public void update_InvalidId_ThrowsMissingEntityException(){
+    public void update_InvalidId_ReturnsNotFound(){
         HttpHeaders httpHeaders = new HttpHeaders();
         ResponseEntity<UserTokenState> responseEntity =
                 restTemplate.postForEntity("/api/v1/auth/login",
@@ -174,7 +174,7 @@ public class WaiterControllerIntegrationTests {
     }
 
     @Test
-    public void delete_ValidId_WaiterDeleted() throws Exception {
+    public void delete_ValidId_ReturnsNoContent() throws Exception {
         Waiter waiter = waiterService.create(new Waiter("Aleksa", "Maric",
                 "111111", "152487", "aleksamaric@gmail.com"));
         int size = waiterService.findAll().size();
@@ -188,7 +188,7 @@ public class WaiterControllerIntegrationTests {
     }
 
     @Test
-    public void delete_InvalidId_ThrowsMissingEntityException() throws Exception {
+    public void delete_InvalidId_ReturnsNotFound() throws Exception {
         int size = waiterService.findAll().size();
 
         HttpEntity<WaiterUpdateDto> httpEntity = new HttpEntity<>(headers);
