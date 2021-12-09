@@ -42,6 +42,7 @@ public class DiscountControllerIntegrationTests {
         accessToken = responseEntity.getBody().getAccessToken();
 
         headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("Authorization", "Bearer " + accessToken);
     }
 
