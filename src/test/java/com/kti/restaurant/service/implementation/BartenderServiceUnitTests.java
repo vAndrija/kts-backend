@@ -51,7 +51,7 @@ public class BartenderServiceUnitTests {
 
     @BeforeEach
     public void setup() {
-        Bartender bartender = new Bartender("Vojnovic", "Andrija", "213123123", "andrija@vojnvo.com", "21312311",true);
+        Bartender bartender = new Bartender("Vojnovic", "Andrija", "213123123", "andrija@vojnvo.com", "21312311", true);
         bartender.setId(1);
         when(bartenderRepository.findById(1))
                 .thenReturn(Optional.of(bartender));
@@ -62,13 +62,13 @@ public class BartenderServiceUnitTests {
     @Test
     public void findById_ValidId_ExistingBartender() throws Exception {
         Bartender bartender = bartenderService.findById(1);
-        assertEquals( 1,bartender.getId());
-        assertEquals( "Andrija",bartender.getName());
-        assertEquals( "Vojnovic",bartender.getLastName());
-        assertEquals("213123123",bartender.getPhoneNumber());
-        assertEquals( "andrija@vojnvo.com",bartender.getEmailAddress());
-        assertEquals( "21312311",bartender.getAccountNumber());
-        assertEquals(true,bartender.getPriority());
+        assertEquals(1, bartender.getId());
+        assertEquals("Andrija", bartender.getName());
+        assertEquals("Vojnovic", bartender.getLastName());
+        assertEquals("213123123", bartender.getPhoneNumber());
+        assertEquals("andrija@vojnvo.com", bartender.getEmailAddress());
+        assertEquals("21312311", bartender.getAccountNumber());
+        assertEquals(true, bartender.getPriority());
 
     }
 
@@ -81,7 +81,7 @@ public class BartenderServiceUnitTests {
 
     @Test
     public void create_ValidUniqueEmail_ValidBartender() throws Exception {
-        Bartender bartenderForCreate = new Bartender("Zolotic", "Milutin", "333333", "milutin@zolotic.com", "21312311",true);
+        Bartender bartenderForCreate = new Bartender("Zolotic", "Milutin", "333333", "milutin@zolotic.com", "21312311", true);
         bartenderForCreate.setPassword("andrija");
         when(userRepository.findByEmailAddress("milutin@zolotic.com"))
                 .thenReturn(null);
@@ -92,19 +92,19 @@ public class BartenderServiceUnitTests {
         bartenderRole.setName("ROLE_SYSTEM_BARTENDER");
         when(roleRepository.getById(2L)).thenReturn(bartenderRole);
         Bartender bartender = this.bartenderService.create(bartenderForCreate);
-        assertEquals("Milutin",bartender.getName() );
-        assertEquals( "Zolotic",bartender.getLastName());
-        assertEquals( "333333",bartender.getPhoneNumber());
-        assertEquals( "milutin@zolotic.com",bartender.getEmailAddress());
-        assertEquals("21312311",bartender.getAccountNumber());
-        assertEquals("ROLE_SYSTEM_BARTENDER",bartender.getRoles().get(0).getName());
-        assertEquals(true,bartender.getPriority());
+        assertEquals("Milutin", bartender.getName());
+        assertEquals("Zolotic", bartender.getLastName());
+        assertEquals("333333", bartender.getPhoneNumber());
+        assertEquals("milutin@zolotic.com", bartender.getEmailAddress());
+        assertEquals("21312311", bartender.getAccountNumber());
+        assertEquals("ROLE_SYSTEM_BARTENDER", bartender.getRoles().get(0).getName());
+        assertEquals(true, bartender.getPriority());
         verify(bartenderRepository, times(1)).save(any());
     }
 
     @Test
     public void create_NonUnique_ThrowsConflictException() {
-        Bartender bartenderForCreate = new Bartender("Zolotic", "Milutin", "333333", "andrija@vojnvo.com", "21312311",true);
+        Bartender bartenderForCreate = new Bartender("Zolotic", "Milutin", "333333", "andrija@vojnvo.com", "21312311", true);
         bartenderForCreate.setPassword("andrija");
         assertThrows(ConflictException.class, () -> {
             this.bartenderService.create(bartenderForCreate);
@@ -114,18 +114,18 @@ public class BartenderServiceUnitTests {
 
     @Test
     public void update_ValidBartender_ValidBartender() throws Exception {
-        Bartender bartenderForUpdate = new Bartender("Vojnovic", "Andrija", "21312312323", "andrija@vojnvo.com", "21312311",false);
+        Bartender bartenderForUpdate = new Bartender("Vojnovic", "Andrija", "21312312323", "andrija@vojnvo.com", "21312311", false);
         bartenderForUpdate.setId(1);
         when(bartenderRepository.save(any()))
                 .thenAnswer(a -> a.getArgument(0));
         Bartender bartender = this.bartenderService.update(bartenderForUpdate, 1);
         assertEquals(bartender.getId(), 1);
-        assertEquals( "Andrija",bartender.getName());
-        assertEquals( "Vojnovic",bartender.getLastName());
-        assertEquals("21312312323",bartender.getPhoneNumber());
-        assertEquals( "andrija@vojnvo.com",bartender.getEmailAddress());
-        assertEquals( "21312311",bartender.getAccountNumber());
-        assertEquals(false,bartender.getPriority());
+        assertEquals("Andrija", bartender.getName());
+        assertEquals("Vojnovic", bartender.getLastName());
+        assertEquals("21312312323", bartender.getPhoneNumber());
+        assertEquals("andrija@vojnvo.com", bartender.getEmailAddress());
+        assertEquals("21312311", bartender.getAccountNumber());
+        assertEquals(false, bartender.getPriority());
         verify(bartenderRepository, times(1)).findById(1);
         verify(bartenderRepository, times(1)).save(any());
     }
