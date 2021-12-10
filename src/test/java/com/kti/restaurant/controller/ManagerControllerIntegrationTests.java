@@ -46,7 +46,7 @@ public class ManagerControllerIntegrationTests {
     }
 
     @Test
-    public void create_UniqueEmail_ValidManager() throws Exception {
+    public void create_UniqueEmail_ReturnsCreated() throws Exception {
         int size = managerService.findAll().size();
 
         HttpEntity<ManagerCreateDto> httpEntity = new HttpEntity<>(new ManagerCreateDto("Aleksa", "Maric",
@@ -71,16 +71,19 @@ public class ManagerControllerIntegrationTests {
     }
 
     @Test
-    public void create_NonUniqueEmail_ThrowsConflictException() {
+    public void create_NonUniqueEmail_ReturnsNotFound() {
+        int size = managerService.findAll().size();
         HttpEntity<ManagerCreateDto> httpEntity = new HttpEntity<>(new ManagerCreateDto("Ana", "Popovic",
                 "111111", "152487", "sarajovic@gmail.com"), headers);
         ResponseEntity<Manager> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Manager.class);
 
+        int sizeAfter = managerService.findAll().size();
         assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+        assertEquals(size,sizeAfter);
     }
 
     @Test
-    public void getManagers_ManagersList() {
+    public void getManagers_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<ManagerDto[]> responseEntity = restTemplate.exchange(URL_PREFIX, HttpMethod.GET, httpEntity,
                 ManagerDto[].class);
@@ -93,7 +96,7 @@ public class ManagerControllerIntegrationTests {
     }
 
     @Test
-    public void getManager_ValidId_ExistingManager() {
+    public void getManager_ValidId_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<ManagerDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.GET,
                 httpEntity, ManagerDto.class, 6);
@@ -110,7 +113,7 @@ public class ManagerControllerIntegrationTests {
     }
 
     @Test
-    public void getManager_InvalidId_ThrowsMissingEntityException() {
+    public void getManager_InvalidId_ReturnsNotFound() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<ManagerDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.GET,
                 httpEntity, ManagerDto.class, 2);
@@ -120,7 +123,7 @@ public class ManagerControllerIntegrationTests {
     }
 
     @Test
-    public void updateManager_ValidId_ExistingManager() throws Exception {
+    public void updateManager_ValidId_ReturnsOk() throws Exception {
 
 
         HttpEntity<ManagerUpdateDto> httpEntity = new HttpEntity<>(new ManagerUpdateDto("sara", "jovic",
@@ -149,7 +152,7 @@ public class ManagerControllerIntegrationTests {
     }
 
     @Test
-    public void update_InvalidId_ThrowsMissingEntityException() {
+    public void update_InvalidId_ReturnsNotFound() {
         HttpEntity<ManagerUpdateDto> httpEntity = new HttpEntity<>(new ManagerUpdateDto("ana", "savic",
                 "152487", "8795613"), headers);
         ResponseEntity<ManagerDto> responseEntity1 = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.PUT, httpEntity,
@@ -159,7 +162,7 @@ public class ManagerControllerIntegrationTests {
     }
 
     @Test
-    public void delete_ValidId_ManagerDeleted() throws Exception {
+    public void delete_ValidId_ReturnsNoContent() throws Exception {
         Manager manager = managerService.create(new Manager("Aleksa", "Maric",
                 "111111", "aleksamaric7@gmail.com", "152487"));
         int size = managerService.findAll().size();
@@ -173,7 +176,7 @@ public class ManagerControllerIntegrationTests {
     }
 
     @Test
-    public void delete_InvalidId_ThrowsMissingEntityException() throws Exception {
+    public void delete_InvalidId_ReturnsNotFound() throws Exception {
         int size = managerService.findAll().size();
 
         HttpEntity<ManagerUpdateDto> httpEntity = new HttpEntity<>(headers);

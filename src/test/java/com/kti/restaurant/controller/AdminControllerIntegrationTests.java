@@ -46,7 +46,7 @@ public class AdminControllerIntegrationTests {
     }
 
     @Test
-    public void create_UniqueEmail_ValidAdmin() throws Exception {
+    public void create_UniqueEmail_ValidAdmin_ReturnsCreated() throws Exception {
         int size = adminService.findAll().size();
 
         HttpEntity<AdminCreateDto> httpEntity = new HttpEntity<>(new AdminCreateDto("Aleksa", "Maric",
@@ -71,16 +71,18 @@ public class AdminControllerIntegrationTests {
     }
 
     @Test
-    public void create_NonUniqueEmail_ThrowsConflictException() {
+    public void create_NonUniqueEmail_ReturnsConflict() {
+        int size = adminService.findAll().size();
         HttpEntity<AdminCreateDto> httpEntity = new HttpEntity<>(new AdminCreateDto("Ana", "Popovic",
                 "111111", "152487", "anapopovic@gmail.com"), headers);
         ResponseEntity<Admin> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Admin.class);
-
+        int sizeAfter = adminService.findAll().size();
         assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+        assertEquals(size,sizeAfter);
     }
 
     @Test
-    public void getAdmins_AdminsList() {
+    public void getAdmins_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<AdminDto[]> responseEntity = restTemplate.exchange(URL_PREFIX, HttpMethod.GET, httpEntity,
                 AdminDto[].class);
@@ -94,7 +96,7 @@ public class AdminControllerIntegrationTests {
     }
 
     @Test
-    public void getAdmin_ValidId_ExistingAdmin() {
+    public void getAdmin_ValidId_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<AdminDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.GET,
                 httpEntity, AdminDto.class, 1);
@@ -111,7 +113,7 @@ public class AdminControllerIntegrationTests {
     }
 
     @Test
-    public void getAdmin_InvalidId_ThrowsMissingEntityException() {
+    public void getAdmin_InvalidId_ReturnsNotFound() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<AdminDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.GET,
                 httpEntity, AdminDto.class, 2);
@@ -121,7 +123,7 @@ public class AdminControllerIntegrationTests {
     }
 
     @Test
-    public void updateAdmin_ValidId_ExistingAdmin() throws Exception {
+    public void updateAdmin_ValidId_ReturnsOk() throws Exception {
 
 
         HttpEntity<AdminUpdateDto> httpEntity = new HttpEntity<>(new AdminUpdateDto("mirko", "savic",
@@ -151,7 +153,7 @@ public class AdminControllerIntegrationTests {
     }
 
     @Test
-    public void update_InvalidId_ThrowsMissingEntityException() {
+    public void update_InvalidId_ReturnsNotFound() {
         HttpEntity<AdminUpdateDto> httpEntity = new HttpEntity<>(new AdminUpdateDto("ana", "savic",
                 "152487", "8795613"), headers);
         ResponseEntity<AdminDto> responseEntity1 = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.PUT, httpEntity,
@@ -161,7 +163,7 @@ public class AdminControllerIntegrationTests {
     }
 
     @Test
-    public void delete_ValidId_AdminDeleted() throws Exception {
+    public void delete_ValidId_ReturnsNoContent() throws Exception {
         Admin admin = adminService.create(new Admin("Aleksa", "Maric",
                 "111111", "aleksamaric1@gmail.com", "152487"));
         int size = adminService.findAll().size();
@@ -175,7 +177,7 @@ public class AdminControllerIntegrationTests {
     }
 
     @Test
-    public void delete_InvalidId_ThrowsMissingEntityException() throws Exception {
+    public void delete_InvalidId_ReturnsNotFound() throws Exception {
         int size = adminService.findAll().size();
 
         HttpEntity<AdminUpdateDto> httpEntity = new HttpEntity<>(headers);

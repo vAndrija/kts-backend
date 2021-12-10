@@ -45,7 +45,7 @@ public class CookControllerIntegrationTests {
     }
 
     @Test
-    public void create_UniqueEmail_ValidCook() throws Exception {
+    public void create_UniqueEmail_ReturnsCreated() throws Exception {
         int size = cookService.findAll().size();
 
         HttpEntity<CookCreateDto> httpEntity = new HttpEntity<>(new CookCreateDto("Aleksa", "Maric",
@@ -70,16 +70,19 @@ public class CookControllerIntegrationTests {
     }
 
     @Test
-    public void create_NonUniqueEmail_ThrowsConflictException() {
+    public void create_NonUniqueEmail_ReturnsNotFound() {
+        int size = cookService.findAll().size();
         HttpEntity<CookCreateDto> httpEntity = new HttpEntity<>(new CookCreateDto("Ana", "Popovic",
                 "111111", "152487", "kristinamisic@gmail.com", true), headers);
         ResponseEntity<Cook> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Cook.class);
 
+        int sizeAfter =  cookService.findAll().size();
         assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+        assertEquals(size,sizeAfter);
     }
 
     @Test
-    public void getCooks_CooksList() {
+    public void getCooks_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<CookDto[]> responseEntity = restTemplate.exchange(URL_PREFIX, HttpMethod.GET, httpEntity,
                 CookDto[].class);
@@ -93,7 +96,7 @@ public class CookControllerIntegrationTests {
     }
 
     @Test
-    public void getCook_ValidId_ExistingCook() {
+    public void getCook_ValidId_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<CookDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.GET,
                 httpEntity, CookDto.class, 4);
@@ -110,7 +113,7 @@ public class CookControllerIntegrationTests {
     }
 
     @Test
-    public void getCook_InvalidId_ThrowsMissingEntityException() {
+    public void getCook_InvalidId_ReturnsNotFound() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<CookDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.GET,
                 httpEntity, CookDto.class, 100);
@@ -120,7 +123,7 @@ public class CookControllerIntegrationTests {
     }
 
     @Test
-    public void updateCook_ValidIdAndValidJWT_ExistingCook() throws Exception {
+    public void updateCook_ValidIdAndValidJWT_ReturnsOk() throws Exception {
         ResponseEntity<UserTokenState> responseEntity =
                 restTemplate.postForEntity("/api/v1/auth/login",
                         new JwtAuthenticationRequest("kristinamisic@gmail.com", "123"),
@@ -156,7 +159,7 @@ public class CookControllerIntegrationTests {
     }
 
     @Test
-    public void updateCook_ValidIdAndInvalidJWT_ExistingCook() throws Exception {
+    public void updateCook_ValidIdAndInvalidJWT_ReturnsForbidden() throws Exception {
         ResponseEntity<UserTokenState> responseEntity =
                 restTemplate.postForEntity("/api/v1/auth/login",
                         new JwtAuthenticationRequest("urosmatic@gmail.com", "123"),
@@ -175,7 +178,7 @@ public class CookControllerIntegrationTests {
     }
 
     @Test
-    public void update_InvalidId_ThrowsMissingEntityException() {
+    public void update_InvalidId_ReturnsNotFound() {
         HttpEntity<CookUpdateDto> httpEntity = new HttpEntity<>(new CookUpdateDto("ana", "savic",
                 "152487", "8795613", true), headers);
         ResponseEntity<CookDto> responseEntity1 = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.PUT, httpEntity,
@@ -185,7 +188,7 @@ public class CookControllerIntegrationTests {
     }
 
     @Test
-    public void delete_ValidId_CookDeleted() throws Exception {
+    public void delete_ValidId_ReturnsNoContent() throws Exception {
         Cook cook = cookService.create(new Cook("Aleksa", "Maric",
                 "111111", "aleksamaric5@gmail.com", "152487", true));
         int size = cookService.findAll().size();
@@ -199,7 +202,7 @@ public class CookControllerIntegrationTests {
     }
 
     @Test
-    public void delete_InvalidId_ThrowsMissingEntityException() throws Exception {
+    public void delete_InvalidId_ReturnsNotFound() throws Exception {
         int size = cookService.findAll().size();
 
         HttpEntity<CookUpdateDto> httpEntity = new HttpEntity<>(headers);
