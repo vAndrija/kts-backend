@@ -54,7 +54,7 @@ public class AdminControllerIntegrationTests {
         int size = adminService.findAll().size();
 
         HttpEntity<AdminCreateDto> httpEntity = new HttpEntity<>(new AdminCreateDto("Aleksa", "Maric",
-                "111111", "152487", "aleksamaric@gmail.com"), headers);
+                "111111", "152487", "aleksamaric2@gmail.com"), headers);
         ResponseEntity<AdminDto> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, AdminDto.class);
 
         AdminDto adminDto = responseEntity.getBody();
@@ -64,11 +64,11 @@ public class AdminControllerIntegrationTests {
         assertEquals("Maric", adminDto.getLastName());
         assertEquals("111111", adminDto.getPhoneNumber());
         assertEquals("152487", adminDto.getAccountNumber());
-        assertEquals("aleksamaric@gmail.com", adminDto.getEmailAddress());
+        assertEquals("aleksamaric2@gmail.com", adminDto.getEmailAddress());
 
         List<Admin> adminList = adminService.findAll();
         assertEquals(size + 1, adminList.size());
-        assertEquals("aleksamaric@gmail.com", adminList.get(size).getEmailAddress());
+        assertEquals("aleksamaric2@gmail.com", adminList.get(size).getEmailAddress());
 
         adminService.delete(adminDto.getId());
 
@@ -167,7 +167,7 @@ public class AdminControllerIntegrationTests {
     @Test
     public void delete_ValidId_AdminDeleted() throws Exception {
         Admin admin = adminService.create(new Admin("Aleksa", "Maric",
-                "111111", "152487", "aleksamaric@gmail.com"));
+                "111111", "aleksamaric1@gmail.com","152487"));
         int size = adminService.findAll().size();
 
         HttpEntity<AdminUpdateDto> httpEntity = new HttpEntity<>(headers);

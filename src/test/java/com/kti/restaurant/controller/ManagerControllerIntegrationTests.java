@@ -55,7 +55,7 @@ public class ManagerControllerIntegrationTests {
         int size = managerService.findAll().size();
 
         HttpEntity<ManagerCreateDto> httpEntity = new HttpEntity<>(new ManagerCreateDto("Aleksa", "Maric",
-                "111111", "152487", "aleksamaric@gmail.com"), headers);
+                "111111", "152487", "aleksamaric8@gmail.com"), headers);
         ResponseEntity<ManagerDto> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, ManagerDto.class);
 
         ManagerDto managerDto = responseEntity.getBody();
@@ -65,11 +65,11 @@ public class ManagerControllerIntegrationTests {
         assertEquals("Maric", managerDto.getLastName());
         assertEquals("111111", managerDto.getPhoneNumber());
         assertEquals("152487", managerDto.getAccountNumber());
-        assertEquals("aleksamaric@gmail.com", managerDto.getEmailAddress());
+        assertEquals("aleksamaric8@gmail.com", managerDto.getEmailAddress());
 
         List<Manager> managerList = managerService.findAll();
         assertEquals(size + 1, managerList.size());
-        assertEquals("aleksamaric@gmail.com", managerList.get(size).getEmailAddress());
+        assertEquals("aleksamaric8@gmail.com", managerList.get(size).getEmailAddress());
 
         managerService.delete(managerDto.getId());
 
@@ -166,7 +166,7 @@ public class ManagerControllerIntegrationTests {
     @Test
     public void delete_ValidId_ManagerDeleted() throws Exception {
         Manager manager = managerService.create(new Manager("Aleksa", "Maric",
-                "111111", "152487", "aleksamaric@gmail.com"));
+                "111111","aleksamaric7@gmail.com", "152487" ));
         int size = managerService.findAll().size();
 
         HttpEntity<ManagerUpdateDto> httpEntity = new HttpEntity<>(headers);
