@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.client.RestClientException;
 
@@ -111,6 +112,34 @@ public class DiscountControllerIntegrationTests {
     }
 
     @Test
+    public void createDiscount_InvalidMenuItemId_ReturnsBadRequest() {
+        int size = discountService.findAll().size();
+
+        HttpEntity<DiscountDto> httpEntity = new HttpEntity<DiscountDto>(new DiscountDto(10, LocalDate.parse("2021-11-11"),
+                LocalDate.parse("2022-05-11"), null, true), headers);
+        ResponseEntity<Discount> responseEntity =
+                restTemplate.postForEntity("/api/v1/discount", httpEntity,
+                        Discount.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(size, discountService.findAll().size());
+    }
+
+    @Test
+    public void createDiscount_InvalidCurrentValue_ReturnsBadRequest() {
+        int size = discountService.findAll().size();
+
+        HttpEntity<DiscountDto> httpEntity = new HttpEntity<DiscountDto>(new DiscountDto(10, LocalDate.parse("2021-11-11"),
+                LocalDate.parse("2022-05-11"), 5, null), headers);
+        ResponseEntity<Discount> responseEntity =
+                restTemplate.postForEntity("/api/v1/discount", httpEntity,
+                        Discount.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(size, discountService.findAll().size());
+    }
+
+    @Test
     public void updateDiscount_ValidDiscount_ReturnsOk() throws Exception {
         HttpEntity<DiscountDto> httpEntity = new HttpEntity<DiscountDto>(new DiscountDto(15, LocalDate.parse("2021-11-20"),
                 LocalDate.parse("2021-11-25"), 8, false), headers);
@@ -139,6 +168,17 @@ public class DiscountControllerIntegrationTests {
                         Discount.class, 2);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void updateDiscount_InvalidDiscountMenuItemIt_ReturnsBadRequest() {
+        HttpEntity<DiscountDto> httpEntity = new HttpEntity<DiscountDto>(new DiscountDto(15, LocalDate.parse("2021-11-11"),
+                LocalDate.parse("2022-05-11"), null, true), headers);
+        ResponseEntity<Discount> responseEntity =
+                restTemplate.exchange("/api/v1/discount/{id}", HttpMethod.PUT, httpEntity,
+                        Discount.class, 2);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
