@@ -6,6 +6,7 @@ import com.kti.restaurant.model.Admin;
 import com.kti.restaurant.model.User;
 import com.kti.restaurant.repository.RoleRepository;
 import com.kti.restaurant.repository.UserRepository;
+import com.kti.restaurant.security.auth.ConfirmationToken;
 import com.kti.restaurant.security.auth.ConfirmationTokenRepository;
 import com.kti.restaurant.service.EmailService;
 import com.kti.restaurant.service.UserService;
@@ -21,8 +22,8 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -67,7 +68,9 @@ public class UserServiceUnitTests {
 
     @Test
     public void sendResetToken_ValidEmail() throws Exception {
-
+        when(confirmationTokenRepository.save(any()))
+                .thenAnswer(a -> a.getArgument(0));
+        assertDoesNotThrow(()->{userService.sendResetToken("andrija@vojnvo.com");});
     }
 
 
