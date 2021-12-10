@@ -63,7 +63,6 @@ public class AdminServiceUnitTests {
         assertEquals("213123123",admin.getPhoneNumber());
         assertEquals( "andrija@vojnvo.com",admin.getEmailAddress());
         assertEquals( "21312311",admin.getAccountNumber());
-
     }
 
     @Test
