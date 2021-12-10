@@ -49,7 +49,7 @@ public class CookControllerIntegrationTests {
         int size = cookService.findAll().size();
 
         HttpEntity<CookCreateDto> httpEntity = new HttpEntity<>(new CookCreateDto("Aleksa", "Maric",
-                "111111", "152487", "aleksamaric6@gmail.com",true), headers);
+                "111111", "152487", "aleksamaric6@gmail.com", true), headers);
         ResponseEntity<CookDto> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, CookDto.class);
 
         CookDto cookDto = responseEntity.getBody();
@@ -72,7 +72,7 @@ public class CookControllerIntegrationTests {
     @Test
     public void create_NonUniqueEmail_ThrowsConflictException() {
         HttpEntity<CookCreateDto> httpEntity = new HttpEntity<>(new CookCreateDto("Ana", "Popovic",
-                "111111", "152487", "kristinamisic@gmail.com",true), headers);
+                "111111", "152487", "kristinamisic@gmail.com", true), headers);
         ResponseEntity<Cook> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Cook.class);
 
         assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
@@ -130,7 +130,7 @@ public class CookControllerIntegrationTests {
         httpHeaders.add("Authorization", "Bearer " + accessToken);
 
         HttpEntity<CookUpdateDto> httpEntity = new HttpEntity<>(new CookUpdateDto("kristina", "misic",
-                "06974258311", "853156123189631",true), httpHeaders);
+                "06974258311", "853156123189631", true), httpHeaders);
         ResponseEntity<CookDto> responseEntity1 = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.PUT, httpEntity,
                 CookDto.class, 4);
 
@@ -166,7 +166,7 @@ public class CookControllerIntegrationTests {
         httpHeaders.add("Authorization", "Bearer " + accessToken);
 
         HttpEntity<CookUpdateDto> httpEntity = new HttpEntity<>(new CookUpdateDto("mirko", "savic",
-                "152487", "8795613",true), httpHeaders);
+                "152487", "8795613", true), httpHeaders);
         ResponseEntity<CookDto> responseEntity1 = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.PUT, httpEntity,
                 CookDto.class, 4);
 
@@ -177,7 +177,7 @@ public class CookControllerIntegrationTests {
     @Test
     public void update_InvalidId_ThrowsMissingEntityException() {
         HttpEntity<CookUpdateDto> httpEntity = new HttpEntity<>(new CookUpdateDto("ana", "savic",
-                "152487", "8795613",true), headers);
+                "152487", "8795613", true), headers);
         ResponseEntity<CookDto> responseEntity1 = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.PUT, httpEntity,
                 CookDto.class, 100);
 
@@ -187,7 +187,7 @@ public class CookControllerIntegrationTests {
     @Test
     public void delete_ValidId_CookDeleted() throws Exception {
         Cook cook = cookService.create(new Cook("Aleksa", "Maric",
-                "111111","aleksamaric5@gmail.com", "152487", true));
+                "111111", "aleksamaric5@gmail.com", "152487", true));
         int size = cookService.findAll().size();
 
         HttpEntity<CookUpdateDto> httpEntity = new HttpEntity<>(headers);

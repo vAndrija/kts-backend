@@ -4,12 +4,8 @@ import com.kti.restaurant.dto.JwtAuthenticationRequest;
 import com.kti.restaurant.dto.admin.AdminCreateDto;
 import com.kti.restaurant.dto.admin.AdminDto;
 import com.kti.restaurant.dto.admin.AdminUpdateDto;
-import com.kti.restaurant.dto.waiter.WaiterCreateDto;
-import com.kti.restaurant.dto.waiter.WaiterDto;
-import com.kti.restaurant.dto.waiter.WaiterUpdateDto;
 import com.kti.restaurant.model.Admin;
 import com.kti.restaurant.model.UserTokenState;
-import com.kti.restaurant.model.Waiter;
 import com.kti.restaurant.service.implementation.AdminService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -167,7 +163,7 @@ public class AdminControllerIntegrationTests {
     @Test
     public void delete_ValidId_AdminDeleted() throws Exception {
         Admin admin = adminService.create(new Admin("Aleksa", "Maric",
-                "111111", "aleksamaric1@gmail.com","152487"));
+                "111111", "aleksamaric1@gmail.com", "152487"));
         int size = adminService.findAll().size();
 
         HttpEntity<AdminUpdateDto> httpEntity = new HttpEntity<>(headers);

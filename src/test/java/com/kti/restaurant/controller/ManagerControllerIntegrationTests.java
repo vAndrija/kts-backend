@@ -1,16 +1,11 @@
 package com.kti.restaurant.controller;
 
 import com.kti.restaurant.dto.JwtAuthenticationRequest;
-import com.kti.restaurant.dto.admin.AdminCreateDto;
-import com.kti.restaurant.dto.admin.AdminDto;
-import com.kti.restaurant.dto.admin.AdminUpdateDto;
 import com.kti.restaurant.dto.manager.ManagerCreateDto;
 import com.kti.restaurant.dto.manager.ManagerDto;
 import com.kti.restaurant.dto.manager.ManagerUpdateDto;
-import com.kti.restaurant.model.Admin;
 import com.kti.restaurant.model.Manager;
 import com.kti.restaurant.model.UserTokenState;
-import com.kti.restaurant.service.implementation.AdminService;
 import com.kti.restaurant.service.implementation.ManagerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -166,7 +161,7 @@ public class ManagerControllerIntegrationTests {
     @Test
     public void delete_ValidId_ManagerDeleted() throws Exception {
         Manager manager = managerService.create(new Manager("Aleksa", "Maric",
-                "111111","aleksamaric7@gmail.com", "152487" ));
+                "111111", "aleksamaric7@gmail.com", "152487"));
         int size = managerService.findAll().size();
 
         HttpEntity<ManagerUpdateDto> httpEntity = new HttpEntity<>(headers);

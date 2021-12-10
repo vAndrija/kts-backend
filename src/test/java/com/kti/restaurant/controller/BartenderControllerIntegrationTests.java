@@ -49,7 +49,7 @@ public class BartenderControllerIntegrationTests {
         int size = bartenderService.findAll().size();
 
         HttpEntity<BartenderCreateDto> httpEntity = new HttpEntity<>(new BartenderCreateDto("Aleksa", "Maric",
-                "111111", "152487", "aleksamaric3@gmail.com",true), headers);
+                "111111", "152487", "aleksamaric3@gmail.com", true), headers);
         ResponseEntity<BartenderDto> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, BartenderDto.class);
 
         BartenderDto bartenderDto = responseEntity.getBody();
@@ -72,7 +72,7 @@ public class BartenderControllerIntegrationTests {
     @Test
     public void create_NonUniqueEmail_ThrowsConflictException() {
         HttpEntity<BartenderCreateDto> httpEntity = new HttpEntity<>(new BartenderCreateDto("Ana", "Popovic",
-                "111111", "152487", "lukaperic@gmail.com",true), headers);
+                "111111", "152487", "lukaperic@gmail.com", true), headers);
         ResponseEntity<Bartender> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Bartender.class);
 
         assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
@@ -130,7 +130,7 @@ public class BartenderControllerIntegrationTests {
         httpHeaders.add("Authorization", "Bearer " + accessToken);
 
         HttpEntity<BartenderUpdateDto> httpEntity = new HttpEntity<>(new BartenderUpdateDto("luka", "peric",
-                "06325896411", "63322389312551",true), httpHeaders);
+                "06325896411", "63322389312551", true), httpHeaders);
         ResponseEntity<BartenderDto> responseEntity1 = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.PUT, httpEntity,
                 BartenderDto.class, 2);
 
@@ -166,7 +166,7 @@ public class BartenderControllerIntegrationTests {
         httpHeaders.add("Authorization", "Bearer " + accessToken);
 
         HttpEntity<BartenderUpdateDto> httpEntity = new HttpEntity<>(new BartenderUpdateDto("mirko", "savic",
-                "152487", "8795613",true), httpHeaders);
+                "152487", "8795613", true), httpHeaders);
         ResponseEntity<BartenderDto> responseEntity1 = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.PUT, httpEntity,
                 BartenderDto.class, 2);
 
@@ -177,7 +177,7 @@ public class BartenderControllerIntegrationTests {
     @Test
     public void update_InvalidId_ThrowsMissingEntityException() {
         HttpEntity<BartenderUpdateDto> httpEntity = new HttpEntity<>(new BartenderUpdateDto("ana", "savic",
-                "152487", "8795613",true), headers);
+                "152487", "8795613", true), headers);
         ResponseEntity<BartenderDto> responseEntity1 = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.PUT, httpEntity,
                 BartenderDto.class, 100);
 
@@ -187,7 +187,7 @@ public class BartenderControllerIntegrationTests {
     @Test
     public void delete_ValidId_BartenderDeleted() throws Exception {
         Bartender bartender = bartenderService.create(new Bartender("Aleksa", "Maric",
-                "111111","aleksamaric4@gmail.com", "152487", true));
+                "111111", "aleksamaric4@gmail.com", "152487", true));
         int size = bartenderService.findAll().size();
 
         HttpEntity<BartenderUpdateDto> httpEntity = new HttpEntity<>(headers);
