@@ -160,7 +160,7 @@ INSERT INTO discount (value, start_date, end_date, menu_item_id, is_current, del
 INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
     (0, '2021-11-19T14:15', 1520, 3, 7, false);
 INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
-    (0, '2022-11-18T13:00', 1830, 4, 8, false);
+    (1, '2022-11-18T13:00', 1830, 4, 8, false);
 INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
     (0, '2022-11-18T12:48', 810, 2, 7, false);
 

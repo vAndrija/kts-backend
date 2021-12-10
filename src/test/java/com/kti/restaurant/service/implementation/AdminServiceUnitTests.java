@@ -57,12 +57,12 @@ public class AdminServiceUnitTests {
     @Test
     public void findById_ValidId_ExistingAdmin() throws Exception {
         Admin admin = adminService.findById(1);
-        assertEquals(admin.getId(), 1);
-        assertEquals(admin.getName(), "Andrija");
-        assertEquals(admin.getLastName(), "Vojnovic");
-        assertEquals(admin.getPhoneNumber(), "213123123");
-        assertEquals(admin.getEmailAddress(), "andrija@vojnvo.com");
-        assertEquals(admin.getAccountNumber(), "21312311");
+        assertEquals( 1,admin.getId());
+        assertEquals( "Andrija",admin.getName());
+        assertEquals( "Vojnovic",admin.getLastName());
+        assertEquals("213123123",admin.getPhoneNumber());
+        assertEquals( "andrija@vojnvo.com",admin.getEmailAddress());
+        assertEquals( "21312311",admin.getAccountNumber());
 
     }
 
@@ -86,12 +86,12 @@ public class AdminServiceUnitTests {
         adminRole.setName("ROLE_SYSTEM_ADMIN");
         when(roleRepository.getById(1L)).thenReturn(adminRole);
         Admin admin = this.adminService.create(adminForCreate);
-        assertEquals(admin.getName(), "Milutin");
-        assertEquals(admin.getLastName(), "Zolotic");
-        assertEquals(admin.getPhoneNumber(), "333333");
-        assertEquals(admin.getEmailAddress(), "milutin@zolotic.com");
-        assertEquals(admin.getAccountNumber(), "21312311");
-        assertEquals(admin.getRoles().get(0).getName(), "ROLE_SYSTEM_ADMIN");
+        assertEquals("Milutin",admin.getName() );
+        assertEquals( "Zolotic",admin.getLastName());
+        assertEquals( "333333",admin.getPhoneNumber());
+        assertEquals( "milutin@zolotic.com",admin.getEmailAddress());
+        assertEquals("21312311",admin.getAccountNumber());
+        assertEquals("ROLE_SYSTEM_ADMIN",admin.getRoles().get(0).getName());
         verify(adminRepository, times(1)).save(any());
     }
 
@@ -113,11 +113,11 @@ public class AdminServiceUnitTests {
                 .thenAnswer(a -> a.getArgument(0));
         Admin admin = this.adminService.update(adminForUpdate, 1);
         assertEquals(admin.getId(), 1);
-        assertEquals(admin.getName(), "Andrija");
-        assertEquals(admin.getLastName(), "Vojnovic");
-        assertEquals(admin.getPhoneNumber(), "333333");
-        assertEquals(admin.getEmailAddress(), "andrija@vojnvo.com");
-        assertEquals(admin.getAccountNumber(), "21312311");
+        assertEquals( "Andrija",admin.getName());
+        assertEquals( "Vojnovic",admin.getLastName());
+        assertEquals("333333",admin.getPhoneNumber());
+        assertEquals( "andrija@vojnvo.com",admin.getEmailAddress());
+        assertEquals( "21312311",admin.getAccountNumber());
         verify(adminRepository, times(1)).findById(1);
         verify(adminRepository, times(1)).save(any());
     }
