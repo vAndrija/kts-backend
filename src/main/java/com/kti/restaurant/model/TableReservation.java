@@ -3,12 +3,14 @@ package com.kti.restaurant.model;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "table_reservation")
-@SQLDelete(sql = "UPDATE table_reservation SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE table_reservation SET deleted = true WHERE id=? and version=?")
 @Where(clause = "deleted=false")
 public class TableReservation {
     @Version
@@ -26,9 +28,9 @@ public class TableReservation {
 
     private LocalDateTime durationStart;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private RestaurantTable table;
-
+ 
     public TableReservation(String name, LocalDateTime durationStart, RestaurantTable table) {
         this.name = name;
         this.durationStart = durationStart;

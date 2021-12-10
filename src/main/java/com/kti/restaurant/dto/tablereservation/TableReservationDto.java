@@ -5,6 +5,9 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public class TableReservationDto {
+	
+	private Integer id;
+	
     @NotEmpty(message = "Name should not be null or empty")
     private String name;
 
@@ -22,7 +25,22 @@ public class TableReservationDto {
         this.tableId = tableId;
         this.durationStart = durationStart;
     }
+    
+    public TableReservationDto(Integer id, String name, Integer tableId, LocalDateTime durationStart) {
+        this.name = name;
+        this.tableId = tableId;
+        this.durationStart = durationStart;
+        this.id = id;
+    }
 
+    public Integer getId() {
+    	return id;
+    }
+    
+    public void setId(Integer id) {
+    	this.id = id;
+    }
+    
     public String getName() {
         return name;
     }
