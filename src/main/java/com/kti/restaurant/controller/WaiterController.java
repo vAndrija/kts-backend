@@ -58,9 +58,9 @@ public class WaiterController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('MANAGER', 'WAITER')")
     public ResponseEntity<?> updateWaiter(@Valid @RequestBody WaiterUpdateDto waiterUpdateDto, @PathVariable Integer id) throws Exception {
-        User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(user.getRoles().get(0).getId()==5L && !user.getId().equals(id))
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+//        User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        if(user.getRoles().get(0).getId()==5L && !user.getId().equals(id))
+//            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         Waiter waiter = waiterService.update(waiterMapper.fromWaiterUpdateDtoToWaiter(waiterUpdateDto), id);
         return new ResponseEntity<>(waiterMapper.fromWaiterToWaiterDto(waiter),HttpStatus.OK);
     }
