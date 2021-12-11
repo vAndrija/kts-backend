@@ -30,11 +30,7 @@ public class MenuController {
     @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<?> createMenu(@Valid @RequestBody MenuDto menuDto) throws Exception {
         Menu menu = menuService.create(menuMapper.fromMenuDtoToMenu(menuDto));
-
-        if(menu != null) {
-            return new ResponseEntity<>(menu, HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(menu, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

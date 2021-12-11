@@ -6,11 +6,13 @@ import com.kti.restaurant.dto.cook.CookDto;
 import com.kti.restaurant.dto.cook.CookUpdateDto;
 import com.kti.restaurant.mapper.CookMapper;
 import com.kti.restaurant.model.Cook;
+import com.kti.restaurant.model.User;
 import com.kti.restaurant.service.contract.ICookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -56,6 +58,9 @@ public class CookController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'MANAGER', 'COOK')")
     public ResponseEntity<?> updateCook(@Valid @RequestBody CookUpdateDto cookUpdateDto, @PathVariable Integer id) throws Exception {
+        User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(user.getRoles().get(0).getId()==3L && !user.getId().equals(id))
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         Cook cook = cookService.update(cookMapper.fromCookUpdateDtoToCook(cookUpdateDto), id);
         return new ResponseEntity<>(cookMapper.fromCookToCookDto(cook), HttpStatus.OK);
     }

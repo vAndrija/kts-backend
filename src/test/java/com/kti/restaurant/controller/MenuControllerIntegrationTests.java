@@ -67,6 +67,34 @@ public class MenuControllerIntegrationTests {
     }
 
     @Test
+    public void createMenu_InvalidMenuName_ReturnsBadRequest() throws Exception {
+        int size = menuService.findAll().size();
+
+        HttpEntity<MenuDto> httpEntity = new HttpEntity<>(new MenuDto("", LocalDateTime.parse("2021-11-11T13:00"),
+                LocalDateTime.parse("2022-05-11T13:00")), headers);
+        ResponseEntity<Menu> responseEntity =
+                restTemplate.postForEntity("/api/v1/menu", httpEntity,
+                        Menu.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(size, menuService.findAll().size());
+    }
+
+    @Test
+    public void createMenu_InvalidMenuStartDateEndDate_ReturnsBadRequest() throws Exception {
+        int size = menuService.findAll().size();
+
+        HttpEntity<MenuDto> httpEntity = new HttpEntity<>(new MenuDto("Glavni", null,
+                null), headers);
+        ResponseEntity<Menu> responseEntity =
+                restTemplate.postForEntity("/api/v1/menu", httpEntity,
+                        Menu.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(size, menuService.findAll().size());
+    }
+
+    @Test
     public void getMenuById_ValidMenuId_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
         ResponseEntity<Menu> responseEntity =
@@ -119,7 +147,7 @@ public class MenuControllerIntegrationTests {
     }
 
     @Test
-    public void updateMenu_InvalidMenu_ReturnsNotFoundStatus() {
+    public void updateMenu_InvalidMenuId_ReturnsNotFoundStatus() {
         HttpEntity<MenuDto> httpEntity = new HttpEntity<MenuDto>(new MenuDto("Glavni", LocalDateTime.parse("2021-11-18T08:00"),
                 LocalDateTime.parse("2022-11-18T08:00")), headers);
         ResponseEntity<Menu> responseEntity =
@@ -127,6 +155,28 @@ public class MenuControllerIntegrationTests {
                         Menu.class, 3);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void updateMenu_InvalidMenuName_ReturnsBadRequest() {
+        HttpEntity<MenuDto> httpEntity = new HttpEntity<MenuDto>(new MenuDto("", LocalDateTime.parse("2021-11-18T08:00"),
+                LocalDateTime.parse("2022-11-18T08:00")), headers);
+        ResponseEntity<Menu> responseEntity =
+                restTemplate.exchange("/api/v1/menu/{id}", HttpMethod.PUT, httpEntity,
+                        Menu.class, 2);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void updateMenu_InvalidMenuStartDateEndDate_ReturnsBadRequest() {
+        HttpEntity<MenuDto> httpEntity = new HttpEntity<MenuDto>(new MenuDto("Glavni", null,
+                null), headers);
+        ResponseEntity<Menu> responseEntity =
+                restTemplate.exchange("/api/v1/menu/{id}", HttpMethod.PUT, httpEntity,
+                        Menu.class, 2);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
