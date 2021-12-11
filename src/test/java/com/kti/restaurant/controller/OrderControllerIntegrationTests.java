@@ -6,6 +6,7 @@ import com.kti.restaurant.dto.order.OrderDto;
 import com.kti.restaurant.dto.order.UpdateOrderDto;
 import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.UserTokenState;
+import com.kti.restaurant.model.Waiter;
 import com.kti.restaurant.model.enums.OrderStatus;
 import com.kti.restaurant.service.implementation.OrderService;
 import com.kti.restaurant.service.implementation.RestaurantTableService;
@@ -18,6 +19,7 @@ import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -52,6 +54,8 @@ public class OrderControllerIntegrationTests {
 
     @Test
     public void create_ValidOrder_ReturnsCreated() throws Exception {
+        int size = orderService.findAll().size();
+
         HttpEntity<CreateOrderDto> httpEntity = new HttpEntity<>(new CreateOrderDto(OrderStatus.ORDERED,
                 LocalDateTime.parse("2021-10-10T14:52"), 500.00, 1, 7), headers);
         ResponseEntity<OrderDto> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, OrderDto.class);
@@ -59,6 +63,8 @@ public class OrderControllerIntegrationTests {
         OrderDto orderDto = responseEntity.getBody();
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        List<Order> orderList = orderService.findAll();
+        assertEquals(size + 1, orderList.size());
         assertEquals(OrderStatus.ORDERED, orderDto.getStatus());
         assertEquals(LocalDateTime.parse("2021-10-10T14:52"), orderDto.getDateOfOrder());
         assertEquals(500.00, orderDto.getPrice());

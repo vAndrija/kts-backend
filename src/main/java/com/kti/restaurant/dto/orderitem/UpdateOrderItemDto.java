@@ -25,9 +25,9 @@ public class UpdateOrderItemDto {
 
     private Integer cookId;
 
+    @NotNull(message = "Order id should not be null or empty")
     private Integer orderId;
 
-    //dodati cook barteneder
     public UpdateOrderItemDto( Integer quantity, String note, OrderItemStatus status, Integer priority,Integer menuItemId,
                              Integer orderId, Integer bartenderId, Integer cookId) {
         this.quantity = quantity;

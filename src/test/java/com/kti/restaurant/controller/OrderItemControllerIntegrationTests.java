@@ -4,6 +4,7 @@ import com.kti.restaurant.dto.JwtAuthenticationRequest;
 import com.kti.restaurant.dto.orderitem.CreateOrderItemDto;
 import com.kti.restaurant.dto.orderitem.OrderItemDto;
 import com.kti.restaurant.dto.orderitem.UpdateOrderItemDto;
+import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.model.enums.OrderItemStatus;
@@ -18,6 +19,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -53,6 +56,8 @@ public class OrderItemControllerIntegrationTests {
 
     @Test
     public void create_ValidOrderItem_ReturnsCreated() throws Exception {
+        int size = orderItemService.findAll().size();
+
         HttpEntity<CreateOrderItemDto> httpEntity = new HttpEntity<>(new CreateOrderItemDto(2, "sa sojinim mlekom",
                 OrderItemStatus.PREPARATION, 1, 3, 1), headers);
         ResponseEntity<OrderItemDto> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, OrderItemDto.class);
@@ -60,6 +65,9 @@ public class OrderItemControllerIntegrationTests {
         OrderItemDto orderItemDto = responseEntity.getBody();
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        List<OrderItem> orderItemList = orderItemService.findAll();
+        assertEquals(size + 1, orderItemList.size());
+
         assertEquals(2, orderItemDto.getQuantity());
         assertEquals("sa sojinim mlekom", orderItemDto.getNote());
         assertEquals(OrderItemStatus.PREPARATION, orderItemDto.getStatus());
@@ -67,6 +75,54 @@ public class OrderItemControllerIntegrationTests {
         assertEquals(1, orderItemDto.getOrderId());
         assertEquals(3, orderItemDto.getMenuItemId());
         orderItemService.delete(orderItemDto.getId());
+
+    }
+
+    @Test
+    public void createInvalidOrderItem_InvalidQuantity_ReturnsBadRequest() throws Exception {
+        int size = orderItemService.findAll().size();
+
+        HttpEntity<CreateOrderItemDto> httpEntity = new HttpEntity<>(new CreateOrderItemDto(0, "sa sojinim mlekom",
+                OrderItemStatus.PREPARATION, 1, 3, 1), headers);
+        ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+
+    }
+
+    @Test
+    public void createInvalidOrderItem_InvalidPriority_ReturnsBadRequest() throws Exception {
+        int size = orderItemService.findAll().size();
+
+        HttpEntity<CreateOrderItemDto> httpEntity = new HttpEntity<>(new CreateOrderItemDto(1, "sa sojinim mlekom",
+                OrderItemStatus.PREPARATION, 0, 3, 1), headers);
+        ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+
+    }
+
+    @Test
+    public void createInvalidOrderItem_InvalidMenuItem_ReturnsBadRequest() throws Exception {
+        int size = orderItemService.findAll().size();
+
+        HttpEntity<CreateOrderItemDto> httpEntity = new HttpEntity<>(new CreateOrderItemDto(1, "sa sojinim mlekom",
+                OrderItemStatus.PREPARATION, 1, null, 1), headers);
+        ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+
+    }
+
+    @Test
+    public void createInvalidOrderItem_InvaliOrder_ReturnsBadRequest() throws Exception {
+        int size = orderItemService.findAll().size();
+
+        HttpEntity<CreateOrderItemDto> httpEntity = new HttpEntity<>(new CreateOrderItemDto(1, "sa sojinim mlekom",
+                OrderItemStatus.PREPARATION, 1, 3, null), headers);
+        ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
 
     }
 
@@ -184,6 +240,17 @@ public class OrderItemControllerIntegrationTests {
                 httpEntity, OrderItemDto.class, 4);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void update_InvalidId_ReturnsNotFound() {
+        HttpEntity<UpdateOrderItemDto> httpEntity = new HttpEntity<>(new UpdateOrderItemDto(3, "sa sojinim mlekom",
+                OrderItemStatus.PREPARATION, 1, 3, 2, 2, null), headers);
+
+        ResponseEntity<OrderItemDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.PUT,
+                httpEntity, OrderItemDto.class, 300);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
 
