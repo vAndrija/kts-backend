@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 
-import java.net.PasswordAuthentication;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -72,10 +71,10 @@ public class AuthenticationControllerIntegrationTests {
         HttpEntity<ResetPasswordDTO> httpEntity =
                 new HttpEntity<>(new ResetPasswordDTO(null, null, "mirkomiric@gmail.com"), headers);
         ResponseEntity<Object> responseEntity =
-                restTemplate.postForEntity(URL_PREFIX + "/send-reset-password-link", httpEntity,Object.class);
-        int sizeAfter  = confirmationTokenRepository.findAll().size();
-        assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
-        assertEquals(size+1,sizeAfter);
+                restTemplate.postForEntity(URL_PREFIX + "/send-reset-password-link", httpEntity, Object.class);
+        int sizeAfter = confirmationTokenRepository.findAll().size();
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(size + 1, sizeAfter);
         confirmationTokenRepository.delete(confirmationTokenRepository.findByUser(userService.findById(1)));
 
     }
@@ -86,28 +85,28 @@ public class AuthenticationControllerIntegrationTests {
         HttpEntity<ResetPasswordDTO> httpEntity =
                 new HttpEntity<>(new ResetPasswordDTO(null, null, "mirkomiric2131@gmail.com"), headers);
         ResponseEntity<Object> responseEntity =
-                restTemplate.postForEntity(URL_PREFIX + "/send-reset-password-link", httpEntity,Object.class);
-        int sizeAfter  = confirmationTokenRepository.findAll().size();
-        assertEquals(HttpStatus.NOT_FOUND,responseEntity.getStatusCode());
-        assertEquals(size,sizeAfter);
+                restTemplate.postForEntity(URL_PREFIX + "/send-reset-password-link", httpEntity, Object.class);
+        int sizeAfter = confirmationTokenRepository.findAll().size();
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertEquals(size, sizeAfter);
     }
 
     @Test
     public void resetPasswordDone_ValidData_ReturnsOk() {
         User user = userService.findById(1);
-        ConfirmationToken confirmationToken =  new ConfirmationToken(user);
+        ConfirmationToken confirmationToken = new ConfirmationToken(user);
         confirmationTokenRepository.save(confirmationToken);
         int size = confirmationTokenRepository.findAll().size();
         HttpEntity<ResetPasswordDTO> httpEntity =
                 new HttpEntity<>(new ResetPasswordDTO(confirmationToken.getConfirmationToken(),
                         "1234", user.getEmailAddress()), headers);
         ResponseEntity<Object> responseEntity =
-                restTemplate.postForEntity(URL_PREFIX + "/reset-password", httpEntity,Object.class);
-        int sizeAfter  = confirmationTokenRepository.findAll().size();
+                restTemplate.postForEntity(URL_PREFIX + "/reset-password", httpEntity, Object.class);
+        int sizeAfter = confirmationTokenRepository.findAll().size();
         User userChanged = userService.findById(1);
-        assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
-        assertEquals(size-1,sizeAfter);
-        assertTrue(passwordEncoder.matches("1234",userChanged.getPassword()));
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(size - 1, sizeAfter);
+        assertTrue(passwordEncoder.matches("1234", userChanged.getPassword()));
 
         userChanged.setPassword(passwordEncoder.encode("123"));
         userRepository.save(userChanged);
@@ -117,22 +116,22 @@ public class AuthenticationControllerIntegrationTests {
     public void resetPasswordDone_InvalidToken_ReturnsForbidden() {
         Admin admin = new Admin("Aleksa", "Maric",
                 "111111", "aleksamaric2311@gmail.com", "152487");
-        ConfirmationToken confirmationToken =  new ConfirmationToken(admin);
+        ConfirmationToken confirmationToken = new ConfirmationToken(admin);
         int size = confirmationTokenRepository.findAll().size();
         HttpEntity<ResetPasswordDTO> httpEntity =
                 new HttpEntity<>(new ResetPasswordDTO(confirmationToken.getConfirmationToken(),
                         "1234", null), headers);
         ResponseEntity<Object> responseEntity =
-                restTemplate.postForEntity(URL_PREFIX + "/reset-password", httpEntity,Object.class);
-        int sizeAfter  = confirmationTokenRepository.findAll().size();
-        assertEquals(HttpStatus.FORBIDDEN,responseEntity.getStatusCode());
-        assertEquals(size,sizeAfter);
+                restTemplate.postForEntity(URL_PREFIX + "/reset-password", httpEntity, Object.class);
+        int sizeAfter = confirmationTokenRepository.findAll().size();
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+        assertEquals(size, sizeAfter);
     }
 
     @Test
     public void resetPasswordDone_ExpiredToken_ReturnsForbidden() {
         User user = userService.findById(1);
-        ConfirmationToken confirmationToken =  new ConfirmationToken(user);
+        ConfirmationToken confirmationToken = new ConfirmationToken(user);
         confirmationToken.setCreatedDate(new Date(new Date().getTime() - 1000 * 60 * 60 * 31));
         confirmationToken = confirmationTokenRepository.save(confirmationToken);
 
@@ -141,11 +140,11 @@ public class AuthenticationControllerIntegrationTests {
                 new HttpEntity<>(new ResetPasswordDTO(confirmationToken.getConfirmationToken(),
                         "1234", user.getEmailAddress()), headers);
         ResponseEntity<Object> responseEntity =
-                restTemplate.postForEntity(URL_PREFIX + "/reset-password", httpEntity,Object.class);
-        int sizeAfter  = confirmationTokenRepository.findAll().size();
+                restTemplate.postForEntity(URL_PREFIX + "/reset-password", httpEntity, Object.class);
+        int sizeAfter = confirmationTokenRepository.findAll().size();
 
-        assertEquals(HttpStatus.FORBIDDEN,responseEntity.getStatusCode());
-        assertEquals(size,sizeAfter);
+        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+        assertEquals(size, sizeAfter);
         confirmationTokenRepository.delete(confirmationToken);
     }
 }
