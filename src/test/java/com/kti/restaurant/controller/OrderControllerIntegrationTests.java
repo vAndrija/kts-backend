@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestPropertySource("classpath:application-test.properties")
 public class OrderControllerIntegrationTests {
 
-    private  static final String URL_PREFIX = "/api/v1/orders";
+    private static final String URL_PREFIX = "/api/v1/orders";
 
     @Autowired
     private OrderService orderService;
@@ -41,20 +41,20 @@ public class OrderControllerIntegrationTests {
     private HttpHeaders headers = new HttpHeaders();
 
     @BeforeEach
-    public void login(){
+    public void login() {
         ResponseEntity<UserTokenState> responseEntity =
                 restTemplate.postForEntity("/api/v1/auth/login",
                         new JwtAuthenticationRequest("anapopovic@gmail.com", "123"),
                         UserTokenState.class);
         accessToken = responseEntity.getBody().getAccessToken();
-        headers.add("Authorization", "Bearer "+ accessToken);
+        headers.add("Authorization", "Bearer " + accessToken);
     }
 
     @Test
     public void create_ValidOrder_ReturnsCreated() throws Exception {
         HttpEntity<CreateOrderDto> httpEntity = new HttpEntity<>(new CreateOrderDto(OrderStatus.ORDERED,
                 LocalDateTime.parse("2021-10-10T14:52"), 500.00, 1, 7), headers);
-        ResponseEntity<OrderDto> responseEntity = restTemplate.postForEntity(URL_PREFIX,httpEntity,OrderDto.class);
+        ResponseEntity<OrderDto> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, OrderDto.class);
 
         OrderDto orderDto = responseEntity.getBody();
 
@@ -69,14 +69,35 @@ public class OrderControllerIntegrationTests {
     }
 
     @Test
-    public void getOrders_ReturnsOk(){
+    public void createInvalidOrder_InvalidTable_ReturnsBadRequest() {
+        HttpEntity<CreateOrderDto> httpEntity = new HttpEntity<>(new CreateOrderDto(OrderStatus.ORDERED,
+                LocalDateTime.parse("2021-10-10T14:52"), 500.00, null, 7), headers);
+        ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+
+    }
+
+    @Test
+    public void createInvalidOrder_InvalidWaiter_ReturnsBadRequest() {
+        HttpEntity<CreateOrderDto> httpEntity = new HttpEntity<>(new CreateOrderDto(OrderStatus.ORDERED,
+                LocalDateTime.parse("2021-10-10T14:52"), 500.00, 1, null), headers);
+        ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+
+    }
+
+    @Test
+    public void getOrders_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<OrderDto[]> responseEntity = restTemplate.exchange(URL_PREFIX, HttpMethod.GET,
                 httpEntity, OrderDto[].class);
 
         OrderDto[] orderDtoList = responseEntity.getBody();
 
-        assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(3, orderDtoList.length);
         assertEquals(OrderStatus.ORDERED, orderDtoList[0].getStatus());
         assertEquals(OrderStatus.PAID, orderDtoList[1].getStatus());
         assertEquals(1520, orderDtoList[0].getPrice());
@@ -85,9 +106,9 @@ public class OrderControllerIntegrationTests {
     }
 
     @Test
-    public void getOrder_ValidId_ReturnsOk(){
+    public void getOrder_ValidId_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX+"/{id}", HttpMethod.GET,
+        ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.GET,
                 httpEntity, OrderDto.class, 1);
 
         OrderDto orderDto = responseEntity.getBody();
@@ -101,9 +122,9 @@ public class OrderControllerIntegrationTests {
     }
 
     @Test
-    public void getOrder_InvalidId_ReturnsNotFound(){
+    public void getOrder_InvalidId_ReturnsNotFound() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX+"/{id}", HttpMethod.GET,
+        ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.GET,
                 httpEntity, OrderDto.class, 105);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -118,20 +139,20 @@ public class OrderControllerIntegrationTests {
         int size = orderService.findAll().size();
 
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX+"/{id}", HttpMethod.DELETE,
+        ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.DELETE,
                 httpEntity, OrderDto.class, order.getId());
 
         assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
-        assertEquals(size - 1 , orderService.findAll().size());
+        assertEquals(size - 1, orderService.findAll().size());
 
     }
 
     @Test
-    public void delete_InvalidId_ReturnsNotFound(){
+    public void delete_InvalidId_ReturnsNotFound() {
         int size = orderService.findAll().size();
 
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX+"/{id}", HttpMethod.DELETE,
+        ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.DELETE,
                 httpEntity, OrderDto.class, 5000);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -140,8 +161,8 @@ public class OrderControllerIntegrationTests {
 
     @Test
     public void update_ValidId_ReturnsOk() throws Exception {
-        HttpEntity<UpdateOrderDto> httpEntity = new HttpEntity<>(new UpdateOrderDto(OrderStatus.PAID, 3000.00),headers);
-        ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX+"/{id}", HttpMethod.PUT,
+        HttpEntity<UpdateOrderDto> httpEntity = new HttpEntity<>(new UpdateOrderDto(OrderStatus.PAID, 3000.00), headers);
+        ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.PUT,
                 httpEntity, OrderDto.class, 1);
 
         OrderDto orderDto = responseEntity.getBody();
@@ -162,35 +183,35 @@ public class OrderControllerIntegrationTests {
     }
 
     @Test
-    public void update_InvalidId_ReturnsNotFound(){
+    public void update_InvalidId_ReturnsNotFound() {
         HttpEntity<UpdateOrderDto> httpEntity = new HttpEntity<>(new UpdateOrderDto(OrderStatus.FINISHED, 3000.00),
                 headers);
-        ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX+"/{id}", HttpMethod.PUT,
+        ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.PUT,
                 httpEntity, OrderDto.class, 8523);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
     @Test
-    public void getFilteredOrdersByStatus_ValidStatus_ReturnsOk(){
+    public void getFilteredOrdersByStatus_ValidStatus_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<OrderDto[]> responseEntity = restTemplate.exchange(URL_PREFIX+"/filter/{status}", HttpMethod.GET,
+        ResponseEntity<OrderDto[]> responseEntity = restTemplate.exchange(URL_PREFIX + "/filter/{status}", HttpMethod.GET,
                 httpEntity, OrderDto[].class, "ORDERED");
 
         OrderDto[] orderDtoList = responseEntity.getBody();
 
-        assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(OrderStatus.ORDERED, orderDtoList[0].getStatus());
         assertEquals(OrderStatus.ORDERED, orderDtoList[1].getStatus());
     }
 
     @Test
-    public void getFilteredOrdersByStatus_InvalidStatus_ReturnsNotAcceptable(){
+    public void getFilteredOrdersByStatus_InvalidStatus_ReturnsNotAcceptable() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Object> responseEntity = restTemplate.exchange(URL_PREFIX+"/filter/{status}", HttpMethod.GET,
-                httpEntity,Object.class, "PREPARATION");
+        ResponseEntity<Object> responseEntity = restTemplate.exchange(URL_PREFIX + "/filter/{status}", HttpMethod.GET,
+                httpEntity, Object.class, "PREPARATION");
 
-        assertEquals(HttpStatus.NOT_ACCEPTABLE,responseEntity.getStatusCode());
+        assertEquals(HttpStatus.NOT_ACCEPTABLE, responseEntity.getStatusCode());
     }
 
 }
