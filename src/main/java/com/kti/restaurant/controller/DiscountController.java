@@ -31,11 +31,7 @@ public class DiscountController {
     @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<?> createDiscount(@Valid @RequestBody DiscountDto discountDto) throws Exception {
         Discount discount = discountService.create(discountMapper.fromDiscountDtoToDiscount(discountDto));
-
-        if(discount != null) {
-            return new ResponseEntity<>(discount, HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(discount, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

@@ -31,11 +31,7 @@ public class PriceItemController {
     @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<?> createPriceItem(@Valid @RequestBody PriceItemDto priceItemDto) throws Exception {
         PriceItem priceItem = priceItemService.create(priceItemMapper.fromPriceItemDtoToPriceItem(priceItemDto));
-
-        if(priceItem != null) {
-            return new ResponseEntity<>(priceItem, HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(priceItem, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

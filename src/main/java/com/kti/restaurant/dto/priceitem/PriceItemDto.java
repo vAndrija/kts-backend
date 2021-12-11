@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public class PriceItemDto {
-    @NotEmpty(message = "Value should not be null or empty")
+    @NotNull(message = "Value should not be null or empty")
     @Min(value = 1, message = "Value should be bigger than 0")
     private Double value;
 
@@ -16,13 +16,13 @@ public class PriceItemDto {
     @NotNull(message = "End date should not be null or empty")
     private LocalDate endDate;
 
-    @NotEmpty(message = "Menu item id should not be null or empty")
+    @NotNull(message = "Menu item id should not be null or empty")
     private Integer menuItemId;
 
     @NotNull(message = "Is current should not be null or empty")
     private Boolean isCurrent;
 
-    @NotEmpty(message = "Preparation value should not be null or empty")
+    @NotNull(message = "Preparation value should not be null or empty")
     @Min(value = 1, message = "Preparation value should be bigger than 0")
     private Double preparationValue;
 
