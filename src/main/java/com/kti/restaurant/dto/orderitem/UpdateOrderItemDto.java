@@ -25,14 +25,19 @@ public class UpdateOrderItemDto {
 
     private Integer cookId;
 
+    private Integer orderId;
+
     //dodati cook barteneder
-    public UpdateOrderItemDto( Integer quantity, String note, OrderItemStatus status, Integer priority,Integer menuItemId
-                               ) {
+    public UpdateOrderItemDto( Integer quantity, String note, OrderItemStatus status, Integer priority,Integer menuItemId,
+                             Integer orderId, Integer bartenderId, Integer cookId) {
         this.quantity = quantity;
         this.note = note;
         this.status = status;
         this.priority = priority;
         this.menuItemId = menuItemId;
+        this.bartenderId = bartenderId;
+        this.cookId = cookId;
+        this.orderId = orderId;
     }
 
     public UpdateOrderItemDto(){
@@ -93,5 +98,13 @@ public class UpdateOrderItemDto {
 
     public void setMenuItemId(Integer menuItemId) {
         this.menuItemId = menuItemId;
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 }

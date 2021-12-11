@@ -46,10 +46,11 @@ public class OrderItemService implements IOrderItemService {
     @Override
     public OrderItem update(OrderItem orderItem, Integer id) throws Exception {
         OrderItem orderItemToUpdate = this.findById(id);
-        if(!orderItemToUpdate.getStatus().equals(OrderItemStatus.ORDERED) ||
-                (orderItemToUpdate.getStatus().equals(orderItem.getStatus())) && !orderItemToUpdate.getStatus().equals(OrderItemStatus.ORDERED)){
+        if(orderItemToUpdate.getStatus().equals(orderItem.getStatus()) &&
+                (!orderItemToUpdate.getStatus().equals(OrderItemStatus.ORDERED))){
             throw new BadLogicException("Order item cannot be changed.");
         }
+
         orderItemToUpdate.setStatus(orderItem.getStatus());
         orderItemToUpdate.setQuantity(orderItem.getQuantity());
         orderItemToUpdate.setPriority(orderItem.getPriority());
