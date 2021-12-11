@@ -33,11 +33,7 @@ public class MenuItemController {
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER')")
     public ResponseEntity<?> createMenuItem(@Valid @RequestBody MenuItemDto menuItemDto) throws Exception {
         MenuItem menuItem = menuItemService.create(menuItemMapper.fromCreateMenuItemDtoToMenuItem(menuItemDto));
-
-        if(menuItem != null) {
-            return new ResponseEntity<>(menuItem, HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(menuItem, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

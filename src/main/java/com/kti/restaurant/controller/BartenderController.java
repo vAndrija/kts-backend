@@ -5,11 +5,13 @@ import com.kti.restaurant.dto.bartender.BartenderDto;
 import com.kti.restaurant.dto.bartender.BartenderUpdateDto;
 import com.kti.restaurant.mapper.BartenderMapper;
 import com.kti.restaurant.model.Bartender;
+import com.kti.restaurant.model.User;
 import com.kti.restaurant.service.contract.IBartenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -55,6 +57,9 @@ public class BartenderController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'MANAGER', 'BARTENDER')")
     public ResponseEntity<?> updateBartender(@Valid @RequestBody BartenderUpdateDto bartenderUpdateDto, @PathVariable Integer id) throws Exception {
+        User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(user.getRoles().get(0).getId()==2L && !user.getId().equals(id))
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         Bartender bartender = bartenderService.update(bartenderMapper.fromBartenderUpdateDtoToBartender(bartenderUpdateDto), id);
         return new ResponseEntity<>(bartenderMapper.fromBartenderToBartenderDto(bartender),HttpStatus.OK);
     }

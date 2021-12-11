@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 
 public class OrderDto {
 
+    @NotNull(message = "Id should not be null.")
+    private Integer id;
+
     @NotNull(message = "Status should not be null")
     private OrderStatus status;
 
@@ -19,15 +22,29 @@ public class OrderDto {
     @NotNull(message = "Table id should not be null")
     private Integer tableId;
 
+    @NotNull(message = "Waiter id should not be null")
+    private Integer waiterId;
+
     public OrderDto(){
 
     }
 
-    public OrderDto(OrderStatus status, LocalDateTime dateOfOrder, Double price, Integer tableId) {
+    public OrderDto(Integer id, OrderStatus status, LocalDateTime dateOfOrder, Double price, Integer tableId,
+                    Integer waiterId) {
+        this.id = id;
         this.status = status;
         this.dateOfOrder = dateOfOrder;
         this.price = price;
         this.tableId = tableId;
+        this.waiterId = waiterId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public OrderStatus getStatus() {
@@ -60,5 +77,13 @@ public class OrderDto {
 
     public void setTableId(Integer tableId) {
         this.tableId = tableId;
+    }
+
+    public Integer getWaiterId() {
+        return waiterId;
+    }
+
+    public void setWaiterId(Integer waiterId) {
+        this.waiterId = waiterId;
     }
 }

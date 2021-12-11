@@ -23,7 +23,7 @@ public class MenuItemDto {
     @NotNull(message = "Preparation time should not be null")
     private Integer preparationTime;
 
-    public MenuItemDto(String name, String description, MenuItemType type, MenuItemCategory category) {
+    public MenuItemDto(String name, String description, MenuItemType type, MenuItemCategory category, int preparationTime) {
         this.name = name;
         this.description = description;
         this.type = type;

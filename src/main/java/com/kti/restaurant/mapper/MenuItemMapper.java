@@ -29,6 +29,6 @@ public class MenuItemMapper {
     }
 
     public MenuItemDto fromMenuItemToMenuItemDto(MenuItem menuItem) {
-        return new MenuItemDto(menuItem.getName(), menuItem.getDescription(), menuItem.getType(), menuItem.getCategory());
+        return new MenuItemDto(menuItem.getName(), menuItem.getDescription(), menuItem.getType(), menuItem.getCategory(), menuItem.getPreparationTime());
     }
 }
