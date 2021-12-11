@@ -140,6 +140,20 @@ public class DiscountControllerIntegrationTests {
     }
 
     @Test
+    public void createDiscount_InvalidDates_ReturnsBadRequest() {
+        int size = discountService.findAll().size();
+
+        HttpEntity<DiscountDto> httpEntity = new HttpEntity<DiscountDto>(new DiscountDto(10, LocalDate.parse("2022-05-11"),
+                LocalDate.parse("2021-11-11"),5, null), headers);
+        ResponseEntity<Discount> responseEntity =
+                restTemplate.postForEntity("/api/v1/discount", httpEntity,
+                        Discount.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(size, discountService.findAll().size());
+    }
+
+    @Test
     public void updateDiscount_ValidDiscount_ReturnsOk() throws Exception {
         HttpEntity<DiscountDto> httpEntity = new HttpEntity<DiscountDto>(new DiscountDto(15, LocalDate.parse("2021-11-20"),
                 LocalDate.parse("2021-11-25"), 8, false), headers);
