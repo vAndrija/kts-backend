@@ -39,7 +39,6 @@ public class OrderService implements IOrderService {
     @Override
     public Order update(Order order, Integer id) throws Exception {
         Order orderToUpdate = this.findById(id);
-        // videti da li treba sto i konobar, mada mislim da ne
         orderToUpdate.setStatus(order.getStatus());
         orderToUpdate.setDateOfOrder(order.getDateOfOrder());
         orderToUpdate.setPrice(order.getPrice());

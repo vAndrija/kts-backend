@@ -35,9 +35,6 @@ public class OrderController {
     @PreAuthorize("hasAnyRole('WAITER')")
     public ResponseEntity<?> createOrder(@Valid @RequestBody CreateOrderDto newOrder) throws Exception {
         Order order = orderService.create(orderMapper.fromCreateOrderDtoToOrder(newOrder));
-        if(order == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         return new ResponseEntity<>(orderMapper.fromOrderToOrderDto(order),HttpStatus.CREATED);
     }
 
