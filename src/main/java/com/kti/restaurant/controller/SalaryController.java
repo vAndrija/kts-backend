@@ -42,11 +42,7 @@ public class SalaryController {
     @PreAuthorize("hasAnyRole('MANAGER')")
     public ResponseEntity<Salary> createSalary(@RequestBody CreateSalaryDto salaryDto) throws Exception {
         Salary salary = salaryService.create(salaryMapper.fromCreateSalaryDtoToSalary(salaryDto));
-
-        if(salary != null) {
-            return new ResponseEntity<>(salary, HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(salary, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

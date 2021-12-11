@@ -41,12 +41,7 @@ public class TableReservationController {
     @PreAuthorize("hasAnyRole('WAITER')")
     public ResponseEntity<TableReservation> createTableReservation(@Valid @RequestBody TableReservationDto tableReservationDto) throws Exception {
         TableReservation tableReservation = tableReservationService.create(tableReservationMapper.fromTableReservationDtoToTableReservation(tableReservationDto));
-
-        if (tableReservation != null) {
-            return new ResponseEntity<>(tableReservation, HttpStatus.CREATED);
-        }
-
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(tableReservation, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

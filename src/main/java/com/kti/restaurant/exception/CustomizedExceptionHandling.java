@@ -1,4 +1,4 @@
-package com.kti.restaurant.exception;
+ package com.kti.restaurant.exception;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -54,6 +54,7 @@ public class CustomizedExceptionHandling extends ResponseEntityExceptionHandler 
         return new ResponseEntity<Object>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<Object> handleExceptions(ConstraintViolationException exception,
                                                       HttpHeaders headers, HttpStatus status, WebRequest request) {

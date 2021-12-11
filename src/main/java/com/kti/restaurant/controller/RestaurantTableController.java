@@ -35,12 +35,7 @@ public class RestaurantTableController {
     @PreAuthorize("hasAnyRole('MANAGER', 'SYSTEM_ADMIN')")
     public ResponseEntity<RestaurantTable> createRestaurantTable(@RequestBody RestaurantTable restaurantTable) throws Exception {
         RestaurantTable restaurantTableToCreate = restaurantTableService.create(restaurantTable);
-
-        if(restaurantTableToCreate != null) {
-            return new ResponseEntity<>(restaurantTableToCreate, HttpStatus.CREATED);
-        }
-
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(restaurantTableToCreate, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

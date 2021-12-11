@@ -1,8 +1,13 @@
 package com.kti.restaurant.dto.notification;
 
-public class CreateUpdateNotificationDto {
-    private String message;
+import javax.validation.constraints.NotNull;
 
+public class CreateUpdateNotificationDto {
+	
+	@NotNull(message = "Message should not be null or empty.")
+    private String message;
+	
+	@NotNull(message = "Order Item id should not be null or empty.")
     private Integer orderItemId;
 
     public CreateUpdateNotificationDto(String message, Integer orderItemId) {
