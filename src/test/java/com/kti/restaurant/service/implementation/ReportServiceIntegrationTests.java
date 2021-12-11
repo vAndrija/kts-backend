@@ -179,7 +179,7 @@ public class ReportServiceIntegrationTests {
 	}
 	
 	@Test 
-	public void mealDrinkCostsForYear_ValidParamters_MealDrinkCostsForYear() {
+	public void mealDrinkCostsForYear_ValidParameters_MealDrinkCostsForYear() {
 		List<Double> costsPerMonths = reportService.mealDrinkCostsForYear(2021);
 		
 		assertEquals(12, costsPerMonths.size());
@@ -249,7 +249,7 @@ public class ReportServiceIntegrationTests {
 	}
 	
 	@Test
-	public void preparationTimeForMonth_InvaliYear_ThrowsBadLogicException() {
+	public void preparationTimeForMonth_InvalidYear_ThrowsBadLogicException() {
 		Exception exception = assertThrows(BadLogicException.class, () -> {
 			reportService.preparationTimeForMonth(-1, 1, 1);
 		});
@@ -258,7 +258,7 @@ public class ReportServiceIntegrationTests {
 	}
 	
 	@Test
-	public void preprationTimeForMonth_InvalidMonthLessThan1_ThrowsBadLogicException() {
+	public void preparationTimeForMonth_InvalidMonthLessThan1_ThrowsBadLogicException() {
 		Exception exception = assertThrows(BadLogicException.class, () -> {
 			reportService.preparationTimeForMonth(2021, 0, 1);
 		});
@@ -267,7 +267,7 @@ public class ReportServiceIntegrationTests {
 	}
 	
 	@Test
-	public void preprationTimeForMonth_InvalidMonthGreaterThan12_ThrowsBadLogicException() {
+	public void preparationTimeForMonth_InvalidMonthGreaterThan12_ThrowsBadLogicException() {
 		Exception exception = assertThrows(BadLogicException.class, () -> {
 			reportService.preparationTimeForMonth(2021, 13, 1);
 		});
@@ -276,7 +276,7 @@ public class ReportServiceIntegrationTests {
 	}
 	
 	@Test
-	public void preprationTimeForMonth_InvalidUserId_ThrowsMissingEntityException() {
+	public void preparationTimeForMonth_InvalidUserId_ThrowsMissingEntityException() {
 		Exception exception = assertThrows(MissingEntityException.class, () -> {
 			reportService.preparationTimeForMonth(2021, 1, 15);
 		});
@@ -285,7 +285,7 @@ public class ReportServiceIntegrationTests {
 	}
 	
 	@Test
-	public void preprationTimeForMonth_InvalidUserId_ThrowsBadLogicException() {
+	public void preparationTimeForMonth_InvalidUserId_ThrowsBadLogicException() {
 		Exception exception = assertThrows(BadLogicException.class, () -> {
 			reportService.preparationTimeForMonth(2021, 1, 1);
 		});
