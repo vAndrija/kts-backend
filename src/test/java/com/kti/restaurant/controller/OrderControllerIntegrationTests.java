@@ -6,7 +6,6 @@ import com.kti.restaurant.dto.order.OrderDto;
 import com.kti.restaurant.dto.order.UpdateOrderDto;
 import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.UserTokenState;
-import com.kti.restaurant.model.Waiter;
 import com.kti.restaurant.model.enums.OrderStatus;
 import com.kti.restaurant.service.implementation.OrderService;
 import com.kti.restaurant.service.implementation.RestaurantTableService;
@@ -50,6 +49,7 @@ public class OrderControllerIntegrationTests {
                         UserTokenState.class);
         accessToken = responseEntity.getBody().getAccessToken();
         headers.add("Authorization", "Bearer " + accessToken);
+
     }
 
     @Test
@@ -76,21 +76,27 @@ public class OrderControllerIntegrationTests {
 
     @Test
     public void createInvalidOrder_InvalidTable_ReturnsBadRequest() {
+        int size = orderService.findAll().size();
+
         HttpEntity<CreateOrderDto> httpEntity = new HttpEntity<>(new CreateOrderDto(OrderStatus.ORDERED,
                 LocalDateTime.parse("2021-10-10T14:52"), 500.00, null, 7), headers);
         ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(size, orderService.findAll().size());
 
     }
 
     @Test
     public void createInvalidOrder_InvalidWaiter_ReturnsBadRequest() {
+        int size = orderService.findAll().size();
+
         HttpEntity<CreateOrderDto> httpEntity = new HttpEntity<>(new CreateOrderDto(OrderStatus.ORDERED,
                 LocalDateTime.parse("2021-10-10T14:52"), 500.00, 1, null), headers);
         ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(size, orderService.findAll().size());
 
     }
 
@@ -125,6 +131,7 @@ public class OrderControllerIntegrationTests {
         assertEquals(1520, orderDto.getPrice());
         assertEquals(3, orderDto.getTableId());
         assertEquals(7, orderDto.getWaiterId());
+
     }
 
     @Test
@@ -163,6 +170,7 @@ public class OrderControllerIntegrationTests {
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertEquals(size, orderService.findAll().size());
+
     }
 
     @Test
@@ -196,6 +204,7 @@ public class OrderControllerIntegrationTests {
                 httpEntity, OrderDto.class, 8523);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+
     }
 
     @Test
@@ -209,6 +218,7 @@ public class OrderControllerIntegrationTests {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(OrderStatus.ORDERED, orderDtoList[0].getStatus());
         assertEquals(OrderStatus.ORDERED, orderDtoList[1].getStatus());
+
     }
 
     @Test
@@ -218,6 +228,7 @@ public class OrderControllerIntegrationTests {
                 httpEntity, Object.class, "PREPARATION");
 
         assertEquals(HttpStatus.NOT_ACCEPTABLE, responseEntity.getStatusCode());
+
     }
 
 }
