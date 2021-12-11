@@ -1,5 +1,6 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Discount;
 import org.junit.jupiter.api.Assertions;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
@@ -42,13 +44,21 @@ public class DiscountServiceIntegrationTests {
     }
 
     @Test
-    public void create_ValidDiscount() throws Exception {
+    public void create_ValidDiscount_CreatedDiscount() throws Exception {
         Discount discount = discountService.create(new Discount(15, LocalDate.parse("2021-05-11"),
                 LocalDate.parse("2021-11-11"), false, null));
         assertEquals(15, discount.getValue());
         assertEquals(LocalDate.parse("2021-05-11"), discount.getStartDate());
         assertEquals(LocalDate.parse("2021-11-11"), discount.getEndDate());
         assertEquals(false, discount.getCurrent());
+    }
+
+    @Test
+    public void create_DiscountWithInvalidDates_ThrowBadLogicException() {
+        assertThrows(BadLogicException.class, () -> {
+            discountService.create(new Discount(15, LocalDate.parse("2021-11-11"),
+                    LocalDate.parse("2021-05-11"), false, null));
+        });
     }
 
     @Test
@@ -69,6 +79,13 @@ public class DiscountServiceIntegrationTests {
     void update_InvalidId_ThrowsMissingEntityException() {
         Assertions.assertThrows(MissingEntityException.class, () -> {
             discountService.update(null, 10);
+        });
+    }
+
+    @Test
+    void update_InvalidDates_ThrowsBadLogicException() {
+        Assertions.assertThrows(BadLogicException.class, () -> {
+            discountService.update(new Discount(null, LocalDate.parse("2022-11-05"), LocalDate.parse("2021-11-05"), null, null), 1);
         });
     }
 

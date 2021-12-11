@@ -1,5 +1,6 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.PriceItem;
 import org.junit.jupiter.api.Test;
@@ -59,6 +60,14 @@ public class PriceItemServiceIntegrationTests {
         assertEquals(Double.valueOf(240), priceItem.getPreparationValue());
     }
 
+    @Test
+    public void create_PriceItemWithInvalidDates_ThrowsBadLogicException() throws Exception {
+        assertThrows(BadLogicException.class, () -> {
+            priceItemService.create(new PriceItem(Double.valueOf(350), LocalDate.parse("2022-08-15"), LocalDate.parse("2021-11-15"),
+                    null, true, Double.valueOf(240)));
+        });
+    }
+
     @Rollback()
     @Test
     public void update_ValidPriceItem_UpdatedPriceItem() throws Exception {
@@ -78,6 +87,14 @@ public class PriceItemServiceIntegrationTests {
     public void update_InvalidPriceItem_ThrowsMissingEntityException() {
         assertThrows(MissingEntityException.class, () -> {
             priceItemService.update(null, 20);
+        });
+    }
+
+    @Test
+    public void update_InvalidDates_ThrowsMissingEntityException() {
+        assertThrows(BadLogicException.class, () -> {
+            priceItemService.update(new PriceItem(null, LocalDate.parse("2022-11-05"), LocalDate.parse("2021-11-05"), null,
+                    null, null), 1);
         });
     }
 

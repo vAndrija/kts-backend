@@ -1,5 +1,6 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.PriceItem;
 import com.kti.restaurant.repository.PriceItemRepository;
@@ -38,12 +39,20 @@ public class PriceItemService implements IPriceItemService {
 
     @Override
     public PriceItem create(PriceItem entity) throws Exception {
+        if(entity.getEndDate().isBefore(entity.getStartDate())) {
+            throw new BadLogicException("The end date must be after start date.");
+        }
+
         return priceItemRepository.save(entity);
     }
 
     @Override
     public PriceItem update(PriceItem entity, Integer id) throws Exception {
         PriceItem priceItemToUpdate = this.findById(id);
+
+        if(entity.getEndDate().isBefore(entity.getStartDate())) {
+            throw new BadLogicException("The end date must be after start date.");
+        }
 
         priceItemToUpdate.setCurrent(entity.getCurrent());
         priceItemToUpdate.setStartDate(entity.getStartDate());
