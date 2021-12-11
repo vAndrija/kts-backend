@@ -3,8 +3,6 @@ package com.kti.restaurant.model;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -28,7 +26,7 @@ public class TableReservation {
 
     private LocalDateTime durationStart;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     private RestaurantTable table;
  
     public TableReservation(String name, LocalDateTime durationStart, RestaurantTable table) {

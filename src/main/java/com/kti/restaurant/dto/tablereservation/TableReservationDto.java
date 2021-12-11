@@ -1,6 +1,5 @@
 package com.kti.restaurant.dto.tablereservation;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -8,12 +7,13 @@ public class TableReservationDto {
 	
 	private Integer id;
 	
-    @NotEmpty(message = "Name should not be null or empty")
+    @NotNull(message = "Name should not be null or empty")
     private String name;
 
     @NotNull(message = "Start date should not be null or empty")
     private LocalDateTime durationStart;
 
+    @NotNull(message = "Table id should not be null")
     private Integer tableId;
 
     public TableReservationDto() {

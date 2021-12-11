@@ -40,6 +40,7 @@ public class TableReservationService implements ITableReservationService {
     	if(!checkTableReservations(tableReservation.getTable().getId(), tableReservation.getDurationStart())) {
     		throw new BadLogicException("Cannot reserve same table in same time period.");
     	}
+    	
     	return tableReservationRepository.save(tableReservation);
     }
 
