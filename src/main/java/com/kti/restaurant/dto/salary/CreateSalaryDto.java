@@ -7,12 +7,13 @@ import java.time.LocalDate;
 
 public class CreateSalaryDto {
     @DecimalMin(value = "0.01", message = "Salary should not be negative value.")
+    @NotNull(message = "Value should not be null")
     private Double value;
 
-    @NotNull(message = "Start date of salary should not be null.")
+    @NotNull(message = "Start date of salary should not be null")
     private LocalDate startDate;
 
-    @NotNull(message = "Start date of salary should not be null.")
+    @NotNull(message = "End date of salary should not be null")
     private LocalDate endDate;
 
     @NotEmpty(message = "User email should not be null or empty")

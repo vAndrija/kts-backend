@@ -71,6 +71,18 @@ public class TableReservationControllerIntegrationTests {
 	}
 	
 	@Test
+	public void getTableReservations_InvalidId_ReturnsStatusNotFound() {
+		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
+
+		ResponseEntity<TableReservationDto> entity = restTemplate
+				.exchange("/api/v1/table-reservations/3", HttpMethod.GET, httpEntity, TableReservationDto.class);
+		
+		assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
+		
+	}
+	
+	
+	@Test
 	public void getTableReservations_ReservationsExists_ReturnsStatusOk() {
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 		
@@ -83,7 +95,6 @@ public class TableReservationControllerIntegrationTests {
 		assertEquals(2, reservations.length);
 		
 	}
-	
 	
 	@Test
 	public void createTableReservation_ValidTableReservation_ReturnsStatusCreated() throws Exception {
