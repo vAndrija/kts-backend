@@ -8,6 +8,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +19,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.RestaurantTable;
 import com.kti.restaurant.model.TableReservation;
@@ -33,6 +36,7 @@ public class TableReservationServiceUnitTests {
 	private TableReservationRepository reservationRepository;
 	
 	private static final String message = "Table reservation with given id does not exist in the system.";
+	private static final String badLogicMessage = "Cannot reserve same table in same time period.";
 	
 	@BeforeEach
 	private void setup() {
@@ -61,6 +65,34 @@ public class TableReservationServiceUnitTests {
 	}
 	
 	@Test
+	public void create_ValidTableReservation_ReturnsCreatedTableReservation() throws Exception {
+		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-12-12T22:22"), new RestaurantTable());
+		
+		when(reservationRepository.save(any())).thenReturn(reservationToUpdate);
+
+		TableReservation reservation = reservationService.create(reservationToUpdate);
+		assertEquals(reservationToUpdate.getId(), reservation.getId());
+		assertEquals(reservationToUpdate.getDurationStart(), reservation.getDurationStart());
+	}
+	
+	@Test
+	public void create_InvalidReservationTime_ThrowsBadLogicException() {
+		List<TableReservation> reservations = new ArrayList<TableReservation>();
+		reservations.add(new TableReservation("Ime", LocalDateTime.parse("2021-10-10T22:22"), new RestaurantTable()));
+		
+		when(reservationRepository.getTableReservationByDateAndTableId(any(), any(), any())).thenReturn(reservations);
+		
+		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-10-10T22:22"), new RestaurantTable());
+		reservationToUpdate.setId(1);
+		
+		Exception exception = assertThrows(BadLogicException.class, () -> {
+			reservationService.create(reservationToUpdate);
+		});
+		
+		assertEquals(badLogicMessage, exception.getMessage());
+	}
+	
+	@Test
 	public void update_ValidId_ReturnsUpdatedTableReservation() throws Exception {
 		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-10-10T22:22"), new RestaurantTable());
 		reservationToUpdate.setId(1);
@@ -81,6 +113,23 @@ public class TableReservationServiceUnitTests {
 		});
 		
 		assertEquals(message, exception.getMessage());
+	}
+	
+	@Test
+	public void update_InvalidReservationTime_ThrowsBadLogicException() {
+		List<TableReservation> reservations = new ArrayList<TableReservation>();
+		reservations.add(new TableReservation("Ime", LocalDateTime.parse("2021-10-10T22:22"), new RestaurantTable()));
+		
+		when(reservationRepository.getTableReservationByDateAndTableId(any(), any(), any())).thenReturn(reservations);
+		
+		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-10-10T22:22"), new RestaurantTable());
+		reservationToUpdate.setId(1);
+		
+		Exception exception = assertThrows(BadLogicException.class, () -> {
+			reservationService.update(reservationToUpdate, 1);
+		});
+		
+		assertEquals(badLogicMessage, exception.getMessage());
 	}
 	
 	@Test

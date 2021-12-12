@@ -65,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .cors().and()
         .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
                 BasicAuthenticationFilter.class);
-    	
+
     	http.csrf().disable();
     }
 
