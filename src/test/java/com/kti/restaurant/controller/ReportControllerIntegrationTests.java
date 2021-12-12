@@ -379,4 +379,108 @@ public class ReportControllerIntegrationTests {
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
+    
+    @Test
+    public void getYearlyReportForMealAndDrinkSales_ValidYear_ValidMenuItemId_ReturnsStatusOk() {
+    	HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Integer[]> responseEntity = restTemplate.exchange(URL_PREFIX + "/yearly/{year}/meal-drink-sales/{id}",
+                HttpMethod.GET, httpEntity, Integer[].class, 2021, 1);
+
+        List<Integer> salesPerMonth = List.of(responseEntity.getBody());
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(12, salesPerMonth.size());
+        assertEquals(3, salesPerMonth.get(10));
+    }
+    
+    @Test
+    public void getYearlyReportForMealAndDrinkSales_YearWithoutOrders_ReturnsOk() {
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Integer[]> responseEntity = restTemplate.exchange(URL_PREFIX + "/yearly/{year}/meal-drink-sales/{id}",
+                HttpMethod.GET, httpEntity, Integer[].class, 2001, 1);
+
+        List<Integer> salesPerMonth = List.of(responseEntity.getBody());
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(12, salesPerMonth.size());
+        salesPerMonth.forEach(ratio -> {
+            assertEquals(Integer.valueOf(0), ratio);
+        });
+    }
+    
+    @Test
+    public void getYearlyReportForMealAndDrinkSales_InvalidYear_ValidMenuItemId_ReturnsStatusBadRequest() {
+    	HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/yearly/{year}/meal-drink-sales/{id}",
+                HttpMethod.GET, httpEntity, Void.class, -1, 1);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+    
+    @Test
+    public void getYearlyReportForMealAndDrinkSales_ValidYear_InvalidMenuItemId_ReturnsStatusNotFound() {
+    	HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/yearly/{year}/meal-drink-sales/{id}",
+                HttpMethod.GET, httpEntity, Void.class, 2021, 15);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+    
+    @Test
+    public void getMonthlyReportForMealAndDrinkSales_ValidParameters_ReturnsStatusOk() {
+    	HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Integer[]> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/meal-drink-sales/{id}",
+                HttpMethod.GET, httpEntity, Integer[].class, 2021,11, 1);
+
+        List<Integer> salesPerDay = List.of(responseEntity.getBody());
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(30, salesPerDay.size());
+        assertEquals(3, salesPerDay.get(18));
+    }
+    
+    @Test
+    public void getMonthlyReportForMealAndDrinkSales_YearWithoutOrders_ReturnsOk() {
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Integer[]> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/meal-drink-sales/{id}",
+                HttpMethod.GET, httpEntity, Integer[].class, 2001, 11, 1);
+
+        List<Integer> salesPerDay = List.of(responseEntity.getBody());
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(30, salesPerDay.size());
+        salesPerDay.forEach(ratio -> {
+            assertEquals(Integer.valueOf(0), ratio);
+        });
+    }
+    
+    @Test
+    public void getMonthlyReportForMealAndDrinkSales_InvalidYear_ReturnsStatusBadRequest() {
+    	HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/meal-drink-sales/{id}",
+                HttpMethod.GET, httpEntity, Void.class, -2021,11, 1);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+    
+    @Test
+    public void getMonthlyReportForMealAndDrinkSales_InvalidMonth_ReturnsStatusBadRequest() {
+    	HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/meal-drink-sales/{id}",
+                HttpMethod.GET, httpEntity, Void.class, 2021,13, 1);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+    
+    @Test
+    public void getMonthlyReportForMealAndDrinkSales_InvalidMenuItemId_ReturnsStatusNotFound() {
+    	HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/meal-drink-sales/{id}",
+                HttpMethod.GET, httpEntity, Void.class, 2021,11, 15);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+    
+    
+    
 }
