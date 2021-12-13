@@ -42,7 +42,8 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY)
     private Cook cook;
 
-    public OrderItem(Integer quantity, String note, OrderItemStatus status, Integer priority, Order order, MenuItem menuItem, Bartender bartender, Cook cook) {
+    public OrderItem(Integer quantity, String note, OrderItemStatus status, Integer priority, Order order,
+                     MenuItem menuItem, Bartender bartender, Cook cook) {
         this.quantity = quantity;
         this.note = note;
         this.status = status;
@@ -73,6 +74,16 @@ public class OrderItem {
         this.menuItem = menuItem;
         this.order = order;
 
+    }
+
+    public OrderItem(Integer quantity, String note, OrderItemStatus status, Integer priority, MenuItem menuItem, Bartender bartender, Cook cook) {
+        this.quantity = quantity;
+        this.note = note;
+        this.status = status;
+        this.priority = priority;
+        this.menuItem = menuItem;
+        this.bartender = bartender;
+        this.cook = cook;
     }
 
     public Long getVersion() {

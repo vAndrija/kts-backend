@@ -26,4 +26,8 @@ public class TableReservationMapper {
 
         return new TableReservation(tableReservationDto.getName(), tableReservationDto.getDurationStart(), table);
     }
+    
+    public TableReservationDto fromTableReservationToTableReservationDto(TableReservation tableReservation) {
+        return new TableReservationDto(tableReservation.getId(), tableReservation.getName(), tableReservation.getTable().getId(), tableReservation.getDurationStart());
+    }
 }

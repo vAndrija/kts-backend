@@ -1,5 +1,6 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Discount;
 import com.kti.restaurant.repository.DiscountRepository;
@@ -37,12 +38,19 @@ public class DiscountService implements IDiscountService {
 
     @Override
     public Discount create(Discount entity) throws Exception {
+        if(entity.getEndDate().isBefore(entity.getStartDate())) {
+            throw new BadLogicException("The end date must be after start date.");
+        }
         return discountRepository.save(entity);
     }
 
     @Override
     public Discount update(Discount entity, Integer id) throws Exception {
         Discount discountToUpdate = this.findById(id);
+
+        if(entity.getEndDate().isBefore(entity.getStartDate())) {
+            throw new BadLogicException("The end date must be after start date.");
+        }
 
         discountToUpdate.setCurrent(entity.getCurrent());
         discountToUpdate.setEndDate(entity.getEndDate());

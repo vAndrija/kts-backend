@@ -60,18 +60,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests().antMatchers("/auth/").permitAll()
         .antMatchers("/socket/").permitAll().
         antMatchers("/h2-console/").permitAll().
-        antMatchers("/api/v1/auth/login").permitAll()
+        antMatchers("/api/v1/auth/login").permitAll().
+        antMatchers("/api/v1/auth/send-reset-password-link").permitAll().
+        antMatchers("/api/v1/auth/reset-password").permitAll()
         .anyRequest().authenticated().and()
         .cors().and()
         .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
                 BasicAuthenticationFilter.class);
-    	
+
     	http.csrf().disable();
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/auth/login");
+        web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/auth/send-reset-password-link");
+        web.ignoring().antMatchers(HttpMethod.POST, "/api/v1/auth/reset-password");
         web.ignoring().antMatchers(HttpMethod.GET,"/", "/webjars/**", "/*.html", "/favicon.ico", "/**/*.html",
                 "/**/*.css", "/**/*.js");
     }
