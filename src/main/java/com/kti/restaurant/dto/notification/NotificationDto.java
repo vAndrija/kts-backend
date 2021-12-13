@@ -2,7 +2,6 @@ package com.kti.restaurant.dto.notification;
 
 
 import com.kti.restaurant.dto.orderitem.NotificationOrderItemDto;
-import com.kti.restaurant.dto.orderitem.OrderItemDto;
 
 import javax.validation.constraints.NotNull;
 

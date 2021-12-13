@@ -225,7 +225,7 @@ public class ReportServiceIntegrationTests {
 	@Test
 	public void mealDrinkCostsForMonth_InvalidMonthGreaterThan12_ThrowsBadLogicException() {
 		Exception exception = assertThrows(BadLogicException.class, () -> {
-			reportService.mealDrinkCostsForMonth(2021, 0);
+			reportService.mealDrinkCostsForMonth(2021, 13);
 		});
 		
 		assertEquals(badLogicMonthInvalidMessage, exception.getMessage());
