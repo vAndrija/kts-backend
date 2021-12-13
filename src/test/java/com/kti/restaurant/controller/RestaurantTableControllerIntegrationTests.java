@@ -31,7 +31,8 @@ public class RestaurantTableControllerIntegrationTests {
 	private RestaurantTableService tableService;
 	
 	private String accessToken;
-	private HttpHeaders headers = new HttpHeaders();
+	
+	private HttpHeaders headers;
 	
 	@BeforeEach
 	public void login() {
@@ -41,12 +42,13 @@ public class RestaurantTableControllerIntegrationTests {
 						UserTokenState.class);
 		
 		accessToken = responseEntity.getBody().getAccessToken();
+		
+		headers = new HttpHeaders();
 		headers.add("Authorization", "Bearer " + accessToken);
 	}
 	
-	
 	@Test
-	public void getRestaurantTable_ValidId_StatusOK() {
+	public void getRestaurantTable_ValidId_ReturnsStatusOk() {
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 		
 		ResponseEntity<RestaurantTable> entity = restTemplate
@@ -60,7 +62,7 @@ public class RestaurantTableControllerIntegrationTests {
 	}
 	
 	@Test
-	public void getRestaurantTables_TablesExist_StatusOK() {
+	public void getRestaurantTables_TablesExist_ReturnsStatusOk() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", "Bearer "+ accessToken);
 		
@@ -76,9 +78,8 @@ public class RestaurantTableControllerIntegrationTests {
 		assertEquals(4, tables.length);
 	}
 	
-	
 	@Test
-	public void createRestaurantTable_ValidInput_StatusOK() throws Exception {
+	public void createRestaurantTable_ValidInput_ReturnsStatusOk() throws Exception {
 		int size = tableService.findAll().size();
 		
     	RestaurantTable tableToAdd = new RestaurantTable(false, 1, 1, 1, 1);
@@ -100,7 +101,7 @@ public class RestaurantTableControllerIntegrationTests {
 	}
 	
 	@Test
-	public void createRestaurantTable_InvalidTable_StatusBAD_REQUEST() {
+	public void createRestaurantTable_InvalidTable_ReturnsStatusBadRequest() {
 		RestaurantTable table = new RestaurantTable();
 		
 		HttpEntity<RestaurantTable> httpEntity = new HttpEntity<RestaurantTable>(table, headers);
@@ -112,7 +113,7 @@ public class RestaurantTableControllerIntegrationTests {
 	}
 	
 	@Test
-	public void updateRestaurantTable_ValidTable_StatusOK() throws Exception {
+	public void updateRestaurantTable_ValidTable_ReturnsStatusOk() throws Exception {
 		RestaurantTable table = new RestaurantTable(false, 1, 4, 1, 1);
 		
 		HttpEntity<RestaurantTable> httpEntity = new HttpEntity<RestaurantTable>(table, headers);
@@ -132,7 +133,7 @@ public class RestaurantTableControllerIntegrationTests {
 	}
 	
 	@Test
-	public void updateRestaurantTable_InvalidTableId_StatusNOT_FOUND() {
+	public void updateRestaurantTable_InvalidTableId_ReturnsStatusNotFound() {
 		RestaurantTable table = new RestaurantTable(false, 1, 4, 1, 1);
 		
 		HttpEntity<RestaurantTable> httpEntity = new HttpEntity<RestaurantTable>(table, headers);
@@ -141,6 +142,30 @@ public class RestaurantTableControllerIntegrationTests {
 				.exchange("/api/v1/restaurant-table/{id}", HttpMethod.PUT, httpEntity, RestaurantTable.class, 10);
 		
 		assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
+	}
+	
+	@Test
+	public void updateRestaurantTable_InvalidCapacity_ReturnsStatusBadRequest() {
+		RestaurantTable table = new RestaurantTable(false, 1, 0, 1, 1);
+		
+		HttpEntity<RestaurantTable> httpEntity = new HttpEntity<RestaurantTable>(table, headers);
+		
+		ResponseEntity<RestaurantTable> entity = restTemplate
+				.exchange("/api/v1/restaurant-table/{id}", HttpMethod.PUT, httpEntity, RestaurantTable.class, 2);
+		
+		assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
+	}
+	
+	@Test
+	public void updateRestaurantTable_InvalidTableNumber_ReturnsStatusBadRequest() {
+		RestaurantTable table = new RestaurantTable(false, null, 0, 1, 1);
+		
+		HttpEntity<RestaurantTable> httpEntity = new HttpEntity<RestaurantTable>(table, headers);
+		
+		ResponseEntity<RestaurantTable> entity = restTemplate
+				.exchange("/api/v1/restaurant-table/{id}", HttpMethod.PUT, httpEntity, RestaurantTable.class, 2);
+		
+		assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
 	}
 	
 	@Test
@@ -156,7 +181,6 @@ public class RestaurantTableControllerIntegrationTests {
 		
 		assertEquals(HttpStatus.NO_CONTENT, entity.getStatusCode());
 		assertEquals(size - 1, tableService.findAll().size());
-		
 	}
 	
 	@Test
@@ -169,7 +193,6 @@ public class RestaurantTableControllerIntegrationTests {
 				.exchange("/api/v1/restaurant-table/{id}", HttpMethod.DELETE, httpEntity, Void.class, 10);
 		
 		assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
-		assertEquals(size, tableService.findAll().size());
-		
+		assertEquals(size, tableService.findAll().size());	
 	}
 }

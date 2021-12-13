@@ -45,6 +45,7 @@ public class SalaryController {
 
     @PostMapping("")
     @PreAuthorize("hasAnyRole('MANAGER')")
+
     public ResponseEntity<SalaryDto> createSalary(@Valid @RequestBody CreateSalaryDto salaryDto) throws Exception {
         SalaryDto salary = salaryMapper.fromSalarytoSalaryDto(salaryService.create(salaryMapper.fromCreateSalaryDtoToSalary(salaryDto)));
         return new ResponseEntity<>(salary, HttpStatus.CREATED);

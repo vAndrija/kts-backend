@@ -6,7 +6,12 @@ public class ResetPasswordDTO {
     private String email;
 
     public ResetPasswordDTO() {
+    }
 
+    public ResetPasswordDTO(String token, String password, String email) {
+        this.token = token;
+        this.password = password;
+        this.email = email;
     }
 
     public String getToken() {

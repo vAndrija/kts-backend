@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 @RestController
 @CrossOrigin
 @RequestMapping(value = "api/v1/notifications")
@@ -47,7 +49,7 @@ public class NotificationController {
 
     @PostMapping("")
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
-    public ResponseEntity<NotificationDto> createNotification(@RequestBody CreateUpdateNotificationDto notificationDto) throws Exception {
+    public ResponseEntity<NotificationDto> createNotification(@Valid @RequestBody CreateUpdateNotificationDto notificationDto) throws Exception {
         Notification notification = notificationService.create(notificationMapper.fromCreateNotificationDtoToNotification(notificationDto));
 
         if(notification != null) {
@@ -59,14 +61,10 @@ public class NotificationController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
-    public ResponseEntity<NotificationDto> updateNotification(@RequestBody CreateUpdateNotificationDto notificationDto, @PathVariable Integer id) throws Exception {
-        Notification notification = notificationService.update((notificationMapper.fromUpdateNotificationDtoToNotification(notificationDto)), id);
-
-        if(notification != null) {
-            return new ResponseEntity<>(notificationMapper.fromNotificationToNotificationDto(notification), HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<NotificationDto> updateNotification(@PathVariable Integer id) throws Exception {
+        Notification notification = notificationService.update(new Notification() {{ setSeen(Boolean.TRUE); }}, id);
+        
+        return new ResponseEntity<>(notificationMapper.fromNotificationToNotificationDto(notification), HttpStatus.OK);
     }
 
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
