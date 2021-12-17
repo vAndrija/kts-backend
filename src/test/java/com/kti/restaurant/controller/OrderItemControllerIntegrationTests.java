@@ -4,7 +4,6 @@ import com.kti.restaurant.dto.JwtAuthenticationRequest;
 import com.kti.restaurant.dto.orderitem.CreateOrderItemDto;
 import com.kti.restaurant.dto.orderitem.OrderItemDto;
 import com.kti.restaurant.dto.orderitem.UpdateOrderItemDto;
-import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.model.enums.OrderItemStatus;
@@ -52,6 +51,7 @@ public class OrderItemControllerIntegrationTests {
                 new JwtAuthenticationRequest("anapopovic@gmail.com", "123"), UserTokenState.class);
         accessToken = responseEntity.getBody().getAccessToken();
         headers.add("Authorization", "Bearer " + accessToken);
+
     }
 
     @Test
@@ -87,6 +87,7 @@ public class OrderItemControllerIntegrationTests {
         ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(size, orderItemService.findAll().size());
 
     }
 
@@ -99,6 +100,7 @@ public class OrderItemControllerIntegrationTests {
         ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(size, orderItemService.findAll().size());
 
     }
 
@@ -111,6 +113,7 @@ public class OrderItemControllerIntegrationTests {
         ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(size, orderItemService.findAll().size());
 
     }
 
@@ -123,6 +126,7 @@ public class OrderItemControllerIntegrationTests {
         ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(size, orderItemService.findAll().size());
 
     }
 
@@ -140,6 +144,7 @@ public class OrderItemControllerIntegrationTests {
         assertEquals(2, orderItemDtos[0].getQuantity());
         assertEquals(2, orderItemDtos[1].getPriority());
         assertEquals(1, orderItemDtos[1].getQuantity());
+
     }
 
     @Test
@@ -228,6 +233,7 @@ public class OrderItemControllerIntegrationTests {
         orderItem.setNote("");
         orderItem.setStatus(OrderItemStatus.PREPARATION);
         orderItemService.update(orderItem, 4);
+
     }
 
 
@@ -240,6 +246,7 @@ public class OrderItemControllerIntegrationTests {
                 httpEntity, OrderItemDto.class, 4);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+
     }
 
     @Test
@@ -251,6 +258,7 @@ public class OrderItemControllerIntegrationTests {
                 httpEntity, OrderItemDto.class, 300);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+
     }
 
 

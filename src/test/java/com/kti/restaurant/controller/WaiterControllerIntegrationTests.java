@@ -43,6 +43,7 @@ public class WaiterControllerIntegrationTests {
                         UserTokenState.class);
         accessToken = responseEntity.getBody().getAccessToken();
         headers.add("Authorization", "Bearer " + accessToken);
+
     }
 
     @Test
@@ -72,11 +73,15 @@ public class WaiterControllerIntegrationTests {
 
     @Test
     public void create_NonUniqueEmail_ReturnsConflict() {
+        int size = waiterService.findAll().size();
+
         HttpEntity<WaiterCreateDto> httpEntity = new HttpEntity<>(new WaiterCreateDto("Ana", "Popovic",
                 "111111", "152487", "anapopovic@gmail.com"), headers);
         ResponseEntity<Waiter> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Waiter.class);
 
         assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+        assertEquals(size, waiterService.findAll().size());
+
     }
 
     @Test
@@ -91,6 +96,7 @@ public class WaiterControllerIntegrationTests {
         assertEquals(2, waiterDtos.length);
         assertEquals("jovanpetrovic@gmail.com", waiterDtos[0].getEmailAddress());
         assertEquals("anapopovic@gmail.com", waiterDtos[1].getEmailAddress());
+
     }
 
     @Test
@@ -172,6 +178,7 @@ public class WaiterControllerIntegrationTests {
                 WaiterDto.class, 100);
 
         assertEquals(HttpStatus.FORBIDDEN, responseEntity1.getStatusCode());
+
     }
 
     @Test
@@ -189,6 +196,7 @@ public class WaiterControllerIntegrationTests {
                 WaiterDto.class, 100);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity1.getStatusCode());
+
     }
 
     @Test
@@ -203,10 +211,11 @@ public class WaiterControllerIntegrationTests {
 
         assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
         assertEquals(size - 1, waiterService.findAll().size());
+
     }
 
     @Test
-    public void delete_InvalidId_ReturnsNotFound() throws Exception {
+    public void delete_InvalidId_ReturnsNotFound() {
         int size = waiterService.findAll().size();
 
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
@@ -215,6 +224,7 @@ public class WaiterControllerIntegrationTests {
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertEquals(size, waiterService.findAll().size());
+
     }
 
 

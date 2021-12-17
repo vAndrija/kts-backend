@@ -4,8 +4,11 @@ package com.kti.restaurant.repository;
 import com.kti.restaurant.model.PriceItem;
 
 import java.time.LocalDate;
+import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
@@ -18,22 +21,32 @@ public class PriceItemRepositoryTests {
 
     @Autowired
     private PriceItemRepository priceItemRepository;
-    
-    @Test
-    public void findPriceItemForDate_ValidDate_ExistingPriceItem() {
-    	PriceItem priceItem = priceItemRepository.findPriceItemForDate(LocalDate.parse("2021-11-19"), 1);
-    	assertEquals(Double.valueOf(180.00), priceItem.getValue());
+
+    @ParameterizedTest
+    @MethodSource("validDatesForFindPriceItemForDate")
+    public void findPriceItemForDate(LocalDate date, int menuItemId, double expected) {
+        PriceItem priceItem = priceItemRepository.findPriceItemForDate(date, menuItemId);
+        assertEquals(expected, priceItem.getValue());
     }
-    
-    @Test
-    public void findPriceItemForDate_InvalidDate_Null() {
-    	PriceItem priceItem = priceItemRepository.findPriceItemForDate(LocalDate.parse("2021-11-15"), 1);
-    	assertEquals(null, priceItem);
+
+    private static Stream<Arguments> validDatesForFindPriceItemForDate() {
+        return Stream.of(
+                Arguments.of(LocalDate.parse("2021-11-19"), 1, Double.valueOf(180.00))
+        );
     }
-    
-    @Test
-    public void findPriceItemForDate_InvalidMenuItemId_Null() {
-    	PriceItem priceItem = priceItemRepository.findPriceItemForDate(LocalDate.parse("2021-11-19"), 100);
-    	assertEquals(null, priceItem);
+
+    @ParameterizedTest
+    @MethodSource("invalidDatesForFindPriceItemForDate")
+    public void findPriceItemForDateInvalid(LocalDate date, int menuItemId, Object expected) {
+        PriceItem priceItem = priceItemRepository.findPriceItemForDate(date, menuItemId);
+        assertEquals(expected, priceItem);
     }
+
+    private static Stream<Arguments> invalidDatesForFindPriceItemForDate() {
+        return Stream.of(
+                Arguments.of(LocalDate.parse("2021-11-15"), 1, null),
+                Arguments.of(LocalDate.parse("2021-11-19"), 100, null)
+        );
+    }
+
 }
