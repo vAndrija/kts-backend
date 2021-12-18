@@ -32,7 +32,7 @@ public class OrderItemServiceUnitTests {
     @BeforeEach
     public void setup() {
         OrderItem orderItem = new OrderItem(1, "",
-                OrderItemStatus.ORDERED, 1, new Order(OrderStatus.ORDERED, LocalDateTime.parse("2021-10-10T08:00"), 300.00), new MenuItem(), new Bartender(), null);
+                OrderItemStatus.ORDERED, 1, new Order(OrderStatus.ORDERED, 300.00), new MenuItem(), new Bartender(), null);
         orderItem.setId(1);
         when(orderItemRepository.findById(1)).thenReturn(Optional.of(orderItem));
     }

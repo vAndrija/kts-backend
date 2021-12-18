@@ -51,6 +51,14 @@ public class RestaurantTableService implements IRestaurantTableService {
     @Override
     public RestaurantTable update(RestaurantTable restaurantTable, Integer id) throws Exception {
         RestaurantTable restaurantTableToUpdate = this.findById(id);
+        
+        if(restaurantTable.getCapacity() == null || restaurantTable.getTableNumber() == null) {
+        	throw new BadLogicException("Capacity and table number cannot be null.");
+        }
+        
+        if(restaurantTable.getCapacity() < 1) {
+        	throw new BadLogicException("Capacity should be greater than 1.");
+        }
 
         restaurantTableToUpdate.setTableNumber(restaurantTable.getTableNumber());
         restaurantTableToUpdate.setCapacity(restaurantTable.getCapacity());

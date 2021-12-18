@@ -18,6 +18,7 @@ public class CreateOrderDto {
     @NotNull(message = "Table id should not be null")
     private Integer tableId;
 
+    @NotNull(message = "Waiter id should not be null")
     private Integer waiterId;
 
     public CreateOrderDto(OrderStatus status, LocalDateTime dateOfOrder, Double price, Integer tableId, Integer waiterId) {

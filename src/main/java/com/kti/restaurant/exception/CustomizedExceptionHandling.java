@@ -1,4 +1,4 @@
-package com.kti.restaurant.exception;
+ package com.kti.restaurant.exception;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -45,7 +45,7 @@ public class CustomizedExceptionHandling extends ResponseEntityExceptionHandler 
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
+                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
 
@@ -56,6 +56,7 @@ public class CustomizedExceptionHandling extends ResponseEntityExceptionHandler 
         return new ResponseEntity<Object>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<Object> handleExceptions(ConstraintViolationException exception,
                                                       HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -83,5 +84,13 @@ public class CustomizedExceptionHandling extends ResponseEntityExceptionHandler 
         response.setDateTime(LocalDateTime.now());
         response.setMessage(exception.getMessage());
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleExceptions(IllegalArgumentException exception, WebRequest webRequest) {
+        ExceptionResponse response = new ExceptionResponse();
+        response.setDateTime(LocalDateTime.now());
+        response.setMessage(exception.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
     }
 }

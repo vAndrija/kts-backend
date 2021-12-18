@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -27,35 +28,33 @@ public class TableReservationController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<TableReservation>> getTableReservations() {
-        return new ResponseEntity<>(tableReservationService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<TableReservationDto>> getTableReservations() {
+    	 return new ResponseEntity<>(tableReservationService.findAll().stream().map(
+                 reservation -> this.tableReservationMapper.fromTableReservationToTableReservationDto(reservation)
+         ).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TableReservation> getTableReservation(@PathVariable Integer id) throws Exception {
-        return new ResponseEntity<>(tableReservationService.findById(id), HttpStatus.OK);
+    public ResponseEntity<TableReservationDto> getTableReservation(@PathVariable Integer id) throws Exception {
+        return new ResponseEntity<>(tableReservationMapper.fromTableReservationToTableReservationDto(tableReservationService.findById(id)), HttpStatus.OK);
     }
 
 
     @PostMapping("")
     @PreAuthorize("hasAnyRole('WAITER')")
-    public ResponseEntity<TableReservation> createTableReservation(@Valid @RequestBody TableReservationDto tableReservationDto) throws Exception {
-        TableReservation tableReservation = tableReservationService.create(tableReservationMapper.fromTableReservationDtoToTableReservation(tableReservationDto));
-
-        if (tableReservation != null) {
-            return new ResponseEntity<>(tableReservation, HttpStatus.CREATED);
-        }
-
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<TableReservationDto> createTableReservation(@Valid @RequestBody TableReservationDto tableReservationDto) throws Exception {
+    	TableReservation tableReservation = tableReservationService.create(tableReservationMapper.fromTableReservationDtoToTableReservation(tableReservationDto));
+        
+      return new ResponseEntity<>(tableReservationMapper.fromTableReservationToTableReservationDto(tableReservation), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('WAITER')")
-    public ResponseEntity<TableReservation> updateTableReservation(@Valid @RequestBody TableReservationDto tableReservationDto,
+    public ResponseEntity<TableReservationDto> updateTableReservation(@Valid @RequestBody TableReservationDto tableReservationDto,
                                                                    @PathVariable Integer id) throws Exception {
         TableReservation tableReservation = tableReservationMapper.fromTableReservationDtoToTableReservation(tableReservationDto);
 
-        return new ResponseEntity<>(tableReservationService.update(tableReservation, id),
+        return new ResponseEntity<>(tableReservationMapper.fromTableReservationToTableReservationDto(tableReservationService.update(tableReservation, id)),
                 HttpStatus.OK);
     }
 

@@ -35,7 +35,12 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     private Waiter waiter;
 
-    public Order( OrderStatus status, LocalDateTime dateOfOrder, Double price) {
+    public Order(OrderStatus status, Double price) {
+        this.status = status;
+        this.price = price;
+    }
+
+    public Order(OrderStatus status,LocalDateTime dateOfOrder, Double price) {
         this.status = status;
         this.dateOfOrder = dateOfOrder;
         this.price = price;
