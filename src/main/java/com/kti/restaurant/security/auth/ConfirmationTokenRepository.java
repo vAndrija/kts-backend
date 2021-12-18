@@ -9,3 +9,4 @@ public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationT
     ConfirmationToken findByConfirmationToken(String confirmationToken);
     ConfirmationToken findByUser(User user);
 }
+

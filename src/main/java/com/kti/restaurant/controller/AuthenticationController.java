@@ -63,8 +63,7 @@ public class AuthenticationController {
 
     @PostMapping("/reset-password")
     public void resetPasswordDone(@RequestBody ResetPasswordDTO resetPasswordDTO) throws Exception {
-        this.userService.resetPasswordDone(resetPasswordDTO.getEmail(),
-                resetPasswordDTO.getToken(),resetPasswordDTO.getPassword());
+        this.userService.resetPasswordDone(resetPasswordDTO.getToken(),resetPasswordDTO.getPassword());
     }
 
 }

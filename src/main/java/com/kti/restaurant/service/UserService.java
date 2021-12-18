@@ -38,7 +38,10 @@ public class UserService  implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.getByEmailAddress(email);
+        UserDetails userDetails = userRepository.getByEmailAddress(email);
+        if(userDetails==null)
+            throw new UsernameNotFoundException(email);
+        return userDetails;
     }
 
 
@@ -52,7 +55,7 @@ public class UserService  implements UserDetailsService {
         emailService.sendResetLinkMail(user.getEmailAddress(),"Zaboravljena lozinka",confirmationToken.getConfirmationToken());
     }
 
-    public void resetPasswordDone(String email, String confirmationToken, String password) throws Exception {
+    public void resetPasswordDone(String confirmationToken, String password) throws Exception {
         ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
         if(token == null)
             throw new BadTokenException("Bad token");
