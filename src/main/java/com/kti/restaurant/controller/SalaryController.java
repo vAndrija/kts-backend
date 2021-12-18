@@ -1,6 +1,8 @@
 package com.kti.restaurant.controller;
 
+import com.kti.restaurant.dto.order.OrderDto;
 import com.kti.restaurant.dto.salary.CreateSalaryDto;
+import com.kti.restaurant.dto.salary.SalaryDto;
 import com.kti.restaurant.mapper.SalaryMapper;
 import com.kti.restaurant.model.Salary;
 import com.kti.restaurant.service.contract.ISalaryService;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -28,27 +31,30 @@ public class SalaryController {
 
     @GetMapping("")
     @PreAuthorize("hasAnyRole('MANAGER')")
-    public ResponseEntity<List<Salary>> getSalaries() {
-        return new ResponseEntity<>(salaryService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<SalaryDto>> getSalaries() {
+    	List<SalaryDto> salaries = salaryService.findAll().stream()
+                .map(salary -> this.salaryMapper.fromSalarytoSalaryDto(salary)).collect(Collectors.toList());
+        return new ResponseEntity<>(salaries, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('MANAGER', 'COOK', 'BARTENDER', 'WAITER')")
-    public ResponseEntity<Salary> getSalary(@PathVariable Integer id) throws Exception {
-        return new ResponseEntity<>(salaryService.findById(id), HttpStatus.OK);
+    public ResponseEntity<SalaryDto> getSalary(@PathVariable Integer id) throws Exception {
+        return new ResponseEntity<>(salaryMapper.fromSalarytoSalaryDto(salaryService.findById(id)), HttpStatus.OK);
     }
 
     @PostMapping("")
     @PreAuthorize("hasAnyRole('MANAGER')")
-    public ResponseEntity<Salary> createSalary(@RequestBody CreateSalaryDto salaryDto) throws Exception {
-        Salary salary = salaryService.create(salaryMapper.fromCreateSalaryDtoToSalary(salaryDto));
+
+    public ResponseEntity<SalaryDto> createSalary(@Valid @RequestBody CreateSalaryDto salaryDto) throws Exception {
+        SalaryDto salary = salaryMapper.fromSalarytoSalaryDto(salaryService.create(salaryMapper.fromCreateSalaryDtoToSalary(salaryDto)));
         return new ResponseEntity<>(salary, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('MANAGER')")
-    public ResponseEntity<?> updateSalary(@Valid @RequestBody CreateSalaryDto salaryDto, @PathVariable Integer id) throws Exception {
-        return new ResponseEntity<>(salaryService.update(salaryMapper.fromCreateSalaryDtoToSalary(salaryDto), id),
+    public ResponseEntity<SalaryDto> updateSalary(@Valid @RequestBody CreateSalaryDto salaryDto, @PathVariable Integer id) throws Exception {
+        return new ResponseEntity<>(salaryMapper.fromSalarytoSalaryDto(salaryService.update(salaryMapper.fromCreateSalaryDtoToSalary(salaryDto), id)),
                 HttpStatus.OK);
     }
 
