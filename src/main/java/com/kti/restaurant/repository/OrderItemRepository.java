@@ -1,8 +1,8 @@
 package com.kti.restaurant.repository;
 
-import com.kti.restaurant.model.Bartender;
-import com.kti.restaurant.model.Cook;
 import com.kti.restaurant.model.OrderItem;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -22,4 +22,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItem,Integer> {
 
     @Query("select oi from OrderItem oi join Order o on oi.order.id = o.id where o.dateOfOrder > ?2 and o.dateOfOrder < ?3 and oi.bartender.id = ?1")
     List<OrderItem> findByBartenderForDate(Integer bartenderId, LocalDateTime startDate, LocalDateTime endDate);
+
+    @Query("select oi from OrderItem oi join Order o on oi.order.id = o.id where oi.bartender.id = ?1 or oi.cook.id=?1")
+    Page<OrderItem> findByEmployee(Pageable pageable, Integer employeeId);
 }

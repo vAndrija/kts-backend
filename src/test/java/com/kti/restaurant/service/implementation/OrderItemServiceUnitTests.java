@@ -65,8 +65,8 @@ public class OrderItemServiceUnitTests {
         OrderItem updatedOrderItem = orderItemService.update(orderItemForUpdate, 1);
         assertEquals(2, updatedOrderItem.getPriority());
         assertEquals(2, updatedOrderItem.getQuantity());
-        assertEquals( OrderItemStatus.PREPARATION, updatedOrderItem.getStatus());
-        assertEquals( "bez bibera", updatedOrderItem.getNote());
+        assertEquals(OrderItemStatus.PREPARATION, updatedOrderItem.getStatus());
+        assertEquals("bez bibera", updatedOrderItem.getNote());
     }
 
     @Test
@@ -94,6 +94,26 @@ public class OrderItemServiceUnitTests {
 
         verify(orderItemRepository, times(1)).findById(100);
         verify(orderItemRepository, times(0)).deleteById(100);
+    }
+
+    @Test
+    public void updateStatus_ValidId_ExistingOrderItem() throws Exception {
+        OrderItem orderItemForUpdate = new OrderItem(2, "bez bibera", OrderItemStatus.PREPARATION,
+                2, new Order(), new MenuItem(), null, new Cook());
+        orderItemForUpdate.setId(1);
+
+        when(orderItemRepository.save(any())).thenAnswer(a -> a.getArgument(0));
+
+        OrderItem updatedOrderItem = orderItemService.updateStatus(orderItemForUpdate.getId(), "Pripremljeno");
+        assertEquals(OrderItemStatus.PREPARED, updatedOrderItem.getStatus());
+    }
+
+
+    @Test
+    public void updateStatus_InvalidId_ThrowsMissingEntityException() throws Exception {
+        assertThrows(MissingEntityException.class, () -> {
+            orderItemService.updateStatus(null, "Pripremljeno");
+        });
     }
 
 }
