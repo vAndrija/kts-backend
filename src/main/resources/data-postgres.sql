@@ -98,37 +98,37 @@ INSERT INTO menu_item (name, description, type, category, menu_id, accepted, del
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
     ('baklava', 'baklava sa orasima', 1, 4, 1, true, false, 5);
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('krempita', 'krempita sa dodatkom visnje', 1, 4, 1, true, false, 5);
+    ('krempita', 'krempita sa dodatkom visnje', 1, 4, 2, true, false, 5);
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
     ('pita sa visnjama', 'pita sa visnjama, belom cokoladom i sladoledom od vannile', 1, 4, null, false, false, 5);
 
 
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
-    ( 180.00, '2021-11-18', '2021-12-18', 1, true, false, 100.00);
+    ( 180.00, '2021-11-18', '2022-12-22', 1, true, false, 100.00);
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
-    ( 600.00, '2021-11-18', '2021-12-18', 2, true, false, 450.00);
+    ( 600.00, '2021-11-18', '2022-12-22', 2, true, false, 450.00);
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
-    ( 100.00, '2021-11-18', '2021-12-18', 3, true, false, 35.00);
+    ( 100.00, '2021-11-18', '2022-12-22', 3, true, false, 35.00);
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
-    ( 150.00, '2021-11-18', '2021-12-18', 4, true, false, 60.00);
+    ( 150.00, '2021-11-18', '2022-12-22', 4, true, false, 60.00);
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
-    ( 265.00, '2021-11-18', '2021-12-18', 5, true, false, 130.00);
+    ( 265.00, '2021-11-18', '2022-12-22', 5, true, false, 130.00);
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
-    ( 290.00, '2021-11-18', '2021-12-18', 6, true, false, 175.00);
+    ( 290.00, '2021-11-18', '2022-12-22', 6, true, false, 175.00);
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
-    ( 990.00, '2021-11-18', '2021-12-18', 7, true, false, 390.00);
+    ( 990.00, '2021-11-18', '2022-12-22', 7, true, false, 390.00);
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
-    ( 1070.00, '2021-11-18', '2021-12-18', 8, true, false, 450.00);
+    ( 1070.00, '2021-11-18', '2022-12-22', 8, true, false, 450.00);
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
-    ( 820.00, '2021-11-18', '2021-12-18', 9, true, false, 250.00);
+    ( 820.00, '2021-11-18', '2022-12-22', 9, true, false, 250.00);
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
-    ( 760.00, '2021-11-18', '2021-12-18', 10, true, false, 210.00);
+    ( 760.00, '2021-11-18', '2022-12-22', 10, true, false, 210.00);
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
-    ( 250.00, '2021-11-18', '2021-12-18', 11, true, false, 100.00);
+    ( 250.00, '2021-11-18', '2022-12-22', 11, true, false, 100.00);
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
-    ( 250.00, '2021-11-18', '2021-12-18', 12, true, false, 100.00);
+    ( 250.00, '2021-11-18', '2022-12-22', 12, true, false, 100.00);
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values
-    ( 280.00, '2021-11-18', '2021-12-18', 13, true, false, 125.00);
+    ( 280.00, '2021-11-18', '2022-12-22', 13, true, false, 125.00);
 
 
 INSERT INTO discount (value, start_date, end_date, menu_item_id, is_current, deleted) values

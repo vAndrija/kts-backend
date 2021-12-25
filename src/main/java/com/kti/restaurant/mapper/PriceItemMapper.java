@@ -25,4 +25,9 @@ public class PriceItemMapper {
         return new PriceItem(priceItemDto.getValue(), priceItemDto.getStartDate(), priceItemDto.getEndDate(),
                 menuItem, priceItemDto.getCurrent(), priceItemDto.getPreparationValue());
     }
+
+    public PriceItemDto fromPriceItemToPriceItemDto(PriceItem priceItem) {
+        return new PriceItemDto(priceItem.getValue(), priceItem.getStartDate(), priceItem.getEndDate(),
+                priceItem.getMenuItem().getId(), priceItem.getCurrent(), priceItem.getPreparationValue());
+    }
 }

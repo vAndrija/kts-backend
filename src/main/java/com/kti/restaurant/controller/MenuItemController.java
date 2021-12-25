@@ -6,6 +6,7 @@ import com.kti.restaurant.mapper.MenuItemMapper;
 import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.service.contract.IMenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -71,6 +72,13 @@ public class MenuItemController {
     public ResponseEntity<?> filterMenuItems(@PathVariable("filter") String f) {
         List<MenuItemDto> menuItems = menuItemService.filter(f).stream()
                 .map(menuItem->this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem)).collect(Collectors.toList());
+        return new ResponseEntity<>(menuItems, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/by-menu/{menuId}")
+    public ResponseEntity<?> findMenuItemsByMenuId(Pageable pageable, @PathVariable Integer menuId) throws Exception {
+        List<MenuItemDto> menuItems = menuItemService.findByMenu(menuId, pageable).stream()
+                .map(menuItem -> this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem)).collect(Collectors.toList());
         return new ResponseEntity<>(menuItems, HttpStatus.OK);
     }
 }

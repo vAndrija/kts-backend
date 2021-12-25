@@ -6,14 +6,22 @@ import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
@@ -142,5 +150,35 @@ public class MenuItemServiceIntegrationTests {
     public void filter_InvalidCategory_EmptySet() {
         var menuItems = menuItemService.filter("abcd");
         assertEquals(0, menuItems.size());
+    }
+
+    @ParameterizedTest
+    @MethodSource("validMenuIdAndPageable")
+    public void findByMenu_MenuId_Pageable_ReturnsMenuItems(Integer menuId, Pageable pageable) throws Exception {
+        List<MenuItem> menuItems = menuItemService.findByMenu(menuId, pageable);
+        assertEquals(pageable.getPageSize(), menuItems.size());
+        assertEquals(menuId, menuItems.get(0).getMenu().getId());
+    }
+
+    private static Stream<Arguments> validMenuIdAndPageable() {
+        return Stream.of(
+                Arguments.of(1, PageRequest.of( 0, 5)),
+                Arguments.of(1, PageRequest.of(1, 5))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidMenuIdAndValidPageable")
+    public void findByMenu_InvalidMenuId_Pageable_MissingEntityException(Integer menuId, Pageable pageable) throws Exception {
+        assertThrows(MissingEntityException.class, () -> {
+            List<MenuItem> menuItems = menuItemService.findByMenu(menuId, pageable);
+        });
+    }
+
+    private static Stream<Arguments> invalidMenuIdAndValidPageable() {
+        return Stream.of(
+                Arguments.of(15, PageRequest.of( 0, 5)),
+                Arguments.of(15, PageRequest.of(1, 5))
+        );
     }
 }

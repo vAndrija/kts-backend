@@ -1,5 +1,6 @@
 package com.kti.restaurant.dto.menuitem;
 
+import com.kti.restaurant.dto.priceitem.PriceItemDto;
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
 
@@ -23,12 +24,16 @@ public class MenuItemDto {
     @NotNull(message = "Preparation time should not be null")
     private Integer preparationTime;
 
-    public MenuItemDto(String name, String description, MenuItemType type, MenuItemCategory category, int preparationTime) {
+    private PriceItemDto priceItemDto;
+
+    public MenuItemDto(String name, String description, MenuItemType type, MenuItemCategory category, int preparationTime,
+                       PriceItemDto priceItemDto) {
         this.name = name;
         this.description = description;
         this.type = type;
         this.category = category;
         this.preparationTime = preparationTime;
+        this.priceItemDto = priceItemDto;
     }
 
     public MenuItemDto() {
@@ -73,5 +78,13 @@ public class MenuItemDto {
 
     public void setPreparationTime(Integer preparationTime) {
         this.preparationTime = preparationTime;
+    }
+
+    public PriceItemDto getPriceItemDto() {
+        return priceItemDto;
+    }
+
+    public void setPriceItemDto(PriceItemDto priceItemDto) {
+        this.priceItemDto = priceItemDto;
     }
 }
