@@ -2,10 +2,11 @@ package com.kti.restaurant.service.implementation;
 
 import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
-import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.enums.OrderItemStatus;
 import com.kti.restaurant.repository.OrderItemRepository;
+import com.kti.restaurant.service.UserService;
+import com.kti.restaurant.service.contract.IBartenderService;
 import com.kti.restaurant.service.contract.IOrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,14 +16,18 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class OrderItemService implements IOrderItemService {
     private OrderItemRepository orderItemRepository;
+    private UserService userService;
 
     @Autowired
-    public OrderItemService(OrderItemRepository orderItemRepository) {
+    public OrderItemService(OrderItemRepository orderItemRepository, UserService userService,
+                            IBartenderService bartenderService) {
         this.orderItemRepository = orderItemRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -98,10 +103,10 @@ public class OrderItemService implements IOrderItemService {
 
     @Override
     public List<OrderItem> findByEmployee(Pageable pageable, Integer employeeId, HttpHeaders header) {
-        Page<OrderItem> orderItemPage = orderItemRepository.findByEmployee(pageable, employeeId);
-        if(orderItemPage.isEmpty()){
-            throw new MissingEntityException("Order item with given bartender/cook id does not exist in the system.");
+        if (userService.findById(employeeId) == null) {
+            throw new MissingEntityException("Bartender/cook with given id does not exist in the system.");
         }
+        Page<OrderItem> orderItemPage = orderItemRepository.findByEmployee(pageable, employeeId);
         header.add("Total-items", Long.toString(orderItemPage.getTotalElements()));
         return orderItemPage.getContent();
     }
@@ -109,20 +114,11 @@ public class OrderItemService implements IOrderItemService {
     @Override
     public OrderItem updateStatus(Integer id, String status) throws Exception {
         OrderItem orderItemToUpdate = this.findById(id);
-        if (status.equals("U pripremi")) {
-            orderItemToUpdate.setStatus(OrderItemStatus.PREPARATION);
-            orderItemRepository.save(orderItemToUpdate);
-            return orderItemToUpdate;
-        } else if (status.equals("Pripremljeno")) {
-            orderItemToUpdate.setStatus(OrderItemStatus.PREPARED);
-            orderItemRepository.save(orderItemToUpdate);
-            return orderItemToUpdate;
-        } else if (status.equals("Servirano")) {
-            orderItemToUpdate.setStatus(OrderItemStatus.SERVED);
-            orderItemRepository.save(orderItemToUpdate);
-            return orderItemToUpdate;
+        if (Objects.equals(status, "")) {
+            return null;
         }
-        return null;
-
+        orderItemToUpdate.setStatus(OrderItemStatus.findType(status));
+        orderItemRepository.save(orderItemToUpdate);
+        return orderItemToUpdate;
     }
 }
