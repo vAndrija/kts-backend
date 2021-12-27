@@ -11,7 +11,7 @@ public class CookDto extends UserDto {
 
     public CookDto(Integer id, String name, String lastName, String phoneNumber, String emailAddress,
                         String accountNumber, Boolean priority) {
-        super(id,name, lastName, phoneNumber, emailAddress, accountNumber);
+        super(id,name, lastName, phoneNumber, emailAddress, accountNumber,"COOK");
         this.priority = priority;
     }
 
