@@ -36,7 +36,6 @@ public class OrderItemMapper {
                 findOrderById(orderItemDto.getOrderId()));
     }
 
-    //ubaciti bartender i cook
     public OrderItem fromUpdateOrderItemDtoToOrderItem(UpdateOrderItemDto updateOrderItemDto) throws Exception {
         OrderItem orderItem = new OrderItem(updateOrderItemDto.getQuantity(), updateOrderItemDto.getNote(),
                 updateOrderItemDto.getStatus(), updateOrderItemDto.getPriority(), findMenuItemById(updateOrderItemDto.getMenuItemId()),
@@ -61,8 +60,8 @@ public class OrderItemMapper {
     public OrderItemDto fromOrderItemToOrderItemDto(OrderItem orderItem) {
 
         OrderItemDto orderItemDto = new OrderItemDto(orderItem.getId(), orderItem.getQuantity(), orderItem.getNote(),
-                orderItem.getStatus(), orderItem.getPriority(), orderItem.getOrder().getId(),
-                orderItem.getMenuItem().getId());
+                orderItem.getStatus().getType(), orderItem.getPriority(), orderItem.getOrder().getId(),
+                orderItem.getMenuItem().getId(), orderItem.getOrder().getDateOfOrder());
         if (orderItem.getBartender() == null && orderItem.getCook() == null) {
             orderItemDto.setBartenderId(null);
             orderItemDto.setCookId(null);

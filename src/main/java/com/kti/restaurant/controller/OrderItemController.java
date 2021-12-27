@@ -7,6 +7,8 @@ import com.kti.restaurant.mapper.OrderItemMapper;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.service.contract.IOrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -67,5 +69,22 @@ public class OrderItemController {
                 orderItemMapper.fromOrderItemToOrderItemDto(orderItemService.
                         update(orderItemMapper.fromUpdateOrderItemDtoToOrderItem(updateOrderItemDto), id)),
                     HttpStatus.OK);
+    }
+
+    @GetMapping("/employee/{id}")
+    @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER', 'MANAGER')")
+    public ResponseEntity<?> getOrderItemsForEmployee(Pageable page, @PathVariable("id") Integer id) throws Exception {
+        HttpHeaders header = new HttpHeaders();
+        List<OrderItemDto> orderItems = orderItemService.findByEmployee(page, id, header).stream()
+                .map(orderItem->this.orderItemMapper.fromOrderItemToOrderItemDto(orderItem)).collect(Collectors.toList());
+        return new ResponseEntity<>(orderItems, header, HttpStatus.OK);
+    }
+
+
+    @PostMapping("/status/{id}")
+    @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
+    public ResponseEntity<?> updateStatus(@PathVariable("id") Integer id, @RequestBody String status) throws Exception {
+        OrderItem orderItem = orderItemService.updateStatus(id, status);
+        return new ResponseEntity<>(orderItemMapper.fromOrderItemToOrderItemDto(orderItem),HttpStatus.OK);
     }
 }
