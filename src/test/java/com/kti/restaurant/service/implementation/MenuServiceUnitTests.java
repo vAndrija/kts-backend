@@ -32,6 +32,7 @@ public class MenuServiceUnitTests {
         Menu menu = new Menu("Glavni meni", LocalDateTime.parse("2020-11-10T13:00"), LocalDateTime.parse("2022-11-10T13:00"), 1);
 
         when(menuRepository.findById(1)).thenReturn(Optional.of(menu));
+        when(menuRepository.findById(2)).thenThrow(MissingEntityException.class);
     }
 
     @Test

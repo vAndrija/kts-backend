@@ -50,9 +50,10 @@ public class AuthenticationController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = (User) authentication.getPrincipal();
         String role = user.getRoles().get(0).getName();
-        String jwt = tokenUtils.generateToken(user.getUsername(),role);
+        Integer id = user.getId();
+        String jwt = tokenUtils.generateToken(user.getUsername(),role, id);
         int expiresIn = tokenUtils.getExpiredIn();
-        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn,role));
+        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn,role, id));
     }
 
     @PostMapping("/send-reset-password-link")

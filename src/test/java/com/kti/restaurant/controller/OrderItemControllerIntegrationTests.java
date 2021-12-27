@@ -19,7 +19,9 @@ import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -70,7 +72,7 @@ public class OrderItemControllerIntegrationTests {
 
         assertEquals(2, orderItemDto.getQuantity());
         assertEquals("sa sojinim mlekom", orderItemDto.getNote());
-        assertEquals(OrderItemStatus.PREPARATION, orderItemDto.getStatus());
+        assertEquals(OrderItemStatus.PREPARATION.getType(), orderItemDto.getStatus());
         assertEquals(1, orderItemDto.getPriority());
         assertEquals(1, orderItemDto.getOrderId());
         assertEquals(3, orderItemDto.getMenuItemId());
@@ -158,7 +160,7 @@ public class OrderItemControllerIntegrationTests {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(1, orderItemDto.getPriority());
         assertEquals(2, orderItemDto.getQuantity());
-        assertEquals(OrderItemStatus.ORDERED, orderItemDto.getStatus());
+        assertEquals(OrderItemStatus.ORDERED.getType(), orderItemDto.getStatus());
         assertEquals(1, orderItemDto.getMenuItemId());
         assertEquals(1, orderItemDto.getOrderId());
 
@@ -216,7 +218,7 @@ public class OrderItemControllerIntegrationTests {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(2, orderItemDto.getQuantity());
         assertEquals("sa sojinim mlekom", orderItemDto.getNote());
-        assertEquals(OrderItemStatus.PREPARED, orderItemDto.getStatus());
+        assertEquals(OrderItemStatus.PREPARED.getType(), orderItemDto.getStatus());
         assertEquals(1, orderItemDto.getPriority());
         assertEquals(3, orderItemDto.getMenuItemId());
         assertEquals(2, orderItemDto.getBartenderId());
@@ -261,5 +263,41 @@ public class OrderItemControllerIntegrationTests {
 
     }
 
+    @Test
+    public void getOrderItemsForEmployee_ValidId_ReturnsOk() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        ResponseEntity<UserTokenState> responseEntity =
+                restTemplate.postForEntity("/api/v1/auth/login",
+                        new JwtAuthenticationRequest("milossaric@gmail.com", "123"),
+                        UserTokenState.class);
+        accessToken = responseEntity.getBody().getAccessToken();
+        httpHeaders.add("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
+
+        ResponseEntity<OrderItemDto[]> responseEntity1 = restTemplate.exchange(URL_PREFIX+"/employee/{id}", HttpMethod.GET,
+                httpEntity, OrderItemDto[].class, 3);
+
+        OrderItemDto[] orderItemDtos = responseEntity1.getBody();
+
+        assertEquals(HttpStatus.OK, responseEntity1.getStatusCode());
+        assertEquals(2, orderItemDtos.length);
+        assertEquals(5, orderItemDtos[0].getId());
+        assertEquals(1, orderItemDtos[0].getQuantity());
+        assertEquals(9, orderItemDtos[1].getId());
+        assertEquals(1, orderItemDtos[1].getQuantity());
+
+    }
+
+    @Test
+    public void getOrderItemsForEmployee_InvalidId_ReturnsNotFound() {
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<Object> responseEntity = restTemplate.exchange(URL_PREFIX+"/employee/{id}", HttpMethod.GET,
+                httpEntity, Object.class, 300);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+
+    }
 
 }

@@ -38,6 +38,7 @@ public class DiscountServiceUnitTests {
 
 		when(discountRepository.findById(1))
 				.thenReturn(Optional.of(discount));
+		when(discountRepository.findById(2)).thenThrow(MissingEntityException.class);
 		when(discountRepository.save(any())).thenAnswer(a -> a.getArgument(0));
 	}
 
@@ -101,7 +102,7 @@ public class DiscountServiceUnitTests {
 	}
 
 	@Test
-	public void update_InvalidDates_ThrowsMissingEntityException() {
+	public void update_InvalidDates_ThrowsBadLogicException() {
 		Assertions.assertThrows(BadLogicException.class, () -> {
 			discountService.update(new Discount(null, LocalDate.parse("2022-11-05"), LocalDate.parse("2021-11-05"), null, null), 1);
 		});

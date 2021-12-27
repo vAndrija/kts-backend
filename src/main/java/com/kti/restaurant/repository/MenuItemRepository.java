@@ -22,4 +22,8 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, Integer> {
     
     @Query("select mi from MenuItem mi where mi.accepted = false")
     Page<MenuItem> findPendingMenuItems(Pageable pageable);
+  
+    @Query("select mi from MenuItem  mi where mi.menu.id = :id")
+    Page<MenuItem> findByMenu(Integer id, Pageable pageable);
+
 }

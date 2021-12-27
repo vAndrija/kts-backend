@@ -16,10 +16,12 @@ import java.util.*;
 @Service
 public class MenuItemService implements IMenuItemService {
     private MenuItemRepository menuItemRepository;
+    private MenuService menuService;
 
     @Autowired
-    MenuItemService(MenuItemRepository menuItemRepository) {
+    MenuItemService(MenuItemRepository menuItemRepository, MenuService menuService) {
         this.menuItemRepository = menuItemRepository;
+        this.menuService = menuService;
     }
 
     @Override
@@ -80,8 +82,17 @@ public class MenuItemService implements IMenuItemService {
         return new HashSet<>(menuItemRepository.findByCategory(MenuItemCategory.findCategory(filter)));
     }
 
-	@Override
-	public Page<MenuItem> pendingMenuItems(Pageable pageable) {
-		return menuItemRepository.findPendingMenuItems(pageable);
-	}
+
+	  @Override
+	  public Page<MenuItem> pendingMenuItems(Pageable pageable) {
+		  return menuItemRepository.findPendingMenuItems(pageable);
+	  }
+
+    @Override
+    public List<MenuItem> findByMenu(Integer menuId, Pageable pageable) throws Exception {
+        menuService.findById(menuId);
+
+        Page<MenuItem> page = menuItemRepository.findByMenu(menuId, pageable);
+        return page.getContent();
+    }
 }

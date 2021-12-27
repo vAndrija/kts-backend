@@ -1,5 +1,7 @@
 package com.kti.restaurant.dto.user;
 
+import com.kti.restaurant.model.Role;
+
 public class UserDto {
     private Integer id;
 
@@ -13,6 +15,8 @@ public class UserDto {
 
     private String accountNumber;
 
+    private String role;
+
     public UserDto(){}
 
     public UserDto(String name, String lastName, String phoneNumber, String emailAddress,String accountNumber) {
@@ -23,13 +27,14 @@ public class UserDto {
         this.accountNumber = accountNumber;
     }
 
-    public UserDto(Integer id, String name, String lastName, String phoneNumber, String emailAddress, String accountNumber) {
+    public UserDto(Integer id, String name, String lastName, String phoneNumber, String emailAddress, String accountNumber,String role) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
         this.accountNumber = accountNumber;
+        this.role = role;
     }
 
     public String getName() {
@@ -78,6 +83,14 @@ public class UserDto {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
 

@@ -35,6 +35,7 @@ public class PriceItemServiceUnitTests {
 
         when(priceItemRepository.findById(1)).thenReturn(Optional.of(priceItem));
         when(priceItemRepository.save(any())).thenAnswer(a -> a.getArgument(0));
+        when(priceItemRepository.findById(2)).thenThrow(MissingEntityException.class);
     }
 
     @Test
@@ -104,7 +105,7 @@ public class PriceItemServiceUnitTests {
     }
 
     @Test
-    public void update_InvalidDates_ThrowsMissingEntityException() {
+    public void update_InvalidDates_ThrowsBadLogicException() {
         assertThrows(BadLogicException.class, () -> {
             priceItemService.update(new PriceItem(null, LocalDate.parse("2022-11-05"), LocalDate.parse("2021-11-05"), null,
                     null, null), 1);

@@ -7,6 +7,8 @@ import com.kti.restaurant.model.enums.OrderItemStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
@@ -186,4 +188,39 @@ public class OrderItemServiceIntegrationTests {
         assertEquals(orderItems.size(), 0);
     }
 
+    @Test
+    public void findByEmployee_ValidId_ExistingOrderItems() {
+        HttpHeaders headers = new HttpHeaders();
+        List<OrderItem> orderItems = orderItemService.findByEmployee(PageRequest.of(0,5), 3, headers);
+        assertEquals(orderItems.size(), 2);
+    }
+
+    @Test
+    public void findByEmployee_InvalidId_ExmptyList() {
+        HttpHeaders headers = new HttpHeaders();
+        List<OrderItem> orderItems = orderItemService.findByEmployee(PageRequest.of(0,5), 1, headers);
+        assertEquals(orderItems.size(), 0);
+    }
+
+    @Test
+    @Rollback
+    public void updateStatus_ValidId_ExistingOrderItem() throws Exception {
+        OrderItem orderItemForUpdate = new OrderItem(2, "bez luka", OrderItemStatus.PREPARATION, 1,
+                new MenuItem());
+
+        OrderItem updatedOrder = orderItemService.update(orderItemForUpdate, 1);
+
+        assertEquals(1, updatedOrder.getPriority());
+        assertEquals(2, updatedOrder.getQuantity());
+        assertEquals("bez luka", updatedOrder.getNote());
+        assertEquals(OrderItemStatus.PREPARATION, updatedOrder.getStatus());
+
+    }
+
+    @Test
+    public void updateStatus_InvalidId_ThrowsMissingEntityException() {
+        assertThrows(MissingEntityException.class, () -> {
+            orderItemService.updateStatus(0, "Pripremljeno");
+        });
+    }
 }

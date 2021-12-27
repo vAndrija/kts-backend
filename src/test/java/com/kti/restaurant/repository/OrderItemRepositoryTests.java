@@ -10,6 +10,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestPropertySource;
 
 import com.kti.restaurant.model.OrderItem;
@@ -84,5 +86,20 @@ public class OrderItemRepositoryTests {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("cookIdBartenderIdForFindByEmployee")
+    public void findByEmployee(int id, int expected) {
+        Page<OrderItem> orderItems = orderItemRepository.findByEmployee(PageRequest.of(0,5), id);
+        List<OrderItem> orderItemList = orderItems.getContent();
+        assertEquals(expected, orderItemList.size());
+    }
+
+    private static Stream<Arguments> cookIdBartenderIdForFindByEmployee() {
+        return Stream.of(
+                Arguments.of( 3, 2),
+                Arguments.of( 2, 2),
+                Arguments.of( 1, 0)
+        );
+    }
 
 }

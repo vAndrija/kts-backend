@@ -23,7 +23,7 @@ public class TokenUtils {
     @Value("somesecret")
     public String SECRET;
 
-    @Value("300000")
+    @Value("3600000")
     private int EXPIRES_IN;
 
     @Value("Authorization")
@@ -36,9 +36,10 @@ public class TokenUtils {
 
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
-    public String generateToken(String username,String role) {
+    public String generateToken(String username,String role, Integer id) {
         return Jwts.builder()
                 .claim("role", role)
+                .claim("id", id)
                 .setIssuer(APP_NAME)
                 .setSubject(username)
                 .setAudience(generateAudience())
