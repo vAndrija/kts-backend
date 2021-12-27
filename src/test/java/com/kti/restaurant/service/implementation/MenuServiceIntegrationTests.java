@@ -30,7 +30,7 @@ public class MenuServiceIntegrationTests {
     }
 
     @Test
-    public void findById_ValidId_ExistingMenu() throws Exception {
+    public void findById_ValidId_ReturnsExistingMenu() throws Exception {
         Menu menu = menuService.findById(1);
 
         assertEquals("standardni", menu.getName());
@@ -46,7 +46,7 @@ public class MenuServiceIntegrationTests {
     }
 
     @Test
-    public void create_ValidMenu() throws Exception {
+    public void create_ValidMenu_ReturnsCreatedMenu() throws Exception {
         Menu menu = menuService.create(new Menu("Glavni meni", LocalDateTime.parse("2021-10-10T13:00"),
                 LocalDateTime.parse("2022-10-10T13:00")));
 
@@ -57,7 +57,7 @@ public class MenuServiceIntegrationTests {
 
     @Rollback()
     @Test
-    public void update_ValidMenuId_UpdatedMenu() throws Exception {
+    public void update_ValidMenuId_ReturnsUpdatedMenu() throws Exception {
         Menu menuForUpdate = new Menu("Glavni meni", LocalDateTime.parse("2021-10-10T13:00"),
                 LocalDateTime.parse("2022-10-10T13:00"), 1);
 
@@ -76,7 +76,7 @@ public class MenuServiceIntegrationTests {
 
     @Rollback()
     @Test
-    public void delete_ValidMenuId_DeletedMenu() throws Exception {
+    public void delete_ValidMenuId() throws Exception {
         menuService.delete(1);
         Assertions.assertThrows(MissingEntityException.class, () -> {
             menuService.findById(1);

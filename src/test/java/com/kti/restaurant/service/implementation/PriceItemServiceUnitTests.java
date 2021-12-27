@@ -38,7 +38,7 @@ public class PriceItemServiceUnitTests {
     }
 
     @Test
-    public void create_ValidPriceItem_CreatedPriceItem() throws Exception {
+    public void create_ValidPriceItem_ReturnsCreatedPriceItem() throws Exception {
         PriceItem priceItem = new PriceItem(Double.valueOf(300), LocalDate.parse("2021-08-15"), LocalDate.parse("2022-08-15"),
                 null, true, Double.valueOf(200));
         priceItemService.create(priceItem);
@@ -61,7 +61,7 @@ public class PriceItemServiceUnitTests {
     }
 
     @Test
-    public void findById_ValidPriceItemId_ExistingPriceItem() throws Exception {
+    public void findById_ValidPriceItemId_ReturnsExistingPriceItem() throws Exception {
         PriceItem priceItem = priceItemService.findById(1);
 
         assertEquals(Double.valueOf(300), priceItem.getValue());
@@ -80,7 +80,7 @@ public class PriceItemServiceUnitTests {
     }
 
     @Test
-    public void update_ValidPriceItem_UpdatedPriceItem() throws Exception {
+    public void update_ValidPriceItem_ReturnsUpdatedPriceItem() throws Exception {
         PriceItem priceItemForUpdate = new PriceItem(Double.valueOf(350), LocalDate.parse("2021-11-15"), LocalDate.parse("2022-08-15"),
                 null, true, Double.valueOf(240));
 
@@ -112,7 +112,7 @@ public class PriceItemServiceUnitTests {
     }
 
     @Test
-    public void delete_ValidPriceItemId_DeletedPriceItem() throws Exception {
+    public void delete_ValidPriceItemId_ReturnsDeletedPriceItem() throws Exception {
         assertDoesNotThrow(() -> {
             priceItemService.delete(1);
         });

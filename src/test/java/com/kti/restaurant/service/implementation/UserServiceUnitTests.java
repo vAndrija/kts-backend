@@ -49,12 +49,12 @@ public class UserServiceUnitTests {
     public void setup() {
         User user = new Admin("Vojnovic", "Andrija", "213123123", "andrija@vojnvo.com", "21312311");
         user.setId(1);
-        when(userRepository.getByEmailAddress("andrija@vojnvo.com"))
+        when(userRepository.findByEmailAddress("andrija@vojnvo.com"))
                 .thenReturn(user);
     }
 
     @Test
-    public void loadUserByUsername_ValidUsername_ExistingUserDetails() throws Exception {
+    public void loadUserByUsername_ValidUsername_ReturnsExistingUserDetails() throws Exception {
         UserDetails userDetails = userService.loadUserByUsername("andrija@vojnvo.com");
         assertEquals("andrija@vojnvo.com", userDetails.getUsername());
     }
@@ -94,7 +94,7 @@ public class UserServiceUnitTests {
     }
 
     @Test
-    public void resetPasswordDone_UnexistingToken_BadTokenException() throws Exception {
+    public void resetPasswordDone_UnexistingToken_ThrowsBadTokenException() throws Exception {
         User user = new Admin("Vojnovic", "Andrija", "213123123", "andrija@vojnvo.com", "21312311");
         ConfirmationToken confirmationToken = new ConfirmationToken(user);
         when(confirmationTokenRepository.findByConfirmationToken(any()))
@@ -108,7 +108,7 @@ public class UserServiceUnitTests {
     }
 
     @Test
-    public void resetPasswordDone_ExpiredToken_BadTokenException() throws Exception {
+    public void resetPasswordDone_ExpiredToken_ThrowsBadTokenException() throws Exception {
         User user = new Admin("Vojnovic", "Andrija", "213123123", "andrija@vojnvo.com", "21312311");
         ConfirmationToken confirmationToken = new ConfirmationToken(user);
         when(confirmationTokenRepository.findByConfirmationToken(any()))
@@ -120,6 +120,21 @@ public class UserServiceUnitTests {
         assertEquals("Token expired", exception.getMessage());
         verify(confirmationTokenRepository, times(0)).delete(confirmationToken);
         verify(userRepository, times(0)).save(any());
+    }
+    
+    @Test
+    public void findUserByUsername_ValidUserEmail_ReturnsUser() {
+    	User user = userService.findUserByUsername("andrija@vojnvo.com");
+    	assertEquals("andrija@vojnvo.com", user.getEmailAddress());
+    }
+    
+    @Test
+    public void findUserByUsername_InvalidUserEmail_ThrowsMissingEntityException() {
+    	when(userRepository.findByEmailAddress("invalid")).thenThrow(MissingEntityException.class);
+    	
+    	assertThrows(MissingEntityException.class, ()-> {
+    		userService.findUserByUsername("invalid");
+    	});
     }
 
 }

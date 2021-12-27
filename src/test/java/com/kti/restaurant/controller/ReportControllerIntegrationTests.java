@@ -2,25 +2,26 @@ package com.kti.restaurant.controller;
 
 import com.kti.restaurant.dto.JwtAuthenticationRequest;
 import com.kti.restaurant.model.UserTokenState;
-import com.kti.restaurant.service.implementation.ReportService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 
+
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
 public class ReportControllerIntegrationTests {
-
-    @Autowired
-    private ReportService reportService;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -79,7 +80,7 @@ public class ReportControllerIntegrationTests {
     }
 
     @Test
-    public void getMonthlyReportForMealAndDrinkCosts_ValidYear_ValidMonth_ReturnsOk() {
+    public void getMonthlyReportForMealAndDrinkCosts_ValidYearValidMonth_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<Double[]> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/meal-drink-costs",
                 HttpMethod.GET, httpEntity, Double[].class, 2021, 11);
@@ -91,35 +92,29 @@ public class ReportControllerIntegrationTests {
         assertEquals(Double.valueOf(1860), costPerDays.get(18));
     }
 
+    private static Stream<Arguments> provideInvalidParamteres() {
+		
+		return Stream.of(
+				Arguments.of(-1, 11),
+				Arguments.of(-1, -11), 
+				Arguments.of(2021, -11),
+				Arguments.of(2021, 0),
+				Arguments.of(2021, 13)
+				);
+	}
+    
+    @ParameterizedTest
+	@MethodSource("provideInvalidParamteres")
+	public void getMonthlyReportForMealAndDrinkCosts_InvalidParameters_ReturnsBadRequest(Integer year, Integer month) {
+    	 HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+         ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/meal-drink-costs",
+                 HttpMethod.GET, httpEntity, Void.class, year, month);
+
+         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+	}
+    
     @Test
-    public void getMonthlyReportForMealAndDrinkCosts_InvalidYear_ValidMonth_ReturnsBadRequest() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/meal-drink-costs",
-                HttpMethod.GET, httpEntity, Void.class, -1, 11);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void getMonthlyReportForMealAndDrinkCosts_InvalidYear_InvalidMonth_ReturnsBadRequest() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/meal-drink-costs",
-                HttpMethod.GET, httpEntity, Void.class, -1, -11);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void getMonthlyReportForMealAndDrinkCosts_ValidYear_InvalidMonth_ReturnsBadRequest() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/meal-drink-costs",
-                HttpMethod.GET, httpEntity, Void.class, 2021, -11);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void getMonthlyReportForMealAndDrinkCosts_ValidYear_MonthWithoutOrders_ReturnsOk() {
+    public void getMonthlyReportForMealAndDrinkCosts_ValidYearMonthWithoutOrders_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<Double[]> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/meal-drink-costs",
                 HttpMethod.GET, httpEntity, Double[].class, 2021, 5);
@@ -175,7 +170,7 @@ public class ReportControllerIntegrationTests {
     }
 
     @Test
-    public void getMonthlyReportForCostBenefitRatio_ValidYear_ValidMonth_ReturnsOk() {
+    public void getMonthlyReportForCostBenefitRatio_ValidYearValidMonth_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<Double[]> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/cost-benefit-ratio",
                 HttpMethod.GET, httpEntity, Double[].class, 2021, 11);
@@ -202,36 +197,19 @@ public class ReportControllerIntegrationTests {
             assertEquals(Double.valueOf(0), ratio);
         });
     }
+    
+    @ParameterizedTest
+	@MethodSource("provideInvalidParamteres")
+	public void getMonthlyReportForCostBenefitRatio_InvalidParameters_ReturnsBadRequest(Integer year, Integer month) {
+    	 HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+         ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/cost-benefit-ratio",
+                 HttpMethod.GET, httpEntity, Void.class, year, month);
 
+         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+	}
+    
     @Test
-    public void getMonthlyReportForCostBenefitRatio_InvalidYear_ValidMonth_ReturnsBadRequest() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/cost-benefit-ratio",
-                HttpMethod.GET, httpEntity, Void.class, -1, 11);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void getMonthlyReportForCostBenefitRatio_ValidYear_InvalidMonth_ReturnsBadRequest() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/cost-benefit-ratio",
-                HttpMethod.GET, httpEntity, Void.class, 2021, -11);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void getMonthlyReportForCostBenefitRatio_InvalidYear_InvalidMonth_ReturnsBadRequest() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/cost-benefit-ratio",
-                HttpMethod.GET, httpEntity, Void.class, -1, -11);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void getYearlyPreparingTimeReport_ValidYear_ValidUserId_ReturnsOk() {
+    public void getYearlyPreparingTimeReport_ValidYearValidUserId_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<Integer[]> responseEntity = restTemplate.exchange(URL_PREFIX + "/yearly/{year}/time-preparing/{userId}",
                 HttpMethod.GET, httpEntity, Integer[].class, 2021, 2);
@@ -245,7 +223,7 @@ public class ReportControllerIntegrationTests {
     }
 
     @Test
-    public void getYearlyPreparingTimeReport_YearWithoutOrders_ValidUserId_ReturnsOk() {
+    public void getYearlyPreparingTimeReport_YearWithoutOrdersValidUserId_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<Integer[]> responseEntity = restTemplate.exchange(URL_PREFIX + "/yearly/{year}/time-preparing/{userId}",
                 HttpMethod.GET, httpEntity, Integer[].class, 2001, 2);
@@ -258,18 +236,9 @@ public class ReportControllerIntegrationTests {
             assertEquals(Integer.valueOf(0), time);
         });
     }
-
+    
     @Test
-    public void getYearlyPreparingTimeReport_InvalidYear_ValidUserId_ReturnsBadRequest() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/yearly/{year}/time-preparing/{userId}",
-                HttpMethod.GET, httpEntity, Void.class, -1, 2);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void getYearlyPreparingTimeReport_ValidYear_InvalidUserId_ReturnsNotFound() {
+    public void getYearlyPreparingTimeReport_ValidYearInvalidUserId_ReturnsNotFound() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/yearly/{year}/time-preparing/{userId}",
                 HttpMethod.GET, httpEntity, Void.class, 2021, 35);
@@ -277,26 +246,27 @@ public class ReportControllerIntegrationTests {
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
-    @Test
-    public void getYearlyPreparingTimeReport_ValidYear_InvalidUserType_ReturnsNotFound() {
+    @ParameterizedTest
+	@MethodSource("provideInvalidParamteresForYearlyPreparingTimeReport")
+    public void getYearlyPreparingTimeReport_InvalidYearValidUserId_ReturnsBadRequest() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/yearly/{year}/time-preparing/{userId}",
-                HttpMethod.GET, httpEntity, Void.class, 2021, 1);
+                HttpMethod.GET, httpEntity, Void.class, -1, 2);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
-    @Test
-    public void getYearlyPreparingTimeReport_InvalidYear_InvalidUserId_ReturnsBadRequest() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/yearly/{year}/time-preparing/{userId}",
-                HttpMethod.GET, httpEntity, Void.class, -1, 35);
+    private static Stream<Arguments> provideInvalidParamteresForYearlyPreparingTimeReport() {
+		
+		return Stream.of(
+				Arguments.of(-1, 2),
+				Arguments.of(2021, 1), 
+				Arguments.of(-1, 35)
+				);
+	}
 
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
     @Test
-    public void getMonthlyPreparingTimeReport_ValidYear_ValidMonth_ValidUserId_ReturnsOk() {
+    public void getMonthlyPreparingTimeReport_ValidYearValidMonthValidUserId_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<Integer[]> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/time-preparing{userId}",
                 HttpMethod.GET, httpEntity, Integer[].class, 2021, 11, 4);
@@ -309,79 +279,40 @@ public class ReportControllerIntegrationTests {
     }
 
     @Test
-    public void getMonthlyPreparingTimeReport_InalidYear_ValidMonth_ValidUserId_ReturnsBadRequest() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/time-preparing{userId}",
-                HttpMethod.GET, httpEntity, Void.class, -2021, 11, 4);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void getMonthlyPreparingTimeReport_ValidYear_InvalidMonth_ValidUserId_ReturnsBadRequest() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/time-preparing{userId}",
-                HttpMethod.GET, httpEntity, Void.class, 2021, -11, 4);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void getMonthlyPreparingTimeReport_ValidYear_ValidMonth_InvalidUserId_ReturnsNotFound() {
+    public void getMonthlyPreparingTimeReport_ValidYearValidMonthInvalidUserId_ReturnsNotFound() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/time-preparing{userId}",
                 HttpMethod.GET, httpEntity, Void.class, 2021, 11, 24);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
-
-    @Test
-    public void getMonthlyPreparingTimeReport_ValidYear_ValidMonth_InvalidUserType_ReturnsBadRequest() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/time-preparing{userId}",
-                HttpMethod.GET, httpEntity, Void.class, 2021, 11, 1);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void getMonthlyPreparingTimeReport_InvalidYear_InvalidMonth_InvalidUserId_ReturnsBadRequest() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/time-preparing{userId}",
-                HttpMethod.GET, httpEntity, Void.class, -2021, -11, 24);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void getMonthlyPreparingTimeReport_InvalidYear_ValidMonth_InvalidUserId_ReturnsBadRequest() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/time-preparing{userId}",
-                HttpMethod.GET, httpEntity, Void.class, -2021, 11, 24);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void getMonthlyPreparingTimeReport_ValidYear_InvalidMonth_InvalidUserId_ReturnsBadRequest() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/time-preparing{userId}",
-                HttpMethod.GET, httpEntity, Void.class, 2021, -11, 24);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void getMonthlyPreparingTimeReport_InvalidYear_InvalidMonth_ValidUserId_ReturnsBadRequest() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/time-preparing{userId}",
-                HttpMethod.GET, httpEntity, Void.class, -2021, -11, 4);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
     
+    @ParameterizedTest
+	@MethodSource("provideInvalidParamteresForMonthlyPreparingTimeReport")
+    public void getMonthlyPreparingTimeReport_InvalidParameters_ReturnsBadRequest(Integer year, Integer month, Integer userId) {
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/time-preparing{userId}",
+                HttpMethod.GET, httpEntity, Void.class, year,month, userId);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    private static Stream<Arguments> provideInvalidParamteresForMonthlyPreparingTimeReport() {
+		
+		return Stream.of(
+				Arguments.of(-2021, 11, 4),
+				Arguments.of(2021, 0, 4), 
+				Arguments.of(2021, 13, 4),
+				Arguments.of(2021, 11, 1),
+				Arguments.of(-2021, 0, 24),
+				Arguments.of(-2021, 11, 24),
+				Arguments.of(2021, 0, 24),
+				Arguments.of(-2021, 13, 24)
+				);
+	}
+
     @Test
-    public void getYearlyReportForMealAndDrinkSales_ValidYear_ValidMenuItemId_ReturnsStatusOk() {
+    public void getYearlyReportForMealAndDrinkSales_ValidYearValidMenuItemId_ReturnsOk() {
     	HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<Integer[]> responseEntity = restTemplate.exchange(URL_PREFIX + "/yearly/{year}/meal-drink-sales/{id}",
                 HttpMethod.GET, httpEntity, Integer[].class, 2021, 1);
@@ -409,7 +340,7 @@ public class ReportControllerIntegrationTests {
     }
     
     @Test
-    public void getYearlyReportForMealAndDrinkSales_InvalidYear_ValidMenuItemId_ReturnsStatusBadRequest() {
+    public void getYearlyReportForMealAndDrinkSales_InvalidYearValidMenuItemId_ReturnsBadRequest() {
     	HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/yearly/{year}/meal-drink-sales/{id}",
                 HttpMethod.GET, httpEntity, Void.class, -1, 1);
@@ -418,7 +349,7 @@ public class ReportControllerIntegrationTests {
     }
     
     @Test
-    public void getYearlyReportForMealAndDrinkSales_ValidYear_InvalidMenuItemId_ReturnsStatusNotFound() {
+    public void getYearlyReportForMealAndDrinkSales_ValidYearInvalidMenuItemId_ReturnsNotFound() {
     	HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/yearly/{year}/meal-drink-sales/{id}",
                 HttpMethod.GET, httpEntity, Void.class, 2021, 15);
@@ -427,7 +358,7 @@ public class ReportControllerIntegrationTests {
     }
     
     @Test
-    public void getMonthlyReportForMealAndDrinkSales_ValidParameters_ReturnsStatusOk() {
+    public void getMonthlyReportForMealAndDrinkSales_ValidParameters_ReturnsOk() {
     	HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<Integer[]> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/meal-drink-sales/{id}",
                 HttpMethod.GET, httpEntity, Integer[].class, 2021,11, 1);
@@ -454,24 +385,25 @@ public class ReportControllerIntegrationTests {
         });
     }
     
-    @Test
-    public void getMonthlyReportForMealAndDrinkSales_InvalidYear_ReturnsStatusBadRequest() {
+    @ParameterizedTest
+	@MethodSource("provideInvalidParamteresForMonthlyReportForMealAndDrinkSales")
+    public void getMonthlyReportForMealAndDrinkSales_InvalidParameter_ReturnsStatusBadRequest(Integer year, Integer month, Integer menuItemId) {
     	HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/meal-drink-sales/{id}",
-                HttpMethod.GET, httpEntity, Void.class, -2021,11, 1);
+                HttpMethod.GET, httpEntity, Void.class, year, month, menuItemId);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
     
-    @Test
-    public void getMonthlyReportForMealAndDrinkSales_InvalidMonth_ReturnsStatusBadRequest() {
-    	HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(URL_PREFIX + "/{year}/monthly/{month}/meal-drink-sales/{id}",
-                HttpMethod.GET, httpEntity, Void.class, 2021,13, 1);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-    
+    private static Stream<Arguments> provideInvalidParamteresForMonthlyReportForMealAndDrinkSales() {
+		
+		return Stream.of(
+				Arguments.of(-2021, 11, 1),
+				Arguments.of(2021, 13, 1), 
+				Arguments.of(2021, 0, 1)
+				);
+	}
+ 
     @Test
     public void getMonthlyReportForMealAndDrinkSales_InvalidMenuItemId_ReturnsStatusNotFound() {
     	HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
@@ -482,5 +414,6 @@ public class ReportControllerIntegrationTests {
     }
     
     
+
     
 }

@@ -7,6 +7,8 @@ import com.kti.restaurant.model.enums.MenuItemType;
 import com.kti.restaurant.repository.MenuItemRepository;
 import com.kti.restaurant.service.contract.IMenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -77,4 +79,9 @@ public class MenuItemService implements IMenuItemService {
     public Set<MenuItem> filter(String filter) {
         return new HashSet<>(menuItemRepository.findByCategory(MenuItemCategory.findCategory(filter)));
     }
+
+	@Override
+	public Page<MenuItem> pendingMenuItems(Pageable pageable) {
+		return menuItemRepository.findPendingMenuItems(pageable);
+	}
 }

@@ -40,7 +40,7 @@ public class NotificationServiceUnitTests {
 	}
 	
 	@Test
-	public void findById_ValidId_ExistsNotification() {
+	public void findById_ValidId_ReturnsExistsNotification() {
 		Notification notification = notificationService.findById(1);
 		
 		assertEquals("Poruka", notification.getMessage());
@@ -56,7 +56,7 @@ public class NotificationServiceUnitTests {
 	}
 		
 	@Test
-	public void update_ValidId_NotificationUpdated() throws Exception {
+	public void update_ValidId_ReturnsNotificationUpdated() throws Exception {
 		Notification notificationToUpdate = new Notification("Poruka", new OrderItem(), true);
 		notificationToUpdate.setId(1);
 		
@@ -79,7 +79,7 @@ public class NotificationServiceUnitTests {
 	}
 	
 	@Test
-	public void delete_ValidId_NotificationDeleted() {
+	public void delete_ValidId() {
 		notificationService.delete(1);
 		
 		Notification notification = new Notification("Poruka", new OrderItem(), false);

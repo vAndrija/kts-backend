@@ -32,7 +32,7 @@ public class CookServiceIntegrationTests {
     }
 
     @Test
-    public void findById_ValidId_ValidCook() throws Exception {
+    public void findById_ValidId_ReturnsExistingCook() throws Exception {
         Cook cook = cookService.findById(4);
         assertEquals("kristinamisic@gmail.com", cook.getEmailAddress());
         assertEquals("kristina", cook.getName());
@@ -47,7 +47,7 @@ public class CookServiceIntegrationTests {
     }
 
     @Test
-    public void create_ValidCook() throws Exception {
+    public void create_ValidCook_ReturnsCreatedCook() throws Exception {
         Cook cook = new Cook("Vojnovic", "Andrija", "213123123", "andrija@vojnvo.com", "21312311", true);
         cook.setPassword("1234");
         Cook createdCook = cookService.create(cook);
@@ -69,7 +69,7 @@ public class CookServiceIntegrationTests {
 
     @Rollback()
     @Test
-    public void update_ValidId_ValidCook() throws Exception {
+    public void update_ValidId_ReturnsUpdatedCook() throws Exception {
         Cook cook = new Cook("Vojnovic", "Andrija", "213123123", "kristinamisic@gmail.com", "21312311", true);
         Cook updatedCook = cookService.update(cook, 4);
         assertEquals("Vojnovic", updatedCook.getLastName());
@@ -90,7 +90,7 @@ public class CookServiceIntegrationTests {
 
     @Rollback()
     @Test
-    void delete_ValidId_ThrowsMissingEntityException() throws Exception {
+    void delete_ValidId() throws Exception {
         cookService.delete(4);
         Assertions.assertThrows(MissingEntityException.class, () -> {
             cookService.findById(4);

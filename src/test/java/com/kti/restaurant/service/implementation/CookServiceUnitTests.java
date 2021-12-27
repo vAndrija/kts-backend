@@ -54,7 +54,7 @@ public class CookServiceUnitTests {
     }
 
     @Test
-    public void findById_ValidId_ExistingCook() throws Exception {
+    public void findById_ValidId_ReturnsExistingCook() throws Exception {
         Cook cook = cookService.findById(1);
         assertEquals(1, cook.getId());
         assertEquals("Andrija", cook.getName());
@@ -74,7 +74,7 @@ public class CookServiceUnitTests {
     }
 
     @Test
-    public void create_ValidUniqueEmail_ValidCook() throws Exception {
+    public void create_ValidUniqueEmail_ReturnsCreatedCook() throws Exception {
         Cook cookForCreate = new Cook("Zolotic", "Milutin", "333333", "milutin@zolotic.com", "21312311", true);
         cookForCreate.setPassword("andrija");
         when(userRepository.findByEmailAddress("milutin@zolotic.com"))
@@ -107,7 +107,7 @@ public class CookServiceUnitTests {
     }
 
     @Test
-    public void update_ValidCook_ValidCook() throws Exception {
+    public void update_ValidCook_ReturnsUpdatedCook() throws Exception {
         Cook CookForUpdate = new Cook("Vojnovic", "Andrija", "21312312323", "andrija@vojnvo.com", "21312311", false);
         CookForUpdate.setId(1);
         when(cookRepository.save(any()))
@@ -134,7 +134,7 @@ public class CookServiceUnitTests {
     }
 
     @Test
-    public void delete_ValidId_CookDeleted() {
+    public void delete_ValidId() {
         assertDoesNotThrow(() -> {
             this.cookService.delete(1);
         });

@@ -96,7 +96,7 @@ public class MenuItemControllerIntegrationTests {
     }
 
     @Test
-    public void getMenuItemById_InvalidMenuItem_ReturnsNotFound() {
+    public void getMenuItemById_InvalidMenuItemId_ReturnsNotFound() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<MenuItem> responseEntity = restTemplate.exchange("/api/v1/menu-items/{id}", HttpMethod.GET, httpEntity, MenuItem.class, 20);
 

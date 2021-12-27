@@ -3,10 +3,8 @@ package com.kti.restaurant.service.implementation;
 
 import com.kti.restaurant.exception.ConflictException;
 import com.kti.restaurant.exception.MissingEntityException;
-import com.kti.restaurant.model.Admin;
 import com.kti.restaurant.model.Bartender;
 import com.kti.restaurant.model.Role;
-import com.kti.restaurant.repository.AdminRepository;
 import com.kti.restaurant.repository.BartenderRepository;
 import com.kti.restaurant.repository.RoleRepository;
 import com.kti.restaurant.repository.UserRepository;
@@ -60,7 +58,7 @@ public class BartenderServiceUnitTests {
     }
 
     @Test
-    public void findById_ValidId_ExistingBartender() throws Exception {
+    public void findById_ValidId_ReturnsExistingBartender() throws Exception {
         Bartender bartender = bartenderService.findById(1);
         assertEquals(1, bartender.getId());
         assertEquals("Andrija", bartender.getName());
@@ -80,7 +78,7 @@ public class BartenderServiceUnitTests {
     }
 
     @Test
-    public void create_ValidUniqueEmail_ValidBartender() throws Exception {
+    public void create_ValidUniqueEmail_ReturnsValidBartender() throws Exception {
         Bartender bartenderForCreate = new Bartender("Zolotic", "Milutin", "333333", "milutin@zolotic.com", "21312311", true);
         bartenderForCreate.setPassword("andrija");
         when(userRepository.findByEmailAddress("milutin@zolotic.com"))
@@ -113,7 +111,7 @@ public class BartenderServiceUnitTests {
     }
 
     @Test
-    public void update_ValidBartender_ValidBartender() throws Exception {
+    public void update_ValidBartender_ReturnsUpdatedBartender() throws Exception {
         Bartender bartenderForUpdate = new Bartender("Vojnovic", "Andrija", "21312312323", "andrija@vojnvo.com", "21312311", false);
         bartenderForUpdate.setId(1);
         when(bartenderRepository.save(any()))
@@ -140,7 +138,7 @@ public class BartenderServiceUnitTests {
     }
 
     @Test
-    public void delete_ValidId_BartenderDeleted() {
+    public void delete_ValidId() {
         assertDoesNotThrow(() -> {
             this.bartenderService.delete(1);
         });

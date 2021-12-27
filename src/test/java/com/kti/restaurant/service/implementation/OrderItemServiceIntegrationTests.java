@@ -26,14 +26,14 @@ public class OrderItemServiceIntegrationTests {
 
 
     @Test
-    public void findAll_NumberOfOrderItems() {
+    public void findAll_ReturnsExistingOrderItems() {
         List<OrderItem> orderItems = orderItemService.findAll();
 
         assertEquals(orderItems.size(), 11);
     }
 
     @Test
-    public void findById_ExistingOrderItem() throws Exception {
+    public void findById_ReturnsExistingOrderItem() throws Exception {
         OrderItem orderItem = orderItemService.findById(1);
 
         assertEquals("", orderItem.getNote());
@@ -52,7 +52,7 @@ public class OrderItemServiceIntegrationTests {
 
     @Test
     @Rollback
-    public void create_ValidOrderItem() throws Exception {
+    public void create_ValidOrderItem_ReturnsCreatedOrderItem() throws Exception {
         OrderItem orderItemForCreate = new OrderItem(1, "bez secera", OrderItemStatus.ORDERED, 1,
                 new MenuItem());
 
@@ -66,7 +66,7 @@ public class OrderItemServiceIntegrationTests {
 
     @Test
     @Rollback
-    public void update_ValidId_ExistingOrderItem() throws Exception {
+    public void update_ValidId_ReturnsUpdatedOrderItem() throws Exception {
         OrderItem orderItemForUpdate = new OrderItem(2, "bez luka", OrderItemStatus.ORDERED, 1,
                 new MenuItem());
 
@@ -88,7 +88,7 @@ public class OrderItemServiceIntegrationTests {
 
     @Test
     @Rollback
-    public void delete_ValidId_OrderItemDeleted() throws Exception {
+    public void delete_ValidId() throws Exception {
         orderItemService.delete(1);
         assertThrows(MissingEntityException.class, () -> {
             orderItemService.findById(1);
@@ -104,7 +104,7 @@ public class OrderItemServiceIntegrationTests {
     }
 
     @Test
-    public void findOrderItemsInPeriod_ValidPeriod_ExistingOrderItems() {
+    public void findOrderItemsInPeriod_ValidPeriod_ReturnsExistingOrderItems() {
         List<OrderItem> orderItems = orderItemService.findOrderItemsInPeriod(LocalDateTime.parse("2022-11-18T08:00"),
                 LocalDateTime.parse("2022-11-19T08:00"));
 
@@ -112,7 +112,7 @@ public class OrderItemServiceIntegrationTests {
     }
 
     @Test
-    public void findOrderItemsInPeriod_InvalidPeriod_EmptyList() {
+    public void findOrderItemsInPeriod_InvalidPeriod_ReturnsEmptyList() {
         List<OrderItem> orderItems = orderItemService.findOrderItemsInPeriod(LocalDateTime.parse("2022-11-18T14:00"),
                 LocalDateTime.parse("2021-01-01T14:00"));
 
@@ -120,7 +120,7 @@ public class OrderItemServiceIntegrationTests {
     }
 
     @Test
-    public void findOrderItemsInPeriodForMenuItem_ValidPeriod_ValidMenuItemId_ExistingOrderItems() {
+    public void findOrderItemsInPeriodForMenuItem_ValidPeriodValidMenuItemId_ReturnsExistingOrderItems() {
         List<OrderItem> orderItems = orderItemService.findOrderItemsInPeriodForMenuItem(LocalDateTime.parse("2021-11-18T08:00"),
                 LocalDateTime.parse("2021-11-19T23:00"), 1);
 
@@ -128,7 +128,7 @@ public class OrderItemServiceIntegrationTests {
     }
 
     @Test
-    public void findOrderItemsInPeriodForMenuItem_InvalidPeriod_ValidMenuItemId_EmptyList() {
+    public void findOrderItemsInPeriodForMenuItem_InvalidPeriodValidMenuItemId_ReturnsEmptyList() {
         List<OrderItem> orderItems = orderItemService.findOrderItemsInPeriodForMenuItem(LocalDateTime.parse("2022-11-18T08:00"),
                 LocalDateTime.parse("2022-11-01T23:00"), 1);
 
@@ -137,7 +137,7 @@ public class OrderItemServiceIntegrationTests {
 
 
     @Test
-    public void findOrderItemsInPeriodForMenuItem_InvalidPeriod_InvalidMenuItemId_EmptyList() {
+    public void findOrderItemsInPeriodForMenuItem_InvalidPeriodInvalidMenuItemId_ReturnsEmptyList() {
         List<OrderItem> orderItems = orderItemService.findOrderItemsInPeriodForMenuItem(LocalDateTime.parse("2022-11-18T08:00"),
                 LocalDateTime.parse("2022-11-01T23:00"), 100);
 
@@ -145,42 +145,42 @@ public class OrderItemServiceIntegrationTests {
     }
 
     @Test
-    public void findByCook_ValidPeriod_ValidCookId_ExistingOrderItems() {
+    public void findByCook_ValidPeriodValidCookId_ReturnsExistingOrderItems() {
         List<OrderItem> orderItems = orderItemService.findByCook(4, LocalDateTime.parse("2025-11-18T08:00"),
                 LocalDateTime.parse("2021-11-19T23:00"));
         assertEquals(orderItems.size(), 0);
     }
 
     @Test
-    public void findByCook_InvalidPeriod_ValidCookId_EmptyList() {
+    public void findByCook_InvalidPeriodValidCookId_ReturnsEmptyList() {
         List<OrderItem> orderItems = orderItemService.findByCook(4, LocalDateTime.parse("2025-11-18T08:00"),
                 LocalDateTime.parse("2021-11-19T23:00"));
         assertEquals(orderItems.size(), 0);
     }
 
     @Test
-    public void findByCook_ValidPeriod_InvalidCookId_EmptyList() {
+    public void findByCook_ValidPeriodInvalidCookId_ReturnsEmptyList() {
         List<OrderItem> orderItems = orderItemService.findByCook(250, LocalDateTime.parse("2021-11-18T08:00"),
                 LocalDateTime.parse("2021-11-19T23:00"));
         assertEquals(orderItems.size(), 0);
     }
 
     @Test
-    public void findByBartender_ValidPeriod_ValidBartenderId_ExistingOrderItems() {
+    public void findByBartender_ValidPeriodValidBartenderId_ReturnsExistingOrderItems() {
         List<OrderItem> orderItems = orderItemService.findByBartender(2, LocalDateTime.parse("2022-11-18T08:00"),
                 LocalDateTime.parse("2022-11-28T23:00"));
         assertEquals(orderItems.size(), 1);
     }
 
     @Test
-    public void findByBartender_InvalidPeriod_ValidBartenderId_EmptyList() {
+    public void findByBartender_InvalidPeriodValidBartenderId_ReturnsEmptyList() {
         List<OrderItem> orderItems = orderItemService.findByBartender(2, LocalDateTime.parse("2022-12-22T08:00"),
                 LocalDateTime.parse("2022-11-01T11:45"));
         assertEquals(orderItems.size(), 0);
     }
 
     @Test
-    public void findByBartender_InvalidPeriod_InvalidBartenderId_EmptyList() {
+    public void findByBartender_InvalidPeriodInvalidBartenderId_ReturnsEmptyList() {
         List<OrderItem> orderItems = orderItemService.findByBartender(1500, LocalDateTime.parse("2025-10-22T08:00"),
                 LocalDateTime.parse("2022-01-01T11:45"));
         assertEquals(orderItems.size(), 0);

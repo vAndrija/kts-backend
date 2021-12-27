@@ -5,9 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -64,7 +68,7 @@ public class SalaryControllerIntegrationTests {
 	}
 	
 	@Test
-	public void findAll_SalariesExist_ReturnsStatusOk() {
+	public void findAll_ReturnsOk() {
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers); 
 		ResponseEntity<SalaryDto[]> responseEntity = restTemplate
 				.exchange(URI_PREFIX, HttpMethod.GET, httpEntity, SalaryDto[].class);
@@ -76,7 +80,7 @@ public class SalaryControllerIntegrationTests {
 	}
 	
 	@Test
-	public void findById_ValidSalaryId_ReturnsStatusOk() {
+	public void findById_ValidSalaryId_ReturnsOk() {
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers); 
 		ResponseEntity<SalaryDto> responseEntity = restTemplate
 				.exchange(URI_PREFIX + "/{id}", HttpMethod.GET, httpEntity, SalaryDto.class, 1);
@@ -89,7 +93,7 @@ public class SalaryControllerIntegrationTests {
 	}
 	
 	@Test
-	public void findById_InvalidSalaryId_ReturnsStatusNotFound() {
+	public void findById_InvalidSalaryId_ReturnsNotFound() {
 		HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers); 
 		ResponseEntity<SalaryDto> responseEntity = restTemplate
 				.exchange(URI_PREFIX + "/{id}", HttpMethod.GET, httpEntity, SalaryDto.class, 9);
@@ -98,7 +102,7 @@ public class SalaryControllerIntegrationTests {
 	}
 	
 	@Test
-	public void createSalary_ValidSalary_ReturnsStatusCreated() throws Exception {
+	public void createSalary_ValidSalary_ReturnsCreated() throws Exception {
 		int size = salaryService.findAll().size();
 		
 		CreateSalaryDto salary = new CreateSalaryDto(45000.00, LocalDate.parse("2021-12-01"), 
@@ -122,7 +126,7 @@ public class SalaryControllerIntegrationTests {
 	} 
 	
 	@Test
-	public void createSalary_InvalidUserEmail_ReturnsStatusNotFound() {
+	public void createSalary_InvalidUserEmail_ReturnsNotFound() {
 		int size = salaryService.findAll().size();
 		
 		CreateSalaryDto salary = new CreateSalaryDto(45000.00, LocalDate.parse("2021-12-01"), 
@@ -130,19 +134,18 @@ public class SalaryControllerIntegrationTests {
 		
 		HttpEntity<CreateSalaryDto> httpEntity = new HttpEntity<CreateSalaryDto>(salary, headers);
 		
-		ResponseEntity<Object> entity = restTemplate
-				.exchange(URI_PREFIX, HttpMethod.POST, httpEntity, Object.class);
+		ResponseEntity<Object> entity = restTemplate.postForEntity(URI_PREFIX, httpEntity, Object.class);
 		
 		assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
 		assertEquals(size, salaryService.findAll().size());
 	}
 	
-	@Test
-	public void createSalary_InvalidValueNull_ReturnsStatusBadRequest() {
+	@ParameterizedTest
+	@MethodSource("provideSalaryDto")
+	public void createSalary_InvalidParameters_ReturnsBadRequest(Double value, LocalDate startDate, LocalDate endDate, String email , String bodyParameter, String errorMessage) {
 		int size = salaryService.findAll().size();
 		
-		CreateSalaryDto salary = new CreateSalaryDto(null, LocalDate.parse("2021-12-01"), 
-				LocalDate.parse("2022-12-11"), "mirkomiric@gmail.com");
+		CreateSalaryDto salary = new CreateSalaryDto(value, startDate, endDate, email);
 		
 		HttpEntity<String> httpEntity = new HttpEntity<String>(GsonUtils.ToJson(salary), headers);
 		ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() { };
@@ -154,94 +157,51 @@ public class SalaryControllerIntegrationTests {
 		HashMap<String, String> body = entity.getBody();
 		
 		assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
-		assertEquals("Value should not be null", body.get("value"));
+		assertEquals(errorMessage, body.get(bodyParameter));
 		assertEquals(size, salaryService.findAll().size());
 	}
 	
-	@Test
-	public void createSalary_InvalidValueLessThan0_ReturnsStatusBadRequest() {
+	
+	@ParameterizedTest
+	@MethodSource("provideSalaryDto")
+	public void updateSalary_InvalidParameters_ReturnsBadRequest(Double value, LocalDate startDate, LocalDate endDate, 
+			String email , String bodyParameter, String errorMessage) {
 		int size = salaryService.findAll().size();
 		
-		CreateSalaryDto salary = new CreateSalaryDto(0.00, LocalDate.parse("2021-12-01"), 
-				LocalDate.parse("2022-12-11"), "mirkomiric@gmail.com");
+		CreateSalaryDto salary = new CreateSalaryDto(value, startDate, endDate, email);
 		
 		HttpEntity<String> httpEntity = new HttpEntity<String>(GsonUtils.ToJson(salary), headers);
 		ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() { };
 		
 		ResponseEntity<HashMap<String, String>> entity = restTemplate
-				.exchange(URI_PREFIX, HttpMethod.POST, httpEntity, responseType);
+				.exchange(URI_PREFIX + "/{id}", HttpMethod.PUT, httpEntity, responseType, 1);
 		
 
 		HashMap<String, String> body = entity.getBody();
 		
 		assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
-		assertEquals("Salary should not be negative value.", body.get("value"));
+		assertEquals(errorMessage, body.get(bodyParameter));
 		assertEquals(size, salaryService.findAll().size());
 	}
 	
-	@Test
-	public void createSalary_InvalidStartDateNull_ReturnsStatusBadRequest() {
-		int size = salaryService.findAll().size();
+	private static Stream<Arguments> provideSalaryDto() {
 		
-		CreateSalaryDto salary = new CreateSalaryDto(45000.00, null, LocalDate.parse("2022-12-11"), "mirkomiric@gmail.com");
-		
-		HttpEntity<String> httpEntity = new HttpEntity<String>(GsonUtils.ToJson(salary), headers);
-		ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() { };
-		
-		ResponseEntity<HashMap<String, String>> entity = restTemplate
-				.exchange(URI_PREFIX, HttpMethod.POST, httpEntity, responseType);
-		
-
-		HashMap<String, String> body = entity.getBody();
-		
-		assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
-		assertEquals("Start date of salary should not be null", body.get("startDate"));
-		assertEquals(size, salaryService.findAll().size());
+		return Stream.of(
+				Arguments.of(null, LocalDate.parse("2021-12-01"), 
+						LocalDate.parse("2022-12-11"), "mirkomiric@gmail.com", "value" ,"Value should not be null"),
+				Arguments.of(0.00, LocalDate.parse("2021-12-01"), 
+						LocalDate.parse("2022-12-11"), "mirkomiric@gmail.com", "value", "Salary should not be negative value."),
+				Arguments.of(45000.00, null, 
+						LocalDate.parse("2022-12-11"), "mirkomiric@gmail.com", "startDate", "Start date of salary should not be null"),
+				Arguments.of(45000.00, LocalDate.parse("2021-12-11"), 
+						null, "mirkomiric@gmail.com", "endDate", "End date of salary should not be null"),
+				Arguments.of(45000.00, LocalDate.parse("2021-12-11"), 
+						LocalDate.parse("2022-12-11"), null, "userEmail", "User email should not be null or empty")
+				
+				);
 	}
-	
 	@Test
-	public void createSalary_InvalidEndDateNull_ReturnsStatusBadRequest() {
-		int size = salaryService.findAll().size();
-		
-		CreateSalaryDto salary = new CreateSalaryDto(45000.00, LocalDate.parse("2021-12-11"), null, "mirkomiric@gmail.com");
-		
-		HttpEntity<String> httpEntity = new HttpEntity<String>(GsonUtils.ToJson(salary), headers);
-		ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() { };
-		
-		ResponseEntity<HashMap<String, String>> entity = restTemplate
-				.exchange(URI_PREFIX, HttpMethod.POST, httpEntity, responseType);
-		
-
-		HashMap<String, String> body = entity.getBody();
-		
-		assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
-		assertEquals("End date of salary should not be null", body.get("endDate"));
-		assertEquals(size, salaryService.findAll().size());
-	}
-	
-	@Test
-	public void createSalary_InvalidEmailNull_ReturnsStatusBadRequest() {
-		int size = salaryService.findAll().size();
-		
-		CreateSalaryDto salary = new CreateSalaryDto(45000.00, LocalDate.parse("2021-12-11"), 
-				LocalDate.parse("2022-12-11"), null);
-		
-		HttpEntity<String> httpEntity = new HttpEntity<String>(GsonUtils.ToJson(salary), headers);
-		ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() { };
-		
-		ResponseEntity<HashMap<String, String>> entity = restTemplate
-				.exchange(URI_PREFIX, HttpMethod.POST, httpEntity, responseType);
-		
-
-		HashMap<String, String> body = entity.getBody();
-		
-		assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
-		assertEquals("User email should not be null or empty", body.get("userEmail"));
-		assertEquals(size, salaryService.findAll().size());
-	}
-	
-	@Test
-	public void updateSalary_ValidSalary_ReturnsStatusOk() throws Exception {		
+	public void updateSalary_ValidSalary_ReturnsOk() throws Exception {		
 		CreateSalaryDto salary = new CreateSalaryDto(45000.00, LocalDate.parse("2021-12-01"), 
 				LocalDate.parse("2022-12-11"), "mirkomiric@gmail.com");
 		
@@ -264,109 +224,7 @@ public class SalaryControllerIntegrationTests {
 	} 
 	
 	@Test
-	public void updateSalary_InvalidValueNull_ReturnsStatusBadRequest() {
-		int size = salaryService.findAll().size();
-		
-		CreateSalaryDto salary = new CreateSalaryDto(null, LocalDate.parse("2021-12-01"), 
-				LocalDate.parse("2022-12-11"), "mirkomiric@gmail.com");
-		
-		HttpEntity<String> httpEntity = new HttpEntity<String>(GsonUtils.ToJson(salary), headers);
-		ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() { };
-		
-		ResponseEntity<HashMap<String, String>> entity = restTemplate
-				.exchange(URI_PREFIX + "/{id}", HttpMethod.PUT, httpEntity, responseType, 1);
-		
-
-		HashMap<String, String> body = entity.getBody();
-		
-		assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
-		assertEquals("Value should not be null", body.get("value"));
-		assertEquals(size, salaryService.findAll().size());
-	}
-	
-	@Test
-	public void updateSalary_InvalidValueLessThan0_ReturnsStatusBadRequest() {
-		int size = salaryService.findAll().size();
-		
-		CreateSalaryDto salary = new CreateSalaryDto(0.00, LocalDate.parse("2021-12-01"), 
-				LocalDate.parse("2022-12-11"), "mirkomiric@gmail.com");
-		
-		HttpEntity<String> httpEntity = new HttpEntity<String>(GsonUtils.ToJson(salary), headers);
-		ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() { };
-		
-		ResponseEntity<HashMap<String, String>> entity = restTemplate
-				.exchange(URI_PREFIX + "/{id}", HttpMethod.PUT, httpEntity, responseType, 1);
-		
-
-		HashMap<String, String> body = entity.getBody();
-		
-		assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
-		assertEquals("Salary should not be negative value.", body.get("value"));
-		assertEquals(size, salaryService.findAll().size());
-	}
-	
-	@Test
-	public void updateTableReservation_InvalidStartDateNull_ReturnsStatusBadRequest() {
-		int size = salaryService.findAll().size();
-		
-		CreateSalaryDto salary = new CreateSalaryDto(45000.00, null, LocalDate.parse("2022-12-11"), "mirkomiric@gmail.com");
-		
-		HttpEntity<String> httpEntity = new HttpEntity<String>(GsonUtils.ToJson(salary), headers);
-		ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() { };
-		
-		ResponseEntity<HashMap<String, String>> entity = restTemplate
-				.exchange(URI_PREFIX + "/{id}", HttpMethod.PUT, httpEntity, responseType, 1);
-		
-
-		HashMap<String, String> body = entity.getBody();
-		
-		assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
-		assertEquals("Start date of salary should not be null", body.get("startDate"));
-		assertEquals(size, salaryService.findAll().size());
-	}
-	
-	@Test
-	public void updateTableReservation_InvalidEndDateNull_ReturnsStatusBadRequest() {
-		int size = salaryService.findAll().size();
-		
-		CreateSalaryDto salary = new CreateSalaryDto(45000.00, LocalDate.parse("2021-12-11"), null, "mirkomiric@gmail.com");
-		
-		HttpEntity<String> httpEntity = new HttpEntity<String>(GsonUtils.ToJson(salary), headers);
-		ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() { };
-		
-		ResponseEntity<HashMap<String, String>> entity = restTemplate
-				.exchange(URI_PREFIX + "/{id}", HttpMethod.PUT, httpEntity, responseType, 1);
-		
-
-		HashMap<String, String> body = entity.getBody();
-		
-		assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
-		assertEquals("End date of salary should not be null", body.get("endDate"));
-		assertEquals(size, salaryService.findAll().size());
-	}
-	
-	@Test
-	public void updateTableReservation_InvalidEmailNull_ReturnsStatusBadRequest() {
-		int size = salaryService.findAll().size();
-		
-		CreateSalaryDto salary = new CreateSalaryDto(45000.00, LocalDate.parse("2021-12-11"), LocalDate.parse("2022-12-11"), null);
-		
-		HttpEntity<String> httpEntity = new HttpEntity<String>(GsonUtils.ToJson(salary), headers);
-		ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() { };
-		
-		ResponseEntity<HashMap<String, String>> entity = restTemplate
-				.exchange(URI_PREFIX + "/{id}", HttpMethod.PUT, httpEntity, responseType, 1);
-		
-
-		HashMap<String, String> body = entity.getBody();
-		
-		assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
-		assertEquals("User email should not be null or empty", body.get("userEmail"));
-		assertEquals(size, salaryService.findAll().size());
-	}
-	
-	@Test
-	public void deleteTableReservation_ValidId_ReturnsStatusNoContent() throws Exception {		
+	public void deleteTableReservation_ValidId_ReturnsNoContent() throws Exception {		
 		Salary salary = new Salary(45000.00, LocalDate.parse("2021-12-11"), LocalDate.parse("2022-12-11"), userService.findById(1));
 		Salary createdSalary = salaryService.create(salary);
 		
@@ -378,7 +236,6 @@ public class SalaryControllerIntegrationTests {
 		
 		assertEquals(HttpStatus.NO_CONTENT, entity.getStatusCode());
 		assertEquals(size-1, salaryService.findAll().size());
-		
 	} 
 	
 	@Test

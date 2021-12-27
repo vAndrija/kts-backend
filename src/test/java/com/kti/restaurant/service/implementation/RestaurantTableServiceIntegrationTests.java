@@ -52,7 +52,7 @@ public class RestaurantTableServiceIntegrationTests {
 	
 	@Test
 	@Rollback
-	public void create_ValidSalary_ReturnsValidSalary() throws Exception {
+	public void create_ValidSalary_ReturnsCreatedSalary() throws Exception {
 		RestaurantTable table = tableService.create(new RestaurantTable(false, 1, 4, 1, 1));
 		
 		assertEquals(Integer.valueOf(5), table.getId());

@@ -23,13 +23,13 @@ public class MenuItemServiceIntegrationTests {
     private MenuItemService menuItemService;
 
     @Test
-    public void findAll_ValidNumberOfMenuItems() {
+    public void findAll_ReturnsExistingMenuItems() {
         List<MenuItem> menuItems = menuItemService.findAll();
         assertEquals(14, menuItems.size());
     }
 
     @Test
-    public void findById_ValidId_ValidDiscount() throws Exception {
+    public void findById_ValidId_ReturnsExistingDiscount() throws Exception {
         MenuItem menuItem = menuItemService.findById(1);
         assertEquals("coca cola", menuItem.getName());
         assertEquals("bezalkoholno gazirano pice", menuItem.getDescription());
@@ -48,7 +48,7 @@ public class MenuItemServiceIntegrationTests {
     }
 
     @Test
-    public void create_ValidMenuItem() throws Exception {
+    public void create_ValidMenuItem_ReturnsCreatedMenuItem() throws Exception {
         MenuItem menuItem = menuItemService.create(new MenuItem("Coca-cola", "Gazirano pice", MenuItemCategory.NON_ALCOHOLIC,
                 MenuItemType.DRINK, 2));
         assertEquals("Coca-cola", menuItem.getName());
@@ -58,7 +58,7 @@ public class MenuItemServiceIntegrationTests {
     }
 
     @Test
-    public void update_ValidId_ValidMenuItem() throws Exception {
+    public void update_ValidId_ReturnsUpdatedMenuItem() throws Exception {
         MenuItem menuItem = new MenuItem("Coca-cola", "Gazirano pice", MenuItemCategory.NON_ALCOHOLIC,
                 MenuItemType.DRINK, 5);
         menuItem.setId(1);
@@ -81,7 +81,7 @@ public class MenuItemServiceIntegrationTests {
 
     @Rollback()
     @Test
-    public void delete_ValidId_MenuItemDeleted() throws Exception {
+    public void delete_ValidId() throws Exception {
         menuItemService.delete(1);
         Assertions.assertThrows(MissingEntityException.class, () -> {
             menuItemService.findById(1);
@@ -97,49 +97,49 @@ public class MenuItemServiceIntegrationTests {
     }
 
     @Test
-    public void search_SearchParamNameDescription_SetOfMenuItems() {
+    public void search_SearchParamNameDescription_ReturnsSetOfMenuItems() {
         var menuItems = menuItemService.search("limun");
         assertEquals(1, menuItems.size());
     }
 
     @Test
-    public void search_SearchParamName_SetOfMenuItems() {
+    public void search_SearchParamName_ReturnsSetOfMenuItems() {
         var menuItems = menuItemService.search("coca cola");
         assertEquals(1, menuItems.size());
     }
 
     @Test
-    public void search_SearchParamDescription_SetOfMenuItems() {
+    public void search_SearchParamDescription_ReturnsSetOfMenuItems() {
         var menuItems = menuItemService.search("dimljeni");
         assertEquals(1, menuItems.size());
     }
 
     @Test
-    public void search_SearchParamCategory_SetOfMenuItems() {
+    public void search_SearchParamCategory_ReturnsSetOfMenuItems() {
         var menuItems = menuItemService.search("Dezert");
         assertEquals(4, menuItems.size());
     }
 
     @Test
-    public void search_SearchParamType_SetOfMenuItems() {
+    public void search_SearchParamType_ReturnsSetOfMenuItems() {
         var menuItems = menuItemService.search("Hrana");
         assertEquals(10, menuItems.size());
     }
 
     @Test
-    public void search_InvalidParam_EmptySet() {
+    public void search_InvalidParam_ReturnsEmptySet() {
         var menuItems = menuItemService.search("abcd");
         assertEquals(0, menuItems.size());
     }
 
     @Test
-    public void filter_ValidCategory_SetOfMenuItems() {
+    public void filter_ValidCategory_ReturnsSetOfMenuItems() {
         var menuItems = menuItemService.filter("Glavno jelo");
         assertEquals(4, menuItems.size());
     }
 
     @Test
-    public void filter_InvalidCategory_EmptySet() {
+    public void filter_InvalidCategory_ReturnsEmptySet() {
         var menuItems = menuItemService.filter("abcd");
         assertEquals(0, menuItems.size());
     }

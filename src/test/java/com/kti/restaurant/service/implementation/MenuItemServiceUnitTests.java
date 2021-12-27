@@ -41,7 +41,7 @@ public class MenuItemServiceUnitTests {
     }
 
     @Test
-    public void findById_ValidId_ExistingMenuItem() throws Exception {
+    public void findById_ValidId_ReturnsExistingMenuItem() throws Exception {
         MenuItem menuItem = menuItemService.findById(1);
         assertEquals("Coca-cola", menuItem.getName());
     }
@@ -54,7 +54,7 @@ public class MenuItemServiceUnitTests {
     }
 
     @Test
-    public void delete_ValidId_MenuItemDeleted() {
+    public void delete_ValidId() {
         Assertions.assertDoesNotThrow(() -> {
             menuItemService.delete(1);
         });
@@ -72,7 +72,7 @@ public class MenuItemServiceUnitTests {
     }
 
     @Test
-    public void update_ValidMenuItemId_ValidItem() throws Exception {
+    public void update_ValidMenuItemId_ReturnsUpdatedItem() throws Exception {
         MenuItem menuItemForUpdate = new MenuItem("COCA-COLA", "Gazirano bezalhoholno pice", MenuItemCategory.NON_ALCOHOLIC, MenuItemType.DRINK,
                 3);
 
@@ -99,7 +99,7 @@ public class MenuItemServiceUnitTests {
 
     //Da li je potrebno jos testova za ovu metodu?
     @Test
-    public void search_ValidSearchParam_SetOfMenuItems() {
+    public void search_ValidSearchParam_ReturnsSetOfMenuItems() {
         List<MenuItem> menuItemsSearchByNameAndDescription = new ArrayList<>();
         MenuItem menuItem1 = new MenuItem("COCA-COLA", "Gazirano bezalhoholno pice", MenuItemCategory.NON_ALCOHOLIC, MenuItemType.DRINK,
                 3);

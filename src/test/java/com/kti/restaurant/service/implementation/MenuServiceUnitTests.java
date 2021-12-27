@@ -35,7 +35,7 @@ public class MenuServiceUnitTests {
     }
 
     @Test
-    public void findById_ValidId_ExistingId() throws Exception {
+    public void findById_ValidId_ReturnsExistingMenu() throws Exception {
         Menu menu = menuService.findById(1);
 
         assertEquals("Glavni meni", menu.getName());
@@ -51,7 +51,7 @@ public class MenuServiceUnitTests {
     }
 
     @Test
-    public void update_ValidId_UpdatedMenu() throws Exception {
+    public void update_ValidId_ReturnsUpdatedMenu() throws Exception {
         Menu menuForUpdate = new Menu("GLAVNI MENI", LocalDateTime.parse("2021-11-10T13:00"), LocalDateTime.parse("2023-11-10T13:00"), 1);
 
         when(menuRepository.save(any())).thenAnswer(a -> a.getArgument(0));
@@ -77,7 +77,7 @@ public class MenuServiceUnitTests {
     }
 
     @Test
-    public void delete_ValidId_DeletedMenu() throws Exception {
+    public void delete_ValidId() throws Exception {
         Assertions.assertDoesNotThrow(() -> {
             menuService.delete(1);
         });

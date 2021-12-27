@@ -23,13 +23,13 @@ public class PriceItemServiceIntegrationTests {
     private PriceItemService priceItemService;
 
     @Test
-    public void findAll_ListOfPriceItems() {
+    public void findAll_ReturnsExistingPriceItems() {
         List<PriceItem> priceItems = priceItemService.findAll();
         assertEquals(13, priceItems.size());
     }
 
     @Test
-    public void findById_ValidPriceItemId_ExistingPriceItem() throws Exception {
+    public void findById_ValidPriceItemId_ReturnsExistingPriceItem() throws Exception {
         PriceItem priceItem = priceItemService.findById(1);
 
         assertEquals(Double.valueOf(180), priceItem.getValue());
@@ -49,7 +49,7 @@ public class PriceItemServiceIntegrationTests {
 
     @Rollback()
     @Test
-    public void create_ValidPriceItem_CreatedPriceItem() throws Exception {
+    public void create_ValidPriceItem_ReturnsCreatedPriceItem() throws Exception {
         PriceItem priceItem = priceItemService.create(new PriceItem(Double.valueOf(350), LocalDate.parse("2021-11-15"), LocalDate.parse("2022-08-15"),
                 null, true, Double.valueOf(240)));
 
@@ -70,7 +70,7 @@ public class PriceItemServiceIntegrationTests {
 
     @Rollback()
     @Test
-    public void update_ValidPriceItem_UpdatedPriceItem() throws Exception {
+    public void update_ValidPriceItem_ReturnsUpdatedPriceItem() throws Exception {
         PriceItem priceItemForUpdate = new PriceItem(Double.valueOf(350), LocalDate.parse("2021-11-15"), LocalDate.parse("2022-08-15"),
                 null, true, Double.valueOf(240));
 
@@ -114,7 +114,7 @@ public class PriceItemServiceIntegrationTests {
     }
 
     @Test
-    public void findPriceForDate_ValidDate_ValidMenuItemId_ExistingPriceItem() throws Exception {
+    public void findPriceForDate_ValidDateValidMenuItemId_ReturnsExistingPriceItem() throws Exception {
         PriceItem priceItem = priceItemService.findPriceForDate(LocalDate.parse("2021-11-20"),1);
 
         assertEquals(Double.valueOf(180), priceItem.getValue());
@@ -125,21 +125,21 @@ public class PriceItemServiceIntegrationTests {
     }
 
     @Test
-    public void findPriceForDate_InvalidDate_ValidMenuItemId_Null() throws Exception {
+    public void findPriceForDate_InvalidDateValidMenuItemId_ReturnsNull() throws Exception {
         PriceItem priceItem = priceItemService.findPriceForDate(LocalDate.parse("2022-11-18"), 1);
 
         assertNull(priceItem);
     }
 
     @Test
-    public void findPriceForDate_ValidDate_InvalidMenuItemId_Null() throws Exception {
+    public void findPriceForDate_ValidDateInvalidMenuItemId_ReturnsNull() throws Exception {
         PriceItem priceItem = priceItemService.findPriceForDate(LocalDate.parse("2021-11-20"), 20);
 
         assertNull(priceItem);
     }
 
     @Test
-    public void findPriceForDate_InvalidDate_InvalidMenuItemId_Null() {
+    public void findPriceForDate_InvalidDateInvalidMenuItemId_ReturnsNull() {
         PriceItem priceItem = priceItemService.findPriceForDate(LocalDate.parse("2022-11-20"), 20);
 
         assertNull(priceItem);

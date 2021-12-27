@@ -28,14 +28,14 @@ public class OrderServiceIntegrationTests {
     private OrderService orderService;
 
     @Test
-    public void findAll_NumberOfOrders() {
+    public void findAll_ReturnsExistingOrders() {
         List<Order> orders = orderService.findAll();
 
         assertEquals(3, orders.size());
     }
 
     @Test
-    public void findById_ValidId_ExistingOrder() throws Exception {
+    public void findById_ValidId_ReturnsExistingOrder() throws Exception {
         Order order = orderService.findById(1);
 
         assertEquals(OrderStatus.ORDERED, order.getStatus());
@@ -53,7 +53,7 @@ public class OrderServiceIntegrationTests {
 
     @Test
     @Rollback
-    public void create_ValidOrder() throws Exception {
+    public void create_ValidOrder_ReturnsCreatedOrder() throws Exception {
         Order orderForCreate = new Order(OrderStatus.ORDERED, LocalDateTime.parse("2021-12-08T11:20"),
                 500.00, new RestaurantTable(), new Waiter());
 
@@ -66,7 +66,7 @@ public class OrderServiceIntegrationTests {
 
     @Test
     @Rollback
-    public void update_ValidId_ExistingOrder() throws Exception {
+    public void update_ValidId_ReturnsUpdatedOrder() throws Exception {
         Order orderForUpdate = new Order(OrderStatus.PAID, LocalDateTime.parse("2021-12-01T18:20"),
                 8500.00, new RestaurantTable(), new Waiter());
 
@@ -85,7 +85,7 @@ public class OrderServiceIntegrationTests {
 
     @Test
     @Rollback
-    public void delete_ValidId_OrderDeleted() throws Exception {
+    public void delete_ValidId() throws Exception {
         orderService.delete(1);
         assertThrows(MissingEntityException.class, () -> {
             orderService.findById(1);
@@ -101,7 +101,7 @@ public class OrderServiceIntegrationTests {
     }
 
     @Test
-    public void filterByStatus_ValidStatus_ExistingOrders() {
+    public void filterByStatus_ValidStatus_ReturnsExistingOrders() {
         Collection<Order> filteredOrders = orderService.filterByStatus("ORDERED");
 
         assertEquals(2, filteredOrders.size());

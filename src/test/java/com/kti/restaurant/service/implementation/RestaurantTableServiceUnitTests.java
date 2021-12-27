@@ -58,7 +58,7 @@ public class RestaurantTableServiceUnitTests {
 	}
 	
 	@Test
-	public void update_ValidId_UpdatesRestaurantTable() throws Exception {
+	public void update_ValidId_ReturnsUpdatesRestaurantTable() throws Exception {
 		RestaurantTable tableToUpdate = new RestaurantTable(false, 1, 5, 1, 1);
 		tableToUpdate.setId(1);
 		
@@ -82,7 +82,7 @@ public class RestaurantTableServiceUnitTests {
 	}
 	
 	@Test
-	public void delete_ValidId_DeletesRestaurantTable() throws Exception {
+	public void delete_ValidId() throws Exception {
 		tableService.delete(1);
 		verify(tableRepository, times(1)).findById(1);
 		verify(tableRepository, times(1)).deleteById(1);

@@ -38,7 +38,7 @@ public class OrderItemServiceUnitTests {
     }
 
     @Test
-    public void findById_ValidId_ExistingOrderItem() throws Exception {
+    public void findById_ValidId_ReturnsExistingOrderItem() throws Exception {
         OrderItem orderItem = orderItemService.findById(1);
         assertEquals(1, orderItem.getId());
         assertEquals("", orderItem.getNote());
@@ -55,7 +55,7 @@ public class OrderItemServiceUnitTests {
     }
 
     @Test
-    public void update_ValidId_ExistingOrderItem() throws Exception {
+    public void update_ValidId_ReturnsUpdatedOrderItem() throws Exception {
         OrderItem orderItemForUpdate = new OrderItem(2, "bez bibera", OrderItemStatus.PREPARATION,
                 2, new Order(), new MenuItem(), null, new Cook());
         orderItemForUpdate.setId(1);
@@ -77,7 +77,7 @@ public class OrderItemServiceUnitTests {
     }
 
     @Test
-    public void delete_ValidId_OrderItemDeleted() {
+    public void delete_ValidId() {
         assertDoesNotThrow(() -> {
             orderItemService.delete(1);
         });
