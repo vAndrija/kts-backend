@@ -3,6 +3,7 @@ package com.kti.restaurant.controller;
 import com.kti.restaurant.dto.JwtAuthenticationRequest;
 import com.kti.restaurant.dto.menuitem.MenuItemDto;
 import com.kti.restaurant.dto.menuitem.UpdateMenuItemDto;
+import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.model.enums.MenuItemCategory;
@@ -49,7 +50,7 @@ public class MenuItemControllerIntegrationTests {
         int size = menuItemService.findAll().size();
 
         HttpEntity<MenuItemDto> httpEntity = new HttpEntity<>(new MenuItemDto("Sarma", "Jelo od mlevenog mesa i kiselog kupusa", MenuItemType.FOOD,
-                MenuItemCategory.MAIN_COURSE, 10), headers);
+                MenuItemCategory.MAIN_COURSE, 10, null), headers);
         ResponseEntity<MenuItem> responseEntity = restTemplate.postForEntity("/api/v1/menu-items", httpEntity, MenuItem.class);
 
         MenuItem menuItem = responseEntity.getBody();
@@ -73,7 +74,7 @@ public class MenuItemControllerIntegrationTests {
         int size = menuItemService.findAll().size();
 
         HttpEntity<MenuItemDto> httpEntity = new HttpEntity<>(new MenuItemDto("", "Jelo od mlevenog mesa i kiselog kupusa", MenuItemType.FOOD,
-                MenuItemCategory.MAIN_COURSE, 10), headers);
+                MenuItemCategory.MAIN_COURSE, 10, null), headers);
         ResponseEntity<MenuItem> responseEntity = restTemplate.postForEntity("/api/v1/menu-items", httpEntity, MenuItem.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -221,5 +222,26 @@ public class MenuItemControllerIntegrationTests {
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(0, menuItems.size());
+    }
+
+    @Test
+    public void findMenuItemsByMenuId_ValidMenuId_Pageable_ReturnsOk() {
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<MenuItem[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/by-menu/{menuId}?page={page}&size={size}",
+                HttpMethod.GET, httpEntity, MenuItem[].class, 1, 1, 5);
+
+        List<MenuItem> menuItems = List.of(responseEntity.getBody());
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(5, menuItems.size());
+    }
+
+    @Test
+    public void findMenuItemsByMenuId_InvalidMenuId_Pageable_ReturnsNotFound() {
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<MissingEntityException> responseEntity = restTemplate.exchange("/api/v1/menu-items/by-menu/{menuId}?page={page}&size={size}",
+                HttpMethod.GET, httpEntity, MissingEntityException.class, 10, 1, 5);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 }
