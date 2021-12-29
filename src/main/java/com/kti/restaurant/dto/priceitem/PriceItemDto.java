@@ -19,7 +19,6 @@ public class PriceItemDto {
     @NotNull(message = "Menu item id should not be null or empty")
     private Integer menuItemId;
 
-    @NotNull(message = "Is current should not be null or empty")
     private Boolean isCurrent;
 
     @NotNull(message = "Preparation value should not be null or empty")

@@ -76,7 +76,7 @@ INSERT INTO menu (name, duration_start, duration_end, deleted) values ('letnji',
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
     ('coca cola', 'bezalkoholno gazirano pice', 0, 7, 1, true, false, 2);
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('mohito', 'koktel  od belog kubanskog ruma, soka limetе, sveze nane i mineralne vode', 0, 5, 1, true, false, 8);
+    ('mohito', 'koktel  od belog kubanskog ruma, soka limetе, sveze nane i mineralne vode', 0, 5, 1, false, false, 8);
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
     ('domaca kafa', 'topli napitak', 0, 6, 1, true, false, 5);
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
