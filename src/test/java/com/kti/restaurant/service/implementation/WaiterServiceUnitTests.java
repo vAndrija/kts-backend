@@ -58,7 +58,7 @@ public class WaiterServiceUnitTests {
     }
 
     @Test
-    public void findById_ValidId_ExistingWaiter() throws Exception {
+    public void findById_ValidId_ReturnsExistingWaiter() throws Exception {
         Waiter waiter = waiterService.findById(1);
 
         assertEquals(1, waiter.getId());
@@ -78,7 +78,7 @@ public class WaiterServiceUnitTests {
     }
 
     @Test
-    public void create_UniqueEmail_ValidWaiter() throws Exception {
+    public void create_UniqueEmail_ReturnsCreatedWaiter() throws Exception {
         Waiter waiterForCreate = new Waiter("Peric", "Ana", "065289632",
                 "anaperic@gmail.com", "412589632");
         waiterForCreate.setId(2);
@@ -121,7 +121,7 @@ public class WaiterServiceUnitTests {
     }
 
     @Test
-    public void update_ValidId_ExistingWaiter() throws Exception {
+    public void update_ValidId_ReturnsUpdatedWaiter() throws Exception {
         Waiter waiterForUpdate = new Waiter("Jovic", "Tara", "0632589411",
                 "saramilic@gmail.com", "0252698741");
         waiterForUpdate.setId(1);
@@ -145,7 +145,7 @@ public class WaiterServiceUnitTests {
     }
 
     @Test
-    public void delete_ValidId_WaiterDeleted() {
+    public void delete_ValidId() {
         assertDoesNotThrow(() -> {
             waiterService.delete(1);
         });

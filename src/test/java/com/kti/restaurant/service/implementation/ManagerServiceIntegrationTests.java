@@ -30,13 +30,13 @@ public class ManagerServiceIntegrationTests {
     private ManagerService managerService;
 
     @Test
-    public void findAll_ValidNumberOfManagers() {
+    public void findAll_ReturnsExitingManagers() {
         List<Manager> managers = managerService.findAll();
         assertEquals(1, managers.size());
     }
 
     @Test
-    public void findById_ValidId_ValidManager() throws Exception {
+    public void findById_ValidId_ReturnsExistingManager() throws Exception {
         Manager manager = managerService.findById(6);
         assertEquals("sarajovic@gmail.com", manager.getEmailAddress());
         assertEquals("sara", manager.getName());
@@ -51,7 +51,7 @@ public class ManagerServiceIntegrationTests {
     }
 
     @Test
-    public void create_ValidManager() throws Exception {
+    public void create_ValidManager_ReturnsCreatedManager() throws Exception {
         Manager manager = new Manager("Vojnovic", "Andrija", "213123123", "andrija@vojnvo.com", "21312311");
         manager.setPassword("1234");
         Manager createdManager = managerService.create(manager);
@@ -72,7 +72,7 @@ public class ManagerServiceIntegrationTests {
 
     @Rollback()
     @Test
-    public void update_ValidId_ValidManager() throws Exception {
+    public void update_ValidId_ReturnsUpdatedManager() throws Exception {
         Manager manager = new Manager("Vojnovic", "Andrija", "213123123", "sarajovic@gmail.com", "21312311");
         Manager updatedManager = managerService.update(manager, 6);
         assertEquals("Vojnovic", updatedManager.getLastName());
@@ -93,7 +93,7 @@ public class ManagerServiceIntegrationTests {
 
     @Rollback()
     @Test
-    void delete_ValidId_ThrowsMissingEntityException() throws Exception {
+    void delete_ValidId() throws Exception {
         managerService.delete(6);
         Assertions.assertThrows(MissingEntityException.class, () -> {
             managerService.findById(6);

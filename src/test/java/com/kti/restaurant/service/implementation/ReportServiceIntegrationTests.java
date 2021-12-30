@@ -90,7 +90,7 @@ public class ReportServiceIntegrationTests {
 	}
 
 	@Test
-	public void costBenefitRatioForYear_ValidYear_CostBenefitRatioPerMonths() {
+	public void costBenefitRatioForYear_ValidYear_ReturnsCostBenefitRatioPerMonths() {
 		List<Double> costBenefitRation = reportService.costBenefitRatioForYear(2021);
 		assertEquals(12, costBenefitRation.size());
 		assertEquals(Double.valueOf(0), costBenefitRation.get(0));
@@ -110,7 +110,7 @@ public class ReportServiceIntegrationTests {
 	}
 
 	@Test
-	public void costBenefitRatioForMonth_ValidParameters_CostBenefitRatioPerDays() {
+	public void costBenefitRatioForMonth_ValidParameters_ReturnsCostBenefitRatioPerDays() {
 		List<Double> costBenefitRatio = reportService.costBenefitRatioForMonth(2021, 11);
 		assertEquals(30, costBenefitRatio.size());
 		assertEquals(Double.valueOf(-8167), costBenefitRatio.get(0));
@@ -136,7 +136,7 @@ public class ReportServiceIntegrationTests {
 	}
 
 	@Test
-	public void preparationTimeForYear_ValidParameters_PreparationTimePerMonthsForBartender() {
+	public void preparationTimeForYear_ValidParameters_ReturnsPreparationTimePerMonthsForBartender() {
 		List<Integer> preparationTime = reportService.preparationTimeForYear(2021, 2);
 		assertEquals(12, preparationTime.size());
 		assertEquals(0, preparationTime.get(0));
@@ -144,7 +144,7 @@ public class ReportServiceIntegrationTests {
 	}
 
 	@Test
-	public void preparationTimeForYear_ValidParameters_PreparationTimePerMonthsForCook() {
+	public void preparationTimeForYear_ValidParameters_ReturnsPreparationTimePerMonthsForCook() {
 		List<Integer> preparationTime = reportService.preparationTimeForYear(2021, 4);
 		assertEquals(12, preparationTime.size());
 		assertEquals(0, preparationTime.get(0));
@@ -179,7 +179,7 @@ public class ReportServiceIntegrationTests {
 	}
 	
 	@Test 
-	public void mealDrinkCostsForYear_ValidParameters_MealDrinkCostsForYear() {
+	public void mealDrinkCostsForYear_ValidParameters_ReturnsMealDrinkCostsForYear() {
 		List<Double> costsPerMonths = reportService.mealDrinkCostsForYear(2021);
 		
 		assertEquals(12, costsPerMonths.size());

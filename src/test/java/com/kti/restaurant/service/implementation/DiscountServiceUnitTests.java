@@ -43,7 +43,7 @@ public class DiscountServiceUnitTests {
 	}
 
 	@Test
-	public void create_ValidDiscount_CreatedDiscount() throws Exception {
+	public void create_ValidDiscount_ReturnsCreatedDiscount() throws Exception {
 		Discount discount = discountService.create(new Discount(10, LocalDate.parse("2021-11-19"), LocalDate.parse("2021-11-20"), false,
 				null));
 
@@ -62,7 +62,7 @@ public class DiscountServiceUnitTests {
 	}
 	
 	@Test
-	public void findById_ValidId_ExistingDiscount() throws Exception {
+	public void findById_ValidId_ReturnsExistingDiscount() throws Exception {
 		Discount discount = discountService.findById(1);
 		assertEquals(Integer.valueOf(10), discount.getValue());
 	}
@@ -75,7 +75,7 @@ public class DiscountServiceUnitTests {
 	}
 
 	@Test
-	public void update_ValidDiscount_ValidDiscount() throws Exception {
+	public void update_ValidDiscount_ReturnsUpdatedDiscount() throws Exception {
 		Discount discountForUpdate = new Discount(15, LocalDate.parse("2021-11-21"), LocalDate.parse("2021-11-22"), true,
 				null);
 
@@ -111,7 +111,7 @@ public class DiscountServiceUnitTests {
 	}
 
 	@Test
-	public void delete_ValidId_DiscountDeleted() throws Exception {
+	public void delete_ValidId() throws Exception {
 		Assertions.assertDoesNotThrow(() -> {
 			discountService.delete(1);
 		});

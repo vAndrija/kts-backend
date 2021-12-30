@@ -75,7 +75,7 @@ public class ManagerServiceUnitTests {
     }
 
     @Test
-    public void create_ValidUniqueEmail_ValidManager() throws Exception {
+    public void create_ValidUniqueEmail_ReturnsCreatedManager() throws Exception {
         Manager managerForCreate = new Manager("Zolotic", "Milutin", "333333", "milutin@zolotic.com", "21312311");
         managerForCreate.setPassword("andrija");
         when(userRepository.findByEmailAddress("milutin@zolotic.com"))
@@ -107,7 +107,7 @@ public class ManagerServiceUnitTests {
     }
 
     @Test
-    public void update_ValidManager_ValidManager() throws Exception {
+    public void update_ValidManager_ReturnsUpdatedManager() throws Exception {
         Manager managerForUpdate = new Manager("Vojnovic", "Andrija", "333333", "andrija@vojnvo.com", "21312311");
         managerForUpdate.setId(1);
         when(managerRepository.save(any()))
@@ -133,7 +133,7 @@ public class ManagerServiceUnitTests {
     }
 
     @Test
-    public void delete_ValidId_ManagerDeleted() {
+    public void delete_ValidId() {
         assertDoesNotThrow(() -> {
             this.managerService.delete(1);
         });

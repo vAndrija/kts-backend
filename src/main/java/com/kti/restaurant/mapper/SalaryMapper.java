@@ -2,7 +2,6 @@ package com.kti.restaurant.mapper;
 
 import com.kti.restaurant.dto.salary.CreateSalaryDto;
 import com.kti.restaurant.dto.salary.SalaryDto;
-import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Salary;
 import com.kti.restaurant.model.User;
 import com.kti.restaurant.service.UserService;
@@ -20,12 +19,7 @@ public class SalaryMapper {
     }
 
     public Salary fromCreateSalaryDtoToSalary(CreateSalaryDto salaryDto) {
-    	User user = (User) userService.loadUserByUsername(salaryDto.getUserEmail());
-    	
-    	if(user == null) {
-    		throw new MissingEntityException("User cannot be found in system.");
-    	}
- 
+    	User user = userService.findUserByUsername(salaryDto.getUserEmail());
         return new Salary(salaryDto.getValue(), salaryDto.getStartDate(), salaryDto.getEndDate(), user);
     }
     

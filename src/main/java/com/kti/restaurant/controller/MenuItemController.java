@@ -6,6 +6,10 @@ import com.kti.restaurant.mapper.MenuItemMapper;
 import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.service.contract.IMenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +51,12 @@ public class MenuItemController {
         return new ResponseEntity<>(menuItemService.findAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/pending-menu-items")
+    public ResponseEntity<Page<MenuItem>> getPendingMenuItems(@RequestParam Integer page, @RequestParam Integer size) {
+    	Pageable pageable = PageRequest.of(page, size);
+        return new ResponseEntity<>(menuItemService.pendingMenuItems(pageable), HttpStatus.OK);
+    }
+    
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'MANAGER')")
     public ResponseEntity<?> updateMenuItem(@Valid @RequestBody UpdateMenuItemDto updateMenuItemDto, @PathVariable Integer id) throws Exception {

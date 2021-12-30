@@ -47,7 +47,7 @@ public class TableReservationServiceUnitTests {
 	}
 	
 	@Test
-	public void findById_ValidId_ReturnsValidTableReservation() throws Exception {
+	public void findById_ValidId_ReturnsExistingTableReservation() throws Exception {
 		TableReservation reservation = reservationService.findById(1);
 		
 		assertEquals(reservation.getId(), Integer.valueOf(1));

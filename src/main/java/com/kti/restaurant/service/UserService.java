@@ -1,7 +1,6 @@
 package com.kti.restaurant.service;
 
 
-import com.kti.restaurant.dto.auth.ResetPasswordDTO;
 import com.kti.restaurant.exception.BadTokenException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.User;
@@ -38,15 +37,22 @@ public class UserService  implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserDetails userDetails = userRepository.getByEmailAddress(email);
+        UserDetails userDetails = userRepository.findByEmailAddress(email);
         if(userDetails==null)
             throw new UsernameNotFoundException(email);
         return userDetails;
     }
 
+    public User findUserByUsername(String email) {
+    	User user = userRepository.findByEmailAddress(email);
+    	if(user == null) {
+            throw new MissingEntityException("User with given email does not exist in the system.");
+    	}
+    	return user;
+    }
 
     public void sendResetToken(String email) throws Exception{
-        User user = userRepository.getByEmailAddress(email);
+        User user = userRepository.findByEmailAddress(email);
         if(user == null) {
             throw new MissingEntityException("User with given email does not exist in the system.");
         }
@@ -63,7 +69,7 @@ public class UserService  implements UserDetailsService {
         if(differenceInTime>30)
             throw new BadTokenException("Token expired");
         confirmationTokenRepository.delete(token);
-        User user = userRepository.getByEmailAddress(token.getUser().getEmailAddress());
+        User user = userRepository.findByEmailAddress(token.getUser().getEmailAddress());
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
     }

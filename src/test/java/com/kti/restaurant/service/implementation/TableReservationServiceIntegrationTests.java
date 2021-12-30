@@ -2,11 +2,9 @@ package com.kti.restaurant.service.implementation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -38,14 +36,14 @@ public class TableReservationServiceIntegrationTests {
 	private static final String badLogicMessage = "Cannot reserve same table in same time period.";
 	
 	@Test
-	public void findAll_ReturnsValidTableReservations() {
+	public void findAll_ReturnsExistingTableReservations() {
 		List<TableReservation> reservations = reservationService.findAll();
 		
 		assertEquals(2, reservations.size());
 	}
 	
 	@Test
-	public void findById_ValidId_ReturnsValidTableReservation() throws Exception {
+	public void findById_ValidId_ReturnsExistingTableReservation() throws Exception {
 		TableReservation reservation = reservationService.findById(1);
 		
 		assertEquals(Integer.valueOf(1), reservation.getId());
@@ -64,7 +62,7 @@ public class TableReservationServiceIntegrationTests {
 	
 	@Test
 	@Rollback
-	public void create_ValidTableReservation_ReturnsValidTableReservation() throws Exception {
+	public void create_ValidTableReservation_ReturnsCreatedTableReservation() throws Exception {
 		TableReservation reservation = reservationService.create(new TableReservation("Ime", LocalDateTime.parse("2021-12-12T18:00"), new RestaurantTable()));
 		
 		assertEquals(Integer.valueOf(3), reservation.getId());

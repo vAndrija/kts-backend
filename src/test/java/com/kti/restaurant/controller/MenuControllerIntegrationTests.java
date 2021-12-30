@@ -147,7 +147,7 @@ public class MenuControllerIntegrationTests {
     }
 
     @Test
-    public void updateMenu_InvalidMenuId_ReturnsNotFoundStatus() {
+    public void updateMenu_InvalidMenuId_ReturnsNotFound() {
         HttpEntity<MenuDto> httpEntity = new HttpEntity<MenuDto>(new MenuDto("Glavni", LocalDateTime.parse("2021-11-18T08:00"),
                 LocalDateTime.parse("2022-11-18T08:00")), headers);
         ResponseEntity<Menu> responseEntity =
@@ -195,7 +195,7 @@ public class MenuControllerIntegrationTests {
     }
 
     @Test
-    public void deleteMenu_InvalidMenuId_ReturnsNotFoundStatus() {
+    public void deleteMenu_InvalidMenuId_ReturnsNotFound() {
         int size = menuService.findAll().size();
 
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);

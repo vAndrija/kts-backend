@@ -25,13 +25,13 @@ public class DiscountServiceIntegrationTests {
     private DiscountService discountService;
 
     @Test
-    public void findAll_ValidNumberOfDiscount() {
+    public void findAll_ReturnsExistingDiscounts() {
         List<Discount> discounts = discountService.findAll();
         assertEquals(1, discounts.size());
     }
 
     @Test
-    public void findById_ValidId_ValidDiscount() throws Exception {
+    public void findById_ValidId_ReturnsExistingDiscount() throws Exception {
         Discount discount = discountService.findById(1);
         assertEquals(10, discount.getValue());
     }
@@ -44,7 +44,7 @@ public class DiscountServiceIntegrationTests {
     }
 
     @Test
-    public void create_ValidDiscount_CreatedDiscount() throws Exception {
+    public void create_ValidDiscount_ReturnsCreatedDiscount() throws Exception {
         Discount discount = discountService.create(new Discount(15, LocalDate.parse("2021-05-11"),
                 LocalDate.parse("2021-11-11"), false, null));
         assertEquals(15, discount.getValue());
@@ -62,7 +62,7 @@ public class DiscountServiceIntegrationTests {
     }
 
     @Test
-    void update_ValidId_ValidDiscount() throws Exception {
+    void update_ValidId_ReturnsUpdatedDiscount() throws Exception {
         Discount discount = new Discount(25, LocalDate.parse("2021-05-11"),
                 LocalDate.parse("2021-11-11"), false, null);
         discount.setId(1);
@@ -91,7 +91,7 @@ public class DiscountServiceIntegrationTests {
 
     @Rollback()
     @Test
-    void delete_ValidId_ThrowsMissingEntityException() throws Exception {
+    void delete_ValidId() throws Exception {
         discountService.delete(1);
         Assertions.assertThrows(MissingEntityException.class, () -> {
             discountService.findById(1);

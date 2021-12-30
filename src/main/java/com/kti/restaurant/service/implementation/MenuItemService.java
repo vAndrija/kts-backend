@@ -82,6 +82,12 @@ public class MenuItemService implements IMenuItemService {
         return new HashSet<>(menuItemRepository.findByCategory(MenuItemCategory.findCategory(filter)));
     }
 
+
+	  @Override
+	  public Page<MenuItem> pendingMenuItems(Pageable pageable) {
+		  return menuItemRepository.findPendingMenuItems(pageable);
+	  }
+
     @Override
     public List<MenuItem> findByMenu(Integer menuId, Pageable pageable) throws Exception {
         menuService.findById(menuId);

@@ -4,10 +4,6 @@ package com.kti.restaurant.service.implementation;
 import com.kti.restaurant.exception.ConflictException;
 import com.kti.restaurant.model.Admin;
 import com.kti.restaurant.exception.MissingEntityException;
-import com.kti.restaurant.model.MenuItem;
-import com.kti.restaurant.model.enums.MenuItemCategory;
-import com.kti.restaurant.model.enums.MenuItemType;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +26,13 @@ public class AdminServiceIntegrationTests {
     private AdminService adminService;
 
     @Test
-    public void findAll_ValidNumberOfAdmins() {
+    public void findAll_ReturnsExistingAdmins() {
         List<Admin> admins = adminService.findAll();
         assertEquals(5, admins.size());
     }
 
     @Test
-    public void findById_ValidId_ValidAdmin() throws Exception {
+    public void findById_ValidId_ReturnsValidAdmin() throws Exception {
         Admin admin = adminService.findById(1);
         assertEquals("mirkomiric@gmail.com", admin.getEmailAddress());
         assertEquals("mirko", admin.getName());
@@ -51,7 +47,7 @@ public class AdminServiceIntegrationTests {
     }
 
     @Test
-    public void create_ValidAdmin() throws Exception {
+    public void create_ValidAdmin_ReturnsCreatedAdmin() throws Exception {
         Admin admin = new Admin("Vojnovic", "Andrija", "213123123", "andrija@vojnvo.com", "21312311");
         admin.setPassword("1234");
         Admin createdAdmin = adminService.create(admin);
@@ -72,7 +68,7 @@ public class AdminServiceIntegrationTests {
 
     @Rollback()
     @Test
-    public void update_ValidId_ValidAdmin() throws Exception {
+    public void update_ValidId_ReturnsUpdatedAdmin() throws Exception {
         Admin admin = new Admin("Vojnovic", "Andrija", "213123123", "mirkomiric@gmail.com", "21312311");
         Admin updatedAdmin = adminService.update(admin, 1);
         assertEquals("Vojnovic", updatedAdmin.getLastName());
@@ -93,7 +89,7 @@ public class AdminServiceIntegrationTests {
 
     @Rollback()
     @Test
-    void delete_ValidId_ThrowsMissingEntityException() throws Exception {
+    void delete_ValidId() throws Exception {
         adminService.delete(1);
         Assertions.assertThrows(MissingEntityException.class, () -> {
             adminService.findById(1);

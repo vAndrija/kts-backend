@@ -55,7 +55,7 @@ public class AdminServiceUnitTests {
     }
 
     @Test
-    public void findById_ValidId_ExistingAdmin() throws Exception {
+    public void findById_ValidId_ReturnsExistingAdmin() throws Exception {
         Admin admin = adminService.findById(1);
         assertEquals( 1,admin.getId());
         assertEquals( "Andrija",admin.getName());
@@ -73,7 +73,7 @@ public class AdminServiceUnitTests {
     }
 
     @Test
-    public void create_ValidUniqueEmail_ValidAdmin() throws Exception {
+    public void create_ValidUniqueEmailValidAdmin_ReturnsCreatedAdmin() throws Exception {
         Admin adminForCreate = new Admin("Zolotic", "Milutin", "333333", "milutin@zolotic.com", "21312311");
         adminForCreate.setPassword("andrija");
         when(userRepository.findByEmailAddress("milutin@zolotic.com"))
@@ -105,7 +105,7 @@ public class AdminServiceUnitTests {
     }
 
     @Test
-    public void update_ValidAdmin_ValidAdmin() throws Exception {
+    public void update_ValidAdmin_ReturnsUpdatedAdmin() throws Exception {
         Admin adminForUpdate = new Admin("Vojnovic", "Andrija", "333333", "andrija@vojnvo.com", "21312311");
         adminForUpdate.setId(1);
         when(adminRepository.save(any()))
@@ -131,7 +131,7 @@ public class AdminServiceUnitTests {
     }
 
     @Test
-    public void delete_ValidId_AdminDeleted() {
+    public void delete_ValidId() {
         assertDoesNotThrow(() -> {
             this.adminService.delete(1);
         });

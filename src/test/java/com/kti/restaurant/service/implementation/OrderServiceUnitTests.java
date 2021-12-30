@@ -44,7 +44,7 @@ public class OrderServiceUnitTests {
     }
 
     @Test
-    public void findById_ValidId_ExistingOrder() throws Exception {
+    public void findById_ValidId_ReturnsExistingOrder() throws Exception {
         Order order = orderService.findById(1);
 
         assertEquals(OrderStatus.ORDERED, order.getStatus());
@@ -61,7 +61,7 @@ public class OrderServiceUnitTests {
     }
 
     @Test
-    public void update_ValidId_ExistingOrder() throws Exception {
+    public void update_ValidId_ReturnsUpdatedOrder() throws Exception {
         Order orderForUpdate = new Order(OrderStatus.FINISHED, LocalDateTime.parse("2022-10-10T14:15"),
                 3000.00, new RestaurantTable(), new Waiter());
         orderForUpdate.setId(1);
@@ -85,7 +85,7 @@ public class OrderServiceUnitTests {
     }
 
     @Test
-    public void delete_ValidId_OrderDeleted() {
+    public void delete_ValidId() {
         assertDoesNotThrow(() -> {
             orderService.delete(1);
         });
@@ -105,7 +105,7 @@ public class OrderServiceUnitTests {
     }
 
     @Test
-    public void filterByStatus_ValidStatus_ExistingOrders() {
+    public void filterByStatus_ValidStatus_ReturnsExistingOrders() {
         List<Order> filterByStatus = new ArrayList<>();
         Order order1 = new Order(OrderStatus.ORDERED, LocalDateTime.parse("2022-10-10T10:00"),
                 1000.00, new RestaurantTable(), new Waiter());

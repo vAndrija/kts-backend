@@ -23,14 +23,14 @@ public class WaiterServiceIntegrationTests {
     private WaiterService waiterService;
 
     @Test
-    public void findAll_NumberOfWaiters() {
+    public void findAll_ReturnsExistingWaiters() {
         List<Waiter> waiters = waiterService.findAll();
 
         assertEquals(2, waiters.size());
     }
 
     @Test
-    public void findById_ValidId_ExistingWaiter() throws Exception {
+    public void findById_ValidId_ReturnsExistingWaiter() throws Exception {
         Waiter waiter = waiterService.findById(7);
 
         assertEquals("jovanpetrovic@gmail.com", waiter.getEmailAddress());
@@ -50,7 +50,7 @@ public class WaiterServiceIntegrationTests {
 
     @Test
     @Rollback
-    public void create_UniqueEmail_ValidWaiter() throws Exception {
+    public void create_UniqueEmail_ReturnsCreatedWaiter() throws Exception {
         Waiter waiterForCreate = new Waiter("Peric", "Ana", "065289632",
                 "anaperic@gmail.com", "412589632");
         waiterForCreate.setPassword("456");
@@ -78,7 +78,7 @@ public class WaiterServiceIntegrationTests {
 
     @Test
     @Rollback
-    public void update_ValidId_ExistingWaiter() throws Exception {
+    public void update_ValidId_ReturnsUpdatedWaiter() throws Exception {
         Waiter waiterForUpdate = new Waiter("Jovic", "Ana", "0632589411",
                 "anapopovic@gmail.com", "0252698741");
         waiterForUpdate.setId(8);
@@ -102,7 +102,7 @@ public class WaiterServiceIntegrationTests {
 
     @Test
     @Rollback
-    public void delete_ValidId_WaiterDeleted() throws Exception {
+    public void delete_ValidId() throws Exception {
         waiterService.delete(8);
         assertThrows(MissingEntityException.class, () -> {
             waiterService.findById(8);

@@ -163,7 +163,7 @@ public class WaiterControllerIntegrationTests {
     }
 
     @Test
-    public void update_InvalidId_AnotherUser_ReturnsForbidden() {
+    public void update_InvalidIdAnotherUser_ReturnsForbidden() {
         HttpHeaders httpHeaders = new HttpHeaders();
         ResponseEntity<UserTokenState> responseEntity =
                 restTemplate.postForEntity("/api/v1/auth/login",

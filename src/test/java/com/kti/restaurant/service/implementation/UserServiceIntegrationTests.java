@@ -32,7 +32,7 @@ public class UserServiceIntegrationTests {
     private ConfirmationTokenRepository confirmationTokenRepository;
 
     @Test
-    public void loadUserByUsername_ValidUsername_ValidUser() throws Exception {
+    public void loadUserByUsername_ValidUsername_ReuturnsExistingUser() throws Exception {
         UserDetails userDetails = userService.loadUserByUsername("mirkomiric@gmail.com");
         assertEquals("mirkomiric@gmail.com", userDetails.getUsername());
         assertEquals("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra", userDetails.getPassword());
@@ -112,5 +112,18 @@ public class UserServiceIntegrationTests {
         User userAfter = userService.findById(1);
         assertEquals("Token expired", exception.getMessage());
         assertEquals(oldPassword, userAfter.getPassword());
+    }
+    
+    @Test
+    public void findUserByUsername_ValidUserEmail_ReturnsUser() {
+    	User user = userService.findUserByUsername("mirkomiric@gmail.com");
+    	assertEquals("mirkomiric@gmail.com", user.getEmailAddress());
+    }
+    
+    @Test
+    public void findUserByUsername_InvalidUserEmail_ThrowsMissingEntityException() {
+    	assertThrows(MissingEntityException.class, ()-> {
+    		userService.findUserByUsername("invalid");
+    	});
     }
 }

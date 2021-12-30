@@ -40,10 +40,11 @@ public class SalaryServiceUnitTests {
 		salary.setId(1);
 		
 		when(salaryRepository.findById(1)).thenReturn(Optional.of(salary));
+		when(salaryRepository.findById(10)).thenReturn(Optional.empty());
 	}
 	
 	@Test
-	public void findById_ValidId_ReturnsValidSalary() throws Exception {
+	public void findById_ValidId_ReturnsExistingSalary() throws Exception {
 		Salary salary = salaryService.findById(1);
 		
 		assertEquals(salary.getId(), Integer.valueOf(1));
