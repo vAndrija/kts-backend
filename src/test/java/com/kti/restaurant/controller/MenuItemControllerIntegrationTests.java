@@ -50,7 +50,7 @@ public class MenuItemControllerIntegrationTests {
         int size = menuItemService.findAll().size();
 
         HttpEntity<MenuItemDto> httpEntity = new HttpEntity<>(new MenuItemDto("Sarma", "Jelo od mlevenog mesa i kiselog kupusa", MenuItemType.FOOD,
-                MenuItemCategory.MAIN_COURSE, 10, null), headers);
+                "Glavno jelo", 10, null), headers);
         ResponseEntity<MenuItem> responseEntity = restTemplate.postForEntity("/api/v1/menu-items", httpEntity, MenuItem.class);
 
         MenuItem menuItem = responseEntity.getBody();
@@ -74,7 +74,7 @@ public class MenuItemControllerIntegrationTests {
         int size = menuItemService.findAll().size();
 
         HttpEntity<MenuItemDto> httpEntity = new HttpEntity<>(new MenuItemDto("", "Jelo od mlevenog mesa i kiselog kupusa", MenuItemType.FOOD,
-                MenuItemCategory.MAIN_COURSE, 10, null), headers);
+               "Glavno jelo", 10, null), headers);
         ResponseEntity<MenuItem> responseEntity = restTemplate.postForEntity("/api/v1/menu-items", httpEntity, MenuItem.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -173,10 +173,10 @@ public class MenuItemControllerIntegrationTests {
     @Test
     public void searchMenuItems_ValidSearchParameter_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<MenuItem[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/search/{search}", HttpMethod.GET, httpEntity,
-                MenuItem[].class, "bezalkoholno");
+        ResponseEntity<MenuItemDto[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/search/{search}", HttpMethod.GET, httpEntity,
+                MenuItemDto[].class, "bezalkoholno");
 
-        List<MenuItem> menuItems = List.of(responseEntity.getBody());
+        List<MenuItemDto> menuItems = List.of(responseEntity.getBody());
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(2, menuItems.size());
@@ -199,17 +199,17 @@ public class MenuItemControllerIntegrationTests {
     @Test
     public void filterMenuItems_ValidFilterParameter_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<MenuItem[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/filter/{filter}", HttpMethod.GET, httpEntity,
-                MenuItem[].class, "Dezert");
+        ResponseEntity<MenuItemDto[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/filter/{filter}", HttpMethod.GET, httpEntity,
+                MenuItemDto[].class, "Dezert");
 
-        List<MenuItem> menuItems = List.of(responseEntity.getBody());
+        List<MenuItemDto> menuItems = List.of(responseEntity.getBody());
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(4, menuItems.size());
-        assertEquals(MenuItemCategory.DESSERT, menuItems.get(0).getCategory());
-        assertEquals(MenuItemCategory.DESSERT, menuItems.get(1).getCategory());
-        assertEquals(MenuItemCategory.DESSERT, menuItems.get(2).getCategory());
-        assertEquals(MenuItemCategory.DESSERT, menuItems.get(3).getCategory());
+        assertEquals(MenuItemCategory.DESSERT, MenuItemCategory.findCategory(menuItems.get(0).getCategory()));
+        assertEquals(MenuItemCategory.DESSERT, MenuItemCategory.findCategory(menuItems.get(1).getCategory()));
+        assertEquals(MenuItemCategory.DESSERT, MenuItemCategory.findCategory(menuItems.get(2).getCategory()));
+        assertEquals(MenuItemCategory.DESSERT, MenuItemCategory.findCategory(menuItems.get(3).getCategory()));
     }
 
     @Test
@@ -227,10 +227,10 @@ public class MenuItemControllerIntegrationTests {
     @Test
     public void findMenuItemsByMenuId_ValidMenuId_Pageable_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<MenuItem[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/by-menu/{menuId}?page={page}&size={size}",
-                HttpMethod.GET, httpEntity, MenuItem[].class, 1, 1, 5);
+        ResponseEntity<MenuItemDto[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/by-menu/{menuId}?page={page}&size={size}",
+                HttpMethod.GET, httpEntity, MenuItemDto[].class, 1, 1, 5);
 
-        List<MenuItem> menuItems = List.of(responseEntity.getBody());
+        List<MenuItemDto> menuItems = List.of(responseEntity.getBody());
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(5, menuItems.size());

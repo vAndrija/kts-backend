@@ -17,8 +17,12 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, Integer> {
 
     List<MenuItem> findByCategory(MenuItemCategory category);
 
+    Page<MenuItem> findByCategory(MenuItemCategory category, Pageable pageable);
+
     List<MenuItem> findByType(MenuItemType type);
 
     @Query("select mi from MenuItem  mi where mi.menu.id = :id")
     Page<MenuItem> findByMenu(Integer id, Pageable pageable);
+
+    Page<MenuItem> findAll(Pageable pageable);
 }

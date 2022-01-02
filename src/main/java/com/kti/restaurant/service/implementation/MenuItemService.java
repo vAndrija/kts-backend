@@ -9,6 +9,7 @@ import com.kti.restaurant.service.contract.IMenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -83,10 +84,22 @@ public class MenuItemService implements IMenuItemService {
     }
 
     @Override
+    public Set<MenuItem> filterPageable(String filter, Pageable pageable) {
+        return new HashSet<>(menuItemRepository.findByCategory(MenuItemCategory.findCategory(filter), pageable).getContent());
+    }
+
+    @Override
     public List<MenuItem> findByMenu(Integer menuId, Pageable pageable) throws Exception {
         menuService.findById(menuId);
 
         Page<MenuItem> page = menuItemRepository.findByMenu(menuId, pageable);
         return page.getContent();
     }
+
+    @Override
+    public List<MenuItem> findAll(Pageable pageable) {
+        Page<MenuItem> page = menuItemRepository.findAll(pageable);
+        return page.getContent();
+    }
+
 }

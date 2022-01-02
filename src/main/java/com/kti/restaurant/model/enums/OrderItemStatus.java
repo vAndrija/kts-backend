@@ -1,7 +1,7 @@
 package com.kti.restaurant.model.enums;
 
 public enum OrderItemStatus {
-    ORDERED("Poruceno"),
+    ORDERED("Poručeno"),
     PREPARATION("U pripremi"),
     PREPARED("Pripremljeno"),
     SERVED("Servirano") ;

@@ -56,7 +56,7 @@ public class OrderControllerIntegrationTests {
     public void create_ValidOrder_ReturnsCreated() throws Exception {
         int size = orderService.findAll().size();
 
-        HttpEntity<CreateOrderDto> httpEntity = new HttpEntity<>(new CreateOrderDto(OrderStatus.ORDERED,
+        HttpEntity<CreateOrderDto> httpEntity = new HttpEntity<>(new CreateOrderDto("Poručeno",
                 LocalDateTime.parse("2021-10-10T14:52"), 500.00, 1, 7), headers);
         ResponseEntity<OrderDto> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, OrderDto.class);
 
@@ -78,7 +78,7 @@ public class OrderControllerIntegrationTests {
     public void createInvalidOrder_InvalidTable_ReturnsBadRequest() {
         int size = orderService.findAll().size();
 
-        HttpEntity<CreateOrderDto> httpEntity = new HttpEntity<>(new CreateOrderDto(OrderStatus.ORDERED,
+        HttpEntity<CreateOrderDto> httpEntity = new HttpEntity<>(new CreateOrderDto("Poručeno",
                 LocalDateTime.parse("2021-10-10T14:52"), 500.00, null, 7), headers);
         ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
 
@@ -91,7 +91,7 @@ public class OrderControllerIntegrationTests {
     public void createInvalidOrder_InvalidWaiter_ReturnsBadRequest() {
         int size = orderService.findAll().size();
 
-        HttpEntity<CreateOrderDto> httpEntity = new HttpEntity<>(new CreateOrderDto(OrderStatus.ORDERED,
+        HttpEntity<CreateOrderDto> httpEntity = new HttpEntity<>(new CreateOrderDto("Poručeno",
                 LocalDateTime.parse("2021-10-10T14:52"), 500.00, 1, null), headers);
         ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
 

@@ -1,13 +1,13 @@
 package com.kti.restaurant.dto.order;
 
-import com.kti.restaurant.model.enums.OrderStatus;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public class CreateOrderDto {
+
     @NotNull(message = "Status should not be null")
-    private OrderStatus status;
+    private String status;
 
     @NotNull(message = "Date of order should not be null")
     private LocalDateTime dateOfOrder;
@@ -21,7 +21,7 @@ public class CreateOrderDto {
     @NotNull(message = "Waiter id should not be null")
     private Integer waiterId;
 
-    public CreateOrderDto(OrderStatus status, LocalDateTime dateOfOrder, Double price, Integer tableId, Integer waiterId) {
+    public CreateOrderDto(String status, LocalDateTime dateOfOrder, Double price, Integer tableId, Integer waiterId) {
         this.status = status;
         this.dateOfOrder = dateOfOrder;
         this.price = price;
@@ -29,7 +29,7 @@ public class CreateOrderDto {
         this.waiterId = waiterId;
     }
 
-    public CreateOrderDto(OrderStatus status, LocalDateTime dateOfOrder, Double price, Integer tableId) {
+    public CreateOrderDto(String status, LocalDateTime dateOfOrder, Double price, Integer tableId) {
         this.status = status;
         this.dateOfOrder = dateOfOrder;
         this.price = price;
@@ -40,11 +40,11 @@ public class CreateOrderDto {
 
     }
 
-    public OrderStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

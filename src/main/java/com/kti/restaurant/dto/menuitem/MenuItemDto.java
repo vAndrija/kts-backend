@@ -18,15 +18,17 @@ public class MenuItemDto {
     @NotNull(message = "Type should not be null")
     private MenuItemType type;
 
+//    @NotNull(message = "Category should not be null")
+//    private MenuItemCategory category;
     @NotNull(message = "Category should not be null")
-    private MenuItemCategory category;
+    private String category;
 
     @NotNull(message = "Preparation time should not be null")
     private Integer preparationTime;
 
     private PriceItemDto priceItemDto;
 
-    public MenuItemDto(String name, String description, MenuItemType type, MenuItemCategory category, int preparationTime,
+    public MenuItemDto(String name, String description, MenuItemType type, String category, int preparationTime,
                        PriceItemDto priceItemDto) {
         this.name = name;
         this.description = description;
@@ -64,11 +66,11 @@ public class MenuItemDto {
         this.type = type;
     }
 
-    public MenuItemCategory getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(MenuItemCategory category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 

@@ -5,6 +5,7 @@ import com.kti.restaurant.dto.orderitem.NotificationOrderItemDto;
 import com.kti.restaurant.dto.orderitem.OrderItemDto;
 import com.kti.restaurant.dto.orderitem.UpdateOrderItemDto;
 import com.kti.restaurant.model.*;
+import com.kti.restaurant.model.enums.OrderItemStatus;
 import com.kti.restaurant.service.contract.IBartenderService;
 import com.kti.restaurant.service.contract.ICookService;
 import com.kti.restaurant.service.contract.IMenuItemService;
@@ -31,7 +32,7 @@ public class OrderItemMapper {
     }
 
     public OrderItem fromCreateOrderItemDtoToOrderItem(CreateOrderItemDto orderItemDto) throws Exception {
-        return new OrderItem(orderItemDto.getQuantity(), orderItemDto.getNote(), orderItemDto.getStatus(),
+        return new OrderItem(orderItemDto.getQuantity(), orderItemDto.getNote(), OrderItemStatus.findType(orderItemDto.getStatus()),
                 orderItemDto.getPriority(), findMenuItemById(orderItemDto.getMenuItemId()),
                 findOrderById(orderItemDto.getOrderId()));
     }
