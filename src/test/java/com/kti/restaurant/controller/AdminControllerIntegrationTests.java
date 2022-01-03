@@ -46,7 +46,7 @@ public class AdminControllerIntegrationTests {
     }
 
     @Test
-    public void create_UniqueEmail_ValidAdmin_ReturnsCreated() throws Exception {
+    public void create_UniqueEmail_ReturnsCreated() throws Exception {
         int size = adminService.findAll().size();
 
         HttpEntity<AdminCreateDto> httpEntity = new HttpEntity<>(new AdminCreateDto("Aleksa", "Maric",
@@ -124,8 +124,6 @@ public class AdminControllerIntegrationTests {
 
     @Test
     public void updateAdmin_ValidId_ReturnsOk() throws Exception {
-
-
         HttpEntity<AdminUpdateDto> httpEntity = new HttpEntity<>(new AdminUpdateDto("mirko", "savic",
                 "152487", "8795613"), headers);
         ResponseEntity<AdminDto> responseEntity1 = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.PUT, httpEntity,

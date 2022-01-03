@@ -3,6 +3,7 @@ package com.kti.restaurant.repository;
 import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,9 +21,13 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, Integer> {
     Page<MenuItem> findByCategory(MenuItemCategory category, Pageable pageable);
 
     List<MenuItem> findByType(MenuItemType type);
-
+    
+    @Query("select mi from MenuItem mi where mi.accepted = false")
+    Page<MenuItem> findPendingMenuItems(Pageable pageable);
+  
     @Query("select mi from MenuItem  mi where mi.menu.id = :id")
     Page<MenuItem> findByMenu(Integer id, Pageable pageable);
 
     Page<MenuItem> findAll(Pageable pageable);
+
 }

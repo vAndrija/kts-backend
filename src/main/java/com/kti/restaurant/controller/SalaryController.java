@@ -1,10 +1,8 @@
 package com.kti.restaurant.controller;
 
-import com.kti.restaurant.dto.order.OrderDto;
 import com.kti.restaurant.dto.salary.CreateSalaryDto;
 import com.kti.restaurant.dto.salary.SalaryDto;
 import com.kti.restaurant.mapper.SalaryMapper;
-import com.kti.restaurant.model.Salary;
 import com.kti.restaurant.service.contract.ISalaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,7 +43,6 @@ public class SalaryController {
 
     @PostMapping("")
     @PreAuthorize("hasAnyRole('MANAGER')")
-
     public ResponseEntity<SalaryDto> createSalary(@Valid @RequestBody CreateSalaryDto salaryDto) throws Exception {
         SalaryDto salary = salaryMapper.fromSalarytoSalaryDto(salaryService.create(salaryMapper.fromCreateSalaryDtoToSalary(salaryDto)));
         return new ResponseEntity<>(salary, HttpStatus.CREATED);

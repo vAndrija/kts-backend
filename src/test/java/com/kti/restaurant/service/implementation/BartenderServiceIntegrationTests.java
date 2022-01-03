@@ -26,13 +26,13 @@ public class BartenderServiceIntegrationTests {
     private BartenderService bartenderService;
 
     @Test
-    public void findAll_ValidNumberOfBartenders() {
+    public void findAll_ReturnsExistingBartenders() {
         List<Bartender> bartenders = bartenderService.findAll();
         assertEquals(2, bartenders.size());
     }
 
     @Test
-    public void findById_ValidId_ValidBartender() throws Exception {
+    public void findById_ValidId_ReturnsExistingBartender() throws Exception {
         Bartender bartender = bartenderService.findById(3);
         assertEquals("milossaric@gmail.com", bartender.getEmailAddress());
         assertEquals("milos", bartender.getName());
@@ -47,7 +47,7 @@ public class BartenderServiceIntegrationTests {
     }
 
     @Test
-    public void create_ValidBartender() throws Exception {
+    public void create_ValidBartender_ReturnsCreatedBartender() throws Exception {
         Bartender bartender = new Bartender("Vojnovic", "Andrija", "213123123", "andrija@vojnvo.com", "21312311", true);
         bartender.setPassword("1234");
         Bartender createdBartender = bartenderService.create(bartender);
@@ -69,7 +69,7 @@ public class BartenderServiceIntegrationTests {
 
     @Rollback()
     @Test
-    public void update_ValidId_ValidBartender() throws Exception {
+    public void update_ValidId_ReturnsUpdatedBartender() throws Exception {
         Bartender bartender = new Bartender("Vojnovic", "Andrija", "213123123", "milossaric@gmail.com", "21312311", true);
         Bartender updatedBartender = bartenderService.update(bartender, 3);
         assertEquals("Vojnovic", updatedBartender.getLastName());
@@ -90,7 +90,7 @@ public class BartenderServiceIntegrationTests {
 
     @Rollback()
     @Test
-    void delete_ValidId_ThrowsMissingEntityException() throws Exception {
+    void delete_ValidId() throws Exception {
         bartenderService.delete(3);
         Assertions.assertThrows(MissingEntityException.class, () -> {
             bartenderService.findById(3);

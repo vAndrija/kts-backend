@@ -2,12 +2,17 @@ package com.kti.restaurant.service.implementation;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -26,14 +31,14 @@ public class SalaryServiceIntegrationTests {
 	private static final String message = "Salary with given id does not exist in the system.";
 	
 	@Test
-	public void findAll_ReturnsValidSalaries() {
+	public void findAll_ReturnsExistingSalaries() {
 		List<Salary> salaries = salaryService.findAll();
 		
 		assertEquals(8, salaries.size());
 	}
 	
 	@Test
-	public void findById_ValidId_ReturnsValidSalary() throws Exception {
+	public void findById_ValidId_ReturnsExistingSalary() throws Exception {
 		Salary salary = salaryService.findById(1);
 		
 		assertEquals(Double.valueOf(45000.00), salary.getValue());
@@ -53,7 +58,7 @@ public class SalaryServiceIntegrationTests {
 	
 	@Test
 	@Rollback
-	public void create_ValidSalary_ReturnsValidSalary() throws Exception {
+	public void create_ValidSalary_ReturnsCreatedSalary() throws Exception {
 		Salary salary = salaryService.create(new Salary(46000.00, LocalDate.parse("2021-10-10"), LocalDate.parse("2022-10-10")));
 		
 		assertEquals(Integer.valueOf(9), salary.getId());
@@ -106,7 +111,7 @@ public class SalaryServiceIntegrationTests {
 	}
 	
 	@Test
-	public void findSalaryForDate_ValidDateAndUserId_ReturnsValidSalary() {
+	public void findSalaryForDate_ValidDateAndUserId_ReturnsExistingSalary() {
 		Salary salary = salaryService.findSalaryForDate(LocalDate.parse("2021-11-19"), 1);
 		
 		assertEquals(Double.valueOf(45000.00), salary.getValue());
@@ -115,18 +120,19 @@ public class SalaryServiceIntegrationTests {
 		assertEquals(Integer.valueOf(1), salary.getUser().getId());
 	}
 	
-	@Test
-	public void findSalaryForDate_InvalidDate_ReturnsNull() {
-		assertEquals(null, salaryService.findSalaryForDate(LocalDate.parse("2021-10-19"), 1));
+	@ParameterizedTest
+	@MethodSource("provideParametersForfindSalaryForDate")
+	public void findSalaryForDate_InvalidInput_ReturnsNull(LocalDate date, Integer id) {
+		assertNull(salaryService.findSalaryForDate(date, id));
 	}
 	
-	@Test
-	public void findSalaryForDate_InvalidUserId_ReturnsNull() {
-		assertEquals(null, salaryService.findSalaryForDate(LocalDate.parse("2021-11-19"), 10));
+	private static Stream<Arguments> provideParametersForfindSalaryForDate() {
+		
+		return Stream.of(
+				Arguments.of(LocalDate.parse("2021-10-19"), 1),
+				Arguments.of(LocalDate.parse("2021-11-19"), 10),
+				Arguments.of(LocalDate.parse("2021-01-01"), 10)
+				);
 	}
 	
-	@Test
-	public void findSalaryForDate_InvalidDateAndUserId_ReturnsNull() {
-		assertEquals(null, salaryService.findSalaryForDate(LocalDate.parse("2021-01-01"), 10));
-	}
 }

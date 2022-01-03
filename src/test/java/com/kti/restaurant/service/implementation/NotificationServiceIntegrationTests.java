@@ -35,7 +35,7 @@ public class NotificationServiceIntegrationTests {
 	}
 	
 	@Test
-	public void findById_ValidId_ReturnsValidNotification() {
+	public void findById_ValidId_ReturnsExistingNotification() {
 		Notification notification = notificationService.findById(1);
 		
 		assertEquals(Integer.valueOf(1), notification.getId());
@@ -54,7 +54,7 @@ public class NotificationServiceIntegrationTests {
 	
 	@Test
 	@Rollback
-	public void create_ValidNotification_ReturnsValidNotification() throws Exception {
+	public void create_ValidNotification_ReturnsCreatedNotification() throws Exception {
 		Notification notification = notificationService.create(new Notification("Poruka", new OrderItem(), false));
 		
 		assertEquals("Poruka", notification.getMessage());
@@ -63,7 +63,7 @@ public class NotificationServiceIntegrationTests {
 	
 	@Test
 	@Rollback
-	public void update_ValidId_ReturnsValidNotification() throws Exception {
+	public void update_ValidId_ReturnsUpdatedNotification() throws Exception {
 		Notification notification = new Notification("Nova poruka", new OrderItem(), false);
 		notification.setId(1);
 		
@@ -101,6 +101,7 @@ public class NotificationServiceIntegrationTests {
 		
 		assertEquals(message, exception.getMessage());
 	}
+	
 	
 	
 }

@@ -212,7 +212,7 @@ public class DiscountControllerIntegrationTests {
     }
 
     @Test
-    public void deleteDiscount_InvalidDiscountId_ReturnsNotFoundStatus() {
+    public void deleteDiscount_InvalidDiscountId_ReturnsNotFound() {
         int size = discountService.findAll().size();
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
         ResponseEntity<Discount> responseEntity =
