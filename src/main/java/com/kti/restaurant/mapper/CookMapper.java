@@ -31,8 +31,12 @@ public class CookMapper {
 
     public CookDto fromCookToCookDto(Cook cook) {
         Salary salary = this.salaryService.findSalaryForDate(LocalDate.now(), cook.getId());
-        return new CookDto(cook.getId(), cook.getName(), cook.getLastName(), cook.getPhoneNumber(),
+        if (salary!=null)
+            return new CookDto(cook.getId(), cook.getName(), cook.getLastName(), cook.getPhoneNumber(),
                 cook.getEmailAddress(), cook.getAccountNumber(), cook.getPriority(), salaryMapper.fromSalarytoSalaryDto(salary));
+        else
+            return new CookDto(cook.getId(), cook.getName(), cook.getLastName(), cook.getPhoneNumber(),
+                    cook.getEmailAddress(), cook.getAccountNumber(), cook.getPriority());
     }
 
     public Cook fromCookUpdateDtoToCook(CookUpdateDto cookUpdateDto) {

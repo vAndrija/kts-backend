@@ -13,4 +13,9 @@ public class ManagerDto extends UserDto {
                       String emailAddress, String accountNumber, SalaryDto salaryDto) {
         super(id, name, lastName, phoneNumber, emailAddress,accountNumber,"MANAGER",salaryDto);
     }
+
+    public ManagerDto(Integer id, String name, String lastName, String phoneNumber,
+                      String emailAddress, String accountNumber) {
+        super(id, name, lastName, phoneNumber, emailAddress,accountNumber,"MANAGER");
+    }
 }

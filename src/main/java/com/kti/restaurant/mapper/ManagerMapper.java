@@ -31,8 +31,13 @@ public class ManagerMapper {
 
     public ManagerDto fromManagerToManagerDto(Manager manager) {
         Salary salary = this.salaryService.findSalaryForDate(LocalDate.now(), manager.getId());
-        return new ManagerDto(manager.getId(), manager.getName(), manager.getLastName(),
-                manager.getPhoneNumber(), manager.getEmailAddress(), manager.getAccountNumber(), salaryMapper.fromSalarytoSalaryDto(salary));
+        if(salary!=null)
+            return new ManagerDto(manager.getId(), manager.getName(), manager.getLastName(),
+                    manager.getPhoneNumber(), manager.getEmailAddress(), manager.getAccountNumber(), salaryMapper.fromSalarytoSalaryDto(salary));
+        else
+            return new ManagerDto(manager.getId(), manager.getName(), manager.getLastName(),
+                    manager.getPhoneNumber(), manager.getEmailAddress(), manager.getAccountNumber());
+
     }
 
     public Manager fromManagerUpdateDtoToManager(ManagerUpdateDto managerUpdateDto) {

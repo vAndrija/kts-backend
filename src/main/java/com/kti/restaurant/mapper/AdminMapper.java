@@ -30,8 +30,12 @@ public class AdminMapper {
 
     public AdminDto fromAdminToAdminDto(Admin admin) {
         Salary salary = this.salaryService.findSalaryForDate(LocalDate.now(), admin.getId());
-        return new AdminDto(admin.getId(), admin.getName(), admin.getLastName(),
-                admin.getPhoneNumber(), admin.getEmailAddress(), admin.getAccountNumber(), this.salaryMapper.fromSalarytoSalaryDto(salary));
+        if(salary!=null)
+            return new AdminDto(admin.getId(), admin.getName(), admin.getLastName(),
+                    admin.getPhoneNumber(), admin.getEmailAddress(), admin.getAccountNumber(), this.salaryMapper.fromSalarytoSalaryDto(salary));
+        else
+            return new AdminDto(admin.getId(), admin.getName(), admin.getLastName(),
+                    admin.getPhoneNumber(), admin.getEmailAddress(), admin.getAccountNumber());
     }
 
     public Admin fromAdminUpdateDtoToAdmin(AdminUpdateDto adminUpdateDto) {

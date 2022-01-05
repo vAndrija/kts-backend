@@ -43,6 +43,17 @@ public class UserDto {
         this.salaryDto = salaryDto;
     }
 
+    public UserDto(Integer id, String name, String lastName, String phoneNumber, String emailAddress,
+                   String accountNumber, String role) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.emailAddress = emailAddress;
+        this.accountNumber = accountNumber;
+        this.role = role;
+    }
+
     public String getName() {
         return name;
     }

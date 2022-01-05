@@ -39,9 +39,11 @@ public class SalaryService implements ISalaryService {
     @Override
     public Salary create(Salary salary) throws Exception {
         List<Salary> oldSalaries =  salaryRepository.findAllByUser(salary.getUser());
-        Salary lastSalary = oldSalaries.get(oldSalaries.size()-1);
-        lastSalary.setEndDate(salary.getStartDate());
-        salaryRepository.save(lastSalary);
+        if(oldSalaries.size()!=0) {
+            Salary lastSalary = oldSalaries.get(oldSalaries.size() - 1);
+            lastSalary.setEndDate(salary.getStartDate());
+            salaryRepository.save(lastSalary);
+        }
         return salaryRepository.save(salary);
     }
 

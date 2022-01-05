@@ -31,8 +31,13 @@ public class BartenderMapper {
 
     public BartenderDto fromBartenderToBartenderDto(Bartender bartender) {
         Salary salary = this.salaryService.findSalaryForDate(LocalDate.now(), bartender.getId());
-        return new BartenderDto(bartender.getId(), bartender.getName(), bartender.getLastName(), bartender.getPhoneNumber(),
-                bartender.getEmailAddress(), bartender.getAccountNumber(), bartender.getPriority(), this.salaryMapper.fromSalarytoSalaryDto(salary));
+        if(salary!=null)
+            return new BartenderDto(bartender.getId(), bartender.getName(), bartender.getLastName(), bartender.getPhoneNumber(),
+                    bartender.getEmailAddress(), bartender.getAccountNumber(), bartender.getPriority(), this.salaryMapper.fromSalarytoSalaryDto(salary));
+        else
+            return new BartenderDto(bartender.getId(), bartender.getName(), bartender.getLastName(), bartender.getPhoneNumber(),
+                    bartender.getEmailAddress(), bartender.getAccountNumber(), bartender.getPriority());
+
     }
 
     public Bartender fromBartenderUpdateDtoToBartender(BartenderUpdateDto bartenderUpdateDto) {

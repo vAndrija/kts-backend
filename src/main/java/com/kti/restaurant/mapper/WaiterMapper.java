@@ -30,8 +30,13 @@ public class WaiterMapper {
 
     public WaiterDto fromWaiterToWaiterDto(Waiter waiter) {
         Salary salary = this.salaryService.findSalaryForDate(LocalDate.now(), waiter.getId());
-        return new WaiterDto(waiter.getId(), waiter.getName(), waiter.getLastName(),
-                waiter.getPhoneNumber(), waiter.getEmailAddress(), waiter.getAccountNumber(), salaryMapper.fromSalarytoSalaryDto(salary));
+        if(salary!=null)
+            return new WaiterDto(waiter.getId(), waiter.getName(), waiter.getLastName(),
+                    waiter.getPhoneNumber(), waiter.getEmailAddress(), waiter.getAccountNumber(), salaryMapper.fromSalarytoSalaryDto(salary));
+        else
+            return new WaiterDto(waiter.getId(), waiter.getName(), waiter.getLastName(),
+                    waiter.getPhoneNumber(), waiter.getEmailAddress(), waiter.getAccountNumber());
+
     }
 
     public Waiter fromWaiterUpdateDtoToWaiter(WaiterUpdateDto waiterUpdateDto) {
