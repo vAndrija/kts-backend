@@ -70,4 +70,11 @@ public class BartenderController {
         bartenderService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PutMapping("/updatePriority/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER')")
+    public ResponseEntity<?> updatePriority(@PathVariable Integer id )throws Exception{
+        bartenderService.updatePriority(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

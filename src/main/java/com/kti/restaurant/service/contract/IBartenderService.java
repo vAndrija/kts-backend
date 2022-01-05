@@ -4,4 +4,6 @@ import com.kti.restaurant.model.Bartender;
 
 public interface IBartenderService extends IService<Bartender>{
     Bartender findByUserId(Integer userId);
+
+    void updatePriority(Integer userId) throws Exception;
 }

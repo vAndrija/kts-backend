@@ -1,5 +1,6 @@
 package com.kti.restaurant.dto.cook;
 
+import com.kti.restaurant.dto.salary.SalaryDto;
 import com.kti.restaurant.dto.user.UserDto;
 
 public class CookDto extends UserDto {
@@ -10,7 +11,13 @@ public class CookDto extends UserDto {
     }
 
     public CookDto(Integer id, String name, String lastName, String phoneNumber, String emailAddress,
-                        String accountNumber, Boolean priority) {
+                   String accountNumber, Boolean priority, SalaryDto salaryDto) {
+        super(id,name, lastName, phoneNumber, emailAddress, accountNumber,"COOK",salaryDto);
+        this.priority = priority;
+    }
+
+    public CookDto(Integer id, String name, String lastName, String phoneNumber, String emailAddress,
+                   String accountNumber, Boolean priority) {
         super(id,name, lastName, phoneNumber, emailAddress, accountNumber,"COOK");
         this.priority = priority;
     }

@@ -1,6 +1,8 @@
 package com.kti.restaurant.dto.user;
 
+import com.kti.restaurant.dto.salary.SalaryDto;
 import com.kti.restaurant.model.Role;
+import com.kti.restaurant.model.Salary;
 
 public class UserDto {
     private Integer id;
@@ -17,6 +19,8 @@ public class UserDto {
 
     private String role;
 
+    private SalaryDto salaryDto;
+
     public UserDto(){}
 
     public UserDto(String name, String lastName, String phoneNumber, String emailAddress,String accountNumber) {
@@ -27,7 +31,20 @@ public class UserDto {
         this.accountNumber = accountNumber;
     }
 
-    public UserDto(Integer id, String name, String lastName, String phoneNumber, String emailAddress, String accountNumber,String role) {
+    public UserDto(Integer id, String name, String lastName, String phoneNumber, String emailAddress,
+                   String accountNumber, String role, SalaryDto salaryDto) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.emailAddress = emailAddress;
+        this.accountNumber = accountNumber;
+        this.role = role;
+        this.salaryDto = salaryDto;
+    }
+
+    public UserDto(Integer id, String name, String lastName, String phoneNumber, String emailAddress,
+                   String accountNumber, String role) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -91,6 +108,14 @@ public class UserDto {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public SalaryDto getSalaryDto() {
+        return salaryDto;
+    }
+
+    public void setSalaryDto(SalaryDto salaryDto) {
+        this.salaryDto = salaryDto;
     }
 }
 

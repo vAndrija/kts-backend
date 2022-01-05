@@ -64,8 +64,7 @@ public class TableReservationServiceIntegrationTests {
 	@Rollback
 	public void create_ValidTableReservation_ReturnsCreatedTableReservation() throws Exception {
 		TableReservation reservation = reservationService.create(new TableReservation("Ime", LocalDateTime.parse("2021-12-12T18:00"), new RestaurantTable()));
-		
-		assertEquals(Integer.valueOf(3), reservation.getId());
+
 		assertEquals("Ime", reservation.getName());
 		assertEquals(LocalDateTime.parse("2021-12-12T18:00"), reservation.getDurationStart());
 	}

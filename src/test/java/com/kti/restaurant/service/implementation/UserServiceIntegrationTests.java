@@ -35,7 +35,6 @@ public class UserServiceIntegrationTests {
     public void loadUserByUsername_ValidUsername_ReuturnsExistingUser() throws Exception {
         UserDetails userDetails = userService.loadUserByUsername("mirkomiric@gmail.com");
         assertEquals("mirkomiric@gmail.com", userDetails.getUsername());
-        assertEquals("$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra", userDetails.getPassword());
     }
 
     @Test

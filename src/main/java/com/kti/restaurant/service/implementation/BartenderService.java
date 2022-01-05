@@ -83,4 +83,13 @@ public class BartenderService implements IBartenderService {
     public Bartender findByUserId(Integer userId) {
         return bartenderRepository.findById(userId).orElse(null);
     }
+
+    @Override
+    public void updatePriority(Integer userId) throws Exception {
+        Bartender bartender = this.findById(userId);
+        bartender.setPriority(!bartender.getPriority());
+        bartenderRepository.save(bartender);
+    }
+
+
 }

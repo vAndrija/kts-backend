@@ -71,4 +71,11 @@ public class CookController {
         cookService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PutMapping("/updatePriority/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER')")
+    public ResponseEntity<?> updatePriority(@PathVariable Integer id )throws Exception{
+        cookService.updatePriority(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
