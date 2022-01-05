@@ -17,5 +17,5 @@ public interface IMenuItemService extends IService<MenuItem> {
     Set<MenuItem> filterPageable(String f, Pageable pageable);
     Page<MenuItem> pendingMenuItems(Pageable pageable);
     List<MenuItem> findByMenu(Integer menuId, Pageable pageable) throws Exception;
-    List<MenuItem> findAll(Pageable pageable);
+    Page<MenuItem> findAll(Pageable pageable);
 }

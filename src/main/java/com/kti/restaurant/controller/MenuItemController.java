@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,9 +49,12 @@ public class MenuItemController {
     @GetMapping("/pageable")
     public ResponseEntity<?> getMenuItemsPageable(@RequestParam Integer page, @RequestParam Integer size) {
         Pageable pageable = PageRequest.of(page,size);
-        List<MenuItemDto> menuItems = menuItemService.findAll(pageable).stream()
+        Page<MenuItem> pages = menuItemService.findAll(pageable);
+        List<MenuItemDto> menuItems = pages.getContent().stream()
                 .map(menuItem -> this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem)).collect(Collectors.toList());
-        return new ResponseEntity<>(menuItems, HttpStatus.OK);
+        HashMap<Integer, List<MenuItemDto>> map = new HashMap<>();
+        map.put(pages.getTotalPages(), menuItems);
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
     @GetMapping("")
@@ -79,7 +83,7 @@ public class MenuItemController {
     }
 
     @GetMapping(value = "/search/{search}")
-    public ResponseEntity<?> searchMenuItems(@PathVariable("search") String s) {
+    public ResponseEntity<?> searchMenuItems(@PathVariable("search") String s){
         List<MenuItemDto> menuItems = menuItemService.search(s).stream()
                 .map(menuItem->this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem)).collect(Collectors.toList());
         return new ResponseEntity<>(menuItems, HttpStatus.OK);

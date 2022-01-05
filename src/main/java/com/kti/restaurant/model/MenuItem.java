@@ -63,6 +63,11 @@ public class MenuItem {
         this.type = type;
         this.preparationTime = preparationTime;
     }
+    public MenuItem(String name, String description, MenuItemCategory category) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+    }
     public MenuItem(String name, String description) {
         this.name = name;
         this.description = description;
