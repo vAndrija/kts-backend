@@ -2,13 +2,13 @@ package com.kti.restaurant.model.enums;
 
 public enum MenuItemCategory {
     SOUP("Supa"),
-    BREAKFAST("Dorucak"),
+    BREAKFAST("Doručak"),
     APPETIZER("Predjelo"),
     MAIN_COURSE("Glavno jelo"),
     DESSERT("Dezert"),
     COCKTAIL("Koktel"),
     HOT_DRINK("Topli napitak"),
-    NON_ALCOHOLIC("Bezalkoholno pice");
+    NON_ALCOHOLIC("Bezalkoholno piće");
 
     private String category;
 

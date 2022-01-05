@@ -61,7 +61,7 @@ public class OrderItemControllerIntegrationTests {
         int size = orderItemService.findAll().size();
 
         HttpEntity<CreateOrderItemDto> httpEntity = new HttpEntity<>(new CreateOrderItemDto(2, "sa sojinim mlekom",
-                OrderItemStatus.PREPARATION, 1, 3, 1), headers);
+                "U pripremi", 1, 3, 1), headers);
         ResponseEntity<OrderItemDto> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, OrderItemDto.class);
 
         OrderItemDto orderItemDto = responseEntity.getBody();
@@ -85,7 +85,7 @@ public class OrderItemControllerIntegrationTests {
         int size = orderItemService.findAll().size();
 
         HttpEntity<CreateOrderItemDto> httpEntity = new HttpEntity<>(new CreateOrderItemDto(0, "sa sojinim mlekom",
-                OrderItemStatus.PREPARATION, 1, 3, 1), headers);
+                "U pripremi", 1, 3, 1), headers);
         ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -98,7 +98,7 @@ public class OrderItemControllerIntegrationTests {
         int size = orderItemService.findAll().size();
 
         HttpEntity<CreateOrderItemDto> httpEntity = new HttpEntity<>(new CreateOrderItemDto(1, "sa sojinim mlekom",
-                OrderItemStatus.PREPARATION, 0, 3, 1), headers);
+                "U pripremi", 0, 3, 1), headers);
         ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -111,7 +111,7 @@ public class OrderItemControllerIntegrationTests {
         int size = orderItemService.findAll().size();
 
         HttpEntity<CreateOrderItemDto> httpEntity = new HttpEntity<>(new CreateOrderItemDto(1, "sa sojinim mlekom",
-                OrderItemStatus.PREPARATION, 1, null, 1), headers);
+                "U pripremi", 1, null, 1), headers);
         ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -124,7 +124,7 @@ public class OrderItemControllerIntegrationTests {
         int size = orderItemService.findAll().size();
 
         HttpEntity<CreateOrderItemDto> httpEntity = new HttpEntity<>(new CreateOrderItemDto(1, "sa sojinim mlekom",
-                OrderItemStatus.PREPARATION, 1, 3, null), headers);
+                "U pripremi", 1, 3, null), headers);
         ResponseEntity<Object> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, Object.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());

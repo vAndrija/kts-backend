@@ -6,6 +6,7 @@ import com.kti.restaurant.dto.order.UpdateOrderDto;
 import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.RestaurantTable;
 import com.kti.restaurant.model.Waiter;
+import com.kti.restaurant.model.enums.OrderStatus;
 import com.kti.restaurant.service.contract.IRestaurantTableService;
 import com.kti.restaurant.service.contract.IWaiterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class OrderMapper {
     }
 
     public Order fromCreateOrderDtoToOrder(CreateOrderDto createOrderDto) throws Exception {
-        return new Order(createOrderDto.getStatus(), createOrderDto.getDateOfOrder(), createOrderDto.getPrice(),
+        return new Order(OrderStatus.findType(createOrderDto.getStatus()), createOrderDto.getDateOfOrder(), createOrderDto.getPrice(),
                 findRestaurantTableById(createOrderDto.getTableId()),findWaiterById(createOrderDto.getWaiterId()));
     }
     public OrderDto fromOrderToOrderDto(Order order) {

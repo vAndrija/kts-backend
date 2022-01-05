@@ -6,10 +6,9 @@ import com.kti.restaurant.mapper.MenuItemMapper;
 import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.service.contract.IMenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +46,17 @@ public class MenuItemController {
         return new ResponseEntity<>(menuItemService.findById(id), HttpStatus.OK);
     }
 
+    @GetMapping("/pageable")
+    public ResponseEntity<?> getMenuItemsPageable(@RequestParam Integer page, @RequestParam Integer size) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<MenuItem> pages = menuItemService.findAll(pageable);
+        List<MenuItemDto> menuItems = pages.getContent().stream()
+                .map(menuItem -> this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem)).collect(Collectors.toList());
+        HashMap<Integer, List<MenuItemDto>> map = new HashMap<>();
+        map.put(pages.getTotalPages(), menuItems);
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
     @GetMapping("")
     public ResponseEntity<List<MenuItem>> getMenuItems() {
         return new ResponseEntity<>(menuItemService.findAll(), HttpStatus.OK);
@@ -72,7 +83,7 @@ public class MenuItemController {
     }
 
     @GetMapping(value = "/search/{search}")
-    public ResponseEntity<?> searchMenuItems(@PathVariable("search") String s) {
+    public ResponseEntity<?> searchMenuItems(@PathVariable("search") String s){
         List<MenuItemDto> menuItems = menuItemService.search(s).stream()
                 .map(menuItem->this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem)).collect(Collectors.toList());
         return new ResponseEntity<>(menuItems, HttpStatus.OK);
@@ -85,6 +96,15 @@ public class MenuItemController {
         return new ResponseEntity<>(menuItems, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/filter/pageable/{filter}")
+    public ResponseEntity<?> filterMenuItemsPageable(@PathVariable("filter") String f, @RequestParam Integer page,
+                                             @RequestParam Integer size) {
+        Pageable pageable = PageRequest.of(page,size);
+        List<MenuItemDto> menuItems = menuItemService.filterPageable(f, pageable).stream()
+                .map(menuItem->this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem)).collect(Collectors.toList());
+        return new ResponseEntity<>(menuItems, HttpStatus.OK);
+    }
+    
     @GetMapping(value = "/by-menu/{menuId}")
     public ResponseEntity<?> findMenuItemsByMenuId(Pageable pageable, @PathVariable Integer menuId) throws Exception {
         List<MenuItemDto> menuItems = menuItemService.findByMenu(menuId, pageable).stream()

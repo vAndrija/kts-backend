@@ -7,6 +7,7 @@ import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Menu;
 import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.model.PriceItem;
+import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.service.contract.IMenuService;
 import com.kti.restaurant.service.contract.IPriceItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class MenuItemMapper {
     }
 
     public MenuItem fromCreateMenuItemDtoToMenuItem(MenuItemDto menuItemDto) {
-        return new MenuItem(menuItemDto.getName(), menuItemDto.getDescription(), menuItemDto.getCategory(),
+        return new MenuItem(menuItemDto.getName(), menuItemDto.getDescription(), MenuItemCategory.findCategory(menuItemDto.getCategory()),
                 menuItemDto.getType(), menuItemDto.getPreparationTime());
     }
 
@@ -40,7 +41,7 @@ public class MenuItemMapper {
     public MenuItemDto fromMenuItemToMenuItemDto(MenuItem menuItem) {
         PriceItem priceItem = priceItemService.findPriceForDate(LocalDate.now(), menuItem.getId());
         PriceItemDto priceItemDto = priceItem != null ? priceItemMapper.fromPriceItemToPriceItemDto(priceItem): null;
-        return new MenuItemDto(menuItem.getName(), menuItem.getDescription(), menuItem.getType(), menuItem.getCategory(),
+        return new MenuItemDto(menuItem.getName(), menuItem.getDescription(), menuItem.getType(), menuItem.getCategory().getCategory(),
                 menuItem.getPreparationTime(), priceItemDto);
     }
 }

@@ -1,7 +1,5 @@
 package com.kti.restaurant.dto.orderitem;
 
-import com.kti.restaurant.model.enums.OrderItemStatus;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -12,7 +10,7 @@ public class CreateOrderItemDto {
     private String note;
 
     @NotNull(message = "Status should not be null")
-    private OrderItemStatus status;
+    private String status;
 
     @Min(value = 1,message = "Priority should be greater than 0")
     private Integer priority;
@@ -23,7 +21,7 @@ public class CreateOrderItemDto {
     @NotNull(message = "Menu item id should not be null")
     private Integer menuItemId;
 
-    public CreateOrderItemDto(Integer quantity, String note, OrderItemStatus status, Integer priority,
+    public CreateOrderItemDto(Integer quantity, String note, String status, Integer priority,
                               Integer menuItemId, Integer orderId) {
         this.quantity = quantity;
         this.note = note;
@@ -53,11 +51,11 @@ public class CreateOrderItemDto {
         this.note = note;
     }
 
-    public OrderItemStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(OrderItemStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
