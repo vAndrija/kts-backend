@@ -2,6 +2,7 @@ package com.kti.restaurant.service.implementation;
 
 import com.kti.restaurant.exception.ConflictException;
 import com.kti.restaurant.exception.MissingEntityException;
+import com.kti.restaurant.model.Bartender;
 import com.kti.restaurant.model.Cook;
 import com.kti.restaurant.model.User;
 import com.kti.restaurant.repository.CookRepository;
@@ -82,5 +83,12 @@ public class CookService implements ICookService {
     @Override
     public Cook findByUserId(Integer userId) {
         return cookRepository.findById(userId).orElse(null);
+    }
+
+    @Override
+    public void updatePriority(Integer userId) throws Exception {
+        Cook cook = this.findById(userId);
+        cook.setPriority(!cook.getPriority());
+        cookRepository.save(cook);
     }
 }

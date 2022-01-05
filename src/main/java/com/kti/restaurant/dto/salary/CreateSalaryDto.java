@@ -13,7 +13,6 @@ public class CreateSalaryDto {
     @NotNull(message = "Start date of salary should not be null")
     private LocalDate startDate;
 
-    @NotNull(message = "End date of salary should not be null")
     private LocalDate endDate;
 
     @NotEmpty(message = "User email should not be null or empty")
