@@ -11,6 +11,7 @@ import com.kti.restaurant.repository.UserRepository;
 import com.kti.restaurant.service.EmailService;
 import com.kti.restaurant.service.contract.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class AdminService implements IAdminService {
     private EmailService emailService;
 
     @Autowired
-    public AdminService(AdminRepository adminRepository, PasswordEncoder passwordEncoder,
+    public AdminService(AdminRepository adminRepository,@Lazy PasswordEncoder passwordEncoder,
                         RoleRepository roleRepository,UserRepository userRepository, EmailService emailService) {
         this.adminRepository = adminRepository;
         this.passwordEncoder = passwordEncoder;
