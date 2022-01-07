@@ -3,6 +3,7 @@ package com.kti.restaurant.controller;
 
 import antlr.Token;
 import com.kti.restaurant.dto.JwtAuthenticationRequest;
+import com.kti.restaurant.dto.auth.ChangePasswordDto;
 import com.kti.restaurant.dto.auth.ResetPasswordDTO;
 import com.kti.restaurant.model.User;
 import com.kti.restaurant.model.UserTokenState;
@@ -65,6 +66,12 @@ public class AuthenticationController {
     @PostMapping("/reset-password")
     public void resetPasswordDone(@RequestBody ResetPasswordDTO resetPasswordDTO) throws Exception {
         this.userService.resetPasswordDone(resetPasswordDTO.getToken(),resetPasswordDTO.getPassword());
+    }
+
+    @PostMapping("/change-password")
+    public void changePassword(@RequestBody ChangePasswordDto changePasswordDto){
+        User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        this.userService.changePassword(user,changePasswordDto);
     }
 
 }
