@@ -1,7 +1,9 @@
 package com.kti.restaurant.service;
 
 
+import com.kti.restaurant.dto.auth.ChangePasswordDto;
 import com.kti.restaurant.exception.BadTokenException;
+import com.kti.restaurant.exception.ConflictException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.User;
 import com.kti.restaurant.repository.UserRepository;
@@ -79,4 +81,11 @@ public class UserService  implements UserDetailsService {
     }
 
     public User findById(Integer id) { return userRepository.findById(id).orElse(null); }
+
+    public void changePassword(User user, ChangePasswordDto changePasswordDto) {
+        if(!passwordEncoder.matches(changePasswordDto.getOldPassword(),user.getPassword()))
+            throw new ConflictException("Bad old password");
+        user.setPassword(passwordEncoder.encode(changePasswordDto.getPassword()));
+        this.userRepository.save(user);
+    }
 }
