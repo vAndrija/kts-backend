@@ -54,7 +54,7 @@ public class EmailService {
     }
 
     public void sendResetLinkMail(String toEmail, String subject, String token) {
-        String backendPath = env.getProperty("myenv.backend-url");
+        String path = "http://localhost:4200/auth/password-reset/";
         try {
             MimeMessage msg = javaMailSender.createMimeMessage();
             msg.setSubject(subject);
@@ -63,7 +63,7 @@ public class EmailService {
             helper.setFrom("andrijavojinovicpa@gmail.com");
             helper.setSubject(subject);
             String message = "<h1>Resetovanje lozinke</h1><p>Da biste resetovali lozinku, kliknite na sledeći link: " +
-                    backendPath+"/auth/reset-password?token="+token+"</p>";
+                    "<a href='"+path+token+"'>"+path+token+"</a>"+"</p>";
             helper.setText(message,true);
             javaMailSender.send(msg);
         } catch (MessagingException ex) {
