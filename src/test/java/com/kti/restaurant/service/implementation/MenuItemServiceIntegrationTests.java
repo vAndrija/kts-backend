@@ -4,6 +4,7 @@ import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -104,52 +105,36 @@ public class MenuItemServiceIntegrationTests {
         });
     }
 
-    @Test
-    public void search_SearchParamNameDescription_ReturnsSetOfMenuItems() {
-        var menuItems = menuItemService.search("limun");
-        assertEquals(1, menuItems.size());
+    @ParameterizedTest
+    @MethodSource("provideSearchParams")
+    public void search_SearchParams_ReturnsSetOfMenuItems(String searchParam, Integer sizeOfReturnedSet) {
+        var menuItems = menuItemService.search(searchParam);
+        assertEquals(sizeOfReturnedSet, menuItems.size());
     }
 
-    @Test
-    public void search_SearchParamName_ReturnsSetOfMenuItems() {
-        var menuItems = menuItemService.search("coca cola");
-        assertEquals(1, menuItems.size());
+    private static Stream<Arguments> provideSearchParams() {
+        return Stream.of(
+                Arguments.of("limun", 1),
+                Arguments.of("coca cola", 1),
+                Arguments.of("dimljeni", 1),
+                Arguments.of("Dezert", 4),
+                Arguments.of("Hrana", 10),
+                Arguments.of("abcd", 0)
+        );
     }
 
-    @Test
-    public void search_SearchParamDescription_ReturnsSetOfMenuItems() {
-        var menuItems = menuItemService.search("dimljeni");
-        assertEquals(1, menuItems.size());
+    @ParameterizedTest
+    @MethodSource("provideFilterParams")
+    public void filter_Category_ReturnsSetOfMenuItems(String filterParam, Integer sizeOfReturnedSet) {
+        var menuItems = menuItemService.filter(filterParam);
+        assertEquals(sizeOfReturnedSet, menuItems.size());
     }
 
-    @Test
-    public void search_SearchParamCategory_ReturnsSetOfMenuItems() {
-        var menuItems = menuItemService.search("Dezert");
-        assertEquals(4, menuItems.size());
-    }
-
-    @Test
-    public void search_SearchParamType_ReturnsSetOfMenuItems() {
-        var menuItems = menuItemService.search("Hrana");
-        assertEquals(10, menuItems.size());
-    }
-
-    @Test
-    public void search_InvalidParam_ReturnsEmptySet() {
-        var menuItems = menuItemService.search("abcd");
-        assertEquals(0, menuItems.size());
-    }
-
-    @Test
-    public void filter_ValidCategory_ReturnsSetOfMenuItems() {
-        var menuItems = menuItemService.filter("Glavno jelo");
-        assertEquals(4, menuItems.size());
-    }
-
-    @Test
-    public void filter_InvalidCategory_ReturnsEmptySet() {
-        var menuItems = menuItemService.filter("abcd");
-        assertEquals(0, menuItems.size());
+    private static Stream<Arguments> provideFilterParams() {
+        return Stream.of(
+                Arguments.of("Glavno jelo", 4),
+                Arguments.of("abcd", 0)
+        );
     }
 
     @ParameterizedTest
