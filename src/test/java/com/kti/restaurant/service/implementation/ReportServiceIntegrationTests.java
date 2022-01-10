@@ -4,8 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
+import java.util.stream.Stream;
 
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,22 +76,22 @@ public class ReportServiceIntegrationTests {
 		assertEquals(missingMenuItemMessage, exception.getMessage());
 	}
 	
-	@Test
-	public void mealDrinkSalesForMonth_InvalidYear_ThrowsBadLogicException() {
+	@ParameterizedTest
+	@MethodSource("provideInvalidDateToMealDrinkSalesForMonthReport")
+	public void mealDrinkSalesForMonth_InvalidDate_ThrowsBadLogicException(Integer year, Integer month, String exceptionMessage) {
 		Exception exception = assertThrows(BadLogicException.class, () -> {
-			reportService.mealDrinkSalesForMonth(-1, 10, 1);
+			reportService.mealDrinkSalesForMonth(year, month, 1);
 		});
 		
-		assertEquals(badLogicYearInvalidMessage, exception.getMessage());
+		assertEquals(exceptionMessage, exception.getMessage());
 	}
-	
-	@Test
-	public void mealDrinkSalesForMonth_InvalidMonth_ThrowsBadLogicException() {
-		Exception exception = assertThrows(BadLogicException.class, () -> {
-			reportService.mealDrinkSalesForMonth(2021, 0, 1);
-		});
-		
-		assertEquals(badLogicMonthInvalidMessage, exception.getMessage());
+
+	private static Stream<Arguments> provideInvalidDateToMealDrinkSalesForMonthReport() {
+		return Stream.of(
+				Arguments.of(-1, 10, badLogicYearInvalidMessage),
+				Arguments.of(2021, 0, badLogicMonthInvalidMessage),
+				Arguments.of(2021, 13, badLogicMonthInvalidMessage)
+		);
 	}
 
 	@Test
@@ -117,38 +122,40 @@ public class ReportServiceIntegrationTests {
 		assertEquals(Double.valueOf(-5217), costBenefitRatio.get(18));
 	}
 
-	@Test
-	public void costBenefitRatioForMonth_InvalidYear_ThrowsBadLogicException() {
+	@ParameterizedTest
+	@MethodSource("provideInvalidDateToCostBenefitRationForMonthReport")
+	public void costBenefitRatioForMonth_InvalidDate_ThrowsBadLogicException(Integer year, Integer month, String exceptionMessage) {
 		Exception exception = assertThrows(BadLogicException.class, () -> {
-			reportService.costBenefitRatioForMonth(-1, 10);
+			reportService.costBenefitRatioForMonth(year, month);
 		});
 
-		assertEquals(badLogicYearInvalidMessage, exception.getMessage());
+		assertEquals(exceptionMessage, exception.getMessage());
 	}
 
-	@Test
-	public void costBenefitRatioForMonth_InvalidMonth_ThrowsBadLogicException() {
-		Exception exception = assertThrows(BadLogicException.class, () -> {
-			reportService.costBenefitRatioForMonth(2021, 0);
-		});
-
-		assertEquals(badLogicMonthInvalidMessage, exception.getMessage());
+	private static Stream<Arguments> provideInvalidDateToCostBenefitRationForMonthReport() {
+		return Stream.of(
+				Arguments.of(-1, 10, badLogicYearInvalidMessage),
+				Arguments.of(2021, 0, badLogicMonthInvalidMessage)
+		);
 	}
 
-	@Test
-	public void preparationTimeForYear_ValidParameters_ReturnsPreparationTimePerMonthsForBartender() {
-		List<Integer> preparationTime = reportService.preparationTimeForYear(2021, 2);
-		assertEquals(12, preparationTime.size());
-		assertEquals(0, preparationTime.get(0));
-		assertEquals(2, preparationTime.get(10));
+	@ParameterizedTest
+	@MethodSource("provideValidParamsForPreparationTimeForYearReport")
+	public void preparationTimeForYear_ValidParameters_ReturnsPreparationTimePerMonthsForBartender(
+			Integer year, Integer employeId, Integer sizeOfReturnedList, Integer valueOfOneElementInList,
+			Integer indexOfOneElementInList, Integer valueOfAnotherElementInList, Integer indexOfAnotherElementInList
+	) {
+		List<Integer> preparationTime = reportService.preparationTimeForYear(year, employeId);
+		assertEquals(sizeOfReturnedList, preparationTime.size());
+		assertEquals(valueOfOneElementInList, preparationTime.get(indexOfOneElementInList));
+		assertEquals(valueOfAnotherElementInList, preparationTime.get(indexOfAnotherElementInList));
 	}
 
-	@Test
-	public void preparationTimeForYear_ValidParameters_ReturnsPreparationTimePerMonthsForCook() {
-		List<Integer> preparationTime = reportService.preparationTimeForYear(2021, 4);
-		assertEquals(12, preparationTime.size());
-		assertEquals(0, preparationTime.get(0));
-		assertEquals(18, preparationTime.get(10));
+	private static Stream<Arguments> provideValidParamsForPreparationTimeForYearReport() {
+		return Stream.of(
+				Arguments.of(2021, 2, 12, 0, 0, 2, 10),
+				Arguments.of(2021, 4, 12, 0, 0, 18, 10)
+		);
 	}
 
 	@Test
@@ -160,7 +167,7 @@ public class ReportServiceIntegrationTests {
 		assertEquals(missingUserMessage, exception.getMessage());
 	}
 
-	@Test 
+	@Test
 	public void preparationTimeForYear_InvalidUserRole_ThrowsBadLogicException() {
 		Exception exception = assertThrows(BadLogicException.class, () -> {
 			reportService.preparationTimeForYear(2021, 1);
@@ -170,7 +177,7 @@ public class ReportServiceIntegrationTests {
 	}
 
 	@Test 
-	public void preparationTimeForYear_Invalidear_ThrowsBadLogicException() {
+	public void preparationTimeForYear_InvalidYear_ThrowsBadLogicException() {
 		Exception exception = assertThrows(BadLogicException.class, () -> {
 			reportService.preparationTimeForYear(-1, 1);
 		});
@@ -204,75 +211,59 @@ public class ReportServiceIntegrationTests {
 		assertEquals(1860.00, costsPerDay.get(18));
 	}
 	
-	@Test
-	public void mealDrinkCostsForMonth_InvalidYear_ThrowsBadLogicException() {
+	@ParameterizedTest
+	@MethodSource("provideInvalidDateForMealDrinkCostForMonthReport")
+	public void mealDrinkCostsForMonth_InvalidDate_ThrowsBadLogicException(Integer year, Integer month, String exceptionMessage) {
 		Exception exception = assertThrows(BadLogicException.class, () ->{
-			reportService.mealDrinkCostsForMonth(-1, 1);
+			reportService.mealDrinkCostsForMonth(year, month);
 		});
 		
-		assertEquals(badLogicYearInvalidMessage, exception.getMessage());
+		assertEquals(exceptionMessage, exception.getMessage());
+	}
+
+	private static Stream<Arguments> provideInvalidDateForMealDrinkCostForMonthReport() {
+		return Stream.of(
+				Arguments.of(-1, 1, badLogicYearInvalidMessage),
+				Arguments.of(2021, 0, badLogicMonthInvalidMessage),
+				Arguments.of(2021, 13, badLogicMonthInvalidMessage)
+		);
 	}
 	
-	@Test
-	public void mealDrinkCostsForMonth_InvalidMonthLessThan1_ThorwsBadLogicException() {
+	@ParameterizedTest
+	@MethodSource("provideValidParametersForPreparationTimeForMonthReport")
+	public void preparationTimeForMonth_ValidParameters_ReturnsPreparationTimePerDayForCook(
+			Integer year, Integer month, Integer emploeeId, Integer sizeOfReturnedList, Integer valueOfOneElementInReturnedList,
+			Integer indexOfOneElementInReturnedList
+	) {
+		List<Integer> minutesPerMonth = reportService.preparationTimeForMonth(year, month, emploeeId);
+		
+		assertEquals(sizeOfReturnedList, minutesPerMonth.size());
+		assertEquals(valueOfOneElementInReturnedList, minutesPerMonth.get(indexOfOneElementInReturnedList));
+	}
+
+	private static Stream<Arguments> provideValidParametersForPreparationTimeForMonthReport() {
+		return Stream.of(
+				Arguments.of(2021, 11, 4, 30, 18, 18),
+				Arguments.of(2021, 11, 2, 30, 2, 18)
+		);
+	}
+	
+	@ParameterizedTest
+	@MethodSource("provideInvalidDateForPreparationTimeForMonthReport")
+	public void preparationTimeForMonth_InvalidDate_ThrowsBadLogicException(Integer year, Integer month, String exceptionMessage) {
 		Exception exception = assertThrows(BadLogicException.class, () -> {
-			reportService.mealDrinkCostsForMonth(2021, 0);
+			reportService.preparationTimeForMonth(year, month, 1);
 		});
 		
-		assertEquals(badLogicMonthInvalidMessage, exception.getMessage());
+		assertEquals(exceptionMessage, exception.getMessage());
 	}
-	
-	@Test
-	public void mealDrinkCostsForMonth_InvalidMonthGreaterThan12_ThrowsBadLogicException() {
-		Exception exception = assertThrows(BadLogicException.class, () -> {
-			reportService.mealDrinkCostsForMonth(2021, 13);
-		});
-		
-		assertEquals(badLogicMonthInvalidMessage, exception.getMessage());
-	}
-	
-	@Test
-	public void preparationTimeForMonth_ValidParameters_ReturnsPreparationTimePerDayForCook() {
-		List<Integer> minutesPerMonth = reportService.preparationTimeForMonth(2021, 11, 4);
-		
-		assertEquals(30, minutesPerMonth.size());
-		assertEquals(18, minutesPerMonth.get(18));
-	}
-	
-	
-	@Test
-	public void preparationTimeForMonth_ValidParameters_ReturnsPreperationTimePerDayForBartender() {
-		List<Integer> minutesPerMonth = reportService.preparationTimeForMonth(2021, 11, 2);
-		
-		assertEquals(30, minutesPerMonth.size());
-		assertEquals(2, minutesPerMonth.get(18));
-	}
-	
-	@Test
-	public void preparationTimeForMonth_InvalidYear_ThrowsBadLogicException() {
-		Exception exception = assertThrows(BadLogicException.class, () -> {
-			reportService.preparationTimeForMonth(-1, 1, 1);
-		});
-		
-		assertEquals(badLogicYearInvalidMessage, exception.getMessage());
-	}
-	
-	@Test
-	public void preparationTimeForMonth_InvalidMonthLessThan1_ThrowsBadLogicException() {
-		Exception exception = assertThrows(BadLogicException.class, () -> {
-			reportService.preparationTimeForMonth(2021, 0, 1);
-		});
-		
-		assertEquals(badLogicMonthInvalidMessage, exception.getMessage());
-	}
-	
-	@Test
-	public void preparationTimeForMonth_InvalidMonthGreaterThan12_ThrowsBadLogicException() {
-		Exception exception = assertThrows(BadLogicException.class, () -> {
-			reportService.preparationTimeForMonth(2021, 13, 1);
-		});
-		
-		assertEquals(badLogicMonthInvalidMessage, exception.getMessage());
+
+	private static Stream<Arguments> provideInvalidDateForPreparationTimeForMonthReport() {
+		return Stream.of(
+				Arguments.of(-1, 1, badLogicYearInvalidMessage),
+				Arguments.of(2021, 0, badLogicMonthInvalidMessage),
+				Arguments.of(2021, 13, badLogicMonthInvalidMessage)
+		);
 	}
 	
 	@Test
