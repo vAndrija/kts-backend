@@ -4,17 +4,21 @@ import com.kti.restaurant.dto.JwtAuthenticationRequest;
 import com.kti.restaurant.dto.order.CreateOrderDto;
 import com.kti.restaurant.dto.order.OrderDto;
 import com.kti.restaurant.dto.order.UpdateOrderDto;
+import com.kti.restaurant.dto.orderitem.OrderItemDto;
 import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.model.enums.OrderStatus;
 import com.kti.restaurant.service.implementation.OrderService;
 import com.kti.restaurant.service.implementation.RestaurantTableService;
+import com.kti.restaurant.utils.RestResponsePage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
@@ -65,7 +69,7 @@ public class OrderControllerIntegrationTests {
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         List<Order> orderList = orderService.findAll();
         assertEquals(size + 1, orderList.size());
-        assertEquals(OrderStatus.ORDERED, orderDto.getStatus());
+        assertEquals(OrderStatus.ORDERED, OrderStatus.findType(orderDto.getStatus()));
         assertEquals(LocalDateTime.parse("2021-10-10T14:52"), orderDto.getDateOfOrder());
         assertEquals(500.00, orderDto.getPrice());
         assertEquals(1, orderDto.getTableId());
@@ -110,8 +114,8 @@ public class OrderControllerIntegrationTests {
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(3, orderDtoList.length);
-        assertEquals(OrderStatus.ORDERED, orderDtoList[0].getStatus());
-        assertEquals(OrderStatus.PAID, orderDtoList[1].getStatus());
+        assertEquals(OrderStatus.ORDERED, OrderStatus.findType(orderDtoList[0].getStatus()));
+        assertEquals(OrderStatus.PAID, OrderStatus.findType(orderDtoList[1].getStatus()));
         assertEquals(1520, orderDtoList[0].getPrice());
         assertEquals(1830, orderDtoList[1].getPrice());
 
@@ -126,7 +130,7 @@ public class OrderControllerIntegrationTests {
         OrderDto orderDto = responseEntity.getBody();
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(OrderStatus.ORDERED, orderDto.getStatus());
+        assertEquals(OrderStatus.ORDERED, OrderStatus.findType(orderDto.getStatus()));
         assertEquals(LocalDateTime.parse("2021-11-19T14:15"), orderDto.getDateOfOrder());
         assertEquals(1520, orderDto.getPrice());
         assertEquals(3, orderDto.getTableId());
@@ -182,7 +186,7 @@ public class OrderControllerIntegrationTests {
         OrderDto orderDto = responseEntity.getBody();
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(OrderStatus.PAID, orderDto.getStatus());
+        assertEquals(OrderStatus.PAID, OrderStatus.findType(orderDto.getStatus()));
         assertEquals(3000.00, orderDto.getPrice());
 
         Order order = orderService.findById(1);
@@ -210,24 +214,83 @@ public class OrderControllerIntegrationTests {
     @Test
     public void getFilteredOrdersByStatus_ValidStatus_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<OrderDto[]> responseEntity = restTemplate.exchange(URL_PREFIX + "/filter/{status}", HttpMethod.GET,
-                httpEntity, OrderDto[].class, "ORDERED");
+        ParameterizedTypeReference<RestResponsePage<OrderDto>> responseType = new ParameterizedTypeReference<>() {
+        };
+        ResponseEntity<RestResponsePage<OrderDto>> responseEntity = restTemplate.exchange(URL_PREFIX + "/filter/{id}/{status}?page={page}&size={size}", HttpMethod.GET,
+                httpEntity, responseType, 7, "Poručeno", 0, 8);
 
-        OrderDto[] orderDtoList = responseEntity.getBody();
+        List<OrderDto> orderDtoList = responseEntity.getBody().getContent();
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(OrderStatus.ORDERED, orderDtoList[0].getStatus());
-        assertEquals(OrderStatus.ORDERED, orderDtoList[1].getStatus());
+        assertEquals("Poručeno", orderDtoList.get(0).getStatus());
 
     }
 
     @Test
-    public void getFilteredOrdersByStatus_InvalidStatus_ReturnsNotAcceptable() {
+    public void getFilteredOrdersByStatus_InvalidStatus_ReturnsBadRequest() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<Object> responseEntity = restTemplate.exchange(URL_PREFIX + "/filter/{status}", HttpMethod.GET,
-                httpEntity, Object.class, "PREPARATION");
+        ResponseEntity<Object> responseEntity = restTemplate.exchange(URL_PREFIX + "/filter/{id}/{status}?page={page}&size={size}", HttpMethod.GET,
+                httpEntity, Object.class, 7, " ", 0, 8);
 
-        assertEquals(HttpStatus.NOT_ACCEPTABLE, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+
+    }
+
+    @Test
+    public void getOrdersByWaiter_ValidWaiterId_ReturnsOk() {
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ParameterizedTypeReference<RestResponsePage<OrderDto>> responseType = new ParameterizedTypeReference<>() {
+        };
+        ResponseEntity<RestResponsePage<OrderDto>> responseEntity = restTemplate.exchange(URL_PREFIX + "/by-waiter/{id}?page={page}&size={size}", HttpMethod.GET,
+                httpEntity, responseType, 7, 0, 8);
+
+        List<OrderDto> orderDtoList = responseEntity.getBody().getContent();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(2, orderDtoList.size());
+
+    }
+
+    @Test
+    public void getOrdersByWaiter_InvalidWaiterId_ReturnsBadRequest() {
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Object> responseEntity = restTemplate.exchange(URL_PREFIX + "/by-waiter/{id}?page={page}&size={size}", HttpMethod.GET,
+                httpEntity, Object.class, -7, 0, 8);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+
+    }
+
+
+    @Test
+    public void updateStatus_ValidStatus_ReturnsOk() throws Exception {
+
+        HttpEntity<?> httpEntity = new HttpEntity<>("Plaćeno", headers);
+
+        ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/status/{id}",
+                HttpMethod.POST, httpEntity, OrderDto.class, 1);
+
+        OrderDto orderDto = responseEntity.getBody();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals("Plaćeno", orderDto.getStatus());
+
+        Order order = orderService.findById(1);
+        assertEquals(OrderStatus.PAID, order.getStatus());
+
+        order.setStatus(OrderStatus.ORDERED);
+        orderService.update(order, 1);
+
+    }
+
+    @Test
+    public void update_InvalidStatus_ReturnsNotFound() {
+        HttpEntity<?> httpEntity = new HttpEntity<>(" ", headers);
+
+        ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/status/{id}",
+                HttpMethod.POST, httpEntity, OrderDto.class, 1);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
 
     }
 

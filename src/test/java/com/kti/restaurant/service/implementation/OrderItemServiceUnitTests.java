@@ -1,5 +1,6 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.*;
 import com.kti.restaurant.model.enums.OrderItemStatus;
@@ -110,9 +111,16 @@ public class OrderItemServiceUnitTests {
 
 
     @Test
-    public void updateStatus_InvalidId_ThrowsMissingEntityException() throws Exception {
+    public void updateStatus_InvalidId_ThrowsMissingEntityException() {
         assertThrows(MissingEntityException.class, () -> {
             orderItemService.updateStatus(null, "Pripremljeno");
+        });
+    }
+
+    @Test
+    public void updateStatus_InvalidStatus_ThrowsBadLogicException() {
+        assertThrows(BadLogicException.class, () -> {
+            orderItemService.updateStatus(1, " ");
         });
     }
 

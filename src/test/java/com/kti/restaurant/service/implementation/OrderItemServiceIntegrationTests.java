@@ -7,6 +7,7 @@ import com.kti.restaurant.model.enums.OrderItemStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.annotation.Rollback;
@@ -190,30 +191,25 @@ public class OrderItemServiceIntegrationTests {
 
     @Test
     public void findByEmployee_ValidId_ExistingOrderItems() {
-        HttpHeaders headers = new HttpHeaders();
-        List<OrderItem> orderItems = orderItemService.findByEmployee(PageRequest.of(0,5), 3, headers);
-        assertEquals(orderItems.size(), 2);
+        Page<OrderItem> orderItems = orderItemService.findByEmployee(PageRequest.of(0, 5), 3);
+        assertEquals(orderItems.getContent().size(), 2);
     }
 
     @Test
-    public void findByEmployee_InvalidId_ExmptyList() {
-        HttpHeaders headers = new HttpHeaders();
-        List<OrderItem> orderItems = orderItemService.findByEmployee(PageRequest.of(0,5), 1, headers);
-        assertEquals(orderItems.size(), 0);
+    public void findByEmployee_InvalidId_EmptyList() {
+        Page<OrderItem> orderItems = orderItemService.findByEmployee(PageRequest.of(0, 5), 1);
+        assertEquals(orderItems.getContent().size(), 0);
     }
 
     @Test
     @Rollback
     public void updateStatus_ValidId_ExistingOrderItem() throws Exception {
-        OrderItem orderItemForUpdate = new OrderItem(2, "bez luka", OrderItemStatus.PREPARATION, 1,
-                new MenuItem());
-
-        OrderItem updatedOrder = orderItemService.update(orderItemForUpdate, 1);
+        OrderItem updatedOrder = orderItemService.updateStatus(4, "Pripremljeno");
 
         assertEquals(1, updatedOrder.getPriority());
-        assertEquals(2, updatedOrder.getQuantity());
-        assertEquals("bez luka", updatedOrder.getNote());
-        assertEquals(OrderItemStatus.PREPARATION, updatedOrder.getStatus());
+        assertEquals(1, updatedOrder.getQuantity());
+        assertEquals("", updatedOrder.getNote());
+        assertEquals(OrderItemStatus.PREPARED, updatedOrder.getStatus());
 
     }
 

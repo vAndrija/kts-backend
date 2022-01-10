@@ -13,9 +13,14 @@ import org.springframework.data.domain.Pageable;
 public interface IMenuItemService extends IService<MenuItem> {
 
     Set<MenuItem> search(String s);
+
     Set<MenuItem> filter(String f);
-    Set<MenuItem> filterPageable(String f, Pageable pageable);
+
+    Page<MenuItem> filterPageable(String f, Pageable pageable);
+
     Page<MenuItem> pendingMenuItems(Pageable pageable);
+
     List<MenuItem> findByMenu(Integer menuId, Pageable pageable) throws Exception;
+
     Page<MenuItem> findAll(Pageable pageable);
 }

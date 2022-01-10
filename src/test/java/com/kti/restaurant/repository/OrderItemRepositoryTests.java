@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
 
 import com.kti.restaurant.model.OrderItem;
@@ -89,16 +90,33 @@ public class OrderItemRepositoryTests {
     @ParameterizedTest
     @MethodSource("cookIdBartenderIdForFindByEmployee")
     public void findByEmployee(int id, int expected) {
-        Page<OrderItem> orderItems = orderItemRepository.findByEmployee(PageRequest.of(0,5), id);
+        Page<OrderItem> orderItems = orderItemRepository.findByEmployee(PageRequest.of(0, 5), id);
         List<OrderItem> orderItemList = orderItems.getContent();
         assertEquals(expected, orderItemList.size());
     }
 
     private static Stream<Arguments> cookIdBartenderIdForFindByEmployee() {
         return Stream.of(
-                Arguments.of( 3, 2),
-                Arguments.of( 2, 2),
-                Arguments.of( 1, 0)
+                Arguments.of(3, 2),
+                Arguments.of(2, 2),
+                Arguments.of(1, 0)
+        );
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("employeeIdForFindByEmployee")
+    public void findOrderItemsByEmployee(Integer id, int expected) {
+        Pageable pageable = PageRequest.of(0, 8);
+        Page<OrderItem> orderItemPage = orderItemRepository.findByEmployee(pageable, id);
+        assertEquals(expected, orderItemPage.getContent().size());
+    }
+
+    private static Stream<Arguments> employeeIdForFindByEmployee() {
+        return Stream.of(
+                Arguments.of(2, 2),
+                Arguments.of(4, 2),
+                Arguments.of(-1, 0)
         );
     }
 
