@@ -1,5 +1,6 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.RestaurantTable;
@@ -8,6 +9,9 @@ import com.kti.restaurant.model.enums.OrderStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,16 +105,57 @@ public class OrderServiceIntegrationTests {
     }
 
     @Test
-    public void filterByStatus_ValidStatus_ReturnsExistingOrders() {
-        Collection<Order> filteredOrders = orderService.filterByStatus("ORDERED");
-
-        assertEquals(2, filteredOrders.size());
+    public void filterByStatus_ValidStatus_ReturnsExistingOrders() throws Exception {
+        Page<Order> filteredOrders = orderService.filterByStatus(7, "Poručeno", PageRequest.of(0, 8));
+        assertEquals(2, filteredOrders.getContent().size());
     }
 
     @Test
-    public void filterByStatus_InvalidStatus_ThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            orderService.filterByStatus("PREPARATION");
+    public void filterByStatus_InvalidStatus_ThrowsBadLogicException() {
+        assertThrows(BadLogicException.class, () -> {
+            orderService.filterByStatus(7, " ", PageRequest.of(0, 8));
         });
     }
+
+    @Test
+    public void filterByStatus_InvalidWaiterId_ThrowsMissingEntityException() {
+        assertThrows(MissingEntityException.class, () -> {
+            orderService.filterByStatus(70, "Poručeno", PageRequest.of(0, 8));
+        });
+    }
+
+    @Test
+    public void findByWaiter_ValidWaiterId_ReturnsExistingOrders() throws Exception {
+        Page<Order> orders = orderService.findByWaiter(7, PageRequest.of(0, 8));
+        assertEquals(2, orders.getContent().size());
+    }
+
+    @Test
+    public void findByWaiter_InvalidWaiterId_ThrowsMissingEntityException() {
+        assertThrows(MissingEntityException.class, () -> {
+            orderService.findByWaiter(-1, PageRequest.of(0, 8));
+        });
+    }
+
+    @Test
+    @Rollback
+    public void updateStatus_ValidStatus_ReturnsUpdatedOrder() throws Exception {
+        Order order = orderService.updateStatus(1, "Završeno");
+        assertEquals(OrderStatus.FINISHED, order.getStatus());
+    }
+
+    @Test
+    public void updateStatus_InvalidStatus_ThrowsMissingEntityException() {
+        assertThrows(MissingEntityException.class, () -> {
+            orderService.updateStatus(4, " ");
+        });
+    }
+
+    @Test
+    public void updateStatus_InvalidId_ThrowsMissingEntityException() {
+        assertThrows(MissingEntityException.class, () -> {
+            orderService.updateStatus(-1, "Poručeno");
+        });
+    }
+
 }

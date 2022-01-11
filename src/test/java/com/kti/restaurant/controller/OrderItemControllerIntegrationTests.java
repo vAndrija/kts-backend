@@ -4,17 +4,21 @@ import com.kti.restaurant.dto.JwtAuthenticationRequest;
 import com.kti.restaurant.dto.orderitem.CreateOrderItemDto;
 import com.kti.restaurant.dto.orderitem.OrderItemDto;
 import com.kti.restaurant.dto.orderitem.UpdateOrderItemDto;
+import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.model.enums.OrderItemStatus;
 import com.kti.restaurant.service.implementation.MenuItemService;
 import com.kti.restaurant.service.implementation.OrderItemService;
 import com.kti.restaurant.service.implementation.OrderService;
+import com.kti.restaurant.utils.RestResponsePage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
 import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 
@@ -238,19 +242,6 @@ public class OrderItemControllerIntegrationTests {
 
     }
 
-
-    @Test
-    public void update_InvalidStatus_ReturnsBadRequest() {
-        HttpEntity<UpdateOrderItemDto> httpEntity = new HttpEntity<>(new UpdateOrderItemDto(3, "sa sojinim mlekom",
-                OrderItemStatus.PREPARATION, 1, 3, 2, 2, null), headers);
-
-        ResponseEntity<OrderItemDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.PUT,
-                httpEntity, OrderItemDto.class, 4);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-
-    }
-
     @Test
     public void update_InvalidId_ReturnsNotFound() {
         HttpEntity<UpdateOrderItemDto> httpEntity = new HttpEntity<>(new UpdateOrderItemDto(3, "sa sojinim mlekom",
@@ -264,28 +255,59 @@ public class OrderItemControllerIntegrationTests {
     }
 
     @Test
+    public void update_ValidStatus_ReturnsOk() throws Exception {
+        HttpEntity<?> httpEntity = new HttpEntity<>("Pripremljeno", headers);
+
+        ResponseEntity<OrderItemDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/status/{id}",
+                HttpMethod.POST, httpEntity, OrderItemDto.class, 4);
+
+
+        OrderItemDto orderItemDto = responseEntity.getBody();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(OrderItemStatus.PREPARED.getType(), orderItemDto.getStatus());
+
+        OrderItem orderItem = orderItemService.findById(4);
+        assertEquals(OrderItemStatus.PREPARED, orderItem.getStatus());
+
+        orderItem.setStatus(OrderItemStatus.PREPARATION);
+        orderItemService.update(orderItem, 4);
+
+    }
+
+
+    @Test
+    public void update_InvalidStatus_ReturnsBadRequest() {
+        HttpEntity<?> httpEntity = new HttpEntity<>(" ", headers);
+
+        ResponseEntity<OrderItemDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/status/{id}",
+                HttpMethod.POST, httpEntity, OrderItemDto.class, 4);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+
+    }
+
+    @Test
     public void getOrderItemsForEmployee_ValidId_ReturnsOk() {
         HttpHeaders httpHeaders = new HttpHeaders();
         ResponseEntity<UserTokenState> responseEntity =
                 restTemplate.postForEntity("/api/v1/auth/login",
-                        new JwtAuthenticationRequest("milossaric@gmail.com", "123"),
+                        new JwtAuthenticationRequest("lukaperic@gmail.com", "123"),
                         UserTokenState.class);
         accessToken = responseEntity.getBody().getAccessToken();
         httpHeaders.add("Authorization", "Bearer " + accessToken);
 
         HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
 
-        ResponseEntity<OrderItemDto[]> responseEntity1 = restTemplate.exchange(URL_PREFIX+"/employee/{id}", HttpMethod.GET,
-                httpEntity, OrderItemDto[].class, 3);
+        ParameterizedTypeReference<RestResponsePage<OrderItemDto>> responseType = new ParameterizedTypeReference<>() {
+        };
+        ResponseEntity<RestResponsePage<OrderItemDto>> responseEntity1 = restTemplate.exchange(URL_PREFIX + "/employee/{id}?page={page}&size={size}", HttpMethod.GET,
+                httpEntity, responseType, 2, 0, 8);
 
-        OrderItemDto[] orderItemDtos = responseEntity1.getBody();
+        List<OrderItemDto> orderItems = responseEntity1.getBody().getContent();
 
         assertEquals(HttpStatus.OK, responseEntity1.getStatusCode());
-        assertEquals(2, orderItemDtos.length);
-        assertEquals(5, orderItemDtos[0].getId());
-        assertEquals(1, orderItemDtos[0].getQuantity());
-        assertEquals(9, orderItemDtos[1].getId());
-        assertEquals(1, orderItemDtos[1].getQuantity());
+        assertEquals(2, orderItems.size());
 
     }
 
@@ -293,8 +315,8 @@ public class OrderItemControllerIntegrationTests {
     public void getOrderItemsForEmployee_InvalidId_ReturnsNotFound() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<Object> responseEntity = restTemplate.exchange(URL_PREFIX+"/employee/{id}", HttpMethod.GET,
-                httpEntity, Object.class, 300);
+        ResponseEntity<Object> responseEntity = restTemplate.exchange(URL_PREFIX + "/employee/{id}?page={page}&size={size}", HttpMethod.GET,
+                httpEntity, Object.class, 300, 0, 8);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
 

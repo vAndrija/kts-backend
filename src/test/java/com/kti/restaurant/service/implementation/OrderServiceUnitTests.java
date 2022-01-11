@@ -1,16 +1,22 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
-import com.kti.restaurant.model.Order;
-import com.kti.restaurant.model.RestaurantTable;
-import com.kti.restaurant.model.Waiter;
+import com.kti.restaurant.model.*;
 import com.kti.restaurant.model.enums.OrderStatus;
 import com.kti.restaurant.repository.OrderRepository;
+import com.kti.restaurant.repository.UserRepository;
+import com.kti.restaurant.repository.WaiterRepository;
+import com.kti.restaurant.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
@@ -31,16 +37,22 @@ public class OrderServiceUnitTests {
     private OrderService orderService;
 
     @Mock
+    private WaiterService waiterService;
+
+    @Mock
     private OrderRepository orderRepository;
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws Exception {
         Order order = new Order(OrderStatus.ORDERED, LocalDateTime.parse("2021-12-08T20:00"),
                 1000.00, new RestaurantTable(), new Waiter());
         order.setId(1);
+        Waiter waiter = new Waiter("Milic", "Sara", "0654123699",
+                "saramilic@gmail.com", "02356987451");
+        waiter.setId(7);
 
         when(orderRepository.findById(1)).thenReturn(Optional.of(order));
-
+        when(waiterService.findById(7)).thenReturn(waiter);
     }
 
     @Test
@@ -105,24 +117,68 @@ public class OrderServiceUnitTests {
     }
 
     @Test
-    public void filterByStatus_ValidStatus_ReturnsExistingOrders() {
+    public void filterByStatus_ValidStatus_ReturnsExistingOrders() throws Exception {
         List<Order> filterByStatus = new ArrayList<>();
-        Order order1 = new Order(OrderStatus.ORDERED, LocalDateTime.parse("2022-10-10T10:00"),
+        Order order = new Order(OrderStatus.ORDERED, LocalDateTime.parse("2022-10-10T10:00"),
                 1000.00, new RestaurantTable(), new Waiter());
-        Order order2 = new Order(OrderStatus.FINISHED, LocalDateTime.parse("2022-10-10T14:15"),
-                3000.00, new RestaurantTable(), new Waiter());
-        filterByStatus.add(order1);
+        filterByStatus.add(order);
+        when(orderRepository.findByWaiterAndStatus(7, OrderStatus.ORDERED, PageRequest.of(0, 8))).thenReturn(new PageImpl<>(filterByStatus));
 
-        when(orderRepository.findOrderByStatus(any())).thenReturn(filterByStatus);
-
-        Collection<Order> filtered = orderService.filterByStatus("ORDERED");
-        assertEquals(1, filtered.size());
+        Page<Order> filtered = orderService.filterByStatus(7, "Poručeno", PageRequest.of(0, 8));
+        assertEquals(1, filtered.getContent().size());
     }
 
     @Test
-    public void filterByStatus_InvalidStatus_ThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            orderService.filterByStatus("PREPARED");
+    public void filterByStatus_InvalidWaiterId_ThrowsMissingEntityException() {
+        assertThrows(MissingEntityException.class, () -> {
+            orderService.filterByStatus(-1, "Poručeno", PageRequest.of(0, 8));
         });
     }
+
+    @Test
+    public void update_ValidStatus_ReturnsUpdatedOrder() throws Exception {
+        Order orderForUpdate = new Order(OrderStatus.FINISHED, LocalDateTime.parse("2022-10-10T14:15"),
+                3000.00, new RestaurantTable(), new Waiter());
+        orderForUpdate.setId(5);
+
+        when(orderRepository.save(any()))
+                .thenAnswer(a -> a.getArgument(0));
+        when(orderRepository.findById(5)).thenReturn(Optional.of(orderForUpdate));
+
+        Order updatedOrder = orderService.updateStatus(5, "Plaćeno");
+        assertEquals(OrderStatus.PAID, updatedOrder.getStatus());
+        assertEquals(LocalDateTime.parse("2022-10-10T14:15"), updatedOrder.getDateOfOrder());
+        assertEquals(3000.00, updatedOrder.getPrice());
+
+    }
+
+    @Test
+    public void update_InvalidStatus_ThrowsBadLogicException() {
+        assertThrows(BadLogicException.class, () -> {
+            orderService.updateStatus(1, " ");
+        });
+
+    }
+
+
+    @Test
+    public void findByWaiter_ValidWaiterId_ReturnsExistingOrders() throws Exception {
+        List<Order> orders = new ArrayList<>();
+        Order order = new Order(OrderStatus.ORDERED, LocalDateTime.parse("2022-10-10T10:00"),
+                1000.00, new RestaurantTable(), new Waiter());
+        orders.add(order);
+        when(orderRepository.findByWaiter(7, PageRequest.of(0, 8))).thenReturn(new PageImpl<>(orders));
+
+        Page<Order> filtered = orderService.findByWaiter(7, PageRequest.of(0, 8));
+        assertEquals(1, filtered.getContent().size());
+    }
+
+    @Test
+    public void findByWaiter_InvalidWaiterId_ThrowsMissingEntityException() {
+        assertThrows(MissingEntityException.class, () -> {
+            orderService.findByWaiter(1, PageRequest.of(0, 8));
+        });
+
+    }
+
 }

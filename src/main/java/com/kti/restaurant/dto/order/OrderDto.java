@@ -11,7 +11,7 @@ public class OrderDto {
     private Integer id;
 
     @NotNull(message = "Status should not be null")
-    private OrderStatus status;
+    private String status;
 
     @NotNull(message = "Date of order should not be null")
     private LocalDateTime dateOfOrder;
@@ -25,11 +25,11 @@ public class OrderDto {
     @NotNull(message = "Waiter id should not be null")
     private Integer waiterId;
 
-    public OrderDto(){
+    public OrderDto() {
 
     }
 
-    public OrderDto(Integer id, OrderStatus status, LocalDateTime dateOfOrder, Double price, Integer tableId,
+    public OrderDto(Integer id, String status, LocalDateTime dateOfOrder, Double price, Integer tableId,
                     Integer waiterId) {
         this.id = id;
         this.status = status;
@@ -47,11 +47,11 @@ public class OrderDto {
         this.id = id;
     }
 
-    public OrderStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

@@ -7,8 +7,9 @@ import com.kti.restaurant.mapper.OrderItemMapper;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.service.contract.IOrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value= "/api/v1/order-items")
+@RequestMapping(value = "/api/v1/order-items")
 public class OrderItemController {
 
     private IOrderItemService orderItemService;
@@ -35,15 +36,15 @@ public class OrderItemController {
     @PostMapping("")
     @PreAuthorize("hasAnyRole('WAITER')")
     public ResponseEntity<?> createOrderItem(@Valid @RequestBody CreateOrderItemDto newOrderItem) throws Exception {
-      OrderItem orderItem = orderItemService.create(orderItemMapper.fromCreateOrderItemDtoToOrderItem(newOrderItem));
-      return new ResponseEntity<>(orderItemMapper.fromOrderItemToOrderItemDto(orderItem),HttpStatus.CREATED);
+        OrderItem orderItem = orderItemService.create(orderItemMapper.fromCreateOrderItemDtoToOrderItem(newOrderItem));
+        return new ResponseEntity<>(orderItemMapper.fromOrderItemToOrderItemDto(orderItem), HttpStatus.CREATED);
     }
 
     @GetMapping("")
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER', 'MANAGER')")
     public ResponseEntity<?> getOrderItems() {
         List<OrderItemDto> orderItems = orderItemService.findAll().stream()
-                .map(orderItem->this.orderItemMapper.fromOrderItemToOrderItemDto(orderItem)).collect(Collectors.toList());
+                .map(orderItem -> this.orderItemMapper.fromOrderItemToOrderItemDto(orderItem)).collect(Collectors.toList());
         return new ResponseEntity<>(orderItems, HttpStatus.OK);
     }
 
@@ -51,10 +52,10 @@ public class OrderItemController {
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER', 'MANAGER')")
     public ResponseEntity<?> getOrderItem(@PathVariable("id") Integer id) throws Exception {
         OrderItem orderItem = orderItemService.findById(id);
-        return new ResponseEntity<>( orderItemMapper.fromOrderItemToOrderItemDto(orderItem), HttpStatus.OK);
+        return new ResponseEntity<>(orderItemMapper.fromOrderItemToOrderItemDto(orderItem), HttpStatus.OK);
     }
 
-    @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER', 'MANAGER')")
     public ResponseEntity<OrderItem> deleteOrderItem(@PathVariable("id") Integer id) throws Exception {
         orderItemService.delete(id);
@@ -68,16 +69,16 @@ public class OrderItemController {
         return new ResponseEntity<>(
                 orderItemMapper.fromOrderItemToOrderItemDto(orderItemService.
                         update(orderItemMapper.fromUpdateOrderItemDtoToOrderItem(updateOrderItemDto), id)),
-                    HttpStatus.OK);
+                HttpStatus.OK);
     }
 
     @GetMapping("/employee/{id}")
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER', 'MANAGER')")
-    public ResponseEntity<?> getOrderItemsForEmployee(Pageable page, @PathVariable("id") Integer id) throws Exception {
-        HttpHeaders header = new HttpHeaders();
-        List<OrderItemDto> orderItems = orderItemService.findByEmployee(page, id, header).stream()
-                .map(orderItem->this.orderItemMapper.fromOrderItemToOrderItemDto(orderItem)).collect(Collectors.toList());
-        return new ResponseEntity<>(orderItems, header, HttpStatus.OK);
+    public ResponseEntity<?> getOrderItemsForEmployee(@RequestParam Integer page, @RequestParam Integer size, @PathVariable("id") Integer id) throws Exception {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<OrderItemDto> orderItems = orderItemService.findByEmployee(pageable, id)
+                .map(orderItem -> this.orderItemMapper.fromOrderItemToOrderItemDto(orderItem));
+        return new ResponseEntity<>(orderItems, HttpStatus.OK);
     }
 
 
@@ -85,6 +86,6 @@ public class OrderItemController {
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
     public ResponseEntity<?> updateStatus(@PathVariable("id") Integer id, @RequestBody String status) throws Exception {
         OrderItem orderItem = orderItemService.updateStatus(id, status);
-        return new ResponseEntity<>(orderItemMapper.fromOrderItemToOrderItemDto(orderItem),HttpStatus.OK);
+        return new ResponseEntity<>(orderItemMapper.fromOrderItemToOrderItemDto(orderItem), HttpStatus.OK);
     }
 }

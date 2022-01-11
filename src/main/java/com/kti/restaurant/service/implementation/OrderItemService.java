@@ -102,20 +102,19 @@ public class OrderItemService implements IOrderItemService {
     }
 
     @Override
-    public List<OrderItem> findByEmployee(Pageable pageable, Integer employeeId, HttpHeaders header) {
+    public Page<OrderItem> findByEmployee(Pageable pageable, Integer employeeId) {
         if (userService.findById(employeeId) == null) {
             throw new MissingEntityException("Bartender/cook with given id does not exist in the system.");
         }
-        Page<OrderItem> orderItemPage = orderItemRepository.findByEmployee(pageable, employeeId);
-        header.add("Total-items", Long.toString(orderItemPage.getTotalElements()));
-        return orderItemPage.getContent();
+        return orderItemRepository.findByEmployee(pageable, employeeId);
     }
 
     @Override
     public OrderItem updateStatus(Integer id, String status) throws Exception {
         OrderItem orderItemToUpdate = this.findById(id);
-        if (Objects.equals(status, "")) {
-            return null;
+        System.out.println(orderItemToUpdate.getId());
+        if (Objects.equals(status, " ")) {
+            throw new BadLogicException("Given status cannot be empty.");
         }
         orderItemToUpdate.setStatus(OrderItemStatus.findType(status));
         orderItemRepository.save(orderItemToUpdate);

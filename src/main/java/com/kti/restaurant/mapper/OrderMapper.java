@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class OrderMapper {
     private IRestaurantTableService restaurantTableService;
     private IWaiterService waiterService;
+
     @Autowired
     public OrderMapper(IRestaurantTableService restaurantTableService, IWaiterService waiterService) {
         this.restaurantTableService = restaurantTableService;
@@ -24,11 +25,12 @@ public class OrderMapper {
 
     public Order fromCreateOrderDtoToOrder(CreateOrderDto createOrderDto) throws Exception {
         return new Order(OrderStatus.findType(createOrderDto.getStatus()), createOrderDto.getDateOfOrder(), createOrderDto.getPrice(),
-                findRestaurantTableById(createOrderDto.getTableId()),findWaiterById(createOrderDto.getWaiterId()));
+                findRestaurantTableById(createOrderDto.getTableId()), findWaiterById(createOrderDto.getWaiterId()));
     }
+
     public OrderDto fromOrderToOrderDto(Order order) {
-        return new OrderDto(order.getId(), order.getStatus(), order.getDateOfOrder(),
-                order.getPrice(),order.getTable().getId(), order.getWaiter().getId());
+        return new OrderDto(order.getId(), order.getStatus().getType(), order.getDateOfOrder(),
+                order.getPrice(), order.getTable().getId(), order.getWaiter().getId());
     }
 
     public Order fromUpdateOrderDtoToOrder(UpdateOrderDto orderDto) {
