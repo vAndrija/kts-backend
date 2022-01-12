@@ -31,8 +31,16 @@ public class WaitUtils {
 		return new WebDriverWait(driver, wait).until(ExpectedConditions.presenceOfElementLocated(locator));
 	}
 
+	public static List<WebElement> presenceWaitAll(WebDriver driver, By locator, int wait) {
+		return new WebDriverWait(driver, wait).until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+	}
+
 	public static WebElement clickableWait(WebDriver driver, WebElement element, int wait) {
 		return new WebDriverWait(driver, wait).until(ExpectedConditions.elementToBeClickable(element));
+	}
+
+	public static List<WebElement> numberOfElementsWait(WebDriver driver, By locator, int wait, int number) {
+		return new WebDriverWait(driver, wait).until(ExpectedConditions.numberOfElementsToBe(locator, number));
 	}
 
 	public static boolean isPresent(WebDriver driver, By locator) {
