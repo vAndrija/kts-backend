@@ -5,6 +5,7 @@ import antlr.Token;
 import com.kti.restaurant.dto.JwtAuthenticationRequest;
 import com.kti.restaurant.dto.auth.ChangePasswordDto;
 import com.kti.restaurant.dto.auth.ResetPasswordDTO;
+import com.kti.restaurant.mapper.UserMapper;
 import com.kti.restaurant.model.User;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.security.TokenUtils;
@@ -32,13 +33,16 @@ public class AuthenticationController {
     private UserService userService;
     private TokenUtils tokenUtils;
     private AuthenticationManager authenticationManager;
+    private UserMapper userMapper;
 
 
     @Autowired
-    public AuthenticationController(UserService userService, TokenUtils tokenUtils, AuthenticationManager authenticationManager){
+    public AuthenticationController(UserService userService, TokenUtils tokenUtils,
+                                    AuthenticationManager authenticationManager,UserMapper userMapper){
         this.userService = userService;
         this.tokenUtils = tokenUtils;
         this.authenticationManager  = authenticationManager;
+        this.userMapper = userMapper;
     }
 
 
@@ -72,6 +76,12 @@ public class AuthenticationController {
     public void changePassword(@RequestBody ChangePasswordDto changePasswordDto){
         User user =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         this.userService.changePassword(user,changePasswordDto);
+    }
+
+    @GetMapping("/current-user")
+    public ResponseEntity<?> currentUser(){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return new ResponseEntity<>(userMapper.fromUserToUserDto(user), HttpStatus.OK);
     }
 
 }
