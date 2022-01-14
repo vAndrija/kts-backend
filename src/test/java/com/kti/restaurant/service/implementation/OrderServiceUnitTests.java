@@ -3,6 +3,7 @@ package com.kti.restaurant.service.implementation;
 import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.*;
+import com.kti.restaurant.model.enums.OrderItemStatus;
 import com.kti.restaurant.model.enums.OrderStatus;
 import com.kti.restaurant.repository.OrderRepository;
 import com.kti.restaurant.repository.UserRepository;
@@ -38,6 +39,8 @@ public class OrderServiceUnitTests {
 
     @Mock
     private WaiterService waiterService;
+    @Mock
+    private OrderItemService orderItemService;
 
     @Mock
     private OrderRepository orderRepository;
@@ -155,6 +158,15 @@ public class OrderServiceUnitTests {
     @Test
     public void update_InvalidStatus_ThrowsBadLogicException() {
         assertThrows(BadLogicException.class, () -> {
+            orderService.updateStatus(1, "Završeno");
+        });
+
+    }
+
+    @Test
+    public void update_InvalidStatus_ThrowsMissingEntityException() {
+        when(orderItemService.checkIfServed(1)).thenReturn(true);
+        assertThrows(MissingEntityException.class, () -> {
             orderService.updateStatus(1, " ");
         });
 

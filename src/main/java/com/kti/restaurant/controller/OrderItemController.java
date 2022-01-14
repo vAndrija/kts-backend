@@ -88,4 +88,12 @@ public class OrderItemController {
         OrderItem orderItem = orderItemService.updateStatus(id, status);
         return new ResponseEntity<>(orderItemMapper.fromOrderItemToOrderItemDto(orderItem), HttpStatus.OK);
     }
+
+    @GetMapping("/order/{id}")
+    @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER', 'MANAGER')")
+    public ResponseEntity<?> getOrderItemsForOrder(@PathVariable("id") Integer id) {
+        List<OrderItemDto> orderItems = orderItemService.findByOrder(id).stream()
+                .map(orderItem -> this.orderItemMapper.fromOrderItemToOrderItemDto(orderItem)).collect(Collectors.toList());
+        return new ResponseEntity<>(orderItems, HttpStatus.OK);
+    }
 }

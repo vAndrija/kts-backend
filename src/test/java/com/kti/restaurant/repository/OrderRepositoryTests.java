@@ -29,7 +29,7 @@ public class OrderRepositoryTests {
 
     @ParameterizedTest
     @MethodSource("idAndStatusForFindByWaiterAndStatus")
-    public void findOrdersByWaiterAndStatus(Integer id, OrderStatus status, int expected) {
+    public void findOrdersByWaiterAndStatus(Integer id, OrderStatus status, Integer expected) {
         Pageable pageable = PageRequest.of(0, 8);
         Page<Order> orders = orderRepository.findByWaiterAndStatus(id, status, pageable);
         assertEquals(expected, orders.getContent().size());
@@ -53,7 +53,21 @@ public class OrderRepositoryTests {
     private static Stream<Arguments> idForFindByWaiter() {
         return Stream.of(
                 Arguments.of(8, 1),
-                Arguments.of(70, 0)
+                Arguments.of(10, 0)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("idForFindByRestaurantTable")
+    public void findOrdersByRestaurantTable(Integer id, int expected) {
+        List<Order> orders = orderRepository.findByRestaurantTable(id);
+        assertEquals(expected, orders.size());
+    }
+
+    private static Stream<Arguments> idForFindByRestaurantTable() {
+        return Stream.of(
+                Arguments.of(3, 1),
+                Arguments.of(11, 0)
         );
     }
 }

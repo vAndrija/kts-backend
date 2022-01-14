@@ -30,7 +30,7 @@ public class MenuItemRepositoryTests {
     @ParameterizedTest
     @MethodSource("validNameAndDescription")
     public void findByNameAndDescription_ParamNameDescription_ReturnsMenuItems(String searchParam, Integer expectedSize, String expectedMenuItemName) {
-        List<MenuItem> menuItems = menuItemRepository.findByNameAndDecription(searchParam);
+        List<MenuItem> menuItems = menuItemRepository.findByNameAndDescription(searchParam);
         assertEquals(expectedSize, menuItems.size());
         assertEquals(expectedMenuItemName, menuItems.get(0).getName());
     }
@@ -52,7 +52,7 @@ public class MenuItemRepositoryTests {
 
     private static Stream<Arguments> validMenuItemCategory() {
         return Stream.of(
-                Arguments.of(MenuItemCategory.DESSERT, 4)
+                Arguments.of(MenuItemCategory.DESSERT, 3)
         );
     }
 
@@ -79,7 +79,7 @@ public class MenuItemRepositoryTests {
 
     private static Stream<Arguments> validMenuIdAndPageable() {
         return Stream.of(
-                Arguments.of(1, PageRequest.of( 0, 5)),
+                Arguments.of(1, PageRequest.of(0, 5)),
                 Arguments.of(1, PageRequest.of(1, 5))
         );
     }

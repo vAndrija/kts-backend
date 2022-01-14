@@ -115,7 +115,7 @@ public class OrderControllerIntegrationTests {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(3, orderDtoList.length);
         assertEquals(OrderStatus.ORDERED, OrderStatus.findType(orderDtoList[0].getStatus()));
-        assertEquals(OrderStatus.PAID, OrderStatus.findType(orderDtoList[1].getStatus()));
+        assertEquals(OrderStatus.ORDERED, OrderStatus.findType(orderDtoList[1].getStatus()));
         assertEquals(1520, orderDtoList[0].getPrice());
         assertEquals(1830, orderDtoList[1].getPrice());
 
@@ -290,7 +290,44 @@ public class OrderControllerIntegrationTests {
         ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/status/{id}",
                 HttpMethod.POST, httpEntity, OrderDto.class, 1);
 
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+
+    }
+
+    @Test
+    public void update_InvalidStatus_ReturnsBadRequest() {
+        HttpEntity<?> httpEntity = new HttpEntity<>("Završeno", headers);
+
+        ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/status/{id}",
+                HttpMethod.POST, httpEntity, OrderDto.class, 1);
+
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+
+    }
+
+
+    @Test
+    public void getOrdersByRestaurantTable_ValidRestaurantTableId_ReturnsOk() {
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<OrderDto[]> responseEntity = restTemplate.exchange(URL_PREFIX + "/by-restaurant-table/{id}", HttpMethod.GET,
+                httpEntity, OrderDto[].class, 3);
+
+        OrderDto[] orderDtoList = responseEntity.getBody();
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(1, orderDtoList.length);
+        assertEquals(1, orderDtoList[0].getId());
+
+    }
+
+    @Test
+    public void getOrdersByRestaurantTable_InvalidRestaurantTableId_ReturnsBadRequest() {
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Object> responseEntity = restTemplate.exchange(URL_PREFIX + "/by-restaurant-table/{id}", HttpMethod.GET,
+                httpEntity, Object.class, -7);
+
+        assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
 
     }
 

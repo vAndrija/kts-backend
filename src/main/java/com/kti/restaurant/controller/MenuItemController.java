@@ -1,5 +1,6 @@
 package com.kti.restaurant.controller;
 
+import com.kti.restaurant.dto.menuitem.CreateMenuItemDto;
 import com.kti.restaurant.dto.menuitem.MenuItemDto;
 import com.kti.restaurant.dto.menuitem.UpdateMenuItemDto;
 import com.kti.restaurant.mapper.MenuItemMapper;
@@ -35,14 +36,14 @@ public class MenuItemController {
 
     @PostMapping("")
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER')")
-    public ResponseEntity<?> createMenuItem(@Valid @RequestBody MenuItemDto menuItemDto) throws Exception {
+    public ResponseEntity<?> createMenuItem(@Valid @RequestBody CreateMenuItemDto menuItemDto) throws Exception {
         MenuItem menuItem = menuItemService.create(menuItemMapper.fromCreateMenuItemDtoToMenuItem(menuItemDto));
         return new ResponseEntity<>(menuItem, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MenuItem> getMenuItemById(@PathVariable Integer id) throws Exception {
-        return new ResponseEntity<>(menuItemService.findById(id), HttpStatus.OK);
+    public ResponseEntity<MenuItemDto> getMenuItemById(@PathVariable Integer id) throws Exception {
+        return new ResponseEntity<>(menuItemMapper.fromMenuItemToMenuItemDto(menuItemService.findById(id)), HttpStatus.OK);
     }
 
     @GetMapping("/pageable")
