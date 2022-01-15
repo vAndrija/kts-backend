@@ -164,9 +164,9 @@ public class OrderServiceUnitTests {
     }
 
     @Test
-    public void update_InvalidStatus_ThrowsMissingEntityException() {
+    public void update_EmptyStatus_ThrowsBadLogicException() {
         when(orderItemService.checkIfServed(1)).thenReturn(true);
-        assertThrows(MissingEntityException.class, () -> {
+        assertThrows(BadLogicException.class, () -> {
             orderService.updateStatus(1, " ");
         });
 

@@ -150,11 +150,17 @@ public class OrderServiceIntegrationTests {
             orderService.updateStatus(1, "Završeno");
         });
     }
+    @Test
+    public void updateStatus_EmptyStatus_ThrowsBadLogicException() {
+        assertThrows(BadLogicException.class, () -> {
+            orderService.updateStatus(1, " ");
+        });
+    }
 
     @Test
     public void updateStatus_InvalidId_ThrowsMissingEntityException() {
         assertThrows(MissingEntityException.class, () -> {
-            orderService.updateStatus(2, " ");
+            orderService.updateStatus(5, "Plaćeno");
         });
     }
 

@@ -91,7 +91,7 @@ public class OrderService implements IOrderService {
             throw new BadLogicException("Order items are not served.");
         }
         if (Objects.equals(status, " ")) {
-            throw new MissingEntityException("Given status cannot be empty.");
+            throw new BadLogicException("Given status cannot be empty.");
         }
         orderToUpdate.setStatus(OrderStatus.findType(status));
         orderRepository.save(orderToUpdate);

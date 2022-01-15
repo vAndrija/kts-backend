@@ -284,13 +284,13 @@ public class OrderControllerIntegrationTests {
     }
 
     @Test
-    public void update_InvalidStatus_ReturnsNotFound() {
+    public void update_EmptyStatus_ReturnsBadRequest() {
         HttpEntity<?> httpEntity = new HttpEntity<>(" ", headers);
 
         ResponseEntity<OrderDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/status/{id}",
                 HttpMethod.POST, httpEntity, OrderDto.class, 1);
 
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
 
     }
 
