@@ -112,7 +112,7 @@ public class OrderItemService implements IOrderItemService {
     @Override
     public OrderItem updateStatus(Integer id, String status) throws Exception {
         OrderItem orderItemToUpdate = this.findById(id);
-        System.out.println(orderItemToUpdate.getId());
+        
         if (Objects.equals(status, " ")) {
             throw new BadLogicException("Given status cannot be empty.");
         }
@@ -120,4 +120,10 @@ public class OrderItemService implements IOrderItemService {
         orderItemRepository.save(orderItemToUpdate);
         return orderItemToUpdate;
     }
+
+    @Override
+	public OrderItem findByIdWithOrderAndWaiter(Integer orderItemId) {
+		return orderItemRepository.findByIdWithOrderAndWaiter(orderItemId);
+	}
+    
 }
