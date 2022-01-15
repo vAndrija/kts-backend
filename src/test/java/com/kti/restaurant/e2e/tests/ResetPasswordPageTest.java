@@ -18,7 +18,7 @@ public class ResetPasswordPageTest {
 
     @BeforeEach
     public void setUp(){
-        System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver-lin");
+        System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
         driver = new ChromeDriver();
 
         resetPasswordPage = PageFactory.initElements(driver, ResetPasswordPage.class);
