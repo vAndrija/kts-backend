@@ -14,8 +14,9 @@ import java.util.List;
 public interface MenuItemRepository extends JpaRepository<MenuItem, Integer> {
     
     @Query("select mi from MenuItem mi where lower(mi.name) like lower(concat('%', :search, '%')) or lower(mi.description) like lower(concat('%', :search, '%'))")
-    List<MenuItem> findByNameAndDecription(String search);
+    List<MenuItem> findByNameAndDescription(String search);
 
+    @Query("select mi from MenuItem mi join Menu m on mi.menu.id = m.id where mi.category=?1")
     List<MenuItem> findByCategory(MenuItemCategory category);
 
     Page<MenuItem> findByCategory(MenuItemCategory category, Pageable pageable);

@@ -112,7 +112,7 @@ public class OrderItemService implements IOrderItemService {
     @Override
     public OrderItem updateStatus(Integer id, String status) throws Exception {
         OrderItem orderItemToUpdate = this.findById(id);
-        
+      
         if (Objects.equals(status, " ")) {
             throw new BadLogicException("Given status cannot be empty.");
         }
@@ -122,8 +122,24 @@ public class OrderItemService implements IOrderItemService {
     }
 
     @Override
-	public OrderItem findByIdWithOrderAndWaiter(Integer orderItemId) {
-		return orderItemRepository.findByIdWithOrderAndWaiter(orderItemId);
-	}
-    
+	  public OrderItem findByIdWithOrderAndWaiter(Integer orderItemId) {
+		  return orderItemRepository.findByIdWithOrderAndWaiter(orderItemId);
+	  }
+  
+    @Override
+    public List<OrderItem> findByOrder(Integer id) {
+        return orderItemRepository.findByOrder(id);
+    }
+
+    @Override
+    public boolean checkIfServed(Integer id) {
+        List<OrderItem> orderItems = this.findByOrder(id);
+        for (OrderItem o : orderItems) {
+            if (o.getStatus().getType().equals("Poručeno") || o.getStatus().getType().equals("U pripremi") ||
+                    o.getStatus().getType().equals("Pripremljeno")) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

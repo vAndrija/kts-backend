@@ -105,4 +105,16 @@ public class OrderController {
         return new ResponseEntity<>(orderMapper.fromOrderToOrderDto(order), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/by-restaurant-table/{id}")
+    @PreAuthorize("hasAnyRole('WAITER')")
+    public ResponseEntity<?> getOrderByRestaurantTable(@PathVariable("id") Integer id) throws Exception {
+        List<Order> orders = orderService.findByRestaurantTable(id);
+        if (orders.size() == 0) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        List<OrderDto> orderDtos = orders.stream().map(order -> this.orderMapper.fromOrderToOrderDto(order)).
+                collect(Collectors.toList());
+        return new ResponseEntity<>(orderDtos, HttpStatus.OK);
+    }
+
 }

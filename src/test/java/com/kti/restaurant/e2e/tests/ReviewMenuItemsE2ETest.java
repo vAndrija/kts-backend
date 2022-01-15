@@ -41,11 +41,11 @@ public class ReviewMenuItemsE2ETest {
 
         menuItemsListPage.setSelectMenu("standardni");
 
-        assertTrue(menuItemsListPage.getLoadedMenuItems(2).size() == 2);
+        assertTrue(menuItemsListPage.getLoadedMenuItems(8).size() == 8);
 
         menuItemsListPage.clickLoadMore();
 
-        assertTrue(menuItemsListPage.getLoadedMenuItems(4).size() == 4);
+        assertTrue(menuItemsListPage.getLoadedMenuItems(8).size() == 8);
 
         menuItemsListPage.setSelectMenu("letnji");
         assertTrue(menuItemsListPage.getLoadedMenuItems(1).size() == 1);
@@ -53,6 +53,6 @@ public class ReviewMenuItemsE2ETest {
 
     @AfterEach
     public void tearDown() {
-        //driver.quit();
+        driver.quit();
     }
 }

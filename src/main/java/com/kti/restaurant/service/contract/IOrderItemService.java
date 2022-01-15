@@ -22,5 +22,9 @@ public interface IOrderItemService extends IService<OrderItem> {
 
     OrderItem updateStatus(Integer id, String status) throws Exception;
 
-	OrderItem findByIdWithOrderAndWaiter(Integer orderItemId);
+	  OrderItem findByIdWithOrderAndWaiter(Integer orderItemId);
+  
+    List<OrderItem> findByOrder(Integer id);
+
+    boolean checkIfServed(Integer id);
 }
