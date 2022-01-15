@@ -59,10 +59,16 @@ INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (62000
 INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (62000.00, '2021-11-18', '2022-11-18', 8, false);
 
 
-INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (1, 4, 0, 1, false);
-INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (2, 6, 2, 1, false);
-INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (3, 2, 2, 3, false);
-INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (4, 4, 4, 1, false);
+INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (1, 4, 989, 41, false);
+INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (2, 6, 989, 152, false);
+INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (3, 2, 989, 263, false);
+INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (4, 4, 989, 374, false);
+INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (1, 4, 823, 41, false);
+INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (2, 6, 823, 152, false);
+INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (3, 2, 823, 263, false);
+INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (4, 4, 823, 374, false);
+INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (3, 2, 657, 41, false);
+INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (4, 4, 657, 152, false);
 
 
 INSERT INTO table_reservation (name, duration_start, table_id, deleted) values ('Milica Petric', '2021-11-18T16:00', 1, false);
@@ -147,11 +153,11 @@ INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
     ('', 2, 1, 0, null, null, 7, 1, false);
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
-    ('', 2, 1, 0, null, null, 8, 1, false);
+    ('', 2, 1, 3, null, null, 8, 1, false);
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
-    ('', 1, 1, 1, 2, null, 3, 2, false);
+    ('', 1, 1, 3, 2, null, 3, 2, false);
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
-    ('', 1, 1, 1, 3 , null, 4, 2, false);
+    ('', 1, 1, 3, 3 , null, 4, 2, false);
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
     ('', 2, 1, 1, null, 4, 9, 1, false);
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values

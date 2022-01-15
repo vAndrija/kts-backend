@@ -2,17 +2,12 @@ package com.kti.restaurant.dto.menuitem;
 
 import com.kti.restaurant.dto.menu.MenuDto;
 import com.kti.restaurant.dto.priceitem.PriceItemDto;
-import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-
-public class MenuItemDto {
-
-    @NotNull(message = "Id should not be null")
-    private Integer id;
+public class CreateMenuItemDto {
 
     @NotEmpty(message = "Name should not be null or empty")
     private String name;
@@ -31,21 +26,18 @@ public class MenuItemDto {
 
     private PriceItemDto priceItemDto;
 
-    private MenuDto menuDto;
 
-    public MenuItemDto(Integer id, String name, String description, MenuItemType type, String category, int preparationTime,
-                       PriceItemDto priceItemDto, MenuDto menuDto) {
-        this.id = id;
+    public CreateMenuItemDto(String name, String description, MenuItemType type, String category, int preparationTime,
+                             PriceItemDto priceItemDto) {
         this.name = name;
         this.description = description;
         this.type = type;
         this.category = category;
         this.preparationTime = preparationTime;
         this.priceItemDto = priceItemDto;
-        this.menuDto = menuDto;
     }
 
-    public MenuItemDto() {
+    public CreateMenuItemDto() {
 
     }
 
@@ -97,19 +89,4 @@ public class MenuItemDto {
         this.priceItemDto = priceItemDto;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public MenuDto getMenuDto() {
-        return menuDto;
-    }
-
-    public void setMenuDto(MenuDto menuDto) {
-        this.menuDto = menuDto;
-    }
 }

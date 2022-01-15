@@ -1,6 +1,7 @@
 package com.kti.restaurant.controller;
 
 import com.kti.restaurant.dto.JwtAuthenticationRequest;
+import com.kti.restaurant.dto.menuitem.CreateMenuItemDto;
 import com.kti.restaurant.dto.menuitem.MenuItemDto;
 import com.kti.restaurant.dto.menuitem.UpdateMenuItemDto;
 import com.kti.restaurant.exception.MissingEntityException;
@@ -49,7 +50,7 @@ public class MenuItemControllerIntegrationTests {
     public void createMenuItem_ValidMenuItem_ReturnsOk() throws Exception {
         int size = menuItemService.findAll().size();
 
-        HttpEntity<MenuItemDto> httpEntity = new HttpEntity<>(new MenuItemDto("Sarma", "Jelo od mlevenog mesa i kiselog kupusa", MenuItemType.FOOD,
+        HttpEntity<CreateMenuItemDto> httpEntity = new HttpEntity<>(new CreateMenuItemDto("Sarma", "Jelo od mlevenog mesa i kiselog kupusa", MenuItemType.FOOD,
                 "Glavno jelo", 10, null), headers);
         ResponseEntity<MenuItem> responseEntity = restTemplate.postForEntity("/api/v1/menu-items", httpEntity, MenuItem.class);
 
@@ -70,11 +71,11 @@ public class MenuItemControllerIntegrationTests {
     }
 
     @Test
-    public void createMenuItem_InvalidMenuItemName_RetrunsBadRequest() {
+    public void createMenuItem_InvalidMenuItemName_ReturnsBadRequest() {
         int size = menuItemService.findAll().size();
 
-        HttpEntity<MenuItemDto> httpEntity = new HttpEntity<>(new MenuItemDto("", "Jelo od mlevenog mesa i kiselog kupusa", MenuItemType.FOOD,
-               "Glavno jelo", 10, null), headers);
+        HttpEntity<CreateMenuItemDto> httpEntity = new HttpEntity<>(new CreateMenuItemDto("", "Jelo od mlevenog mesa i kiselog kupusa", MenuItemType.FOOD,
+                "Glavno jelo", 10, null), headers);
         ResponseEntity<MenuItem> responseEntity = restTemplate.postForEntity("/api/v1/menu-items", httpEntity, MenuItem.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -84,15 +85,15 @@ public class MenuItemControllerIntegrationTests {
     @Test
     public void getMenuItemById_ValidMenuItemId_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<MenuItem> responseEntity = restTemplate.exchange("/api/v1/menu-items/{id}", HttpMethod.GET, httpEntity, MenuItem.class, 1);
+        ResponseEntity<MenuItemDto> responseEntity = restTemplate.exchange("/api/v1/menu-items/{id}", HttpMethod.GET, httpEntity, MenuItemDto.class, 1);
 
-        MenuItem menuItem = responseEntity.getBody();
+        MenuItemDto menuItem = responseEntity.getBody();
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals("coca cola", menuItem.getName());
         assertEquals("bezalkoholno gazirano pice", menuItem.getDescription());
         assertEquals(MenuItemType.DRINK, menuItem.getType());
-        assertEquals(MenuItemCategory.NON_ALCOHOLIC, menuItem.getCategory());
+        assertEquals(MenuItemCategory.NON_ALCOHOLIC, MenuItemCategory.findCategory(menuItem.getCategory()));
         assertEquals(2, menuItem.getPreparationTime());
     }
 
@@ -205,11 +206,10 @@ public class MenuItemControllerIntegrationTests {
         List<MenuItemDto> menuItems = List.of(responseEntity.getBody());
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(4, menuItems.size());
+        assertEquals(3, menuItems.size());
         assertEquals(MenuItemCategory.DESSERT, MenuItemCategory.findCategory(menuItems.get(0).getCategory()));
         assertEquals(MenuItemCategory.DESSERT, MenuItemCategory.findCategory(menuItems.get(1).getCategory()));
         assertEquals(MenuItemCategory.DESSERT, MenuItemCategory.findCategory(menuItems.get(2).getCategory()));
-        assertEquals(MenuItemCategory.DESSERT, MenuItemCategory.findCategory(menuItems.get(3).getCategory()));
     }
 
     @Test

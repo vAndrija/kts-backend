@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -117,7 +118,7 @@ public class MenuItemServiceIntegrationTests {
                 Arguments.of("limun", 1),
                 Arguments.of("coca cola", 1),
                 Arguments.of("dimljeni", 1),
-                Arguments.of("Dezert", 4),
+                Arguments.of("Dezert", 3),
                 Arguments.of("Hrana", 10),
                 Arguments.of("abcd", 0)
         );
@@ -147,7 +148,7 @@ public class MenuItemServiceIntegrationTests {
 
     private static Stream<Arguments> validMenuIdAndPageable() {
         return Stream.of(
-                Arguments.of(1, PageRequest.of( 0, 5)),
+                Arguments.of(1, PageRequest.of(0, 5)),
                 Arguments.of(1, PageRequest.of(1, 5))
         );
     }
@@ -162,7 +163,7 @@ public class MenuItemServiceIntegrationTests {
 
     private static Stream<Arguments> invalidMenuIdAndValidPageable() {
         return Stream.of(
-                Arguments.of(15, PageRequest.of( 0, 5)),
+                Arguments.of(15, PageRequest.of(0, 5)),
                 Arguments.of(15, PageRequest.of(1, 5))
         );
     }

@@ -9,4 +9,8 @@ public class MenuMapper {
     public Menu fromMenuDtoToMenu(MenuDto menuDto) {
         return new Menu(menuDto.getName(), menuDto.getStartDuration(), menuDto.getEndDuration());
     }
+
+    public MenuDto fromMenuToMenuDto(Menu menu) {
+        return new MenuDto(menu.getName(), menu.getDurationStart(), menu.getDurationEnd());
+    }
 }

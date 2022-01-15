@@ -140,21 +140,27 @@ public class OrderServiceIntegrationTests {
     @Test
     @Rollback
     public void updateStatus_ValidStatus_ReturnsUpdatedOrder() throws Exception {
-        Order order = orderService.updateStatus(1, "Završeno");
+        Order order = orderService.updateStatus(2, "Završeno");
         assertEquals(OrderStatus.FINISHED, order.getStatus());
     }
 
     @Test
-    public void updateStatus_InvalidStatus_ThrowsMissingEntityException() {
-        assertThrows(MissingEntityException.class, () -> {
-            orderService.updateStatus(4, " ");
+    public void updateStatus_InvalidStatus_ThrowsBadLogicException() {
+        assertThrows(BadLogicException.class, () -> {
+            orderService.updateStatus(1, "Završeno");
+        });
+    }
+    @Test
+    public void updateStatus_EmptyStatus_ThrowsBadLogicException() {
+        assertThrows(BadLogicException.class, () -> {
+            orderService.updateStatus(1, " ");
         });
     }
 
     @Test
     public void updateStatus_InvalidId_ThrowsMissingEntityException() {
         assertThrows(MissingEntityException.class, () -> {
-            orderService.updateStatus(-1, "Poručeno");
+            orderService.updateStatus(5, "Plaćeno");
         });
     }
 
