@@ -53,6 +53,6 @@ public class ReviewMenuItemsE2ETest {
 
     @AfterEach
     public void tearDown() {
-        //driver.quit();
+        driver.quit();
     }
 }

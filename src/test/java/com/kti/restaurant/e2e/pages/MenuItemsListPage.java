@@ -33,9 +33,13 @@ public class MenuItemsListPage {
         button.click();
     }
 
-    public void clickDetailsButton() {
-        WebElement button = getDetailsButton();
+    public void clickDetailsButton(int indexOfButton) {
+        WebElement button = getDetailsButton().get(indexOfButton);
         button.click();
+    }
+
+    public List<WebElement> getSelectOption(String option) {
+        return WaitUtils.visibilityWait(driver, By.xpath("//option[contains(text(), '" + option + "')]"), 10);
     }
 
     public Select getSelectMenu() {
@@ -44,6 +48,7 @@ public class MenuItemsListPage {
 
     public void setSelectMenu(String selectMenuOption) {
         Select selectMenu = getSelectMenu();
+        getSelectOption(selectMenuOption);
         selectMenu.selectByVisibleText(selectMenuOption);
     }
 
@@ -55,7 +60,7 @@ public class MenuItemsListPage {
         return WaitUtils.numberOfElementsWait(driver, By.className("card-body"), 10, number);
     }
 
-    public WebElement getDetailsButton() {
-        return WaitUtils.visibilityWait(driver, detailsButton, 10);
+    public List<WebElement> getDetailsButton() {
+        return WaitUtils.visibilityWait(driver, By.xpath("//button[contains(text(), 'Opširnije')]"), 10);
     }
 }
