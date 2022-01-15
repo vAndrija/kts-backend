@@ -71,7 +71,7 @@ public class MenuItemService implements IMenuItemService {
     @Override
     public Set<MenuItem> search(String search) {
         List<MenuItem> concatenated = new ArrayList<>();
-        concatenated.addAll(menuItemRepository.findByNameAndDecription(search));
+        concatenated.addAll(menuItemRepository.findByNameAndDescription(search));
         concatenated.addAll(menuItemRepository.findByCategory(MenuItemCategory.findCategory(search)));
         concatenated.addAll(menuItemRepository.findByType(MenuItemType.findType(search)));
         return new HashSet<>(concatenated);

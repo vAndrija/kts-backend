@@ -1,5 +1,6 @@
 package com.kti.restaurant.mapper;
 
+import com.kti.restaurant.dto.menuitem.CreateMenuItemDto;
 import com.kti.restaurant.dto.menuitem.MenuItemDto;
 import com.kti.restaurant.dto.menuitem.UpdateMenuItemDto;
 import com.kti.restaurant.dto.priceitem.PriceItemDto;
@@ -20,15 +21,18 @@ public class MenuItemMapper {
     private IMenuService menuService;
     private IPriceItemService priceItemService;
     private PriceItemMapper priceItemMapper;
+    private MenuMapper menuMapper;
 
     @Autowired
-    public MenuItemMapper(IMenuService menuService, IPriceItemService priceItemService, PriceItemMapper priceItemMapper) {
+    public MenuItemMapper(IMenuService menuService, IPriceItemService priceItemService, PriceItemMapper priceItemMapper,
+                          MenuMapper menuMapper) {
         this.menuService = menuService;
         this.priceItemService = priceItemService;
         this.priceItemMapper = priceItemMapper;
+        this.menuMapper = menuMapper;
     }
 
-    public MenuItem fromCreateMenuItemDtoToMenuItem(MenuItemDto menuItemDto) {
+    public MenuItem fromCreateMenuItemDtoToMenuItem(CreateMenuItemDto menuItemDto) {
         return new MenuItem(menuItemDto.getName(), menuItemDto.getDescription(), MenuItemCategory.findCategory(menuItemDto.getCategory()),
                 menuItemDto.getType(), menuItemDto.getPreparationTime());
     }
@@ -40,8 +44,8 @@ public class MenuItemMapper {
 
     public MenuItemDto fromMenuItemToMenuItemDto(MenuItem menuItem) {
         PriceItem priceItem = priceItemService.findPriceForDate(LocalDate.now(), menuItem.getId());
-        PriceItemDto priceItemDto = priceItem != null ? priceItemMapper.fromPriceItemToPriceItemDto(priceItem): null;
-        return new MenuItemDto(menuItem.getName(), menuItem.getDescription(), menuItem.getType(), menuItem.getCategory().getCategory(),
-                menuItem.getPreparationTime(), priceItemDto);
+        PriceItemDto priceItemDto = priceItem != null ? priceItemMapper.fromPriceItemToPriceItemDto(priceItem) : null;
+        return new MenuItemDto(menuItem.getId(), menuItem.getName(), menuItem.getDescription(), menuItem.getType(), menuItem.getCategory().getCategory(),
+                menuItem.getPreparationTime(), priceItemDto, menuMapper.fromMenuToMenuDto(menuItem.getMenu()));
     }
 }

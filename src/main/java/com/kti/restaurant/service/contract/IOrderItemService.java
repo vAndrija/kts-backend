@@ -21,4 +21,8 @@ public interface IOrderItemService extends IService<OrderItem> {
     Page<OrderItem> findByEmployee(Pageable page, Integer employeeId) throws Exception;
 
     OrderItem updateStatus(Integer id, String status) throws Exception;
+
+    List<OrderItem> findByOrder(Integer id);
+
+    boolean checkIfServed(Integer id);
 }
