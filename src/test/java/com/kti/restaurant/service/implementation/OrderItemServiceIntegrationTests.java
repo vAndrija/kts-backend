@@ -1,5 +1,6 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.model.OrderItem;
@@ -200,6 +201,33 @@ public class OrderItemServiceIntegrationTests {
         Page<OrderItem> orderItems = orderItemService.findByEmployee(PageRequest.of(0, 5), 1);
         assertEquals(orderItems.getContent().size(), 0);
     }
+
+    @Test
+    public void findByEmployeeAndStatus_ValidId_ExistingOrderItems() {
+        Page<OrderItem> orderItems = orderItemService.findByEmployeeAndStatus(4, "U pripremi", PageRequest.of(0, 5));
+        assertEquals(orderItems.getContent().size(), 2);
+    }
+
+    @Test
+    public void findByEmployeeAndStatus_InvalidId_ThrowsMissingEntityException() {
+        assertThrows(MissingEntityException.class, () -> {
+            orderItemService.findByEmployeeAndStatus(-4, "U pripremi", PageRequest.of(0, 5));
+        });
+    }
+
+    @Test
+    public void findByEmployeeAndStatus_ValidStatus_ExistingOrderItems() {
+        Page<OrderItem> orderItems = orderItemService.findByEmployeeAndStatus(3, "Pripremljeno", PageRequest.of(0, 5));
+        assertEquals(orderItems.getContent().size(), 1);
+    }
+
+    @Test
+    public void findByEmployeeAndStatus_InvalidStatus_ThrowsBadLogicException() {
+        assertThrows(BadLogicException.class, () -> {
+            orderItemService.findByEmployeeAndStatus(4, " ", PageRequest.of(0, 5));
+        });
+    }
+
 
     @Test
     @Rollback

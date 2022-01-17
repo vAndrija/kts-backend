@@ -2,12 +2,16 @@ package com.kti.restaurant.service.implementation;
 
 import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
+import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.enums.OrderItemStatus;
+import com.kti.restaurant.model.enums.OrderStatus;
 import com.kti.restaurant.repository.OrderItemRepository;
 import com.kti.restaurant.service.UserService;
 import com.kti.restaurant.service.contract.IBartenderService;
 import com.kti.restaurant.service.contract.IOrderItemService;
+import com.kti.restaurant.service.contract.IOrderService;
+import org.seleniumhq.jetty9.util.IO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,8 +28,7 @@ public class OrderItemService implements IOrderItemService {
     private UserService userService;
 
     @Autowired
-    public OrderItemService(OrderItemRepository orderItemRepository, UserService userService,
-                            IBartenderService bartenderService) {
+    public OrderItemService(OrderItemRepository orderItemRepository, UserService userService) {
         this.orderItemRepository = orderItemRepository;
         this.userService = userService;
     }
@@ -135,5 +138,16 @@ public class OrderItemService implements IOrderItemService {
             }
         }
         return true;
+    }
+
+    @Override
+    public Page<OrderItem> findByEmployeeAndStatus(Integer id, String status, Pageable pageable) {
+        if (userService.findById(id) == null) {
+            throw new MissingEntityException("Bartender/cook with given id does not exist in the system.");
+        }
+        if (status.equals(" ")) {
+            throw new BadLogicException("Given order item status does not exist in the system.");
+        }
+        return orderItemRepository.findByEmployeeAndStatus(id, OrderItemStatus.findType(status), pageable);
     }
 }
