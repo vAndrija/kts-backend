@@ -37,27 +37,41 @@ public class RestaurantTableService implements IRestaurantTableService {
 
     @Override
     public RestaurantTable create(RestaurantTable restaurantTable) throws Exception {
-        if(restaurantTable.getCapacity() == null || restaurantTable.getTableNumber() == null) {
-        	throw new BadLogicException("Capacity and table number cannot be null.");
+        if (restaurantTable.getCapacity() == null || restaurantTable.getTableNumber() == null) {
+            throw new BadLogicException("Capacity and table number cannot be null.");
         }
-        
-        if(restaurantTable.getCapacity() < 1) {
-        	throw new BadLogicException("Capacity should be greater than 1.");
+
+        if (restaurantTable.getCapacity() < 1) {
+            throw new BadLogicException("Capacity should be greater than 1.");
         }
-        
-    	return restaurantTableRepository.save(restaurantTable);
+        if (!check(restaurantTable.getxCoordinate(), restaurantTable.getyCoordinate())) {
+            throw new BadLogicException("Error ");
+        }
+
+        return restaurantTableRepository.save(restaurantTable);
+    }
+
+    @Override
+    public boolean check(Integer x, Integer y) {
+        List<RestaurantTable> restaurantTables = this.findAll();
+        for (RestaurantTable table : restaurantTables) {
+            if (Math.abs(table.getxCoordinate() - x) < 80 && Math.abs(table.getyCoordinate() - y) < 80) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public RestaurantTable update(RestaurantTable restaurantTable, Integer id) throws Exception {
         RestaurantTable restaurantTableToUpdate = this.findById(id);
-        
-        if(restaurantTable.getCapacity() == null || restaurantTable.getTableNumber() == null) {
-        	throw new BadLogicException("Capacity and table number cannot be null.");
+
+        if (restaurantTable.getCapacity() == null || restaurantTable.getTableNumber() == null) {
+            throw new BadLogicException("Capacity and table number cannot be null.");
         }
-        
-        if(restaurantTable.getCapacity() < 1) {
-        	throw new BadLogicException("Capacity should be greater than 1.");
+
+        if (restaurantTable.getCapacity() < 1) {
+            throw new BadLogicException("Capacity should be greater than 1.");
         }
 
         restaurantTableToUpdate.setTableNumber(restaurantTable.getTableNumber());

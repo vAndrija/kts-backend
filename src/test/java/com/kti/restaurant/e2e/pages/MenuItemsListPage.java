@@ -27,6 +27,9 @@ public class MenuItemsListPage {
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[4]/a")
     private WebElement addMenuButton;
 
+    @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[3]/a")
+    private WebElement orderButton;
+
     public MenuItemsListPage(WebDriver driver) {
         this.driver = driver;
     }
@@ -36,8 +39,8 @@ public class MenuItemsListPage {
         button.click();
     }
 
-    public void clickDetailsButton() {
-        WebElement button = getDetailsButton();
+    public void clickDetailsButton(int indexOfButton) {
+        WebElement button = getDetailsButton().get(indexOfButton);
         button.click();
     }
 
@@ -45,12 +48,18 @@ public class MenuItemsListPage {
     	WebElement button = getAddMenuButton();
     	button.click();
     }
+  
+    public List<WebElement> getSelectOption(String option) {
+        return WaitUtils.visibilityWait(driver, By.xpath("//option[contains(text(), '" + option + "')]"), 10);
+    }
+
     public Select getSelectMenu() {
         return new Select(WaitUtils.visibilityWait(driver, By.xpath("//*[@formControlName=\"menuId\"]"), 10).get(0));
     }
 
     public void setSelectMenu(String selectMenuOption) {
         Select selectMenu = getSelectMenu();
+        getSelectOption(selectMenuOption);
         selectMenu.selectByVisibleText(selectMenuOption);
     }
 
@@ -62,8 +71,17 @@ public class MenuItemsListPage {
         return WaitUtils.numberOfElementsWait(driver, By.className("card-body"), 10, number);
     }
 
-    public WebElement getDetailsButton() {
-        return WaitUtils.visibilityWait(driver, detailsButton, 10);
+    public List<WebElement> getDetailsButton() {
+        return WaitUtils.visibilityWait(driver, By.xpath("//button[contains(text(), 'Opširnije')]"), 10);
+    }
+
+    public WebElement getOrderButton() {
+        return WaitUtils.visibilityWait(driver, orderButton, 10);
+    }
+
+    public void clickOrderButton() {
+        WebElement button = getOrderButton();
+        button.click();
     }
     
     public WebElement getAddMenuButton() {

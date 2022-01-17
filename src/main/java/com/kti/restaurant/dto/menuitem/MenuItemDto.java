@@ -1,5 +1,6 @@
 package com.kti.restaurant.dto.menuitem;
 
+import com.kti.restaurant.dto.menu.MenuDto;
 import com.kti.restaurant.dto.priceitem.PriceItemDto;
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
@@ -9,6 +10,10 @@ import javax.validation.constraints.NotNull;
 
 
 public class MenuItemDto {
+
+    @NotNull(message = "Id should not be null")
+    private Integer id;
+
     @NotEmpty(message = "Name should not be null or empty")
     private String name;
 
@@ -18,8 +23,6 @@ public class MenuItemDto {
     @NotNull(message = "Type should not be null")
     private MenuItemType type;
 
-//    @NotNull(message = "Category should not be null")
-//    private MenuItemCategory category;
     @NotNull(message = "Category should not be null")
     private String category;
 
@@ -28,14 +31,18 @@ public class MenuItemDto {
 
     private PriceItemDto priceItemDto;
 
-    public MenuItemDto(String name, String description, MenuItemType type, String category, int preparationTime,
-                       PriceItemDto priceItemDto) {
+    private MenuDto menuDto;
+
+    public MenuItemDto(Integer id, String name, String description, MenuItemType type, String category, int preparationTime,
+                       PriceItemDto priceItemDto, MenuDto menuDto) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.type = type;
         this.category = category;
         this.preparationTime = preparationTime;
         this.priceItemDto = priceItemDto;
+        this.menuDto = menuDto;
     }
 
     public MenuItemDto() {
@@ -88,5 +95,21 @@ public class MenuItemDto {
 
     public void setPriceItemDto(PriceItemDto priceItemDto) {
         this.priceItemDto = priceItemDto;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public MenuDto getMenuDto() {
+        return menuDto;
+    }
+
+    public void setMenuDto(MenuDto menuDto) {
+        this.menuDto = menuDto;
     }
 }

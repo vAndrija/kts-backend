@@ -9,10 +9,10 @@ public class LoginPage {
     private WebDriver driver;
 
     @FindBy(xpath = "//*[@formControlName=\"username\"]")
-    private WebElement email;
+    private WebElement emailInputField;
 
     @FindBy(xpath = "//*[@formControlName=\"password\"]")
-    private  WebElement password;
+    private  WebElement passwordInputField;
 
     @FindBy(className = "btn")
     private WebElement submitButton;
@@ -28,7 +28,7 @@ public class LoginPage {
     }
 
     public WebElement getEmail() {
-        return WaitUtils.visibilityWait(driver, email, 10);
+        return WaitUtils.visibilityWait(driver, emailInputField, 10);
     }
 
     public void setEmail(String email) {
@@ -38,7 +38,7 @@ public class LoginPage {
     }
 
     public WebElement getPassword() {
-        return WaitUtils.visibilityWait(driver, password, 10);
+        return WaitUtils.visibilityWait(driver, passwordInputField, 10);
     }
 
     public void setPassword(String password) {

@@ -44,7 +44,7 @@ public class OrderItemRepositoryTests {
 
     @ParameterizedTest
     @MethodSource("datesAndMenuItemForFindSalesForMenuItem")
-    public void findSalesForMenuItem(LocalDateTime startDate, LocalDateTime endDate, int menuId, int expected) {
+    public void findSalesForMenuItem(LocalDateTime startDate, LocalDateTime endDate, Integer menuId, int expected) {
         List<OrderItem> orderItems = orderItemRepository.findSalesForMenuItem(startDate, endDate, menuId);
         assertEquals(expected, orderItems.size());
     }
@@ -59,7 +59,7 @@ public class OrderItemRepositoryTests {
 
     @ParameterizedTest
     @MethodSource("dateAndCookIdForFindByCookForDate")
-    public void findByCookForDate(LocalDateTime startDate, LocalDateTime endDate, int cookId, int expected) {
+    public void findByCookForDate(LocalDateTime startDate, LocalDateTime endDate, Integer cookId, int expected) {
         List<OrderItem> orderItems = orderItemRepository.findByCookForDate(cookId, startDate, endDate);
         assertEquals(expected, orderItems.size());
     }
@@ -74,7 +74,7 @@ public class OrderItemRepositoryTests {
 
     @ParameterizedTest
     @MethodSource("dateAndBartenderIdForFindByBartenderForDate")
-    public void findByBartenderForDate(LocalDateTime startDate, LocalDateTime endDate, int bartenderId, int expected) {
+    public void findByBartenderForDate(LocalDateTime startDate, LocalDateTime endDate, Integer bartenderId, int expected) {
         List<OrderItem> orderItems = orderItemRepository.findByBartenderForDate(bartenderId, startDate, endDate);
         assertEquals(expected, orderItems.size());
     }
@@ -89,7 +89,7 @@ public class OrderItemRepositoryTests {
 
     @ParameterizedTest
     @MethodSource("cookIdBartenderIdForFindByEmployee")
-    public void findByEmployee(int id, int expected) {
+    public void findByEmployee(Integer id, int expected) {
         Page<OrderItem> orderItems = orderItemRepository.findByEmployee(PageRequest.of(0, 5), id);
         List<OrderItem> orderItemList = orderItems.getContent();
         assertEquals(expected, orderItemList.size());
@@ -116,6 +116,21 @@ public class OrderItemRepositoryTests {
         return Stream.of(
                 Arguments.of(2, 2),
                 Arguments.of(4, 2),
+                Arguments.of(-1, 0)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("orderIdForFindByOrder")
+    public void findOrderItemsByOrder(Integer id, int expected) {
+        List<OrderItem> orderItems = orderItemRepository.findByOrder(id);
+        assertEquals(expected, orderItems.size());
+    }
+
+    private static Stream<Arguments> orderIdForFindByOrder() {
+        return Stream.of(
+                Arguments.of(1, 9),
+                Arguments.of(2, 2),
                 Arguments.of(-1, 0)
         );
     }
