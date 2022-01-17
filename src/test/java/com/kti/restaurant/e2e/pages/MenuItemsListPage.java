@@ -23,6 +23,9 @@ public class MenuItemsListPage {
 
     @FindBy(className = "btn")
     private WebElement detailsButton;
+    
+    @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[4]/a")
+    private WebElement addMenuButton;
 
     public MenuItemsListPage(WebDriver driver) {
         this.driver = driver;
@@ -38,6 +41,10 @@ public class MenuItemsListPage {
         button.click();
     }
 
+    public void clickAddMenuButton() {
+    	WebElement button = getAddMenuButton();
+    	button.click();
+    }
     public Select getSelectMenu() {
         return new Select(WaitUtils.visibilityWait(driver, By.xpath("//*[@formControlName=\"menuId\"]"), 10).get(0));
     }
@@ -57,5 +64,9 @@ public class MenuItemsListPage {
 
     public WebElement getDetailsButton() {
         return WaitUtils.visibilityWait(driver, detailsButton, 10);
+    }
+    
+    public WebElement getAddMenuButton() {
+    	return WaitUtils.visibilityWait(driver, addMenuButton, 10);
     }
 }
