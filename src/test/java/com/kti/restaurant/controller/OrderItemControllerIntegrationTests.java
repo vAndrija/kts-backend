@@ -322,4 +322,73 @@ public class OrderItemControllerIntegrationTests {
 
     }
 
+    @Test
+    public void getOrderItemsForOrder_ValidId_ReturnsOk() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        ResponseEntity<UserTokenState> responseEntity =
+                restTemplate.postForEntity("/api/v1/auth/login",
+                        new JwtAuthenticationRequest("jovanpetrovic@gmail.com", "123"),
+                        UserTokenState.class);
+        accessToken = responseEntity.getBody().getAccessToken();
+        httpHeaders.add("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
+
+        ResponseEntity<OrderItemDto[]> responseEntity1 = restTemplate.exchange(URL_PREFIX + "/order/{id}", HttpMethod.GET,
+                httpEntity, OrderItemDto[].class, 1);
+
+        OrderItemDto[] orderItems = responseEntity1.getBody();
+
+        assertEquals(HttpStatus.OK, responseEntity1.getStatusCode());
+        assertEquals(9, orderItems.length);
+
+    }
+
+    @Test
+    public void getOrderItemsForEmployeeAndStatus_ValidId_ReturnsOk() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        ResponseEntity<UserTokenState> responseEntity =
+                restTemplate.postForEntity("/api/v1/auth/login",
+                        new JwtAuthenticationRequest("lukaperic@gmail.com", "123"),
+                        UserTokenState.class);
+        accessToken = responseEntity.getBody().getAccessToken();
+        httpHeaders.add("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
+
+        ParameterizedTypeReference<RestResponsePage<OrderItemDto>> responseType = new ParameterizedTypeReference<>() {
+        };
+        ResponseEntity<RestResponsePage<OrderItemDto>> responseEntity1 = restTemplate.exchange(URL_PREFIX + "/filter/{id}/{status}?page={page}&size={size}", HttpMethod.GET,
+                httpEntity, responseType, 4, "U pripremi", 0, 8);
+
+        List<OrderItemDto> orderItems = responseEntity1.getBody().getContent();
+
+        assertEquals(HttpStatus.OK, responseEntity1.getStatusCode());
+        assertEquals(2, orderItems.size());
+
+    }
+
+    @Test
+    public void getOrderItemsForEmployeeAndStatus_InvalidId_ReturnsNotFound() {
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<Object> responseEntity = restTemplate.exchange(URL_PREFIX + "/filter/{id}/{status}?page={page}&size={size}", HttpMethod.GET,
+                httpEntity, Object.class, 300, "U pripremi", 0, 8);
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+
+    }
+
+    @Test
+    public void getOrderItemsForEmployeeAndStatus_InvalidStatus_ReturnsBadRequest() {
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<Object> responseEntity = restTemplate.exchange(URL_PREFIX + "/filter/{id}/{status}?page={page}&size={size}", HttpMethod.GET,
+                httpEntity, Object.class, 4, " ", 0, 8);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+
+    }
+
+
 }

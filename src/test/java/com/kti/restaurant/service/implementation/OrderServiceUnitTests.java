@@ -164,7 +164,7 @@ public class OrderServiceUnitTests {
     }
 
     @Test
-    public void update_EmptyStatus_ThrowsBadLogicException() {
+    public void update_EmptyStatus_ThrowsBadLogicException() throws Exception {
         when(orderItemService.checkIfServed(1)).thenReturn(true);
         assertThrows(BadLogicException.class, () -> {
             orderService.updateStatus(1, " ");
