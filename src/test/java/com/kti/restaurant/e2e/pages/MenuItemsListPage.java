@@ -26,6 +26,9 @@ public class MenuItemsListPage {
 
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[3]/a")
     private WebElement orderButton;
+    
+    @FindBy(xpath = "//a[.='Kreiraj stavku menija']")
+    private WebElement addNewDishButton;
 
     public MenuItemsListPage(WebDriver driver) {
         this.driver = driver;
@@ -74,5 +77,14 @@ public class MenuItemsListPage {
     public void clickOrderButton() {
         WebElement button = getOrderButton();
         button.click();
+    }
+    
+    public WebElement getAddNewDishButton() {
+    	return WaitUtils.visibilityWait(driver, addNewDishButton, 10);
+    }
+    
+    public void clickAddNewDishButton() {
+    	WebElement button = getAddNewDishButton();
+    	button.click();
     }
 }
