@@ -10,14 +10,21 @@ import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
 import com.kti.restaurant.service.implementation.MenuItemService;
+import com.kti.restaurant.utils.RestResponsePage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.*;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -226,22 +233,60 @@ public class MenuItemControllerIntegrationTests {
 
     @Test
     public void findMenuItemsByMenuId_ValidMenuId_Pageable_ReturnsOk() {
-        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<MenuItemDto[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/by-menu/{menuId}?page={page}&size={size}",
-                HttpMethod.GET, httpEntity, MenuItemDto[].class, 1, 1, 5);
+        ParameterizedTypeReference<RestResponsePage<MenuItemDto>> responseType = new ParameterizedTypeReference<RestResponsePage<MenuItemDto>>() { };
 
-        List<MenuItemDto> menuItems = List.of(responseEntity.getBody());
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<RestResponsePage<MenuItemDto>> responseEntity = restTemplate.exchange("/api/v1/menu-items/by-menu/{menuId}?page={page}&size={size}",
+                HttpMethod.GET, httpEntity, responseType, 1, 1, 5);
+
+        List<MenuItemDto> menuItems = List.of(responseEntity.getBody().getContent().toArray(new MenuItemDto[0]));
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(5, menuItems.size());
     }
 
     @Test
-    public void findMenuItemsByMenuId_InvalidMenuId_Pageable_ReturnsNotFound() {
+    public void findMenuItemsByMenuId_InvalidMenuIdPageable_ReturnsNotFound() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<MissingEntityException> responseEntity = restTemplate.exchange("/api/v1/menu-items/by-menu/{menuId}?page={page}&size={size}",
                 HttpMethod.GET, httpEntity, MissingEntityException.class, 10, 1, 5);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void searchAndFilterMenuItems_MenuIdSearchParamFilterPageable_ReturnsNotFound() {
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<MissingEntityException> responseEntity = restTemplate.exchange("/api/v1/menu-items/by-menu/{menuId}/search?page={page}&size={size}" +
+                        "&searchParam={searchParam}&filter={filter}",
+                HttpMethod.GET, httpEntity, MissingEntityException.class, 10, 1, 5, "", "");
+
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+    @ParameterizedTest
+    @MethodSource("getMenuIdSearchParamFilterAndPageable")
+    public void searchAndFilterMenuItems_MenuIdSearchParamFilterPageable_ReturnsOk(Integer menuId, String searchParam, String filter,
+                                                                                   Integer page, Integer pageSize, Integer expectedSize) {
+        ParameterizedTypeReference<RestResponsePage<MenuItemDto>> responseType = new ParameterizedTypeReference<RestResponsePage<MenuItemDto>>() { };
+
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<RestResponsePage<MenuItemDto>> responseEntity = restTemplate.exchange("/api/v1/menu-items/by-menu/{menuId}/search?page={page}&size={size}" +
+                        "&searchParam={searchParam}&filter={filter}",
+                HttpMethod.GET, httpEntity, responseType, menuId, page, pageSize, searchParam, filter);
+
+        List<MenuItemDto> menuItems = List.of(responseEntity.getBody().getContent().toArray(new MenuItemDto[0]));
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(expectedSize, menuItems.size());
+    }
+
+    private static Stream<Arguments> getMenuIdSearchParamFilterAndPageable() {
+        return Stream.of(
+                Arguments.of(1, "", "", 0, 5, 5),
+                Arguments.of(1, "cola", "", 0, 5, 1),
+                Arguments.of(1, "cola", "Bezalkoholno piće",0, 5, 1),
+                Arguments.of(1, "", "Bezalkoholno piće", 0, 5, 2)
+        );
     }
 }

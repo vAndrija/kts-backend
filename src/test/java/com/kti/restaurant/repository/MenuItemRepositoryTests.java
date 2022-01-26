@@ -71,7 +71,7 @@ public class MenuItemRepositoryTests {
 
     @ParameterizedTest
     @MethodSource("validMenuIdAndPageable")
-    public void findByMenu_MenuId_Pageable_ReturnsMenuItems(Integer menuId, Pageable pageable) {
+    public void findByMenu_MenuIdPageable_ReturnsMenuItems(Integer menuId, Pageable pageable) {
         Page<MenuItem> menuItems = menuItemRepository.findByMenu(menuId, pageable);
         assertEquals(pageable.getPageSize(), menuItems.getContent().size());
         assertEquals(menuId, menuItems.getContent().get(0).getMenu().getId());
@@ -81,6 +81,25 @@ public class MenuItemRepositoryTests {
         return Stream.of(
                 Arguments.of(1, PageRequest.of(0, 5)),
                 Arguments.of(1, PageRequest.of(1, 5))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("getMenuIdSearchParamFilterAndPageable")
+    public void searchAndFilterMenuItems_MenuIdSearchParamCategoryPageable_ReturnsMenuItems(Integer menuId, String searchParam,
+                                                                       MenuItemCategory category, Pageable page, Integer sizeofReturnedList,
+                                                                                            String name, Integer indexOfMenuItem) {
+        Page<MenuItem> menuItems = menuItemRepository.searchAndFilterMenuItems(menuId, searchParam, category, page);
+        assertEquals(sizeofReturnedList, menuItems.getContent().size());
+        assertEquals(name, menuItems.getContent().get(indexOfMenuItem).getName());
+    }
+
+    private static Stream<Arguments> getMenuIdSearchParamFilterAndPageable() {
+        return Stream.of(
+                Arguments.of(1, "", null, PageRequest.of(0, 5), 5, "coca cola", 0),
+                Arguments.of(1, "cola", null, PageRequest.of(0, 5), 1, "coca cola", 0),
+                Arguments.of(1, "cola", MenuItemCategory.NON_ALCOHOLIC, PageRequest.of(0, 5), 1, "coca cola", 0),
+                Arguments.of(1, "", MenuItemCategory.NON_ALCOHOLIC, PageRequest.of(0, 5), 2, "limunada", 1)
         );
     }
 }

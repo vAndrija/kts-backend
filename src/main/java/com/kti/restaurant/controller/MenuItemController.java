@@ -103,9 +103,18 @@ public class MenuItemController {
     }
 
     @GetMapping(value = "/by-menu/{menuId}")
-    public ResponseEntity<?> findMenuItemsByMenuId(Pageable pageable, @PathVariable Integer menuId) throws Exception {
-        List<MenuItemDto> menuItems = menuItemService.findByMenu(menuId, pageable).stream()
-                .map(menuItem -> this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem)).collect(Collectors.toList());
+    public ResponseEntity<Page<MenuItemDto>> findMenuItemsByMenuId(Pageable pageable, @PathVariable Integer menuId) throws Exception {
+        Page<MenuItemDto> menuItems = menuItemService.findByMenu(menuId, pageable)
+                .map(menuItem -> this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem));
+        return new ResponseEntity<>(menuItems, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/by-menu/{menuId}/search")
+    public ResponseEntity<Page<MenuItemDto>> findMenuItemsByMenuIdAndSearchFilterParams(@RequestParam Integer page, @RequestParam Integer size,
+                                             @RequestParam String searchParam, @RequestParam String filter, @PathVariable Integer menuId) throws Exception {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<MenuItemDto> menuItems = menuItemService.searchAndFilterMenuItems(menuId, searchParam, filter, pageable)
+                .map(menuItem -> this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem));
         return new ResponseEntity<>(menuItems, HttpStatus.OK);
     }
 }

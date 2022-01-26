@@ -140,10 +140,10 @@ public class MenuItemServiceIntegrationTests {
 
     @ParameterizedTest
     @MethodSource("validMenuIdAndPageable")
-    public void findByMenu_MenuId_Pageable_ReturnsMenuItems(Integer menuId, Pageable pageable) throws Exception {
-        List<MenuItem> menuItems = menuItemService.findByMenu(menuId, pageable);
-        assertEquals(pageable.getPageSize(), menuItems.size());
-        assertEquals(menuId, menuItems.get(0).getMenu().getId());
+    public void findByMenu_MenuIdPageable_ReturnsMenuItems(Integer menuId, Pageable pageable) throws Exception {
+        Page<MenuItem> menuItems = menuItemService.findByMenu(menuId, pageable);
+        assertEquals(pageable.getPageSize(), menuItems.getContent().size());
+        assertEquals(menuId, menuItems.getContent().get(0).getMenu().getId());
     }
 
     private static Stream<Arguments> validMenuIdAndPageable() {
@@ -155,9 +155,9 @@ public class MenuItemServiceIntegrationTests {
 
     @ParameterizedTest
     @MethodSource("invalidMenuIdAndValidPageable")
-    public void findByMenu_InvalidMenuId_Pageable_MissingEntityException(Integer menuId, Pageable pageable) throws Exception {
+    public void findByMenu_InvalidMenuIdPageable_ThrowsMissingEntityException(Integer menuId, Pageable pageable) throws Exception {
         assertThrows(MissingEntityException.class, () -> {
-            List<MenuItem> menuItems = menuItemService.findByMenu(menuId, pageable);
+            Page<MenuItem> menuItems = menuItemService.findByMenu(menuId, pageable);
         });
     }
 
@@ -165,6 +165,30 @@ public class MenuItemServiceIntegrationTests {
         return Stream.of(
                 Arguments.of(15, PageRequest.of(0, 5)),
                 Arguments.of(15, PageRequest.of(1, 5))
+        );
+    }
+
+    public void searchAndFilterMenuItems_MenuIdSearchParamFilterPageable_ThrowsMissingEntityException() {
+        assertThrows(MissingEntityException.class, () -> {
+            menuItemService.searchAndFilterMenuItems(12, "", "", PageRequest.of(0, 5));
+        });
+    }
+
+    @ParameterizedTest
+    @MethodSource("getMenuIdSearchParamFilterAndPageable")
+    public void searchAndFilterMenuItems_MenuIdSearchParamFilterPageable_ReturnsMenuItems(Integer menuId, String searchParam,
+                                                String category, Pageable page, Integer sizeofReturnedList, String name, Integer indexOfMenuItem) throws Exception {
+        Page<MenuItem> menuItems = menuItemService.searchAndFilterMenuItems(menuId, searchParam, category, page);
+        assertEquals(sizeofReturnedList, menuItems.getContent().size());
+        assertEquals(name, menuItems.getContent().get(indexOfMenuItem).getName());
+    }
+
+    private static Stream<Arguments> getMenuIdSearchParamFilterAndPageable() {
+        return Stream.of(
+                Arguments.of(1, "", "", PageRequest.of(0, 5), 5, "coca cola", 0),
+                Arguments.of(1, "cola", "", PageRequest.of(0, 5), 1, "coca cola", 0),
+                Arguments.of(1, "cola", "Bezalkoholno piće", PageRequest.of(0, 5), 1, "coca cola", 0),
+                Arguments.of(1, "", "Bezalkoholno piće", PageRequest.of(0, 5), 2, "limunada", 1)
         );
     }
 }
