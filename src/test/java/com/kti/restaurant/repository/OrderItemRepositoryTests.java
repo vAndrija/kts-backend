@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.kti.restaurant.model.enums.OrderItemStatus;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -132,6 +133,22 @@ public class OrderItemRepositoryTests {
                 Arguments.of(1, 9),
                 Arguments.of(2, 2),
                 Arguments.of(-1, 0)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("employeeIdAndStatusForFindByEmployeeAndStatus")
+    public void findOrderItemsByEmployeeAndStatus(Integer id, OrderItemStatus status, int expected) {
+        Pageable pageable = PageRequest.of(0, 8);
+        Page<OrderItem> orderItems = orderItemRepository.findByEmployeeAndStatus(id, status, pageable);
+        assertEquals(expected, orderItems.getContent().size());
+    }
+
+    private static Stream<Arguments> employeeIdAndStatusForFindByEmployeeAndStatus() {
+        return Stream.of(
+                Arguments.of(4, OrderItemStatus.PREPARATION, 2),
+                Arguments.of(3, OrderItemStatus.PREPARED, 1),
+                Arguments.of(4, OrderItemStatus.SERVED, 0)
         );
     }
 

@@ -46,6 +46,10 @@ public class OrderTableE2ETest {
 
         orderTablePage.setSelectStatus("Poručeno");
 
+        assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/order/orders", 10));
+
+        assertEquals(2, orderTablePage.getRows().size());
+
         assertEquals("Poručeno", orderTablePage.getInvalidStatusButton().getText());
 
         orderTablePage.clickInvalidStatusButton();
