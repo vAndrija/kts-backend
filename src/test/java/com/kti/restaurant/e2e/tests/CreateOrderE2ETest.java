@@ -2,6 +2,7 @@ package com.kti.restaurant.e2e.tests;
 
 import com.kti.restaurant.e2e.pages.*;
 import com.kti.restaurant.e2e.utils.WaitUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
@@ -50,7 +51,6 @@ public class CreateOrderE2ETest {
 
         assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/restaurant/preview", 10));
 
-        System.out.println(restaurantPreviewPage.getCanvas().getLocation());
         new Actions(driver).moveToElement(restaurantPreviewPage.getCanvas()).moveByOffset(304, 11).click().perform();
 
         assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/order/order", 10));
@@ -113,6 +113,11 @@ public class CreateOrderE2ETest {
         orderPage.clickCreateOrderButton();
         assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/order/review", 10));
 
+    }
+
+    @AfterEach
+    public void tearDown() {
+        driver.quit();
     }
 
 }
