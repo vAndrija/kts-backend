@@ -73,5 +73,4 @@ public class NotificationController {
         notificationService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }

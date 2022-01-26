@@ -11,6 +11,7 @@ import com.kti.restaurant.repository.UserRepository;
 import com.kti.restaurant.service.EmailService;
 import com.kti.restaurant.service.contract.ICookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class CookService implements ICookService {
     private EmailService emailService;
 
     @Autowired
-    public CookService(CookRepository cookRepository, PasswordEncoder passwordEncoder,
+    public CookService(CookRepository cookRepository,@Lazy PasswordEncoder passwordEncoder,
                        RoleRepository roleRepository, UserRepository userRepository, EmailService emailService){
         this.cookRepository = cookRepository;
         this.passwordEncoder = passwordEncoder;

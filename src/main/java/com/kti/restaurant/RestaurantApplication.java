@@ -17,10 +17,10 @@ public class RestaurantApplication {
             @SuppressWarnings("NullableProblems")
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/*")
-                        .allowedMethods("")
+                registry.addMapping("/**")
+                        .allowedMethods("*")
                         .allowedHeaders("*")
-                        .allowedOrigins("http://localhost:4200/");
+                        .allowedOrigins("http://localhost:4200");
             }
         };
     }

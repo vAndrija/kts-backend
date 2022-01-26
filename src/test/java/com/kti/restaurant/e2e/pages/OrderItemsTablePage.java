@@ -9,34 +9,25 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
-
-public class OrderTablePage {
+public class OrderItemsTablePage {
     private WebDriver webDriver;
 
     @FindBy(xpath = "//*[@formControlName=\"filterName\"]")
     private Select selectStatus;
 
-    @FindBy(xpath = "//tr[1]/td[4]")
-    private WebElement changeInvalidStatusButton;
+    @FindBy(xpath = "//tr[1]/td[6]")
+    private WebElement changeStatusButton;
 
-    @FindBy(xpath = "//*[@id=\"1\"]")
-    private WebElement newInvalidStatusButton;
+    @FindBy(xpath = "//*[@id=\"6\"]")
+    private WebElement newStatusButton;
 
-    @FindBy(xpath = "//tr[2]/td[4]")
-    private WebElement changeValidStatusButton;
-
-    @FindBy(name = "Završeno")
+    @FindBy(name = "Pripremljeno")
     private WebElement changedButton;
-
-    @FindBy(xpath = "//*[@id=\"3\"]")
-    private WebElement newValidStatusButton;
 
     @FindBy(tagName = "tbody")
     private WebElement tableBody;
 
-    public OrderTablePage(WebDriver webDriver) {
-        this.webDriver = webDriver;
-    }
+    public OrderItemsTablePage(WebDriver webDriver) { this.webDriver = webDriver; }
 
     public Select getSelectStatus() {
         return new Select(WaitUtils.visibilityWait(webDriver, By.xpath("//*[@formControlName=\"filterName\"]"), 10).get(0));
@@ -52,47 +43,27 @@ public class OrderTablePage {
         selectStatus.selectByVisibleText(selectStatusOption);
     }
 
-    public WebElement getInvalidStatusButton() {
-        return WaitUtils.visibilityWait(webDriver, changeInvalidStatusButton, 10);
+
+    public WebElement getStatusButton() {
+        return WaitUtils.visibilityWait(webDriver, changeStatusButton, 10);
     }
 
-    public void clickInvalidStatusButton() {
-        WebElement button = getInvalidStatusButton();
+    public void clickStatusButton() {
+        WebElement button = getStatusButton();
         button.click();
     }
 
-    public WebElement getNewInvalidStatusButton() {
-        return WaitUtils.visibilityWait(webDriver, newInvalidStatusButton, 10);
+    public WebElement getNewStatusButton() {
+        return WaitUtils.visibilityWait(webDriver, newStatusButton, 10);
     }
 
-    public void clickNewInvalidStatusButton() {
-        WebElement button = getNewInvalidStatusButton();
+    public void clickNewStatusButton() {
+        WebElement button = getNewStatusButton();
         button.click();
     }
-
-
-    public WebElement getValidStatusButton() {
-        return WaitUtils.visibilityWait(webDriver, changeValidStatusButton, 10);
-
-    }
-
     public WebElement getChangedButton() {
         return WaitUtils.visibilityWait(webDriver, changedButton, 10);
 
-    }
-
-    public void clickValidStatusButton() {
-        WebElement button = getValidStatusButton();
-        button.click();
-    }
-
-    public WebElement getNewValidStatusButton() {
-        return WaitUtils.visibilityWait(webDriver, newValidStatusButton, 10);
-    }
-
-    public void clickNewValidStatusButton() {
-        WebElement button = getNewValidStatusButton();
-        button.click();
     }
 
     public WebElement getTableBody() {

@@ -1,5 +1,6 @@
 package com.kti.restaurant.controller;
 
+import com.kti.restaurant.dto.order.OrderDto;
 import com.kti.restaurant.dto.orderitem.CreateOrderItemDto;
 import com.kti.restaurant.dto.orderitem.OrderItemDto;
 import com.kti.restaurant.dto.orderitem.UpdateOrderItemDto;
@@ -91,9 +92,21 @@ public class OrderItemController {
 
     @GetMapping("/order/{id}")
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER', 'MANAGER')")
-    public ResponseEntity<?> getOrderItemsForOrder(@PathVariable("id") Integer id) {
+    public ResponseEntity<?> getOrderItemsForOrder(@PathVariable("id") Integer id) throws Exception {
         List<OrderItemDto> orderItems = orderItemService.findByOrder(id).stream()
                 .map(orderItem -> this.orderItemMapper.fromOrderItemToOrderItemDto(orderItem)).collect(Collectors.toList());
+        return new ResponseEntity<>(orderItems, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/filter/{id}/{status}")
+    @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER', 'MANAGER')")
+    public ResponseEntity<?> getFilteredOrderItemsByStatus(@PathVariable("id") Integer id,
+                                                           @PathVariable("status") String status,
+                                                           @RequestParam Integer page, @RequestParam Integer size)
+            throws Exception {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<OrderItemDto> orderItems = orderItemService.findByEmployeeAndStatus(id, status, pageable)
+                .map(orderItem -> this.orderItemMapper.fromOrderItemToOrderItemDto(orderItem));
         return new ResponseEntity<>(orderItems, HttpStatus.OK);
     }
 }

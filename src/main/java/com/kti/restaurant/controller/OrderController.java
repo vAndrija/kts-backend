@@ -106,7 +106,7 @@ public class OrderController {
     }
 
     @GetMapping(value = "/by-restaurant-table/{id}")
-    @PreAuthorize("hasAnyRole('WAITER')")
+    @PreAuthorize("hasAnyRole('WAITER', 'SYSTEM_ADMIN')")
     public ResponseEntity<?> getOrderByRestaurantTable(@PathVariable("id") Integer id) throws Exception {
         List<Order> orders = orderService.findByRestaurantTable(id);
         if (orders.size() == 0) {
@@ -116,5 +116,6 @@ public class OrderController {
                 collect(Collectors.toList());
         return new ResponseEntity<>(orderDtos, HttpStatus.OK);
     }
+
 
 }
