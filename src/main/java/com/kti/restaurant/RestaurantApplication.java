@@ -20,7 +20,7 @@ public class RestaurantApplication {
                 registry.addMapping("/**")
                         .allowedMethods("*")
                         .allowedHeaders("*")
-                        .allowedOrigins("http://localhost:4200");
+                        .allowedOrigins("*");
             }
         };
     }
