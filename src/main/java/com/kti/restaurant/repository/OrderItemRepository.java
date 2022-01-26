@@ -28,6 +28,9 @@ public interface OrderItemRepository extends JpaRepository<OrderItem,Integer> {
 
     @Query("select oi from OrderItem oi join Order o on oi.order.id = o.id where oi.bartender.id = ?1 or oi.cook.id=?1")
     Page<OrderItem> findByEmployee(Pageable pageable, Integer employeeId);
+    
+    @Query("select oi from OrderItem oi join fetch oi.order o join fetch o.waiter w where oi.id=?1")
+    OrderItem findByIdWithOrderAndWaiter(Integer orderItemId);
 
     @Query("select oi from OrderItem  oi join Order o on oi.order.id = o.id where oi.order.id=?1")
     List<OrderItem> findByOrder(Integer id);

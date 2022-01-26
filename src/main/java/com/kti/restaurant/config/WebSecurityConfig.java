@@ -19,8 +19,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @Configuration
@@ -60,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
         .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
         .authorizeRequests().antMatchers("/auth/").permitAll()
-        .antMatchers("/socket/").permitAll().
+        .antMatchers("/socket/**").permitAll().
         antMatchers("/h2-console/").permitAll().
         antMatchers("/api/v1/auth/login").permitAll().
         antMatchers("/api/v1/auth/send-reset-password-link").permitAll().
