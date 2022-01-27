@@ -36,6 +36,15 @@ public class MenuItemsListPage {
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[3]/a")
     private WebElement orderItemsButton;
 
+    @FindBy(xpath = "//*[@formControlName=\"searchParam\"]")
+    private WebElement searchParamInputField;
+
+    @FindBy(xpath = "//*[@formControlName=\"category\"]")
+    private WebElement categorySelect;
+
+    @FindBy(className = "btn-sm")
+    private WebElement searchButton;
+
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[2]/a")
     private WebElement restaurantButton;
 
@@ -51,6 +60,11 @@ public class MenuItemsListPage {
 
     public void clickDetailsButton(int indexOfButton) {
         WebElement button = getDetailsButton().get(indexOfButton);
+        button.click();
+    }
+
+    public void clickSearchButton() {
+        WebElement button = getSearchButton();
         button.click();
     }
 
@@ -114,6 +128,30 @@ public class MenuItemsListPage {
     public void clickOrderItemsButton() {
         WebElement button = getOrderItemsButton();
         button.click();
+    }
+
+    public WebElement getSearchParamInputField() {
+        return WaitUtils.visibilityWait(driver, searchParamInputField, 10);
+    }
+
+    public void setSearchParamInputField(String searchParam) {
+        WebElement searchInputField = getSearchParamInputField();
+        searchInputField.clear();
+        searchInputField.sendKeys(searchParam);
+    }
+
+    public Select getCategorySelect() {
+        return new Select(WaitUtils.visibilityWait(driver, By.xpath("//*[@formControlName=\"category\"]"), 10).get(0));
+    }
+
+    public void setCategorySelect(String category) {
+        Select selectMenu = getCategorySelect();
+        getSelectOption(category);
+        selectMenu.selectByVisibleText(category);
+    }
+
+    public WebElement getSearchButton() {
+        return WaitUtils.clickableWait(driver, searchButton, 10);
     }
 
     public WebElement getRestaurantButton() {

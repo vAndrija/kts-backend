@@ -2,6 +2,7 @@ package com.kti.restaurant.service.implementation;
 
 import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
+import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.model.PriceItem;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,50 +52,31 @@ public class PriceItemServiceIntegrationTests {
     @Test
     public void create_ValidPriceItem_ReturnsCreatedPriceItem() throws Exception {
         PriceItem priceItem = priceItemService.create(new PriceItem(Double.valueOf(350), LocalDate.parse("2021-11-15"), LocalDate.parse("2022-08-15"),
-                null, true, Double.valueOf(240)));
+                new MenuItem(), true, Double.valueOf(240)));
 
         assertEquals(Double.valueOf(350), priceItem.getValue());
-        assertEquals(LocalDate.parse("2021-11-15"), priceItem.getStartDate());
-        assertEquals(LocalDate.parse("2022-08-15"), priceItem.getEndDate());
+        assertEquals(LocalDate.now(), priceItem.getStartDate());
+        assertEquals(null, priceItem.getEndDate());
         assertEquals(true, priceItem.getCurrent());
         assertEquals(Double.valueOf(240), priceItem.getPreparationValue());
-    }
-
-    @Test
-    public void create_PriceItemWithInvalidDates_ThrowsBadLogicException() throws Exception {
-        assertThrows(BadLogicException.class, () -> {
-            priceItemService.create(new PriceItem(Double.valueOf(350), LocalDate.parse("2022-08-15"), LocalDate.parse("2021-11-15"),
-                    null, true, Double.valueOf(240)));
-        });
     }
 
     @Rollback()
     @Test
     public void update_ValidPriceItem_ReturnsUpdatedPriceItem() throws Exception {
-        PriceItem priceItemForUpdate = new PriceItem(Double.valueOf(350), LocalDate.parse("2021-11-15"), LocalDate.parse("2022-08-15"),
-                null, true, Double.valueOf(240));
+        PriceItem priceItemForUpdate = new PriceItem(Double.valueOf(350), null, null,
+                null, false, Double.valueOf(240));
 
         PriceItem priceItem = priceItemService.update(priceItemForUpdate, 1);
 
-        assertEquals(Double.valueOf(350), priceItem.getValue());
-        assertEquals(LocalDate.parse("2021-11-15"), priceItem.getStartDate());
-        assertEquals(LocalDate.parse("2022-08-15"), priceItem.getEndDate());
-        assertEquals(true, priceItem.getCurrent());
-        assertEquals(Double.valueOf(240), priceItem.getPreparationValue());
+        assertEquals(LocalDate.now(), priceItem.getEndDate());
+        assertEquals(false, priceItem.getCurrent());
     }
 
     @Test
     public void update_InvalidPriceItem_ThrowsMissingEntityException() {
         assertThrows(MissingEntityException.class, () -> {
             priceItemService.update(null, 20);
-        });
-    }
-
-    @Test
-    public void update_InvalidDates_ThrowsMissingEntityException() {
-        assertThrows(BadLogicException.class, () -> {
-            priceItemService.update(new PriceItem(null, LocalDate.parse("2022-11-05"), LocalDate.parse("2021-11-05"), null,
-                    null, null), 1);
         });
     }
 

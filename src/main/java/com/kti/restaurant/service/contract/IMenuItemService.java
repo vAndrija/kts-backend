@@ -1,6 +1,7 @@
 package com.kti.restaurant.service.contract;
 
 import com.kti.restaurant.model.MenuItem;
+import com.kti.restaurant.model.enums.MenuItemCategory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 
@@ -20,7 +21,9 @@ public interface IMenuItemService extends IService<MenuItem> {
 
     Page<MenuItem> pendingMenuItems(Pageable pageable);
 
-    List<MenuItem> findByMenu(Integer menuId, Pageable pageable) throws Exception;
+    Page<MenuItem> findByMenu(Integer menuId, Pageable pageable) throws Exception;
 
     Page<MenuItem> findAll(Pageable pageable);
+
+    Page<MenuItem> searchAndFilterMenuItems(Integer menuId, String searchParam, String category, Pageable pageable) throws Exception;
 }

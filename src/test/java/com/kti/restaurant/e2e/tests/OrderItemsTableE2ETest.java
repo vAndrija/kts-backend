@@ -4,6 +4,7 @@ import com.kti.restaurant.e2e.pages.LoginPage;
 import com.kti.restaurant.e2e.pages.MenuItemsListPage;
 import com.kti.restaurant.e2e.pages.OrderItemsTablePage;
 import com.kti.restaurant.e2e.utils.WaitUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
@@ -58,6 +59,11 @@ public class OrderItemsTableE2ETest {
 
         assertEquals("Pripremljeno", orderItemsTablePage.getChangedButton().getText());
 
+    }
+
+    @AfterEach
+    public void tearDown() {
+        driver.quit();
     }
 
 }

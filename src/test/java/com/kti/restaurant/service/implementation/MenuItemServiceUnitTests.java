@@ -141,15 +141,15 @@ public class MenuItemServiceUnitTests {
         menuItemsSearchByMenuId.add(menuItem2);
 
         when(menuItemRepository.findByMenu(1, PageRequest.of(1, 5))).thenReturn(new PageImpl<>(menuItemsSearchByMenuId));
-        List<MenuItem> menuItems = menuItemService.findByMenu(1, PageRequest.of(1, 5));
+        Page<MenuItem> menuItems = menuItemService.findByMenu(1, PageRequest.of(1, 5));
 
-        assertEquals(2, menuItems.size());
+        assertEquals(2, menuItems.getContent().size());
     }
 
     @Test
     public void findByMenu_InvalidMenuId_Pageable_ThrowsMissingEntityException() {
         assertThrows(MissingEntityException.class, () -> {
-            List<MenuItem> menuItems = menuItemService.findByMenu(2, PageRequest.of(1, 5));
+            Page<MenuItem> menuItems = menuItemService.findByMenu(2, PageRequest.of(1, 5));
         });
     }
 }
