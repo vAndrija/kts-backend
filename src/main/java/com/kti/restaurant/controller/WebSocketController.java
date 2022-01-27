@@ -12,13 +12,21 @@ public class WebSocketController {
 
     private INotificationService notificationService;
 
-    @Autowired
+	@Autowired
     public WebSocketController(INotificationService notificationService) {
         this.notificationService = notificationService;
     }
 
-    @MessageMapping("/send/message")
-    public Map<String, String> broadcastNotification(String message) {
-        return notificationService.broadcastNotification(message);
+    @MessageMapping("/send/orderItemStatus")
+    public Map<String, String> broadcastOrderItemStatusChanged(String message) {
+        return notificationService.broadcastOrderItemStatusChanged(message);
     }
+    
+    @MessageMapping("/send/order")
+    public Map<String, String> broadcastOrderCreated(String message) {
+    	return notificationService.broadcastOrderCreated(message);
+    }
+    
+    
+    
 }

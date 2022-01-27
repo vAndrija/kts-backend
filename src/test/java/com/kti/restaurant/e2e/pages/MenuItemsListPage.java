@@ -23,9 +23,15 @@ public class MenuItemsListPage {
 
     @FindBy(className = "btn")
     private WebElement detailsButton;
+    
+    @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[4]/a")
+    private WebElement addMenuButton;
 
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[3]/a")
     private WebElement orderButton;
+    
+    @FindBy(xpath = "//a[.='Kreiraj stavku menija']")
+    private WebElement addNewDishButton;
 
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[3]/a")
     private WebElement orderItemsButton;
@@ -38,6 +44,10 @@ public class MenuItemsListPage {
 
     @FindBy(className = "btn-sm")
     private WebElement searchButton;
+
+    @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[2]/a")
+    private WebElement restaurantButton;
+
 
     public MenuItemsListPage(WebDriver driver) {
         this.driver = driver;
@@ -58,6 +68,11 @@ public class MenuItemsListPage {
         button.click();
     }
 
+    public void clickAddMenuButton() {
+    	WebElement button = getAddMenuButton();
+    	button.click();
+    }
+  
     public List<WebElement> getSelectOption(String option) {
         return WaitUtils.visibilityWait(driver, By.xpath("//option[contains(text(), '" + option + "')]"), 10);
     }
@@ -92,7 +107,20 @@ public class MenuItemsListPage {
         WebElement button = getOrderButton();
         button.click();
     }
-
+    
+    public WebElement getAddMenuButton() {
+    	return WaitUtils.visibilityWait(driver, addMenuButton, 10);
+    }
+  
+    public WebElement getAddNewDishButton() {
+    	return WaitUtils.visibilityWait(driver, addNewDishButton, 10);
+    }
+    
+    public void clickAddNewDishButton() {
+    	WebElement button = getAddNewDishButton();
+    	button.click();
+    }
+  
     public WebElement getOrderItemsButton() {
         return WaitUtils.visibilityWait(driver, orderItemsButton, 10);
     }
@@ -124,5 +152,14 @@ public class MenuItemsListPage {
 
     public WebElement getSearchButton() {
         return WaitUtils.clickableWait(driver, searchButton, 10);
+    }
+
+    public WebElement getRestaurantButton() {
+        return WaitUtils.visibilityWait(driver, restaurantButton, 10);
+    }
+
+    public void clickRestaurantButton() {
+        WebElement button = getRestaurantButton();
+        button.click();
     }
 }

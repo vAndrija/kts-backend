@@ -2,6 +2,8 @@ package com.kti.restaurant.service.implementation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kti.restaurant.exception.MissingEntityException;
+import com.kti.restaurant.model.Bartender;
+import com.kti.restaurant.model.Cook;
 import com.kti.restaurant.model.Notification;
 import com.kti.restaurant.repository.NotificationRepository;
 import com.kti.restaurant.service.contract.INotificationService;
@@ -13,15 +15,23 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+
 @Service
 public class NotificationService implements INotificationService {
 	
     private NotificationRepository notificationRepository;
+    private OrderItemService orderItemService;
+    private CookService cookService;
+    private BartenderService bartenderService;
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
-    NotificationService(NotificationRepository notificationRepository, SimpMessagingTemplate simpMessagingTemplate) {
+    NotificationService(NotificationRepository notificationRepository, OrderItemService orderItemService, 
+    		SimpMessagingTemplate simpMessagingTemplate, CookService cookService, BartenderService bartenderService) {
         this.notificationRepository = notificationRepository;
+        this.orderItemService = orderItemService;
+        this.cookService = cookService;
+        this.bartenderService = bartenderService;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
@@ -68,22 +78,42 @@ public class NotificationService implements INotificationService {
      * Na ovaj endpoint klijenti salju poruke, ruta na koju klijenti salju poruke je /send/message (parametar @MessageMapping anotacije)
      */
     @Override
-    public Map<String, String> broadcastNotification(String message) {
+    public Map<String, String> broadcastOrderItemStatusChanged(String message) {
         Map<String, String> messageConverted = parseMessage(message);
 
         if (messageConverted != null) {
-            if (messageConverted.containsKey("toId") && messageConverted.get("toId") != null
-                    && !messageConverted.get("toId").equals("")) {
-                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + messageConverted.get("toId"),
-                        messageConverted);
-                this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + messageConverted.get("fromId"),
-                        messageConverted);
-            } else {
-                this.simpMessagingTemplate.convertAndSend("/socket-publisher", messageConverted);
-            }
+            if (messageConverted.containsKey("status")) {
+            	String status = messageConverted.get("status");
+            	
+            	if (status.equalsIgnoreCase("Pripremljeno")) {
+            		Integer orderItemId = Integer.parseInt(messageConverted.get("orderItemId"));
+            		Integer waiterId = orderItemService.findByIdWithOrderAndWaiter(orderItemId).getOrder().getWaiter().getId();
+            		
+            		this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + waiterId, messageConverted);
+            	}
+            } 
         }
 
         return messageConverted;
+    }
+    
+    @Override
+    public Map<String, String> broadcastOrderCreated(String message) {
+        Map<String, String> messageConverted = parseMessage(message);
+
+        if (messageConverted != null) {
+            List<Bartender> bartenders = bartenderService.findAll();
+            List<Cook> cooks = cookService.findAll();
+            
+            bartenders.forEach(bartender -> this.notifyUser(bartender.getId(), messageConverted));
+            cooks.forEach(cook -> this.notifyUser(cook.getId(), messageConverted));   
+        }
+
+        return messageConverted;
+    }
+    
+    private void notifyUser(Integer userId, Map<String, String> messageConverted) {
+    	this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + userId, messageConverted);
     }
 
     @SuppressWarnings("unchecked")
