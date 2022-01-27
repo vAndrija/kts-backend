@@ -34,79 +34,53 @@ public class MenuItemDetailsE2ETest {
 
         driver.manage().window().maximize();
         driver.get("http://localhost:4200/auth/login");
+
+        loginPage.login("sarajovic@gmail.com", "123");
+
+        assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/menu-items", 10));
     }
 
     @Test
     public void viewAcceptedMenuItemDetails() {
-        loginPage.login("sarajovic@gmail.com", "123");
-
-        assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/menu-items", 10));
-
-        menuItemsListPage.setSelectMenu("standardni");
-
         menuItemsListPage.clickDetailsButton(0);
 
         assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/menu-items/1", 10));
 
         assertTrue(menuItemDetailsPage.getMenuItemName().getText().equals("COCA COLA"));
+        assertTrue(menuItemDetailsPage.getMenuItemPrice().getText().equals("180 RSD"));
 
         assertThrows(TimeoutException.class, () -> {
             menuItemDetailsPage.getPriceInputField();
         });
-
-//        Da li su potrebne sve ove asertacije, ako nema jednog nema nijednog svakako
-//        assertThrows(TimeoutException.class, () -> {
-//            menuItemDetailsPage.getPreparationPriceInputField();
-//        });
-//
-//        assertThrows(TimeoutException.class, () -> {
-//            menuItemDetailsPage.getSelectMenu();
-//        });
-//
-//        assertThrows(TimeoutException.class, () -> {
-//            menuItemDetailsPage.getPeriodDatePicker();
-//        });
-//
-//        assertThrows(TimeoutException.class, () -> {
-//            menuItemDetailsPage.getAcceptButton();
-//        });
-//
-//        assertThrows(TimeoutException.class, () -> {
-//            menuItemDetailsPage.getDeclineButton();
-//        });
     }
 
     @Test
     public void viewAndAcceptUnAcceptedMenuItem() {
-        loginPage.login("sarajovic@gmail.com", "123");
-
-        assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/menu-items", 10));
-
         menuItemDetailsPage.clickOnLinkToUnacceptedMenuItemSPage();
 
         assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/pending-menu-items", 10));
+
+        assertEquals("PITA SA VISNJAMA", menuItemDetailsPage.getMenuItemName().getText());
 
         menuItemsListPage.clickDetailsButton(0);
 
         menuItemDetailsPage.setPriceInputField("200");
         menuItemDetailsPage.setPreparationPriceInputField("100");
         menuItemDetailsPage.setSelectMenu("standardni");
-        menuItemDetailsPage.setPeriodDatePicker("2022-01-10 2022-12-10");
-        menuItemDetailsPage.clickApplyDateButton();
 
         menuItemDetailsPage.clickAcceptButton();
 
         assertThrows(TimeoutException.class, () -> {
             menuItemDetailsPage.getPriceInputField();
         });
+
+        assertEquals("PITA SA VISNJAMA", menuItemDetailsPage.getMenuItemName().getText());
+
+        assertEquals("200 RSD", menuItemDetailsPage.getMenuItemPrice().getText());
     }
 
     @Test
     public void viewAndDeclineUnacceptedMenuItem() {
-        loginPage.login("sarajovic@gmail.com", "123");
-
-        assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/menu-items", 10));
-
         menuItemDetailsPage.clickOnLinkToUnacceptedMenuItemSPage();
 
         assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/pending-menu-items", 10));

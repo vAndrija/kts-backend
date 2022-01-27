@@ -19,7 +19,7 @@ public class UpdateMenuItemDto {
     private MenuItemType type;
 
     @NotNull(message = "Category should not be null")
-    private MenuItemCategory category;
+    private String category;
 
     @NotNull(message = "Menu id should not be null or empty")
     private Integer menuId;
@@ -31,7 +31,7 @@ public class UpdateMenuItemDto {
     @Min(message = "Preparation time should be bigger than 0", value = 1 )
     private Integer preparationTime;
 
-    public UpdateMenuItemDto(String name, String description, MenuItemType type, MenuItemCategory category,
+    public UpdateMenuItemDto(String name, String description, MenuItemType type, String category,
                              Integer menu, Boolean accepted, Integer preparationTime) {
         this.name = name;
         this.description = description;
@@ -70,11 +70,11 @@ public class UpdateMenuItemDto {
         this.type = type;
     }
 
-    public MenuItemCategory getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(MenuItemCategory category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 

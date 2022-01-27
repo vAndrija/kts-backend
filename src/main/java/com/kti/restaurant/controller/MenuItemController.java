@@ -68,8 +68,8 @@ public class MenuItemController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'MANAGER')")
     public ResponseEntity<?> updateMenuItem(@Valid @RequestBody UpdateMenuItemDto updateMenuItemDto, @PathVariable Integer id) throws Exception {
-        return new ResponseEntity<>(menuItemService.update(menuItemMapper.fromUpdateMenuItemDtoToMenuItem(updateMenuItemDto), id),
-                HttpStatus.OK);
+        MenuItem menuItem = menuItemService.update(menuItemMapper.fromUpdateMenuItemDtoToMenuItem(updateMenuItemDto), id);
+        return new ResponseEntity<>(menuItemMapper.fromMenuItemToMenuItemDto(menuItem), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

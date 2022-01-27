@@ -124,10 +124,10 @@ public class MenuItemControllerIntegrationTests {
     @Test
     public void updateMenuItem_ValidMenuItemId_ReturnsOk() throws Exception {
         HttpEntity<UpdateMenuItemDto> httpEntity = new HttpEntity<>(new UpdateMenuItemDto("Coca cola", "bezalkoholno gazirano pice", MenuItemType.DRINK,
-                MenuItemCategory.NON_ALCOHOLIC, 1, true, 2), headers);
-        ResponseEntity<MenuItem> responseEntity = restTemplate.exchange("/api/v1/menu-items/{id}", HttpMethod.PUT, httpEntity, MenuItem.class, 1);
+                "Bezalkoholno piće", 1, true, 2), headers);
+        ResponseEntity<MenuItemDto> responseEntity = restTemplate.exchange("/api/v1/menu-items/{id}", HttpMethod.PUT, httpEntity, MenuItemDto.class, 1);
 
-        MenuItem menuItem = responseEntity.getBody();
+        MenuItemDto menuItem = responseEntity.getBody();
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals("Coca cola", menuItem.getName());
@@ -142,7 +142,7 @@ public class MenuItemControllerIntegrationTests {
     @Test
     public void updateMenuItem_InvalidMenuItemId_ReturnsNotFound() {
         HttpEntity<UpdateMenuItemDto> httpEntity = new HttpEntity<>(new UpdateMenuItemDto("Coca cola", "bezalkoholno gazirano pice", MenuItemType.DRINK,
-                MenuItemCategory.NON_ALCOHOLIC, 1, true, 2), headers);
+                "Bezalkoholno piće", 1, true, 2), headers);
         ResponseEntity<MenuItem> responseEntity = restTemplate.exchange("/api/v1/menu-items/{id}", HttpMethod.PUT, httpEntity, MenuItem.class, 20);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -151,7 +151,7 @@ public class MenuItemControllerIntegrationTests {
     @Test
     public void updateMenuItem_InvalidMenuItemName_ReturnsBadRequest() {
         HttpEntity<UpdateMenuItemDto> httpEntity = new HttpEntity<>(new UpdateMenuItemDto("", "bezalkoholno gazirano pice", MenuItemType.DRINK,
-                MenuItemCategory.NON_ALCOHOLIC, 1, true, 2), headers);
+                "Bezalkoholno piće", 1, true, 2), headers);
         ResponseEntity<MenuItem> responseEntity = restTemplate.exchange("/api/v1/menu-items/{id}", HttpMethod.PUT, httpEntity, MenuItem.class, 1);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());

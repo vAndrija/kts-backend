@@ -3,6 +3,7 @@ package com.kti.restaurant.e2e.tests;
 import com.kti.restaurant.e2e.pages.LoginPage;
 import com.kti.restaurant.e2e.pages.ResetPasswordPage;
 import com.kti.restaurant.e2e.utils.WaitUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
@@ -34,5 +35,10 @@ public class ResetPasswordPageTest {
         assertTrue(WaitUtils.urlWait(driver,"http://localhost:4200/auth/password-reset-start",10));
         resetPasswordPage.resetPassword("mirkomiric@gmail.com");
         assertTrue(WaitUtils.urlWait(driver,"http://localhost:4200/auth/login",10));
+    }
+
+    @AfterEach
+    public void tearDown() {
+        driver.quit();
     }
 }
