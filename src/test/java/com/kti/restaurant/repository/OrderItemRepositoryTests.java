@@ -151,5 +151,20 @@ public class OrderItemRepositoryTests {
                 Arguments.of(4, OrderItemStatus.SERVED, 0)
         );
     }
+    
+    @ParameterizedTest
+    @MethodSource("provideExpectedUnacceptedOrderItems")
+    public void findUnacceptedOrderItems(int expected) {
+        Pageable pageable = PageRequest.of(0, 8);
+        Page<OrderItem> orderItems = orderItemRepository.findUnacceptedOrderItems(pageable);
+        assertEquals(expected, orderItems.getContent().size());
+    }
+
+    private static Stream<Arguments> provideExpectedUnacceptedOrderItems() {
+        return Stream.of(
+                Arguments.of(3)
+        );
+    }
+
 
 }

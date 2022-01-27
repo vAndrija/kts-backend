@@ -67,7 +67,7 @@ public class OrderItemController {
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
     public ResponseEntity<?> updateOrderItem(@Valid @RequestBody UpdateOrderItemDto updateOrderItemDto,
                                              @PathVariable Integer id) throws Exception {
-        return new ResponseEntity<>(
+    	return new ResponseEntity<>(
                 orderItemMapper.fromOrderItemToOrderItemDto(orderItemService.
                         update(orderItemMapper.fromUpdateOrderItemDtoToOrderItem(updateOrderItemDto), id)),
                 HttpStatus.OK);
@@ -82,7 +82,15 @@ public class OrderItemController {
         return new ResponseEntity<>(orderItems, HttpStatus.OK);
     }
 
-
+    @GetMapping(value = "/unaccepted")
+    @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER', 'MANAGER')")
+    public ResponseEntity<?> getUnacceptedOrderItems(@RequestParam Integer page, @RequestParam Integer size) throws Exception {
+    	Pageable pageable = PageRequest.of(page, size);
+    	Page<OrderItemDto> orderItems = orderItemService.findUnacceptedOrderItems(pageable)
+                .map(orderItem -> this.orderItemMapper.fromOrderItemToOrderItemDto(orderItem));
+        return new ResponseEntity<>(orderItems, HttpStatus.OK);
+    }
+    
     @PostMapping("/status/{id}")
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
     public ResponseEntity<?> updateStatus(@PathVariable("id") Integer id, @RequestBody String status) throws Exception {

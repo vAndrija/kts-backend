@@ -1,9 +1,7 @@
 package com.kti.restaurant.repository;
 
-import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.enums.OrderItemStatus;
-import com.kti.restaurant.model.enums.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,4 +35,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItem,Integer> {
 
     @Query("select oi from OrderItem oi where oi.cook.id=?1  and oi.status=?2  or  oi.bartender.id=?1 and oi.status=?2")
     Page<OrderItem> findByEmployeeAndStatus(Integer id, OrderItemStatus status, Pageable pageable);
+    
+    @Query("select oi from OrderItem oi join MenuItem m on oi.menuItem.id = m.id where oi.status=0")
+    Page<OrderItem> findUnacceptedOrderItems(Pageable pageable);
 }

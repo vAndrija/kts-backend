@@ -28,4 +28,6 @@ public interface IOrderItemService extends IService<OrderItem> {
     boolean checkIfServed(Integer id) throws Exception;
 
     Page<OrderItem> findByEmployeeAndStatus(Integer id, String status, Pageable pageable) throws Exception;
+
+	Page<OrderItem> findUnacceptedOrderItems(Pageable pageable);
 }

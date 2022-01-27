@@ -2,23 +2,33 @@ package com.kti.restaurant.service.implementation;
 
 import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
+import com.kti.restaurant.model.Bartender;
+import com.kti.restaurant.model.Cook;
 import com.kti.restaurant.model.MenuItem;
+import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.enums.OrderItemStatus;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
@@ -222,12 +232,17 @@ public class OrderItemServiceIntegrationTests {
     }
 
     @Test
+    public void findUnacceptedOrderItems() {
+    	Page<OrderItem> orderItems = orderItemService.findUnacceptedOrderItems(PageRequest.of(0, 8));
+    	assertEquals(3, orderItems.getContent().size());
+    }
+    
+    @Test
     public void findByEmployeeAndStatus_InvalidStatus_ThrowsBadLogicException() {
         assertThrows(BadLogicException.class, () -> {
             orderItemService.findByEmployeeAndStatus(4, " ", PageRequest.of(0, 5));
         });
     }
-
 
     @Test
     @Rollback
@@ -247,4 +262,41 @@ public class OrderItemServiceIntegrationTests {
             orderItemService.updateStatus(0, "Pripremljeno");
         });
     }
+    
+    
+    @Test
+    public void checkIfServed_ValidStatus_ReturnsTrue() {
+        assertTrue(orderItemService.checkIfServed(2));
+    }
+    
+    @Test
+    public void checkIfServed_InvalidStatus_ReturnsFalse() {
+        assertFalse(orderItemService.checkIfServed(1));
+    }
+
+
+    @Test
+    public void findByEmployeeAndStatus_InvalidUserId_ThrowsMissingEntityException() {    	
+    	assertThrows(MissingEntityException.class, () -> {
+            orderItemService.findByEmployeeAndStatus(13, "status", null);
+        });
+    }
+    
+    @Test
+    public void findByEmployeeAndStatus_InvalidStatus_ThrowsBadLogicExcpetion() {
+    	assertThrows(BadLogicException.class, () -> {
+            orderItemService.findByEmployeeAndStatus(2, " ", null);
+        });
+    	
+    }
+  
+    @Test
+    public void findByEmployeeAndStatus_ValidParameters_ReturnsPageableOrderItems() {
+    	Pageable pageable = PageRequest.of(0,2);
+    	Page<OrderItem> orderItems = orderItemService.findByEmployeeAndStatus(1, "U Pripemi", pageable);
+    	assertNotNull(orderItems);
+    	assertEquals(2, orderItems.getSize());
+    }
+    
+    
 }

@@ -154,6 +154,34 @@ public class OrderItemControllerIntegrationTests {
     }
 
     @Test
+    public void getUnacceptedOrderItems_ReturnsOk() {
+    	
+        ResponseEntity<UserTokenState> responseEntity =
+                restTemplate.postForEntity("/api/v1/auth/login",
+                        new JwtAuthenticationRequest("urosmatic@gmail.com", "123"),
+                        UserTokenState.class);
+        accessToken = responseEntity.getBody().getAccessToken();
+        
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
+        
+        ParameterizedTypeReference<RestResponsePage<OrderItemDto>> responseType = new ParameterizedTypeReference<>() {};
+        ResponseEntity<RestResponsePage<OrderItemDto>> entity = restTemplate.exchange(URL_PREFIX + "/unaccepted?page={page}&size={size}", HttpMethod.GET,
+                httpEntity, responseType, 0, 8);
+
+        List<OrderItemDto> orderItemDtos = entity.getBody().getContent();
+
+        assertEquals(HttpStatus.OK, entity.getStatusCode());
+        assertEquals(3, orderItemDtos.size());
+        assertEquals(1, orderItemDtos.get(0).getPriority());
+        assertEquals(2, orderItemDtos.get(0).getQuantity());
+        assertEquals(2, orderItemDtos.get(1).getPriority());
+        assertEquals(1, orderItemDtos.get(1).getQuantity());
+    }
+    
+    @Test
     public void getOrderItem_ValidId_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<OrderItemDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.GET,

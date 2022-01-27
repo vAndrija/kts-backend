@@ -148,6 +148,7 @@ INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_use
 INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
     (0, '2022-11-18T12:48', 810, 2, 7, false);
 
+
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
     ('', 1, 2, 0, null, null ,1, 1, false);
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values

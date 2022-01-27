@@ -1,20 +1,39 @@
 package com.kti.restaurant.service.implementation;
 
+import com.kti.restaurant.dto.tablereservation.TableReservationDto;
 import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.*;
 import com.kti.restaurant.model.enums.OrderItemStatus;
 import com.kti.restaurant.model.enums.OrderStatus;
 import com.kti.restaurant.repository.OrderItemRepository;
+import com.kti.restaurant.service.UserService;
+import com.kti.restaurant.utils.GsonUtils;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,6 +48,9 @@ public class OrderItemServiceUnitTests {
 
     @Mock
     OrderItemRepository orderItemRepository;
+    
+    @Mock
+    UserService userService;
 
     @BeforeEach
     public void setup() {
@@ -123,5 +145,69 @@ public class OrderItemServiceUnitTests {
             orderItemService.updateStatus(1, " ");
         });
     }
+    
+    @Test
+    public void checkIfServed_ValidStatus_ReturnsTrue() {
+    	OrderItem orderItem = new OrderItem(2, "bez bibera", OrderItemStatus.SERVED,
+                2, new Order(), new MenuItem(), null, new Cook());
+        orderItem.setId(2);
+        List<OrderItem> orderItems = new ArrayList<OrderItem>();
+        orderItems.add(orderItem);
+        
+        when(orderItemRepository.findByOrder(2)).thenReturn(orderItems);
+        assertTrue(orderItemService.checkIfServed(2));
+    }
+    
+    @ParameterizedTest
+    @MethodSource("provideInvalidStatusForOrderItem")
+    public void checkIfServed_InvalidStatus_ReturnsFalse(OrderItemStatus status) {
+    	OrderItem orderItem = new OrderItem(2, "bez bibera", status,
+                2, new Order(), new MenuItem(), null, new Cook());
+        orderItem.setId(2);
+        List<OrderItem> orderItems = new ArrayList<OrderItem>();
+        orderItems.add(orderItem);
+        
+        when(orderItemRepository.findByOrder(2)).thenReturn(orderItems);
+        
+        assertFalse(orderItemService.checkIfServed(2));
+    }
 
+    private static Stream<Arguments> provideInvalidStatusForOrderItem() {
+
+        return Stream.of(
+                Arguments.of(OrderItemStatus.ORDERED),
+                Arguments.of(OrderItemStatus.PREPARATION),
+                Arguments.of(OrderItemStatus.PREPARED)
+
+        );
+    }
+
+    @Test
+    public void FindByEmployeeAndStatus_InvalidUserId_ThrowsMissingEntityException() {
+    	when(userService.findById(1)).thenReturn(null);
+    	
+    	assertThrows(MissingEntityException.class, () -> {
+            orderItemService.findByEmployeeAndStatus(1, "status", null);
+        });
+    }
+    
+    @Test
+    public void FindByEmployeeAndStatus_InvalidStatus_ThrowsBadLogicExcpetion() {
+    	when(userService.findById(1)).thenReturn(new Bartender());
+    	
+    	assertThrows(BadLogicException.class, () -> {
+            orderItemService.findByEmployeeAndStatus(1, " ", null);
+        });
+    	
+    }
+    //Vidjeti kako ovo na drugaciji nacin
+    @Test
+    public void FindByEmployeeAndStatus_ValidParameters_ReturnsPageableOrderItems() {
+    	when(userService.findById(1)).thenReturn(new Bartender());
+    	Pageable pageable = PageRequest.of(0,2);
+    	
+    	when(orderItemRepository.findByEmployeeAndStatus(1, OrderItemStatus.PREPARATION, pageable)).thenReturn(null);
+    	assertNull(orderItemService.findByEmployeeAndStatus(1, "U pripemi", pageable));
+    	
+    }
 }

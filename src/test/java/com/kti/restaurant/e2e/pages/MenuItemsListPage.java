@@ -30,8 +30,11 @@ public class MenuItemsListPage {
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[3]/a")
     private WebElement orderButton;
     
-    @FindBy(xpath = "//a[.='Kreiraj stavku menija']")
+    @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[3]/a")
     private WebElement addNewDishButton;
+    
+    @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[5]/a")
+    private WebElement acceptOrderItemButton;
 
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[3]/a")
     private WebElement orderItemsButton;
@@ -107,6 +110,15 @@ public class MenuItemsListPage {
     	button.click();
     }
   
+    public WebElement getAcceptOrderItemButton() {
+    	return WaitUtils.visibilityWait(driver, acceptOrderItemButton, 10);
+    }
+    
+    public void clickAcceptOrderButton() {
+    	WebElement button = getAcceptOrderItemButton();
+    	button.click();
+    }
+    
     public WebElement getOrderItemsButton() {
         return WaitUtils.visibilityWait(driver, orderItemsButton, 10);
     }
