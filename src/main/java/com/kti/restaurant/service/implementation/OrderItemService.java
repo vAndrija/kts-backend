@@ -5,20 +5,16 @@ import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.enums.OrderItemStatus;
-import com.kti.restaurant.model.enums.OrderStatus;
 import com.kti.restaurant.repository.OrderItemRepository;
 import com.kti.restaurant.service.UserService;
-import com.kti.restaurant.service.contract.IBartenderService;
 import com.kti.restaurant.service.contract.IOrderItemService;
-import com.kti.restaurant.service.contract.IOrderService;
-import org.seleniumhq.jetty9.util.IO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -115,7 +111,7 @@ public class OrderItemService implements IOrderItemService {
     @Override
     public OrderItem updateStatus(Integer id, String status) throws Exception {
         OrderItem orderItemToUpdate = this.findById(id);
-      
+
         if (Objects.equals(status, " ")) {
             throw new BadLogicException("Given status cannot be empty.");
         }
@@ -125,10 +121,10 @@ public class OrderItemService implements IOrderItemService {
     }
 
     @Override
-	  public OrderItem findByIdWithOrderAndWaiter(Integer orderItemId) {
-		  return orderItemRepository.findByIdWithOrderAndWaiter(orderItemId);
-	  }
-  
+    public OrderItem findByIdWithOrderAndWaiter(Integer orderItemId) {
+        return orderItemRepository.findByIdWithOrderAndWaiter(orderItemId);
+    }
+
     @Override
     public List<OrderItem> findByOrder(Integer id) {
         return orderItemRepository.findByOrder(id);
@@ -155,5 +151,28 @@ public class OrderItemService implements IOrderItemService {
             throw new BadLogicException("Given order item status does not exist in the system.");
         }
         return orderItemRepository.findByEmployeeAndStatus(id, OrderItemStatus.findType(status), pageable);
+    }
+
+    @Override
+    public List<OrderItem> findByOrdersAndWaiter(List<Order> orders) {
+        List<OrderItem> orderItems = new ArrayList<>();
+        for (Order o : orders) {
+            List<OrderItem> oi = orderItemRepository.findByOrderForWaiter(o.getId());
+            orderItems.addAll(oi);
+        }
+        return orderItems;
+    }
+
+    @Override
+    public List<OrderItem> findByOrdersAndStatus(List<Order> orders, String status) {
+        if (status.equals(" ")) {
+            throw new BadLogicException("Given order item status does not exist in the system.");
+        }
+        List<OrderItem> orderItems = new ArrayList<>();
+        for (Order o : orders) {
+            List<OrderItem> oi = orderItemRepository.findByOrderAndStatus(o.getId(), OrderItemStatus.findType(status));
+            orderItems.addAll(oi);
+        }
+        return orderItems;
     }
 }

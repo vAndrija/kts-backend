@@ -76,7 +76,7 @@ public class CreateOrderE2ETest {
 
     @Test
     public void createOrder() {
-        loginPage.login("jovanpetrovic@gmail.com", "123");
+        loginPage.login("anapopovic@gmail.com", "123");
 
         assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/menu-items", 10));
 

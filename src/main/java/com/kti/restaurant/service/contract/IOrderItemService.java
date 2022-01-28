@@ -1,5 +1,6 @@
 package com.kti.restaurant.service.contract;
 
+import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.OrderItem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +22,17 @@ public interface IOrderItemService extends IService<OrderItem> {
 
     OrderItem updateStatus(Integer id, String status) throws Exception;
 
-	  OrderItem findByIdWithOrderAndWaiter(Integer orderItemId);
-  
+    OrderItem findByIdWithOrderAndWaiter(Integer orderItemId);
+
     List<OrderItem> findByOrder(Integer id) throws Exception;
 
     boolean checkIfServed(Integer id) throws Exception;
 
     Page<OrderItem> findByEmployeeAndStatus(Integer id, String status, Pageable pageable) throws Exception;
+
+    List<OrderItem> findByOrdersAndWaiter(List<Order> orders);
+
+    List<OrderItem> findByOrdersAndStatus(List<Order> orders, String status);
+
+
 }

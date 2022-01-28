@@ -5,6 +5,7 @@ import com.kti.restaurant.dto.auth.ChangePasswordDto;
 import com.kti.restaurant.exception.BadTokenException;
 import com.kti.restaurant.exception.ConflictException;
 import com.kti.restaurant.exception.MissingEntityException;
+import com.kti.restaurant.model.Admin;
 import com.kti.restaurant.model.User;
 import com.kti.restaurant.repository.UserRepository;
 import com.kti.restaurant.security.auth.ConfirmationToken;
@@ -80,7 +81,12 @@ public class UserService  implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public User findById(Integer id) { return userRepository.findById(id).orElse(null); }
+    public User findById(Integer id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null)
+            throw new MissingEntityException("User with given id does not exist in the system.");
+        return user;
+    }
 
     public void changePassword(User user, ChangePasswordDto changePasswordDto) {
         if(!passwordEncoder.matches(changePasswordDto.getOldPassword(),user.getPassword()))

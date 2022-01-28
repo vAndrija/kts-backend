@@ -1,7 +1,6 @@
 package com.kti.restaurant.repository;
 
 import com.kti.restaurant.model.Order;
-import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.enums.OrderStatus;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -13,8 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 

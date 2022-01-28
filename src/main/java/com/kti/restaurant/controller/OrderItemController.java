@@ -1,14 +1,17 @@
 package com.kti.restaurant.controller;
 
-import com.kti.restaurant.dto.order.OrderDto;
 import com.kti.restaurant.dto.orderitem.CreateOrderItemDto;
 import com.kti.restaurant.dto.orderitem.OrderItemDto;
 import com.kti.restaurant.dto.orderitem.UpdateOrderItemDto;
 import com.kti.restaurant.mapper.OrderItemMapper;
+import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.OrderItem;
+import com.kti.restaurant.service.UserService;
 import com.kti.restaurant.service.contract.IOrderItemService;
+import com.kti.restaurant.service.contract.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -27,10 +30,14 @@ public class OrderItemController {
 
     private IOrderItemService orderItemService;
     private OrderItemMapper orderItemMapper;
+    private IOrderService orderService;
+    private UserService userService;
 
     @Autowired
-    public OrderItemController(IOrderItemService orderItemService, OrderItemMapper orderItemMapper) {
+    public OrderItemController(IOrderItemService orderItemService, IOrderService orderService, UserService userService, OrderItemMapper orderItemMapper) {
         this.orderItemService = orderItemService;
+        this.orderService = orderService;
+        this.userService = userService;
         this.orderItemMapper = orderItemMapper;
     }
 
@@ -76,6 +83,17 @@ public class OrderItemController {
     @GetMapping("/employee/{id}")
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER', 'MANAGER')")
     public ResponseEntity<?> getOrderItemsForEmployee(@RequestParam Integer page, @RequestParam Integer size, @PathVariable("id") Integer id) throws Exception {
+
+        if (userService.findById(id).getRoles().get(0).getName().equals("ROLE_WAITER")) {
+            Page<Order> orders = orderService.findByWaiter(id, Pageable.unpaged());
+            List<OrderItem> orderItems = orderItemService.findByOrdersAndWaiter(orders.getContent());
+            int start = (int) PageRequest.of(page, size).getOffset();
+            int end = Math.min((start + PageRequest.of(page, size).getPageSize()), orderItems.size());
+            Page<OrderItemDto> orderItemDtoPage = new PageImpl<>(orderItems.stream()
+                    .map(orderItem -> this.orderItemMapper.fromOrderItemToOrderItemDto(orderItem)).collect(Collectors.toList()).subList(start, end),
+                    PageRequest.of(page, size), orderItems.size());
+            return new ResponseEntity<>(orderItemDtoPage, HttpStatus.OK);
+        }
         Pageable pageable = PageRequest.of(page, size);
         Page<OrderItemDto> orderItems = orderItemService.findByEmployee(pageable, id)
                 .map(orderItem -> this.orderItemMapper.fromOrderItemToOrderItemDto(orderItem));
@@ -104,9 +122,20 @@ public class OrderItemController {
                                                            @PathVariable("status") String status,
                                                            @RequestParam Integer page, @RequestParam Integer size)
             throws Exception {
+        if (userService.findById(id).getRoles().get(0).getName().equals("ROLE_WAITER")) {
+            Page<Order> orders = orderService.findByWaiter(id, Pageable.unpaged());
+            List<OrderItem> orderItems = orderItemService.findByOrdersAndStatus(orders.getContent(), status);
+            int start = (int) PageRequest.of(page, size).getOffset();
+            int end = Math.min((start + PageRequest.of(page, size).getPageSize()), orderItems.size());
+            Page<OrderItemDto> orderItemDtoPage = new PageImpl<>(orderItems.stream()
+                    .map(orderItem -> this.orderItemMapper.fromOrderItemToOrderItemDto(orderItem)).collect(Collectors.toList()).subList(start, end),
+                    PageRequest.of(page, size), orderItems.size());
+            return new ResponseEntity<>(orderItemDtoPage, HttpStatus.OK);
+        }
         Pageable pageable = PageRequest.of(page, size);
         Page<OrderItemDto> orderItems = orderItemService.findByEmployeeAndStatus(id, status, pageable)
                 .map(orderItem -> this.orderItemMapper.fromOrderItemToOrderItemDto(orderItem));
         return new ResponseEntity<>(orderItems, HttpStatus.OK);
     }
+
 }
