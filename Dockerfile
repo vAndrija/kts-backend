@@ -17,4 +17,5 @@ WORKDIR /app
 COPY --from=MAVEN_BUILD /build/target/restaurant-0.0.1-SNAPSHOT.jar /app/
 COPY --from=MAVEN_BUILD /build /app/
 
+RUN java --illegal-access=deny
 ENTRYPOINT ["java", "-jar", "restaurant-0.0.1-SNAPSHOT.jar"]
