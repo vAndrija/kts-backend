@@ -38,6 +38,9 @@ public class MenuItemsListPage {
 
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[2]/a")
     private WebElement restaurantButton;
+    
+    @FindBy(xpath = "//a[.='Rezervacije']")
+    private WebElement reservationsButton;
 
 
     public MenuItemsListPage(WebDriver driver) {
@@ -122,6 +125,15 @@ public class MenuItemsListPage {
 
     public void clickRestaurantButton() {
         WebElement button = getRestaurantButton();
+        button.click();
+    }
+    
+    private WebElement getReservationsButton() {
+        return WaitUtils.visibilityWait(driver, reservationsButton, 10);
+    }
+
+    public void clickReservationButton() {
+        WebElement button = getReservationsButton();
         button.click();
     }
 }
