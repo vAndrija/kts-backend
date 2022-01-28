@@ -68,6 +68,7 @@ public class MenuItem {
         this.description = description;
         this.category = category;
     }
+
     public MenuItem(String name, String description) {
         this.name = name;
         this.description = description;
