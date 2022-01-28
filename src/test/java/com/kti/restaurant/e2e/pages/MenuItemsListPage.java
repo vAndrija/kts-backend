@@ -27,7 +27,7 @@ public class MenuItemsListPage {
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[4]/a")
     private WebElement addMenuButton;
 
-    @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[3]/a")
+    @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[4]/a")
     private WebElement orderButton;
     
     @FindBy(xpath = "//a[.='Kreiraj stavku menija']")

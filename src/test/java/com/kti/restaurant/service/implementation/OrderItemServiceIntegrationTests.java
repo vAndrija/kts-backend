@@ -3,6 +3,7 @@ package com.kti.restaurant.service.implementation;
 import com.kti.restaurant.exception.BadLogicException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.MenuItem;
+import com.kti.restaurant.model.Order;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.enums.OrderItemStatus;
 import org.junit.jupiter.api.Test;
@@ -10,15 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpHeaders;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
@@ -27,6 +30,9 @@ public class OrderItemServiceIntegrationTests {
 
     @Autowired
     private OrderItemService orderItemService;
+
+    @Autowired
+    private OrderService orderService;
 
 
     @Test
@@ -49,9 +55,7 @@ public class OrderItemServiceIntegrationTests {
 
     @Test
     public void findById_InvalidId_ThrowsMissingEntityException() {
-        assertThrows(MissingEntityException.class, () -> {
-            orderItemService.findById(100);
-        });
+        assertThrows(MissingEntityException.class, () -> orderItemService.findById(100));
     }
 
     @Test
@@ -85,26 +89,20 @@ public class OrderItemServiceIntegrationTests {
 
     @Test
     public void update_InvalidId_ThrowsMissingEntityException() {
-        assertThrows(MissingEntityException.class, () -> {
-            orderItemService.update(null, 100);
-        });
+        assertThrows(MissingEntityException.class, () -> orderItemService.update(null, 100));
     }
 
     @Test
     @Rollback
     public void delete_ValidId() throws Exception {
         orderItemService.delete(1);
-        assertThrows(MissingEntityException.class, () -> {
-            orderItemService.findById(1);
-        });
+        assertThrows(MissingEntityException.class, () -> orderItemService.findById(1));
 
     }
 
     @Test
     public void delete_InvalidId_ThrowsMissingEntityException() {
-        assertThrows(MissingEntityException.class, () -> {
-            orderItemService.delete(100);
-        });
+        assertThrows(MissingEntityException.class, () -> orderItemService.delete(100));
     }
 
     @Test
@@ -210,9 +208,7 @@ public class OrderItemServiceIntegrationTests {
 
     @Test
     public void findByEmployeeAndStatus_InvalidId_ThrowsMissingEntityException() {
-        assertThrows(MissingEntityException.class, () -> {
-            orderItemService.findByEmployeeAndStatus(-4, "U pripremi", PageRequest.of(0, 5));
-        });
+        assertThrows(MissingEntityException.class, () -> orderItemService.findByEmployeeAndStatus(-4, "U pripremi", PageRequest.of(0, 5)));
     }
 
     @Test
@@ -223,16 +219,14 @@ public class OrderItemServiceIntegrationTests {
 
     @Test
     public void findByEmployeeAndStatus_InvalidStatus_ThrowsBadLogicException() {
-        assertThrows(BadLogicException.class, () -> {
-            orderItemService.findByEmployeeAndStatus(4, " ", PageRequest.of(0, 5));
-        });
+        assertThrows(BadLogicException.class, () -> orderItemService.findByEmployeeAndStatus(4, " ", PageRequest.of(0, 5)));
     }
 
 
     @Test
     @Rollback
     public void updateStatus_ValidId_ExistingOrderItem() throws Exception {
-        OrderItem updatedOrder = orderItemService.updateStatus(4, "Pripremljeno");
+        OrderItem updatedOrder = orderItemService.updateStatus(8, "Pripremljeno");
 
         assertEquals(1, updatedOrder.getPriority());
         assertEquals(1, updatedOrder.getQuantity());
@@ -243,8 +237,38 @@ public class OrderItemServiceIntegrationTests {
 
     @Test
     public void updateStatus_InvalidId_ThrowsMissingEntityException() {
-        assertThrows(MissingEntityException.class, () -> {
-            orderItemService.updateStatus(0, "Pripremljeno");
-        });
+        assertThrows(MissingEntityException.class, () -> orderItemService.updateStatus(0, "Pripremljeno"));
+    }
+
+    @Test
+    public void findByOrdersAndWaiter_ValidOrderList_ReturnsOrderItems() throws Exception {
+        Page<Order> orders = orderService.findByWaiter(7, Pageable.unpaged());
+        List<OrderItem> orderItems = orderItemService.findByOrdersAndWaiter(orders.getContent());
+        assertEquals(2, orderItems.size());
+
+    }
+
+    @Test
+    public void findByOrdersAndWaiter_InvalidOrderList_ReturnsEmptyList() {
+        List<Order> orders = new ArrayList<>();
+        List<OrderItem> orderItems = orderItemService.findByOrdersAndWaiter(orders);
+        assertEquals(0, orderItems.size());
+
+    }
+
+    @Test
+    public void findByOrdersAndStatus_ValidStatus_ReturnsOrderItems() throws Exception {
+        Page<Order> orders = orderService.findByWaiter(7, Pageable.unpaged());
+        List<OrderItem> orderItems = orderItemService.findByOrdersAndStatus(orders.getContent(), "Pripremljeno");
+        assertEquals(2, orderItems.size());
+
+    }
+
+    @Test
+    public void findByOrdersAndStatus_InvalidStatus_ThrowsBadLogicException() throws Exception {
+        Page<Order> orders = orderService.findByWaiter(8, Pageable.unpaged());
+        assertThrows(BadLogicException.class, () ->
+                orderItemService.findByOrdersAndStatus(orders.getContent(), " "));
+
     }
 }

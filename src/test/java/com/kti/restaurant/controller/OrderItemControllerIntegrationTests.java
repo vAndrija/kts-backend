@@ -4,7 +4,6 @@ import com.kti.restaurant.dto.JwtAuthenticationRequest;
 import com.kti.restaurant.dto.orderitem.CreateOrderItemDto;
 import com.kti.restaurant.dto.orderitem.OrderItemDto;
 import com.kti.restaurant.dto.orderitem.UpdateOrderItemDto;
-import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.model.enums.OrderItemStatus;
@@ -18,14 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
 import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -85,7 +80,7 @@ public class OrderItemControllerIntegrationTests {
     }
 
     @Test
-    public void createInvalidOrderItem_InvalidQuantity_ReturnsBadRequest() throws Exception {
+    public void createInvalidOrderItem_InvalidQuantity_ReturnsBadRequest() {
         int size = orderItemService.findAll().size();
 
         HttpEntity<CreateOrderItemDto> httpEntity = new HttpEntity<>(new CreateOrderItemDto(0, "sa sojinim mlekom",
@@ -98,7 +93,7 @@ public class OrderItemControllerIntegrationTests {
     }
 
     @Test
-    public void createInvalidOrderItem_InvalidPriority_ReturnsBadRequest() throws Exception {
+    public void createInvalidOrderItem_InvalidPriority_ReturnsBadRequest() {
         int size = orderItemService.findAll().size();
 
         HttpEntity<CreateOrderItemDto> httpEntity = new HttpEntity<>(new CreateOrderItemDto(1, "sa sojinim mlekom",
@@ -111,7 +106,7 @@ public class OrderItemControllerIntegrationTests {
     }
 
     @Test
-    public void createInvalidOrderItem_InvalidMenuItem_ReturnsBadRequest() throws Exception {
+    public void createInvalidOrderItem_InvalidMenuItem_ReturnsBadRequest() {
         int size = orderItemService.findAll().size();
 
         HttpEntity<CreateOrderItemDto> httpEntity = new HttpEntity<>(new CreateOrderItemDto(1, "sa sojinim mlekom",
@@ -124,7 +119,7 @@ public class OrderItemControllerIntegrationTests {
     }
 
     @Test
-    public void createInvalidOrderItem_InvaliOrder_ReturnsBadRequest() throws Exception {
+    public void createInvalidOrderItem_InvalidOrder_ReturnsBadRequest() {
         int size = orderItemService.findAll().size();
 
         HttpEntity<CreateOrderItemDto> httpEntity = new HttpEntity<>(new CreateOrderItemDto(1, "sa sojinim mlekom",

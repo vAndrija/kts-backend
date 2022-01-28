@@ -15,7 +15,7 @@ public class OrderItemsTablePage {
     @FindBy(xpath = "//*[@formControlName=\"filterName\"]")
     private Select selectStatus;
 
-    @FindBy(xpath = "//tr[1]/td[6]")
+    @FindBy(xpath = "//tr[1]/td[7]")
     private WebElement changeStatusButton;
 
     @FindBy(xpath = "//*[@id=\"6\"]")
