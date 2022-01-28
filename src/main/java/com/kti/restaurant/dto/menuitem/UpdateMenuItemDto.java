@@ -31,7 +31,6 @@ public class UpdateMenuItemDto {
     @Min(message = "Preparation time should be bigger than 0", value = 1 )
     private Integer preparationTime;
 
-    @NotEmpty(message = "Image name should not be null or empty")
     private String imageName;
 
     public UpdateMenuItemDto(String name, String description, MenuItemType type, String category,

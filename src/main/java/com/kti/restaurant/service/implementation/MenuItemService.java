@@ -62,6 +62,7 @@ public class MenuItemService implements IMenuItemService {
         menuItemToUpdate.setName(menuItem.getName());
         menuItemToUpdate.setType(menuItem.getType());
         menuItemToUpdate.setPreparationTime(menuItem.getPreparationTime());
+        menuItemToUpdate.setImageName(menuItem.getImageName());
 
         menuItemRepository.save(menuItemToUpdate);
 

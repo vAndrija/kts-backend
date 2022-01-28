@@ -35,7 +35,6 @@ public class MenuItemDto {
 
     private Boolean accepted;
 
-    @NotEmpty(message = "Image name should not be null or empty")
     private String imageName;
 
     public MenuItemDto(Integer id, String name, String description, MenuItemType type, String category, int preparationTime,

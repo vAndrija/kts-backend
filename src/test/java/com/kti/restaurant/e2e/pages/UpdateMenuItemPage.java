@@ -42,6 +42,10 @@ public class UpdateMenuItemPage {
     @FindBy(xpath = "//div[contains(text(), 'Uspešno ste sačuvali promene')]")
     private WebElement notificationMessage;
 
+    @FindBy(xpath = "//*[@formControlName=\"imageName\"]")
+    private WebElement imageInputField;
+
+
     public UpdateMenuItemPage(WebDriver driver) {
         this.driver = driver;
     }
@@ -139,5 +143,15 @@ public class UpdateMenuItemPage {
 
     public WebElement getNotificationMessage() {
         return WaitUtils.visibilityWait(driver, notificationMessage, 10);
+    }
+
+    public WebElement getImageInputField() {
+        return WaitUtils.visibilityWait(driver, imageInputField, 10);
+    }
+
+    public void setImageInputField(String image) {
+        WebElement inputField = getImageInputField();
+        inputField.clear();
+        inputField.sendKeys(image);
     }
 }

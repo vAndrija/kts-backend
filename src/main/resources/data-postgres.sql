@@ -82,7 +82,7 @@ INSERT INTO menu (name, duration_start, duration_end, deleted) values ('letnji',
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
     ('coca cola', 'bezalkoholno gazirano pice', 0, 7, 1, true, false, 2, 'cocaCola.jpg');
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
-    ('mohito', 'koktel  od belog kubanskog ruma, soka limetе, sveze nane i mineralne vode', 0, 5, 1, false, false, 8, 'mohito.jpg');
+    ('mohito', 'koktel  od belog kubanskog ruma, soka limetе, sveze nane i mineralne vode', 0, 5, 1, false, false, 8, '');
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
     ('domaca kafa', 'topli napitak', 0, 6, 1, true, false, 5, 'domacaKafa.jpg');
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
@@ -104,9 +104,9 @@ INSERT INTO menu_item (name, description, type, category, menu_id, accepted, del
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
     ('baklava', 'baklava sa orasima', 1, 4, 1, true, false, 5, 'baklava.jpg');
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
-    ('krempita', 'krempita sa dodatkom visnje', 1, 4, 2, true, false, 5, 'krempita.jpg');
+    ('krempita', 'krempita sa dodatkom visnje', 1, 4, 2, true, false, 5, 'krempitaa.jpeg');
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
-    ('pita sa visnjama', 'pita sa visnjama, belom cokoladom i sladoledom od vannile', 1, 4, null, false, false, 5, 'pitaSaVisnjama.jpg');
+    ('pita sa visnjama', 'pita sa visnjama, belom cokoladom i sladoledom od vannile', 1, 4, null, false, false, 5, '');
 
 
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values

@@ -26,7 +26,6 @@ public class CreateMenuItemDto {
 
     private PriceItemDto priceItemDto;
 
-    @NotEmpty(message = "Image name should not be null or empty")
     private String imageName;
 
     public CreateMenuItemDto(String name, String description, MenuItemType type, String category, int preparationTime,
