@@ -16,6 +16,8 @@
     <properties>
     	<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
         <java.version>11</java.version>
+        <sonar.organization>vandrija</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io/</sonar.host.url>
     </properties>
     <dependencies>
         <dependency>
