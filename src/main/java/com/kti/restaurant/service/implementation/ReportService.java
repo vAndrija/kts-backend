@@ -308,21 +308,7 @@ public class ReportService implements IReportService {
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, day);
-        if (true){
-            if (true){
-                if(true){
-                    if(true){
-                        if(true){
-                            if(true){
-                                if(true){
-                                    System.out.println("Andrija");
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+
         Date date = calendar.getTime();
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
