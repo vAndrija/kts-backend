@@ -43,6 +43,9 @@ public class PriceItemService implements IPriceItemService {
         entity.setEndDate(null);
         PriceItem previousPriceItem = priceItemRepository.findPriceItemForDate(LocalDate.now(), entity.getMenuItem().getId());
         if(previousPriceItem != null) {
+            if(previousPriceItem.getValue() == entity.getValue() && previousPriceItem.getPreparationValue() == entity.getPreparationValue()) {
+                return entity;
+            }
             update(previousPriceItem, previousPriceItem.getId());
         }
 
