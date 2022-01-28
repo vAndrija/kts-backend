@@ -37,12 +37,14 @@ public class MenuItem {
 
     private Integer preparationTime;
 
+    private String imageName;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Menu menu;
 
     public MenuItem(String name, String description, Boolean accepted, MenuItemType type, MenuItemCategory category,
-                    Menu menu, Integer preparationTime) {
+                    Menu menu, Integer preparationTime, String imageName) {
         this.name = name;
         this.description = description;
         this.accepted = accepted;
@@ -50,6 +52,7 @@ public class MenuItem {
         this.category = category;
         this.menu = menu;
         this.preparationTime = preparationTime;
+        this.imageName = imageName;
     }
 
     public MenuItem() {
@@ -165,5 +168,13 @@ public class MenuItem {
 
     public void setPreparationTime(Integer preparationTime) {
         this.preparationTime = preparationTime;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 }

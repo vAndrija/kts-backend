@@ -40,7 +40,8 @@ public class MenuItemMapper {
 
     public MenuItem fromUpdateMenuItemDtoToMenuItem(UpdateMenuItemDto menuItemDto) throws Exception {
         return new MenuItem(menuItemDto.getName(), menuItemDto.getDescription(), menuItemDto.getAccepted(),
-                menuItemDto.getType(), MenuItemCategory.findCategory(menuItemDto.getCategory()), menuService.findById(menuItemDto.getMenuId()), menuItemDto.getPreparationTime());
+                menuItemDto.getType(), MenuItemCategory.findCategory(menuItemDto.getCategory()),
+                menuService.findById(menuItemDto.getMenuId()), menuItemDto.getPreparationTime(), menuItemDto.getImageName());
     }
 
     public MenuItemDto fromMenuItemToMenuItemDto(MenuItem menuItem) {
@@ -49,6 +50,6 @@ public class MenuItemMapper {
 
         MenuDto menuDto = menuItem.getMenu() != null ? menuMapper.fromMenuToMenuDto(menuItem.getMenu()) : null;
         return new MenuItemDto(menuItem.getId(), menuItem.getName(), menuItem.getDescription(), menuItem.getType(), menuItem.getCategory().getCategory(),
-                menuItem.getPreparationTime(), priceItemDto, menuDto, menuItem.getAccepted());
+                menuItem.getPreparationTime(), priceItemDto, menuDto, menuItem.getAccepted(), menuItem.getImageName());
     }
 }

@@ -26,15 +26,18 @@ public class CreateMenuItemDto {
 
     private PriceItemDto priceItemDto;
 
+    @NotEmpty(message = "Image name should not be null or empty")
+    private String imageName;
 
     public CreateMenuItemDto(String name, String description, MenuItemType type, String category, int preparationTime,
-                             PriceItemDto priceItemDto) {
+                             PriceItemDto priceItemDto, String imageName) {
         this.name = name;
         this.description = description;
         this.type = type;
         this.category = category;
         this.preparationTime = preparationTime;
         this.priceItemDto = priceItemDto;
+        this.imageName = imageName;
     }
 
     public CreateMenuItemDto() {
@@ -89,4 +92,11 @@ public class CreateMenuItemDto {
         this.priceItemDto = priceItemDto;
     }
 
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
 }

@@ -79,34 +79,34 @@ INSERT INTO menu (name, duration_start, duration_end, deleted) values ('standard
 INSERT INTO menu (name, duration_start, duration_end, deleted) values ('letnji', '2021-06-01T08:00', '2021-08-31T23:59', false);
 
 
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('coca cola', 'bezalkoholno gazirano pice', 0, 7, 1, true, false, 2);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('mohito', 'koktel  od belog kubanskog ruma, soka limetе, sveze nane i mineralne vode', 0, 5, 1, false, false, 8);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('domaca kafa', 'topli napitak', 0, 6, 1, true, false, 5);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('limunada', 'bezalkoholno pice', 0, 7, 1, true, false, 2);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('domaca supa', 'pileca supa sa rezancima', 1, 0, 1, true, false, 10);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('paradajz corba', 'paradajz corba sa slaninicom', 1, 0, 1, true, false, 12);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('dimljeni saran', 'dimljeni saran sa grilovanim povrcem', 1, 3, 1, true, false, 15);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('lignje sa zara', 'lignje sa zara, prilog krompir sa blitvom', 1, 3, 1, true, false, 17);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('pileci file u senfu i medu', 'pileci file u senfu i medu, prilog grilovano povrce ', 1, 3, 1, true, false, 13);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('punjeni pileci batak na zaru', 'pileci batak punjen sirom i slaninom, prilog peceni krompir', 1, 3, 1, true, false, 15);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('strudla sa makom', 'strudla sa makom', 1, 4, 1, true, false, 5);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('baklava', 'baklava sa orasima', 1, 4, 1, true, false, 5);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('krempita', 'krempita sa dodatkom visnje', 1, 4, 2, true, false, 5);
-INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('pita sa visnjama', 'pita sa visnjama, belom cokoladom i sladoledom od vannile', 1, 4, null, false, false, 5);
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
+    ('coca cola', 'bezalkoholno gazirano pice', 0, 7, 1, true, false, 2, 'cocaCola.jpg');
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
+    ('mohito', 'koktel  od belog kubanskog ruma, soka limetе, sveze nane i mineralne vode', 0, 5, 1, false, false, 8, 'mohito.jpg');
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
+    ('domaca kafa', 'topli napitak', 0, 6, 1, true, false, 5, 'domacaKafa.jpg');
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
+    ('limunada', 'bezalkoholno pice', 0, 7, 1, true, false, 2, 'limunada.jpg');
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
+    ('domaca supa', 'pileca supa sa rezancima', 1, 0, 1, true, false, 10, 'domacaSupa.jpg');
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
+    ('paradajz corba', 'paradajz corba sa slaninicom', 1, 0, 1, true, false, 12, 'paradajzCorba.png');
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
+    ('dimljeni saran', 'dimljeni saran sa grilovanim povrcem', 1, 3, 1, true, false, 15, 'dimljeniSaran.jfif');
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
+    ('lignje sa zara', 'lignje sa zara, prilog krompir sa blitvom', 1, 3, 1, true, false, 17, 'lignje.jpg');
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
+    ('pileci file u senfu i medu', 'pileci file u senfu i medu, prilog grilovano povrce ', 1, 3, 1, true, false, 13, 'fileUSenfu.jpg');
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
+    ('punjeni pileci batak na zaru', 'pileci batak punjen sirom i slaninom, prilog peceni krompir', 1, 3, 1, true, false, 15, 'batakNaZaru.jpg');
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
+    ('strudla sa makom', 'strudla sa makom', 1, 4, 1, true, false, 5, 'strudlaSMakom.jpg');
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
+    ('baklava', 'baklava sa orasima', 1, 4, 1, true, false, 5, 'baklava.jpg');
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
+    ('krempita', 'krempita sa dodatkom visnje', 1, 4, 2, true, false, 5, 'krempita.jpg');
+INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values
+    ('pita sa visnjama', 'pita sa visnjama, belom cokoladom i sladoledom od vannile', 1, 4, null, false, false, 5, 'pitaSaVisnjama.jpg');
 
 
 INSERT INTO price_item (value, start_date, end_date, menu_item_id, is_current, deleted, preparation_value) values

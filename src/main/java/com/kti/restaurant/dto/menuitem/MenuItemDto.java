@@ -35,8 +35,11 @@ public class MenuItemDto {
 
     private Boolean accepted;
 
+    @NotEmpty(message = "Image name should not be null or empty")
+    private String imageName;
+
     public MenuItemDto(Integer id, String name, String description, MenuItemType type, String category, int preparationTime,
-                       PriceItemDto priceItemDto, MenuDto menuDto, Boolean accepted) {
+                       PriceItemDto priceItemDto, MenuDto menuDto, Boolean accepted, String imageName) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -46,6 +49,7 @@ public class MenuItemDto {
         this.priceItemDto = priceItemDto;
         this.menuDto = menuDto;
         this.accepted = accepted;
+        this.imageName = imageName;
     }
 
     public MenuItemDto() {
@@ -122,5 +126,13 @@ public class MenuItemDto {
 
     public void setAccepted(Boolean accepted) {
         this.accepted = accepted;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 }

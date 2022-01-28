@@ -31,8 +31,11 @@ public class UpdateMenuItemDto {
     @Min(message = "Preparation time should be bigger than 0", value = 1 )
     private Integer preparationTime;
 
+    @NotEmpty(message = "Image name should not be null or empty")
+    private String imageName;
+
     public UpdateMenuItemDto(String name, String description, MenuItemType type, String category,
-                             Integer menu, Boolean accepted, Integer preparationTime) {
+                             Integer menu, Boolean accepted, Integer preparationTime, String imageName) {
         this.name = name;
         this.description = description;
         this.type = type;
@@ -40,6 +43,7 @@ public class UpdateMenuItemDto {
         this.accepted = accepted;
         this.menuId = menu;
         this.preparationTime = preparationTime;
+        this.imageName = imageName;
     }
 
     public UpdateMenuItemDto() {
@@ -100,5 +104,13 @@ public class UpdateMenuItemDto {
 
     public void setPreparationTime(Integer preparationTime) {
         this.preparationTime = preparationTime;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 }
