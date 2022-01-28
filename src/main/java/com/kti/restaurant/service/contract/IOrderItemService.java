@@ -30,9 +30,10 @@ public interface IOrderItemService extends IService<OrderItem> {
 
     Page<OrderItem> findByEmployeeAndStatus(Integer id, String status, Pageable pageable) throws Exception;
 
+	  Page<OrderItem> findUnacceptedOrderItems(Pageable pageable);
+  
     List<OrderItem> findByOrdersAndWaiter(List<Order> orders);
 
     List<OrderItem> findByOrdersAndStatus(List<Order> orders, String status);
-
 
 }

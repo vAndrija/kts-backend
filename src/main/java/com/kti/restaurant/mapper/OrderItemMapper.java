@@ -41,19 +41,21 @@ public class OrderItemMapper {
         OrderItem orderItem = new OrderItem(updateOrderItemDto.getQuantity(), updateOrderItemDto.getNote(),
                 updateOrderItemDto.getStatus(), updateOrderItemDto.getPriority(), findMenuItemById(updateOrderItemDto.getMenuItemId()),
                 findOrderById(updateOrderItemDto.getOrderId()));
-        if (updateOrderItemDto.getBartenderId() == null && updateOrderItemDto.getCookId() == null) {
+        if (updateOrderItemDto.getBartenderId() == null && updateOrderItemDto.getCookId() == null || 
+        		updateOrderItemDto.getBartenderId() == -1 && updateOrderItemDto.getCookId() == -1) {
             orderItem.setBartender(null);
             orderItem.setCook(null);
             return orderItem;
-        } else if (updateOrderItemDto.getBartenderId() != null && updateOrderItemDto.getCookId() == null) {
+        } else if (updateOrderItemDto.getBartenderId() != null && (updateOrderItemDto.getCookId() == null || updateOrderItemDto.getCookId() == -1)) {
             orderItem.setBartender(findBartenderById(updateOrderItemDto.getBartenderId()));
             orderItem.setCook(null);
             return orderItem;
-        } else if (updateOrderItemDto.getBartenderId() == null && updateOrderItemDto.getCookId() != null) {
+        } else if ((updateOrderItemDto.getBartenderId() == null || updateOrderItemDto.getBartenderId() == -1) && updateOrderItemDto.getCookId() != null) {
             orderItem.setBartender(null);
             orderItem.setCook(findCookById(updateOrderItemDto.getCookId()));
             return orderItem;
         }
+        System.out.println("SSSSSSSSSSSSSSSSSSSS");
         return null;
 
     }

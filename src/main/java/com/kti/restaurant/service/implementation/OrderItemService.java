@@ -33,7 +33,7 @@ public class OrderItemService implements IOrderItemService {
     public List<OrderItem> findAll() {
         return orderItemRepository.findAll();
     }
-
+    
     @Override
     public OrderItem findById(Integer id) throws Exception {
         OrderItem orderItem = orderItemRepository.findById(id).orElse(null);
@@ -106,6 +106,11 @@ public class OrderItemService implements IOrderItemService {
             throw new MissingEntityException("Bartender/cook with given id does not exist in the system.");
         }
         return orderItemRepository.findByEmployee(pageable, employeeId);
+    }
+    
+    @Override
+    public Page<OrderItem> findUnacceptedOrderItems(Pageable pageable) {
+    	return orderItemRepository.findUnacceptedOrderItems(pageable);
     }
 
     @Override
