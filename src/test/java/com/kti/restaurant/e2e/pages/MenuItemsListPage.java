@@ -48,9 +48,16 @@ public class MenuItemsListPage {
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[2]/a")
     private WebElement restaurantButton;
 
+    @FindBy(xpath = "//*[@href=\"/menu/pending-menu-items\"]")
+    private WebElement linkToUnacceptedMenuItemsPage;
 
     public MenuItemsListPage(WebDriver driver) {
         this.driver = driver;
+    }
+
+    public void clickOnLinkToUnacceptedMenuItemSPage() {
+        WebElement link = WaitUtils.visibilityWait(driver, linkToUnacceptedMenuItemsPage, 10);
+        link.click();
     }
 
     public void clickLoadMore() {

@@ -35,61 +35,22 @@ public class MenuItemDetailsE2ETest {
         driver.manage().window().maximize();
         driver.get("http://localhost:4200/auth/login");
 
-        loginPage.login("sarajovic@gmail.com", "123");
+        loginPage.login("anapopovic@gmail.com", "123");
 
         assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/menu-items", 10));
     }
 
     @Test
-    public void viewAcceptedMenuItemDetails() {
+    public void viewMenuItemDetails() {
         menuItemsListPage.clickDetailsButton(0);
 
-        assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/menu-items/1", 10));
-
-        assertTrue(menuItemDetailsPage.getMenuItemName().getText().equals("COCA COLA"));
-        assertTrue(menuItemDetailsPage.getMenuItemPrice().getText().equals("180 RSD"));
-
-        assertThrows(TimeoutException.class, () -> {
-            menuItemDetailsPage.getPriceInputField();
-        });
-    }
-
-    @Test
-    public void viewAndAcceptUnAcceptedMenuItem() {
-        menuItemDetailsPage.clickOnLinkToUnacceptedMenuItemSPage();
-
-        assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/pending-menu-items", 10));
-
-        assertEquals("PITA SA VISNJAMA", menuItemDetailsPage.getMenuItemName().getText());
-
-        menuItemsListPage.clickDetailsButton(0);
-
-        menuItemDetailsPage.setPriceInputField("200");
-        menuItemDetailsPage.setPreparationPriceInputField("100");
-        menuItemDetailsPage.setSelectMenu("standardni");
-
-        menuItemDetailsPage.clickAcceptButton();
-
-        assertThrows(TimeoutException.class, () -> {
-            menuItemDetailsPage.getPriceInputField();
+        assertDoesNotThrow(() -> {
+            menuItemDetailsPage.getMenuItemName();
         });
 
-        assertEquals("PITA SA VISNJAMA", menuItemDetailsPage.getMenuItemName().getText());
-
-        assertEquals("200 RSD", menuItemDetailsPage.getMenuItemPrice().getText());
-    }
-
-    @Test
-    public void viewAndDeclineUnacceptedMenuItem() {
-        menuItemDetailsPage.clickOnLinkToUnacceptedMenuItemSPage();
-
-        assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/pending-menu-items", 10));
-
-        menuItemsListPage.clickDetailsButton(0);
-
-        menuItemDetailsPage.clickDeclineButton();
-
-        assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/pending-menu-items", 10));
+        assertDoesNotThrow(() -> {
+            menuItemDetailsPage.getMenuItemPrice();
+        });
     }
 
     @AfterEach
