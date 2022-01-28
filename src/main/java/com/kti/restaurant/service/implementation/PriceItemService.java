@@ -39,8 +39,14 @@ public class PriceItemService implements IPriceItemService {
 
     @Override
     public PriceItem create(PriceItem entity) throws Exception {
-        if(entity.getEndDate().isBefore(entity.getStartDate())) {
-            throw new BadLogicException("The end date must be after start date.");
+        entity.setStartDate(LocalDate.now());
+        entity.setEndDate(null);
+        PriceItem previousPriceItem = priceItemRepository.findPriceItemForDate(LocalDate.now(), entity.getMenuItem().getId());
+        if(previousPriceItem != null) {
+            if(previousPriceItem.getValue() == entity.getValue() && previousPriceItem.getPreparationValue() == entity.getPreparationValue()) {
+                return entity;
+            }
+            update(previousPriceItem, previousPriceItem.getId());
         }
 
         return priceItemRepository.save(entity);
@@ -50,16 +56,8 @@ public class PriceItemService implements IPriceItemService {
     public PriceItem update(PriceItem entity, Integer id) throws Exception {
         PriceItem priceItemToUpdate = this.findById(id);
 
-        if(entity.getEndDate().isBefore(entity.getStartDate())) {
-            throw new BadLogicException("The end date must be after start date.");
-        }
-
-        priceItemToUpdate.setCurrent(entity.getCurrent());
-        priceItemToUpdate.setStartDate(entity.getStartDate());
-        priceItemToUpdate.setEndDate(entity.getEndDate());
-        priceItemToUpdate.setMenuItem(entity.getMenuItem());
-        priceItemToUpdate.setValue(entity.getValue());
-        priceItemToUpdate.setPreparationValue(entity.getPreparationValue());
+        priceItemToUpdate.setCurrent(false);
+        priceItemToUpdate.setEndDate(LocalDate.now());
 
         return priceItemRepository.save(priceItemToUpdate);
     }

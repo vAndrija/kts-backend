@@ -167,4 +167,33 @@ public class OrderItemRepositoryTests {
     }
 
 
+    @ParameterizedTest
+    @MethodSource("orderIdForFindByOrderAndWaiter")
+    public void findOrderItemsByOrderAndWaiter(Integer id, int expected) {
+        List<OrderItem> orderItems = orderItemRepository.findByOrderForWaiter(id);
+        assertEquals(expected, orderItems.size());
+    }
+
+    private static Stream<Arguments> orderIdForFindByOrderAndWaiter() {
+        return Stream.of(
+                Arguments.of(1, 2),
+                Arguments.of(2, 2),
+                Arguments.of(5, 0)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("orderIdAndStatusForFindByOrderAndStatus")
+    public void findOrderItemsByOrderAndStatus(Integer id, OrderItemStatus status, int expected) {
+        List<OrderItem> orderItems = orderItemRepository.findByOrderAndStatus(id, status);
+        assertEquals(expected, orderItems.size());
+    }
+
+    private static Stream<Arguments> orderIdAndStatusForFindByOrderAndStatus() {
+        return Stream.of(
+                Arguments.of(1, OrderItemStatus.PREPARED , 2),
+                Arguments.of(2, OrderItemStatus.SERVED, 2)
+        );
+    }
+
 }

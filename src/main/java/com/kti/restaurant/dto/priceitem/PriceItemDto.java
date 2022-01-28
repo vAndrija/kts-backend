@@ -10,10 +10,8 @@ public class PriceItemDto {
     @Min(value = 1, message = "Value should be bigger than 0")
     private Double value;
 
-    @NotNull(message = "Start date should not be null or empty")
     private LocalDate startDate;
 
-    @NotNull(message = "End date should not be null or empty")
     private LocalDate endDate;
 
     @NotNull(message = "Menu item id should not be null or empty")

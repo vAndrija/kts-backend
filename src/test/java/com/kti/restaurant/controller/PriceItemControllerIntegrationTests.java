@@ -2,6 +2,7 @@ package com.kti.restaurant.controller;
 
 import com.kti.restaurant.dto.JwtAuthenticationRequest;
 import com.kti.restaurant.dto.priceitem.PriceItemDto;
+import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.model.PriceItem;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.service.implementation.PriceItemService;
@@ -60,24 +61,12 @@ public class PriceItemControllerIntegrationTests {
 
         assertEquals(Double.valueOf(200), priceItem.getValue());
         assertEquals(Double.valueOf(120), priceItem.getPreparationValue());
-        assertEquals(LocalDate.parse("2021-11-05"), priceItem.getStartDate());
-        assertEquals(LocalDate.parse("2022-11-05"), priceItem.getEndDate());
+        assertEquals(LocalDate.now(), priceItem.getStartDate());
+        assertEquals(null, priceItem.getEndDate());
         assertEquals(2, priceItem.getMenuItem().getId());
         assertEquals(true, priceItem.getCurrent());
 
         priceItemService.delete(priceItem.getId());
-    }
-
-    @Test
-    public void createPriceItem_PriceItemWithInvalidDates_ReturnsBadRequest() {
-        int size = priceItemService.findAll().size();
-
-        HttpEntity<PriceItemDto> httpEntity = new HttpEntity<>(new PriceItemDto(Double.valueOf(200), LocalDate.parse("2022-11-05"),
-                LocalDate.parse("2021-11-05"), Integer.valueOf(3), true, Double.valueOf(120)), headers);
-        ResponseEntity<PriceItem> responseEntity = restTemplate.postForEntity(URL_PREFIX, httpEntity, PriceItem.class);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertEquals(size, priceItemService.findAll().size());
     }
 
     @Test
@@ -135,18 +124,20 @@ public class PriceItemControllerIntegrationTests {
     @Test
     public void updatePriceItem_ValidPriceItem_ReturnsOk() throws Exception {
         HttpEntity<PriceItemDto> httpEntity = new HttpEntity<>(new PriceItemDto(Double.valueOf(200), LocalDate.parse("2021-11-18"),
-                LocalDate.parse("2021-12-18"), 1, true, Double.valueOf(100)), headers);
+                LocalDate.parse("2021-12-18"), 1, false, Double.valueOf(100)), headers);
         ResponseEntity<PriceItem> responseEntity = restTemplate.exchange(URL_PREFIX + "/1", HttpMethod.PUT, httpEntity, PriceItem.class);
 
         PriceItem priceItem = responseEntity.getBody();
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(Double.valueOf(200), priceItem.getValue());
+        assertEquals(LocalDate.now(), priceItem.getEndDate());
 
         PriceItem updatedPriceItem = priceItemService.findById(1);
-        assertEquals(Double.valueOf(200), updatedPriceItem.getValue());
+        assertEquals(false, updatedPriceItem.getCurrent());
+        assertEquals(LocalDate.now(), updatedPriceItem.getEndDate());
 
-        updatedPriceItem.setValue(Double.valueOf(180));
+        updatedPriceItem.setCurrent(true);
+        updatedPriceItem.setEndDate(LocalDate.parse("2021-12-18"));
         priceItemService.update(updatedPriceItem, 1);
     }
 
@@ -160,28 +151,9 @@ public class PriceItemControllerIntegrationTests {
     }
 
     @Test
-    public void updatePriceItem_InvalidDates_ReturnsBadRequest() throws Exception {
-        HttpEntity<PriceItemDto> httpEntity = new HttpEntity<>(new PriceItemDto(Double.valueOf(200), LocalDate.parse("2022-12-18"),
-                LocalDate.parse("2021-12-18"), 1, true, Double.valueOf(100)), headers);
-        ResponseEntity<PriceItem> responseEntity = restTemplate.exchange(URL_PREFIX + "/1", HttpMethod.PUT, httpEntity, PriceItem.class);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertEquals(Double.valueOf(180), priceItemService.findById(1).getValue());
-    }
-
-    public void updatePriceItem_NullValue_ReturnsBadRequest() throws Exception {
-        HttpEntity<PriceItemDto> httpEntity = new HttpEntity<>(new PriceItemDto(null, LocalDate.parse("2021-11-18"),
-                LocalDate.parse("2021-12-18"), 1, true, Double.valueOf(100)), headers);
-        ResponseEntity<PriceItem> responseEntity = restTemplate.exchange(URL_PREFIX + "/1", HttpMethod.PUT, httpEntity, PriceItem.class);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertEquals(Double.valueOf(180), priceItemService.findById(1).getValue());
-    }
-
-    @Test
     public void deletePriceItem_ValidPriceItemId_ReturnsNoContent() throws Exception {
         PriceItem priceItem = priceItemService.create(new PriceItem(null, LocalDate.parse("2021-11-18"),
-                LocalDate.parse("2021-12-18"), null, true, Double.valueOf(100)));
+                LocalDate.parse("2021-12-18"), new MenuItem(), true, Double.valueOf(100)));
 
         int size = priceItemService.findAll().size();
 

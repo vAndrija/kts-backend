@@ -11,6 +11,6 @@ public class MenuMapper {
     }
 
     public MenuDto fromMenuToMenuDto(Menu menu) {
-        return new MenuDto(menu.getName(), menu.getDurationStart(), menu.getDurationEnd());
+        return new MenuDto(menu.getName(), menu.getDurationStart(), menu.getDurationEnd(), menu.getId());
     }
 }

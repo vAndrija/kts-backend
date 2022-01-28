@@ -62,6 +62,7 @@ public class MenuItemService implements IMenuItemService {
         menuItemToUpdate.setName(menuItem.getName());
         menuItemToUpdate.setType(menuItem.getType());
         menuItemToUpdate.setPreparationTime(menuItem.getPreparationTime());
+        menuItemToUpdate.setImageName(menuItem.getImageName());
 
         menuItemRepository.save(menuItemToUpdate);
 
@@ -94,17 +95,23 @@ public class MenuItemService implements IMenuItemService {
     }
 
     @Override
-    public List<MenuItem> findByMenu(Integer menuId, Pageable pageable) throws Exception {
+    public Page<MenuItem> findByMenu(Integer menuId, Pageable pageable) throws Exception {
         menuService.findById(menuId);
 
         Page<MenuItem> page = menuItemRepository.findByMenu(menuId, pageable);
-        return page.getContent();
+        return page;
     }
 
     @Override
     public Page<MenuItem> findAll(Pageable pageable) {
         Page<MenuItem> page = menuItemRepository.findAll(pageable);
         return page;
+    }
+
+    @Override
+    public Page<MenuItem> searchAndFilterMenuItems(Integer menuId, String searchParam, String category, Pageable pageable) throws Exception {
+        menuService.findById(menuId);
+        return menuItemRepository.searchAndFilterMenuItems(menuId, searchParam, MenuItemCategory.findCategory(category), pageable);
     }
 
 }

@@ -25,6 +25,9 @@ public enum MenuItemCategory {
     }
 
     public static MenuItemCategory findCategory(String category){
+        if(category.isEmpty()) {
+            return null;
+        }
         if(MenuItemCategory.NON_ALCOHOLIC.getCategory().toLowerCase().contains(category.toLowerCase())){
             return MenuItemCategory.NON_ALCOHOLIC;
         }else if(MenuItemCategory.APPETIZER.getCategory().toLowerCase().contains(category.toLowerCase())){

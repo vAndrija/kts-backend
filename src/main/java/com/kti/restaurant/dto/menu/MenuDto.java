@@ -14,10 +14,13 @@ public class MenuDto {
     @NotNull(message = "End date should not be null or empty")
     private LocalDateTime endDuration;
 
-    public MenuDto(String name, LocalDateTime startDuration, LocalDateTime endDuration) {
+    private Integer id;
+
+    public MenuDto(String name, LocalDateTime startDuration, LocalDateTime endDuration, Integer id) {
         this.name = name;
         this.startDuration = startDuration;
         this.endDuration = endDuration;
+        this.id = id;
     }
 
     public MenuDto() {
@@ -46,5 +49,13 @@ public class MenuDto {
 
     public void setEndDuration(LocalDateTime endDuration) {
         this.endDuration = endDuration;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

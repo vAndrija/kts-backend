@@ -28,6 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,9 +73,7 @@ public class OrderItemServiceUnitTests {
 
     @Test
     public void findById_InvalidId_ThrowsMissingEntityException() {
-        assertThrows(MissingEntityException.class, () -> {
-            orderItemService.findById(2);
-        });
+        assertThrows(MissingEntityException.class, () -> orderItemService.findById(2));
     }
 
     @Test
@@ -94,16 +93,12 @@ public class OrderItemServiceUnitTests {
 
     @Test
     public void update_InvalidId_ThrowsMissingEntityException() {
-        assertThrows(MissingEntityException.class, () -> {
-            orderItemService.update(null, 100);
-        });
+        assertThrows(MissingEntityException.class, () -> orderItemService.update(null, 100));
     }
 
     @Test
     public void delete_ValidId() {
-        assertDoesNotThrow(() -> {
-            orderItemService.delete(1);
-        });
+        assertDoesNotThrow(() -> orderItemService.delete(1));
 
         verify(orderItemRepository, times(1)).findById(1);
         verify(orderItemRepository, times(1)).deleteById(1);
@@ -111,9 +106,7 @@ public class OrderItemServiceUnitTests {
 
     @Test
     public void delete_InvalidId_ThrowsMissingEntityException() {
-        assertThrows(MissingEntityException.class, () -> {
-            orderItemService.delete(100);
-        });
+        assertThrows(MissingEntityException.class, () -> orderItemService.delete(100));
 
         verify(orderItemRepository, times(1)).findById(100);
         verify(orderItemRepository, times(0)).deleteById(100);
@@ -134,16 +127,77 @@ public class OrderItemServiceUnitTests {
 
     @Test
     public void updateStatus_InvalidId_ThrowsMissingEntityException() {
-        assertThrows(MissingEntityException.class, () -> {
-            orderItemService.updateStatus(null, "Pripremljeno");
-        });
+        assertThrows(MissingEntityException.class, () -> orderItemService.updateStatus(null, "Pripremljeno"));
     }
 
     @Test
     public void updateStatus_InvalidStatus_ThrowsBadLogicException() {
-        assertThrows(BadLogicException.class, () -> {
-            orderItemService.updateStatus(1, " ");
-        });
+        assertThrows(BadLogicException.class, () -> orderItemService.updateStatus(1, " "));
+    }
+
+    @Test
+    public void findByOrdersAndWaiter_ValidOrderList_ReturnsOrderItems() {
+        List<OrderItem> orderItems = new ArrayList<>();
+        List<Order> orders = new ArrayList<>();
+
+        Order order = new Order();
+        order.setId(1);
+
+        OrderItem orderItem = new OrderItem(2, "bez bibera", OrderItemStatus.SERVED,
+                2, order, new MenuItem(), null, new Cook());
+        orderItem.setId(1);
+        orders.add(order);
+        orderItems.add(orderItem);
+
+        when(orderItemRepository.findByOrderForWaiter(1)).thenReturn(orderItems);
+
+        List<OrderItem> orderItemList = orderItemService.findByOrdersAndWaiter(orders);
+        assertEquals(1, orderItemList.size());
+
+    }
+    @Test
+    public void findByOrdersAndWaiter_EmptyOrderList_ReturnsEmptyList() {
+        List<OrderItem> orderItems = new ArrayList<>();
+        List<Order> orders = new ArrayList<>();
+
+        OrderItem orderItem = new OrderItem(2, "bez bibera", OrderItemStatus.PREPARED,
+                2, new Order(), new MenuItem(), null, new Cook());
+        orderItem.setId(1);
+
+        orderItems.add(orderItem);
+
+        when(orderItemRepository.findByOrderForWaiter(1)).thenReturn(orderItems);
+
+        List<OrderItem> orderItemList = orderItemService.findByOrdersAndWaiter(orders);
+        assertEquals(0, orderItemList.size());
+
+    }
+
+    @Test
+    public void findByOrdersAndStatus_ValidStatus_ReturnsOrderItems() {
+        List<OrderItem> orderItems = new ArrayList<>();
+        List<Order> orders = new ArrayList<>();
+
+        Order order = new Order();
+        order.setId(1);
+
+        OrderItem orderItem = new OrderItem(2, "bez bibera", OrderItemStatus.PREPARED,
+                2, order, new MenuItem(), null, new Cook());
+        orderItem.setId(1);
+        orders.add(order);
+        orderItems.add(orderItem);
+
+        when(orderItemRepository.findByOrderAndStatus(1, OrderItemStatus.PREPARED)).thenReturn(orderItems);
+
+        List<OrderItem> orderItemList = orderItemService.findByOrdersAndStatus(orders, "Pripremljeno");
+        assertEquals(1, orderItemList.size());
+
+    }
+    @Test
+    public void findByOrdersAndStatus_InvalidStatus_ThrowsBadLogicException() {
+        List<Order> orders = new ArrayList<>();
+        assertThrows(BadLogicException.class, () -> orderItemService.findByOrdersAndStatus(orders, " "));
+
     }
     
     @Test

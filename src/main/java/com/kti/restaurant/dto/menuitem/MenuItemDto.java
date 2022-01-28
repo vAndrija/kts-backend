@@ -33,8 +33,12 @@ public class MenuItemDto {
 
     private MenuDto menuDto;
 
+    private Boolean accepted;
+
+    private String imageName;
+
     public MenuItemDto(Integer id, String name, String description, MenuItemType type, String category, int preparationTime,
-                       PriceItemDto priceItemDto, MenuDto menuDto) {
+                       PriceItemDto priceItemDto, MenuDto menuDto, Boolean accepted, String imageName) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -43,6 +47,8 @@ public class MenuItemDto {
         this.preparationTime = preparationTime;
         this.priceItemDto = priceItemDto;
         this.menuDto = menuDto;
+        this.accepted = accepted;
+        this.imageName = imageName;
     }
 
     public MenuItemDto() {
@@ -111,5 +117,21 @@ public class MenuItemDto {
 
     public void setMenuDto(MenuDto menuDto) {
         this.menuDto = menuDto;
+    }
+
+    public Boolean getAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(Boolean accepted) {
+        this.accepted = accepted;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 }

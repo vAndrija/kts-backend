@@ -47,7 +47,7 @@ public class MenuControllerIntegrationTests {
         int size = menuService.findAll().size();
 
         HttpEntity<MenuDto> httpEntity = new HttpEntity<>(new MenuDto("Glavni meni", LocalDateTime.parse("2021-11-11T13:00"),
-                LocalDateTime.parse("2022-05-11T13:00")), headers);
+                LocalDateTime.parse("2022-05-11T13:00"), null), headers);
         ResponseEntity<Menu> responseEntity =
                 restTemplate.postForEntity("/api/v1/menu", httpEntity,
                         Menu.class);
@@ -71,7 +71,7 @@ public class MenuControllerIntegrationTests {
         int size = menuService.findAll().size();
 
         HttpEntity<MenuDto> httpEntity = new HttpEntity<>(new MenuDto("", LocalDateTime.parse("2021-11-11T13:00"),
-                LocalDateTime.parse("2022-05-11T13:00")), headers);
+                LocalDateTime.parse("2022-05-11T13:00"), null), headers);
         ResponseEntity<Menu> responseEntity =
                 restTemplate.postForEntity("/api/v1/menu", httpEntity,
                         Menu.class);
@@ -85,7 +85,7 @@ public class MenuControllerIntegrationTests {
         int size = menuService.findAll().size();
 
         HttpEntity<MenuDto> httpEntity = new HttpEntity<>(new MenuDto("Glavni", null,
-                null), headers);
+                null, null), headers);
         ResponseEntity<Menu> responseEntity =
                 restTemplate.postForEntity("/api/v1/menu", httpEntity,
                         Menu.class);
@@ -129,7 +129,7 @@ public class MenuControllerIntegrationTests {
     @Test
     public void updateMenu_ValidMenu_ReturnsOk() throws Exception {
         HttpEntity<MenuDto> httpEntity = new HttpEntity<MenuDto>(new MenuDto("Glavni", LocalDateTime.parse("2021-11-18T08:00"),
-                LocalDateTime.parse("2022-11-18T08:00")), headers);
+                LocalDateTime.parse("2022-11-18T08:00"), 1), headers);
         ResponseEntity<Menu> responseEntity =
                 restTemplate.exchange("/api/v1/menu/{id}", HttpMethod.PUT, httpEntity,
                         Menu.class, 1);
@@ -149,7 +149,7 @@ public class MenuControllerIntegrationTests {
     @Test
     public void updateMenu_InvalidMenuId_ReturnsNotFound() {
         HttpEntity<MenuDto> httpEntity = new HttpEntity<MenuDto>(new MenuDto("Glavni", LocalDateTime.parse("2021-11-18T08:00"),
-                LocalDateTime.parse("2022-11-18T08:00")), headers);
+                LocalDateTime.parse("2022-11-18T08:00"), null), headers);
         ResponseEntity<Menu> responseEntity =
                 restTemplate.exchange("/api/v1/menu/{id}", HttpMethod.PUT, httpEntity,
                         Menu.class, 3);
@@ -160,7 +160,7 @@ public class MenuControllerIntegrationTests {
     @Test
     public void updateMenu_InvalidMenuName_ReturnsBadRequest() {
         HttpEntity<MenuDto> httpEntity = new HttpEntity<MenuDto>(new MenuDto("", LocalDateTime.parse("2021-11-18T08:00"),
-                LocalDateTime.parse("2022-11-18T08:00")), headers);
+                LocalDateTime.parse("2022-11-18T08:00"), null), headers);
         ResponseEntity<Menu> responseEntity =
                 restTemplate.exchange("/api/v1/menu/{id}", HttpMethod.PUT, httpEntity,
                         Menu.class, 2);
@@ -171,7 +171,7 @@ public class MenuControllerIntegrationTests {
     @Test
     public void updateMenu_InvalidMenuStartDateEndDate_ReturnsBadRequest() {
         HttpEntity<MenuDto> httpEntity = new HttpEntity<MenuDto>(new MenuDto("Glavni", null,
-                null), headers);
+                null, null), headers);
         ResponseEntity<Menu> responseEntity =
                 restTemplate.exchange("/api/v1/menu/{id}", HttpMethod.PUT, httpEntity,
                         Menu.class, 2);
