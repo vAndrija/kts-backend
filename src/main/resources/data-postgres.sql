@@ -75,8 +75,8 @@ INSERT INTO table_reservation (name, duration_start, duration_end, table_id, del
 INSERT INTO table_reservation (name, duration_start,duration_end, table_id, deleted) values ('Ana Jojic', '2021-11-20T19:00','2021-11-20T21:00', 2, false);
 
 
-INSERT INTO menu (name, duration_start, duration_end, deleted) values ('standardni', '2021-11-18T08:00', '2022-11-18T08:00', false);
-INSERT INTO menu (name, duration_start, duration_end, deleted) values ('letnji', '2021-06-01T08:00', '2021-08-31T23:59', false);
+INSERT INTO menu (name, duration_start, duration_end, deleted) values ('standardni', '2021-11-18T08:00', '2022-11-18T23:00', false);
+INSERT INTO menu (name, duration_start, duration_end, deleted) values ('zimski', '2021-11-01T08:00', '2022-03-31T23:59', false);
 
 
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time, image_name) values

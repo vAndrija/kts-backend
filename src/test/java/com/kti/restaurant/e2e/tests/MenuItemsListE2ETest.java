@@ -42,7 +42,7 @@ public class MenuItemsListE2ETest {
 
         assertTrue(menuItemsListPage.getLoadedMenuItems(8).size() == 8);
 
-        menuItemsListPage.setSelectMenu("letnji");
+        menuItemsListPage.setSelectMenu("zimski");
         assertTrue(menuItemsListPage.getLoadedMenuItems(1).size() == 1);
     }
 

@@ -4,6 +4,9 @@ import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Menu;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -12,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -88,5 +92,20 @@ public class MenuServiceIntegrationTests {
         Assertions.assertThrows(MissingEntityException.class, () -> {
             menuService.delete(3);
         });
+    }
+
+    @ParameterizedTest
+    @MethodSource("findActiveMenus")
+    public void findMenusForDate_Date_ReturnsMenus(LocalDateTime date, Integer expectedSize) {
+        List<Menu> menuItems = menuService.findMenusForDate(date);
+        assertEquals(expectedSize, menuItems.size());
+    }
+
+    private static Stream<Arguments> findActiveMenus() {
+        return Stream.of(
+                Arguments.of(LocalDateTime.of(2022, 1, 15, 14, 0), 1),
+                Arguments.of(LocalDateTime.of(2022, 8, 15, 14, 0), 1),
+                Arguments.of(LocalDateTime.of(2024, 1, 15, 14, 0), 0)
+        );
     }
 }
