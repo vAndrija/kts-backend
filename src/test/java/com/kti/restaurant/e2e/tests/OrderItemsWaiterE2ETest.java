@@ -14,7 +14,8 @@ import org.openqa.selenium.support.PageFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class OrderItemsTableE2ETest {
+public class OrderItemsWaiterE2ETest {
+
     private WebDriver driver;
 
     private OrderItemsTablePage orderItemsTablePage;
@@ -38,22 +39,22 @@ public class OrderItemsTableE2ETest {
     }
 
     @Test
-    public void viewOrderItems() {
-        loginPage.login("kristinamisic@gmail.com", "123");
+    public void viewOrderItemsWaiter() {
+        loginPage.login("jovanpetrovic@gmail.com", "123");
 
         assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/menu-items", 10));
 
         menuItemsListPage.clickOrderItemsButton();
         assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/order/order-items", 10));
 
-        orderItemsTablePage.setSelectStatus("U pripremi");
-
+        orderItemsTablePage.getRow("Pripremljeno", "8").click();
         assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/order/order-items", 10));
 
-        assertEquals(2, orderItemsTablePage.getRows().size());
-
+        orderItemsTablePage.getNewButton("8").click();
+        assertEquals("Servirano", orderItemsTablePage.getRow("Servirano", "8").getText());
 
     }
+
 
 //    @AfterEach
 //    public void tearDown() {
@@ -61,3 +62,4 @@ public class OrderItemsTableE2ETest {
 //    }
 
 }
+

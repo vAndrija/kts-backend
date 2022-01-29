@@ -12,9 +12,6 @@ import java.util.List;
 public class OrderReviewPage {
     private WebDriver webDriver;
 
-    @FindBy(xpath = "//table//tr[2]/td[6]/a")
-    private WebElement deleteButton;
-
     @FindBy(className = "btn-success")
     private WebElement createOrderButton;
 
@@ -24,15 +21,6 @@ public class OrderReviewPage {
 
     public List<WebElement> getRows(int number) {
         return WaitUtils.numberOfElementsWait(webDriver, By.tagName("tr"), 10, number);
-    }
-
-    public WebElement getDeleteButton() {
-        return WaitUtils.visibilityWait(webDriver, deleteButton, 10);
-    }
-
-    public void clickDeleteButton() {
-        WebElement button = getDeleteButton();
-        button.click();
     }
 
     public WebElement getCreateOrderButton() {

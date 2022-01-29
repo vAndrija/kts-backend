@@ -4,6 +4,7 @@ import com.kti.restaurant.exception.ConflictException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Bartender;
 import com.kti.restaurant.model.Cook;
+import com.kti.restaurant.model.Salary;
 import com.kti.restaurant.model.User;
 import com.kti.restaurant.repository.CookRepository;
 import com.kti.restaurant.repository.RoleRepository;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,15 +28,18 @@ public class CookService implements ICookService {
     private RoleRepository roleRepository;
     private UserRepository userRepository;
     private EmailService emailService;
+    private SalaryService salaryService;
 
     @Autowired
-    public CookService(CookRepository cookRepository,@Lazy PasswordEncoder passwordEncoder,
-                       RoleRepository roleRepository, UserRepository userRepository, EmailService emailService){
+    public CookService(CookRepository cookRepository, @Lazy PasswordEncoder passwordEncoder,
+                       RoleRepository roleRepository, UserRepository userRepository,
+                       EmailService emailService, SalaryService salaryService) {
         this.cookRepository = cookRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
+        this.salaryService = salaryService;
     }
 
     @Override
@@ -56,10 +61,12 @@ public class CookService implements ICookService {
         if (user != null)
             throw new ConflictException("Cook with entered email already exists.");
         String tempPassword = UUID.randomUUID().toString();
-        emailService.sendRegistrationMail(entity.getEmailAddress(),"Nalog kreiran", tempPassword);
+        emailService.sendRegistrationMail(entity.getEmailAddress(), "Nalog kreiran", tempPassword);
         entity.setPassword(passwordEncoder.encode(tempPassword));
         entity.getRoles().add(roleRepository.getById(3L));
-        cookRepository.save(entity);
+        Cook cook = cookRepository.save(entity);
+        Salary salary = new Salary(45000.00, LocalDate.now(), LocalDate.now(), cook);
+        salaryService.create(salary);
         return entity;
     }
 

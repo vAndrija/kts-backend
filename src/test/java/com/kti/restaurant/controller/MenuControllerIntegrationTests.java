@@ -17,8 +17,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource("classpath:application-test.properties")
 public class MenuControllerIntegrationTests {
 
     @Autowired
@@ -115,6 +117,15 @@ public class MenuControllerIntegrationTests {
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(2, List.of(responseEntity.getBody()).size());
+    }
+
+    @Test
+    public void getActiveMenus_Date_ReturnsOk() {
+        HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+        ResponseEntity<Menu[]> responseEntity = restTemplate.exchange("/api/v1/menu/active?date=2022-01-29T16:15", HttpMethod.GET, httpEntity, Menu[].class);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(1, List.of(responseEntity.getBody()).size());
     }
 
     @Test

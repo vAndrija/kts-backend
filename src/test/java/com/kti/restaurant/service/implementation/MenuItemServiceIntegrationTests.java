@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -109,7 +110,7 @@ public class MenuItemServiceIntegrationTests {
     @ParameterizedTest
     @MethodSource("provideSearchParams")
     public void search_SearchParams_ReturnsSetOfMenuItems(String searchParam, Integer sizeOfReturnedSet) {
-        var menuItems = menuItemService.search(searchParam);
+        var menuItems = menuItemService.search(searchParam, LocalDateTime.now());
         assertEquals(sizeOfReturnedSet, menuItems.size());
     }
 
@@ -118,8 +119,8 @@ public class MenuItemServiceIntegrationTests {
                 Arguments.of("limun", 1),
                 Arguments.of("coca cola", 1),
                 Arguments.of("dimljeni", 1),
-                Arguments.of("Dezert", 3),
-                Arguments.of("Hrana", 10),
+                Arguments.of("Dezert", 2),
+                Arguments.of("Hrana", 8),
                 Arguments.of("abcd", 0)
         );
     }
@@ -127,7 +128,7 @@ public class MenuItemServiceIntegrationTests {
     @ParameterizedTest
     @MethodSource("provideFilterParams")
     public void filter_Category_ReturnsSetOfMenuItems(String filterParam, Integer sizeOfReturnedSet) {
-        var menuItems = menuItemService.filter(filterParam);
+        var menuItems = menuItemService.filter(filterParam, LocalDateTime.now());
         assertEquals(sizeOfReturnedSet, menuItems.size());
     }
 
@@ -168,6 +169,7 @@ public class MenuItemServiceIntegrationTests {
         );
     }
 
+    @Test
     public void searchAndFilterMenuItems_MenuIdSearchParamFilterPageable_ThrowsMissingEntityException() {
         assertThrows(MissingEntityException.class, () -> {
             menuItemService.searchAndFilterMenuItems(12, "", "", PageRequest.of(0, 5));
@@ -190,5 +192,11 @@ public class MenuItemServiceIntegrationTests {
                 Arguments.of(1, "cola", "Bezalkoholno piće", PageRequest.of(0, 5), 1, "coca cola", 0),
                 Arguments.of(1, "", "Bezalkoholno piće", PageRequest.of(0, 5), 2, "limunada", 1)
         );
+    }
+
+    @Test
+    public void getMenuItemsInActiveMenuPageable_ReturnsMenuItems() {
+        Page<MenuItem> menuItems = menuItemService.findAllInActiveMenu(Pageable.unpaged(), LocalDateTime.now());
+        assertEquals(11, menuItems.getContent().size());
     }
 }

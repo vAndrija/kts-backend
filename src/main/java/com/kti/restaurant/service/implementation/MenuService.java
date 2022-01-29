@@ -7,7 +7,10 @@ import com.kti.restaurant.service.contract.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuService implements IMenuService {
@@ -56,5 +59,10 @@ public class MenuService implements IMenuService {
     public void delete(Integer id) throws Exception {
         this.findById(id);
         menuRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Menu> findMenusForDate(LocalDateTime date) {
+        return menuRepository.findMenusForDate(date);
     }
 }
