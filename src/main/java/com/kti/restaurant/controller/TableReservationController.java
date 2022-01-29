@@ -5,6 +5,9 @@ import com.kti.restaurant.mapper.TableReservationMapper;
 import com.kti.restaurant.model.TableReservation;
 import com.kti.restaurant.service.contract.ITableReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,10 +31,12 @@ public class TableReservationController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<TableReservationDto>> getTableReservations() {
-    	 return new ResponseEntity<>(tableReservationService.findAll().stream().map(
-                 reservation -> this.tableReservationMapper.fromTableReservationToTableReservationDto(reservation)
-         ).collect(Collectors.toList()), HttpStatus.OK);
+    public ResponseEntity<?> getTableReservations(@RequestParam Integer page, @RequestParam Integer size) {
+    	Pageable pageable = PageRequest.of(page, size);
+    	
+    	Page<TableReservationDto> tableReservations = tableReservationService.findAll(pageable).map(
+                reservation -> this.tableReservationMapper.fromTableReservationToTableReservationDto(reservation));
+    	return new ResponseEntity<>(tableReservations, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -45,7 +50,7 @@ public class TableReservationController {
     public ResponseEntity<TableReservationDto> createTableReservation(@Valid @RequestBody TableReservationDto tableReservationDto) throws Exception {
     	TableReservation tableReservation = tableReservationService.create(tableReservationMapper.fromTableReservationDtoToTableReservation(tableReservationDto));
         
-      return new ResponseEntity<>(tableReservationMapper.fromTableReservationToTableReservationDto(tableReservation), HttpStatus.CREATED);
+    	return new ResponseEntity<>(tableReservationMapper.fromTableReservationToTableReservationDto(tableReservation), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

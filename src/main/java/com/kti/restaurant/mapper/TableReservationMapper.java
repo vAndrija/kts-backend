@@ -24,10 +24,10 @@ public class TableReservationMapper {
             throw new MissingEntityException("Table with given id does not exist in the system.");
         }
 
-        return new TableReservation(tableReservationDto.getName(), tableReservationDto.getDurationStart(), table);
+        return new TableReservation(tableReservationDto.getName(), tableReservationDto.getDurationStart(), tableReservationDto.getDurationEnd(), table);
     }
     
     public TableReservationDto fromTableReservationToTableReservationDto(TableReservation tableReservation) {
-        return new TableReservationDto(tableReservation.getId(), tableReservation.getName(), tableReservation.getTable().getId(), tableReservation.getDurationStart());
+        return new TableReservationDto(tableReservation.getId(), tableReservation.getName(), tableReservation.getTable().getId(), tableReservation.getDurationStart(), tableReservation.getDurationEnd());
     }
 }

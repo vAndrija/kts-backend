@@ -50,6 +50,9 @@ public class MenuItemsListPage {
 
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[2]/a")
     private WebElement restaurantButton;
+    
+    @FindBy(xpath = "//a[.='Rezervacije']")
+    private WebElement reservationsButton;
 
     @FindBy(xpath = "//*[@href=\"/menu/pending-menu-items\"]")
     private WebElement linkToUnacceptedMenuItemsPage;
