@@ -23,8 +23,6 @@ public class Notification {
 
     private String message;
 
-    private Boolean seen = Boolean.FALSE;
-
     @ManyToOne(fetch = FetchType.LAZY /*,cascade = CascadeType.ALL*/)
     private OrderItem orderItem;
 
@@ -32,10 +30,9 @@ public class Notification {
 
     }
 
-    public Notification(String message, OrderItem orderItem, Boolean seen) {
+    public Notification(String message, OrderItem orderItem) {
         this.message = message;
         this.orderItem = orderItem;
-        this.seen = seen;
     }
 
     public Long getVersion() {
@@ -77,8 +74,4 @@ public class Notification {
     public void setOrderItem(OrderItem orderItem) {
         this.orderItem = orderItem;
     }
-
-    public Boolean getSeen() { return seen; }
-
-    public void setSeen(Boolean seen) { this.seen = seen; }
 }

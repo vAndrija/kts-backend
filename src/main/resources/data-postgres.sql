@@ -173,18 +173,12 @@ INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
     ('', 2, 1, 1, null, 4, 13, 1, false);
 
-INSERT INTO notification (message, order_item_id, seen, deleted) values
-    ('Napravljena je nova porudzbina.', 2, true, false);
-INSERT INTO notification (message, order_item_id, seen, deleted) values
-    ('Napravljena je nova porudzbina.', 3, true, false);
-INSERT INTO notification (message, order_item_id, seen, deleted) values
-    ('Pileci file u senfu i medu je u pripremi.', 4, true, false);
-INSERT INTO notification (message, order_item_id, seen, deleted) values
-    ('Punjeni pileci batak na zaru je u pripremi.', 5, true, false);
-INSERT INTO notification (message, order_item_id, seen, deleted) values
-    ('Domaca kafa je pripremljena.', 6, false, false);
-INSERT INTO notification (message, order_item_id, seen, deleted) values
-    ('Baklava je u pripremi.', 7, false, false);
-INSERT INTO notification (message, order_item_id, seen, deleted) values
-    ('Krempita je u pipremi.', 8, false, false);
+INSERT INTO notification (message, order_item_id, deleted) values
+    ('Napravljena je nova porudzbina.', null, false);
+INSERT INTO notification (message, order_item_id, deleted) values
+    ('Stavka porudzbine id 3 je u pripremi..', 3, false);
+INSERT INTO notification (message, order_item_id, deleted) values
+    ('Stavka porudzbine id 4 je u pripremi.', 4,false);
+INSERT INTO notification (message, order_item_id, deleted) values
+    ('Stavka porudzbine id 5 je u pripremi.', 5, false);
 
