@@ -6,16 +6,24 @@ import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.model.PriceItem;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.service.implementation.PriceItemService;
+import com.kti.restaurant.utils.GsonUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -44,6 +52,7 @@ public class PriceItemControllerIntegrationTests {
 
         headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
     }
 
     @Test
@@ -79,6 +88,45 @@ public class PriceItemControllerIntegrationTests {
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertEquals(size, priceItemService.findAll().size());
+    }
+
+    @ParameterizedTest
+    @MethodSource("providePriceItemForCreate")
+    public void createPriceItem_InvalidPriceItem_ReturnsBadRequest(Double value, LocalDate startDate, LocalDate endDate,
+                                                                   Integer menuItemId, Boolean isCurrent, Double preparationValue,
+                                                                   String bodyParameter, String errorMessage) {
+        int size = priceItemService.findAll().size();
+
+        ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() {
+        };
+
+        HttpEntity<String> httpEntity = new HttpEntity<>(GsonUtils.ToJson(new PriceItemDto(value, startDate,
+                endDate, menuItemId, isCurrent, preparationValue)), headers);
+        ResponseEntity<HashMap<String, String>> responseEntity = restTemplate.exchange(URL_PREFIX, HttpMethod.POST, httpEntity, responseType);
+
+        HashMap<String, String> body = responseEntity.getBody();
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(errorMessage, body.get(bodyParameter));
+        assertEquals(size, priceItemService.findAll().size());
+    }
+
+    private static Stream<Arguments> providePriceItemForCreate() {
+
+        return Stream.of(
+                Arguments.of(null, LocalDate.parse("2021-11-05"), LocalDate.parse("2022-11-05"), 25, true,
+                        Double.valueOf(120), "value", "Value should not be null or empty"),
+                Arguments.of(Double.valueOf(-10), LocalDate.parse("2021-11-05"), LocalDate.parse("2022-11-05"), 25, true,
+                        Double.valueOf(120), "value", "Value should be bigger than 0"),
+                Arguments.of(Double.valueOf(200), LocalDate.parse("2021-11-05"), LocalDate.parse("2022-11-05"), null, true,
+                        Double.valueOf(120), "menuItemId", "Menu item id should not be null or empty"),
+                Arguments.of(Double.valueOf(200), LocalDate.parse("2021-11-05"), LocalDate.parse("2022-11-05"), 25, null,
+                        Double.valueOf(120), "isCurrent", "Is current should not be null or empty"),
+                Arguments.of(Double.valueOf(200), LocalDate.parse("2021-11-05"), LocalDate.parse("2022-11-05"), 25, true,
+                        null, "preparationValue", "Preparation value should not be null or empty"),
+                Arguments.of(Double.valueOf(200), LocalDate.parse("2021-11-05"), LocalDate.parse("2022-11-05"), 25, true,
+                        Double.valueOf(-20), "preparationValue", "Preparation value should be bigger than 0")
+                );
     }
 
     @Test

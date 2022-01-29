@@ -29,8 +29,10 @@ import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.service.implementation.NotificationService;
 import com.kti.restaurant.service.implementation.OrderItemService;
+import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource("classpath:application-test.properties")
 public class NotificationControllerIntegrationTests {
 	 @Autowired
 	    private TestRestTemplate restTemplate;

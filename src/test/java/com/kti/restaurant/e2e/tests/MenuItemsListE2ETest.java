@@ -10,7 +10,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -44,7 +43,7 @@ public class MenuItemsListE2ETest {
 
         assertTrue(menuItemsListPage.getLoadedMenuItems(8).size() == 8);
 
-        menuItemsListPage.setSelectMenu("letnji");
+        menuItemsListPage.setSelectMenu("zimski");
         assertTrue(menuItemsListPage.getLoadedMenuItems(1).size() == 1);
     }
 

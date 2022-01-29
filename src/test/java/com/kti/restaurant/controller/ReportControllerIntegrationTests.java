@@ -52,7 +52,7 @@ public class ReportControllerIntegrationTests {
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(12, costsPerMonths.size());
-        assertEquals(Double.valueOf(1860), costsPerMonths.get(10));
+        assertEquals(Double.valueOf(1560), costsPerMonths.get(10));
         assertEquals(Double.valueOf(0), costsPerMonths.get(1));
     }
 
@@ -89,7 +89,7 @@ public class ReportControllerIntegrationTests {
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(30, costPerDays.size());
-        assertEquals(Double.valueOf(1860), costPerDays.get(18));
+        assertEquals(Double.valueOf(1560), costPerDays.get(18));
     }
 
     private static Stream<Arguments> provideInvalidParamteres() {
@@ -141,7 +141,7 @@ public class ReportControllerIntegrationTests {
         assertEquals(Double.valueOf(0), ratioPerMonths.get(0));
         assertEquals(Double.valueOf(-135000), ratioPerMonths.get(1));
         assertEquals(Double.valueOf(-195000), ratioPerMonths.get(8));
-        assertEquals(Double.valueOf(-242050), ratioPerMonths.get(10));
+        assertEquals(Double.valueOf(-242290), ratioPerMonths.get(10));
         assertEquals(Double.valueOf(-464000), ratioPerMonths.get(11));
     }
 
@@ -180,7 +180,7 @@ public class ReportControllerIntegrationTests {
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(30, ratioPerDays.size());
         assertEquals(Double.valueOf(-8167), ratioPerDays.get(0));
-        assertEquals(Double.valueOf(-5217), ratioPerDays.get(18));
+        assertEquals(Double.valueOf(-5457), ratioPerDays.get(18));
     }
 
     @Test
