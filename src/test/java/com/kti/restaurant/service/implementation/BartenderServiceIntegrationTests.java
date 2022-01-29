@@ -46,6 +46,7 @@ public class BartenderServiceIntegrationTests {
         });
     }
 
+    @Rollback()
     @Test
     public void create_ValidBartender_ReturnsCreatedBartender() throws Exception {
         Bartender bartender = new Bartender("Vojnovic", "Andrija", "213123123", "andrija@vojnvo.com", "21312311", true);

@@ -5,8 +5,10 @@ import com.kti.restaurant.dto.manager.ManagerCreateDto;
 import com.kti.restaurant.dto.manager.ManagerDto;
 import com.kti.restaurant.dto.manager.ManagerUpdateDto;
 import com.kti.restaurant.model.Manager;
+import com.kti.restaurant.model.Salary;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.service.implementation.ManagerService;
+import com.kti.restaurant.service.implementation.SalaryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class ManagerControllerIntegrationTests {
     private ManagerService managerService;
 
     private String accessToken;
+
+    @Autowired
+    private SalaryService salaryService;
 
     private HttpHeaders headers = new HttpHeaders();
 
@@ -65,7 +70,7 @@ public class ManagerControllerIntegrationTests {
         List<Manager> managerList = managerService.findAll();
         assertEquals(size + 1, managerList.size());
         assertEquals("aleksamaric8@gmail.com", managerList.get(size).getEmailAddress());
-
+        salaryService.delete(managerDto.getSalaryDto().getId());
         managerService.delete(managerDto.getId());
 
     }
@@ -166,7 +171,8 @@ public class ManagerControllerIntegrationTests {
         Manager manager = managerService.create(new Manager("Aleksa", "Maric",
                 "111111", "aleksamaric7@gmail.com", "152487"));
         int size = managerService.findAll().size();
-
+        Salary salaryToDelete = salaryService.findAll().get(salaryService.findAll().size()-1);
+        salaryService.delete(salaryToDelete.getId());
         HttpEntity<ManagerUpdateDto> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<ManagerDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.DELETE, httpEntity,
                 ManagerDto.class, manager.getId());
