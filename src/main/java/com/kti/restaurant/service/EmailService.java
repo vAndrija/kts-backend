@@ -54,7 +54,7 @@ public class EmailService {
     }
 
     public void sendResetLinkMail(String toEmail, String subject, String token) {
-        String path = "http://localhost:4200/auth/password-reset/";
+        String path = "http://a5e611d31cdb44040a154028599832cd-559647522.eu-central-1.elb.amazonaws.com/auth/password-reset/";
         try {
             MimeMessage msg = javaMailSender.createMimeMessage();
             msg.setSubject(subject);
