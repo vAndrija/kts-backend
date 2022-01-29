@@ -63,7 +63,7 @@ public class TableReservationServiceIntegrationTests {
 	@Test
 	@Rollback
 	public void create_ValidTableReservation_ReturnsCreatedTableReservation() throws Exception {
-		TableReservation reservation = reservationService.create(new TableReservation("Ime", LocalDateTime.parse("2021-12-12T18:00"), new RestaurantTable()));
+		TableReservation reservation = reservationService.create(new TableReservation("Ime", LocalDateTime.parse("2021-12-12T18:00"),  LocalDateTime.parse("2021-12-12T20:00"),new RestaurantTable()));
 
 		assertEquals("Ime", reservation.getName());
 		assertEquals(LocalDateTime.parse("2021-12-12T18:00"), reservation.getDurationStart());
@@ -71,7 +71,7 @@ public class TableReservationServiceIntegrationTests {
 	
 	@Test
 	public void create_InvalidReservationTime_ThrowsBadLogicException() throws Exception {	
-		TableReservation reservationToCreate = new TableReservation("NovoIme", LocalDateTime.parse("2021-11-18T22:22"), tableService.findById(1));
+		TableReservation reservationToCreate = new TableReservation("NovoIme", LocalDateTime.parse("2021-11-18T17:22"),  LocalDateTime.parse("2021-11-18T20:22"),tableService.findById(1));
 		
 		Exception exception = assertThrows(BadLogicException.class, () -> {
 			reservationService.create(reservationToCreate);
@@ -86,7 +86,7 @@ public class TableReservationServiceIntegrationTests {
 		RestaurantTable table = new RestaurantTable(false, 1, 4, 0, 1);
 		table.setId(1);
 		
-		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-10-10T22:22"), table);
+		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-10-10T22:22"),  LocalDateTime.parse("2021-10-10T23:22"), table);
 		reservationToUpdate.setId(1);
 
 		TableReservation reservation = reservationService.update(reservationToUpdate, 1);
@@ -105,11 +105,11 @@ public class TableReservationServiceIntegrationTests {
 	
 	@Test
 	public void update_InvalidReservationTime_ThrowsBadLogicException() throws Exception {	
-		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-11-18T22:22"), tableService.findById(1));
-		reservationToUpdate.setId(1);
+		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-11-18T17:22"), LocalDateTime.parse("2021-11-18T22:22"), tableService.findById(1));
+		reservationToUpdate.setId(2);
 		
 		Exception exception = assertThrows(BadLogicException.class, () -> {
-			reservationService.update(reservationToUpdate, 1);
+			reservationService.update(reservationToUpdate, 2);
 		});
 		
 		assertEquals(badLogicMessage, exception.getMessage());

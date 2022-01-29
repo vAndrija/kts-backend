@@ -15,6 +15,7 @@ import org.springframework.data.domain.*;
 import org.springframework.test.context.TestPropertySource;
 import org.junit.jupiter.api.Assertions;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -118,14 +119,14 @@ public class MenuItemServiceUnitTests {
 
         List<MenuItem> menuItemsSearchByCategory = new ArrayList<>();
         menuItemsSearchByCategory.add(menuItem1);
-        when(menuItemRepository.findByCategory(any())).thenReturn(menuItemsSearchByCategory);
+        when(menuItemRepository.findByCategory(any(), any())).thenReturn(menuItemsSearchByCategory);
 
         List<MenuItem> menuItemsSearchByType = new ArrayList<>();
         menuItemsSearchByType.add(menuItem1);
         menuItemsSearchByType.add(menuItem2);
-        when(menuItemRepository.findByType(any())).thenReturn(menuItemsSearchByType);
+        when(menuItemRepository.findByType(any(), any())).thenReturn(menuItemsSearchByType);
 
-        var menuItems = menuItemService.search("");
+        var menuItems = menuItemService.search("", LocalDateTime.now());
 
         assertEquals(2, menuItems.size());
     }

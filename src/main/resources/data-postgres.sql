@@ -53,8 +53,8 @@ INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (45000
 INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (50000.00, '2021-10-05', '2022-10-05', 2, false);
 INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (60000.00, '2021-08-18', '2022-08-18', 3, false);
 INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (50000.00, '2021-11-18', '2022-11-18', 4, false);
-INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (65000.00, '2021-02-01', '2022-02-01', 5, false);
-INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (70000.00, '2021-01-05', '2022-01-05', 6, false);
+INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (65000.00, '2021-02-01', '2022-06-01', 5, false);
+INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (70000.00, '2021-01-05', '2022-06-05', 6, false);
 INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (62000.00, '2021-11-18', '2022-11-18', 7, false);
 INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (62000.00, '2021-11-18', '2022-11-18', 8, false);
 
@@ -71,8 +71,8 @@ INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate
 INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (4, 4, 657, 152, false);
 
 
-INSERT INTO table_reservation (name, duration_start, table_id, deleted) values ('Milica Petric', '2021-11-18T16:00', 1, false);
-INSERT INTO table_reservation (name, duration_start, table_id, deleted) values ('Ana Jojic', '2021-11-20T19:00', 2, false);
+INSERT INTO table_reservation (name, duration_start, duration_end, table_id, deleted) values ('Milica Petric', '2021-11-18T16:00', '2021-11-18T18:00', 1, false);
+INSERT INTO table_reservation (name, duration_start,duration_end, table_id, deleted) values ('Ana Jojic', '2021-11-20T19:00','2021-11-20T21:00', 2, false);
 
 
 INSERT INTO menu (name, duration_start, duration_end, deleted) values ('standardni', '2021-11-18T08:00', '2022-11-18T23:00', false);
@@ -146,7 +146,7 @@ INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_use
 INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
     (0, '2022-11-18T13:00', 1830, 4, 8, false);
 INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
-    (0, '2022-11-18T12:48', 810, 2, 7, false);
+    (0, '2022-11-18T12:48', 280, 2, 7, false);
 
 
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
@@ -173,18 +173,24 @@ INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
     ('', 2, 1, 1, null, 4, 13, 1, false);
 
-INSERT INTO notification (message, order_item_id, seen, deleted) values
-    ('Napravljena je nova porudzbina.', 2, true, false);
-INSERT INTO notification (message, order_item_id, seen, deleted) values
-    ('Napravljena je nova porudzbina.', 3, true, false);
-INSERT INTO notification (message, order_item_id, seen, deleted) values
-    ('Pileci file u senfu i medu je u pripremi.', 4, true, false);
-INSERT INTO notification (message, order_item_id, seen, deleted) values
-    ('Punjeni pileci batak na zaru je u pripremi.', 5, true, false);
+INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
+    ('', 2, 1, 3, null, 5, 1, 3, false);
+INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
+    ('', 2, 1, 3, null, 4, 2, 3, false);
+
+INSERT INTO notification (message, order_item_id, deleted) values
+    ('Napravljena je nova porudzbina.', null, false);
+INSERT INTO notification (message, order_item_id, deleted) values
+    ('Stavka porudzbine id 3 je u pripremi..', 3, false);
+INSERT INTO notification (message, order_item_id, deleted) values
+    ('Stavka porudzbine id 4 je u pripremi.', 4,false);
+INSERT INTO notification (message, order_item_id, deleted) values
+    ('Stavka porudzbine id 5 je u pripremi.', 5, false);
 INSERT INTO notification (message, order_item_id, seen, deleted) values
     ('Domaca kafa je pripremljena.', 6, false, false);
 INSERT INTO notification (message, order_item_id, seen, deleted) values
     ('Baklava je u pripremi.', 7, false, false);
 INSERT INTO notification (message, order_item_id, seen, deleted) values
     ('Krempita je u pipremi.', 8, false, false);
+
 

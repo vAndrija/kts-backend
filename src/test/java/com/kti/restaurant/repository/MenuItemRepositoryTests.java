@@ -4,6 +4,7 @@ import com.kti.restaurant.model.Menu;
 import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -30,7 +32,7 @@ public class MenuItemRepositoryTests {
     @ParameterizedTest
     @MethodSource("validNameAndDescription")
     public void findByNameAndDescription_ParamNameDescription_ReturnsMenuItems(String searchParam, Integer expectedSize, String expectedMenuItemName) {
-        List<MenuItem> menuItems = menuItemRepository.findByNameAndDescription(searchParam);
+        List<MenuItem> menuItems = menuItemRepository.findByNameAndDescription(searchParam, LocalDateTime.now());
         assertEquals(expectedSize, menuItems.size());
         assertEquals(expectedMenuItemName, menuItems.get(0).getName());
     }
@@ -46,26 +48,26 @@ public class MenuItemRepositoryTests {
     @ParameterizedTest
     @MethodSource("validMenuItemCategory")
     public void findByCategory_Category_ReturnsMenuItems(MenuItemCategory category, Integer exceptedSize) {
-        List<MenuItem> menuItems = menuItemRepository.findByCategory(category);
+        List<MenuItem> menuItems = menuItemRepository.findByCategory(category, LocalDateTime.now());
         assertEquals(exceptedSize, menuItems.size());
     }
 
     private static Stream<Arguments> validMenuItemCategory() {
         return Stream.of(
-                Arguments.of(MenuItemCategory.DESSERT, 3)
+                Arguments.of(MenuItemCategory.DESSERT, 2)
         );
     }
 
     @ParameterizedTest
     @MethodSource("validMenuItemType")
     public void findByType_Type_ReturnsMenuItems(MenuItemType type, Integer exceptedSize) {
-        List<MenuItem> menuItems = menuItemRepository.findByType(type);
+        List<MenuItem> menuItems = menuItemRepository.findByType(type, LocalDateTime.now());
         assertEquals(exceptedSize, menuItems.size());
     }
 
     private static Stream<Arguments> validMenuItemType() {
         return Stream.of(
-                Arguments.of(MenuItemType.FOOD, 10)
+                Arguments.of(MenuItemType.FOOD, 8)
         );
     }
 
@@ -87,7 +89,7 @@ public class MenuItemRepositoryTests {
     @ParameterizedTest
     @MethodSource("getMenuIdSearchParamFilterAndPageable")
     public void searchAndFilterMenuItems_MenuIdSearchParamCategoryPageable_ReturnsMenuItems(Integer menuId, String searchParam,
-                                                                       MenuItemCategory category, Pageable page, Integer sizeofReturnedList,
+                                                                                            MenuItemCategory category, Pageable page, Integer sizeofReturnedList,
                                                                                             String name, Integer indexOfMenuItem) {
         Page<MenuItem> menuItems = menuItemRepository.searchAndFilterMenuItems(menuId, searchParam, category, page);
         assertEquals(sizeofReturnedList, menuItems.getContent().size());
@@ -102,4 +104,11 @@ public class MenuItemRepositoryTests {
                 Arguments.of(1, "", MenuItemCategory.NON_ALCOHOLIC, PageRequest.of(0, 5), 2, "limunada", 1)
         );
     }
+
+    @Test
+    public void getMenuItemsInActiveMenuPageable_ReturnsMenuItems() {
+        Page<MenuItem> menuItems = menuItemRepository.findAllInActiveMenu(LocalDateTime.now(), Pageable.unpaged());
+        assertEquals(11, menuItems.getContent().size());
+    }
+
 }

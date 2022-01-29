@@ -21,6 +21,7 @@ public class LoginPage {
         this.driver = driver;
     }
 
+
     public void login(String email, String password) {
         this.setEmail(email);
         this.setPassword(password);
@@ -50,4 +51,7 @@ public class LoginPage {
     public WebElement getSubmitButton() {
         return WaitUtils.clickableWait(driver, submitButton, 10);
     }
+
+
+
 }

@@ -20,9 +20,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
 
 import com.kti.restaurant.dto.JwtAuthenticationRequest;
-import com.kti.restaurant.dto.notification.CreateUpdateNotificationDto;
+import com.kti.restaurant.dto.notification.CreateNotificationDto;
 import com.kti.restaurant.dto.notification.NotificationDto;
 import com.kti.restaurant.model.Notification;
 import com.kti.restaurant.model.OrderItem;
@@ -34,7 +35,7 @@ import org.springframework.test.context.TestPropertySource;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
 public class NotificationControllerIntegrationTests {
-	 @Autowired
+	 	@Autowired
 	    private TestRestTemplate restTemplate;
 
 	    @Autowired
@@ -61,13 +62,23 @@ public class NotificationControllerIntegrationTests {
 	    }
 	    
 	    @Test
-	    public void findAll_ReturnOk() {
+	    public void getAllNotificationsForWaiter_ReturnOk() {
 	    	 HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
 	         ResponseEntity<NotificationDto[]> responseEntity = restTemplate
-	        		 .exchange("/api/v1/notifications", HttpMethod.GET, httpEntity, NotificationDto[].class);
+	        		 .exchange("/api/v1/notifications/waiter/{id}", HttpMethod.GET, httpEntity, NotificationDto[].class, 7);
 
 	         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-	         assertEquals(7, List.of(responseEntity.getBody()).size());
+	         assertEquals(4, List.of(responseEntity.getBody()).size());
+	    }
+	    
+	    @Test
+	    public void getAllNotificationsForCookAndBartender_ReturnOk() {
+	    	 HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
+	         ResponseEntity<NotificationDto[]> responseEntity = restTemplate
+	        		 .exchange("/api/v1/notifications/bartender-cook", HttpMethod.GET, httpEntity, NotificationDto[].class);
+
+	         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+	         assertEquals(1, List.of(responseEntity.getBody()).size());
 	    }
 	    
 	    @Test
@@ -81,14 +92,13 @@ public class NotificationControllerIntegrationTests {
 	        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 	        assertEquals(Integer.valueOf(1), notification.getId());
 	        assertEquals("Napravljena je nova porudzbina.", notification.getMessage());
-	        assertEquals(Integer.valueOf(2), notification.getOrderItemDto().getId());
 	    }
 	    
 	    @Test
 	    public void findById_InvalidNotificationId_ReturnsNotFound() {
 	        HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 	        ResponseEntity<NotificationDto> responseEntity =
-	                restTemplate.exchange("/api/v1/notifications/{id}", HttpMethod.GET, httpEntity, NotificationDto.class, 8);
+	                restTemplate.exchange("/api/v1/notifications/{id}", HttpMethod.GET, httpEntity, NotificationDto.class, 9);
 
 	        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
 	    }
@@ -96,7 +106,7 @@ public class NotificationControllerIntegrationTests {
 	    @Test
 	    public void createNotification_ValidNotificationDto_ReturnsCreated() {
 	    	int size = notificationService.findAll().size();
-	    	HttpEntity<CreateUpdateNotificationDto> httpEntity = new HttpEntity<>(new CreateUpdateNotificationDto("Nova notifikacija", 1), headers);
+	    	HttpEntity<CreateNotificationDto> httpEntity = new HttpEntity<>(new CreateNotificationDto("Nova notifikacija", 1), headers);
 	        ResponseEntity<NotificationDto> responseEntity = restTemplate
 	        		.postForEntity("/api/v1/notifications", httpEntity, NotificationDto.class);
 
@@ -104,11 +114,10 @@ public class NotificationControllerIntegrationTests {
 	        
 	        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 	        assertEquals("Nova notifikacija", notification.getMessage());
-	        assertEquals(1, notification.getOrderItemDto().getId());
 	        assertEquals(size+1, notificationService.findAll().size());
 	    
 
-	        notificationService.delete(notification.getId());	
+	        notificationService.delete(1);	
 	        assertEquals(size, notificationService.findAll().size());
 	    }
 	    
@@ -117,7 +126,7 @@ public class NotificationControllerIntegrationTests {
 	    public void createNotification_InvaliNotificationDto_ReturnsBadRequest(String message, Integer orderItemId, String bodyParameter, String errorMessage) {
 	    	int size = notificationService.findAll().size();
 	    	
-	    	HttpEntity<CreateUpdateNotificationDto> httpEntity = new HttpEntity<>(new CreateUpdateNotificationDto(message, orderItemId), headers);
+	    	HttpEntity<CreateNotificationDto> httpEntity = new HttpEntity<>(new CreateNotificationDto(message, orderItemId), headers);
 	    	
 	    	ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() { };
 			
@@ -134,62 +143,28 @@ public class NotificationControllerIntegrationTests {
 	    private static Stream<Arguments> provideCreateNotificiationDto() {
 			
 			return Stream.of(
-					Arguments.of(null, 1, "message", "Message should not be null or empty."),
-					Arguments.of("Nesto", null, "orderItemId", "Order Item id should not be null or empty.")
+					Arguments.of(null, 1, "message", "Message should not be null or empty.")
 					);
 		}
 		
 	    
 	    @Test
-	    public void updateNotification_ValidNotificationId_ReturnsOk() {
-	    	HttpEntity<CreateUpdateNotificationDto> httpEntity = new HttpEntity<>(headers);
-	    	
-	    	ResponseEntity<NotificationDto> responseEntity = restTemplate
-	    			.exchange("/api/v1/notifications/{id}", HttpMethod.PUT, httpEntity, NotificationDto.class, 1);
-	    	
-	    	assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-	    	assertEquals(Boolean.TRUE, responseEntity.getBody().getSeen());
-	    	//Posto notifikacija ne moze da bude pregledana pa nepregledana ne postoji funkcija za revertovanje
-	    }
-	    
-	    @Test
-	    public void updateNotification_InvalidNotificationId_ReturnsNotFound() {
-	    	HttpEntity<CreateUpdateNotificationDto> httpEntity = new HttpEntity<>(headers);
-	    	
-	    	ResponseEntity<NotificationDto> responseEntity = restTemplate
-	    			.exchange("/api/v1/notifications/{id}", HttpMethod.PUT, httpEntity, NotificationDto.class, 8);
-	    	
-	    	assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-	    }
-	    
-	    @Test
 	    public void deleteNotification_ValidId_ReturnsNoContent() throws Exception {
 	    	OrderItem orderItem = orderItemService.findById(1);
-	    	Notification notification = new Notification("Nova", orderItem, false);
+	    	Notification notification = new Notification("Nova", orderItem);
 	    	
-	    	Notification createdNotification = notificationService.create(notification);
+	    	notificationService.create(notification);
 	    	
 	    	int size = notificationService.findAll().size();
 
-	    	HttpEntity<CreateUpdateNotificationDto> httpEntity = new HttpEntity<>(headers);
+	    	HttpEntity<CreateNotificationDto> httpEntity = new HttpEntity<>(headers);
 	    	
 	    	ResponseEntity<NotificationDto> responseEntity = restTemplate
-	    			.exchange("/api/v1/notifications/{id}", HttpMethod.DELETE, httpEntity, NotificationDto.class, createdNotification.getId());
+	    			.exchange("/api/v1/notifications/{id}", HttpMethod.DELETE, httpEntity, NotificationDto.class, 1);
 	    	
 	    	assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
 	    	assertEquals(size - 1, notificationService.findAll().size());
 	    }
 	    
-	    @Test
-	    public void deleteNotification_InvalidId_ReturnsNoContent() {
-	    	int size = notificationService.findAll().size();
-
-	    	HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
-	    	
-	    	ResponseEntity<Void> responseEntity = restTemplate
-	    			.exchange("/api/v1/notifications/{id}", HttpMethod.DELETE, httpEntity, Void.class, 8);
-	    	
-	    	assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-	    	assertEquals(size, notificationService.findAll().size());
-	    }
+	    
 }

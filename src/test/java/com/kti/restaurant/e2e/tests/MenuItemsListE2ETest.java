@@ -10,7 +10,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MenuItemsListE2ETest {

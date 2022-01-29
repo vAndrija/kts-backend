@@ -90,7 +90,7 @@ public class CreateOrderE2ETest {
 
         orderItemsPage.setQuantity("2");
         orderItemsPage.setPriority("2");
-        orderItemsPage.setNote("sa ledom");
+        orderItemsPage.setNote("sa orasima");
         orderItemsPage.clickAddButton();
 
         orderItemsPage.setQuantitySecond("3");
@@ -99,10 +99,10 @@ public class CreateOrderE2ETest {
 
         orderItemsPage.clickOrderButton();
 
-        assertEquals("coca cola", orderPage.getMenuItemName().getText());
+        assertEquals("baklava", orderPage.getMenuItemName().getText());
         assertEquals("2", orderPage.getMenuItemQuantity().getText());
-        assertEquals("360RSD", orderPage.getMenuItemPrice().getText());
-        assertEquals("sa ledom", orderPage.getMenuItemNote().getText());
+        assertEquals("500RSD", orderPage.getMenuItemPrice().getText());
+        assertEquals("sa orasima", orderPage.getMenuItemNote().getText());
 
         orderPage.clickDeleteButton();
 
