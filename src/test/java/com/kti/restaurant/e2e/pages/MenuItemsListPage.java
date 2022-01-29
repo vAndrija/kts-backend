@@ -32,7 +32,7 @@ public class MenuItemsListPage {
 
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[3]/a")
     private WebElement addNewDishButton;
-    
+
     @FindBy(xpath = "//a[.='Preuzmite stavku porudžbine']")
     private WebElement acceptOrderItemButton;
 
@@ -50,7 +50,7 @@ public class MenuItemsListPage {
 
     @FindBy(xpath = "//a[.='Restoran']")
     private WebElement restaurantButton;
-    
+
     @FindBy(xpath = "//a[.='Rezervacije']")
     private WebElement reservationsButton;
 
@@ -97,8 +97,8 @@ public class MenuItemsListPage {
     }
 
     public void clickAddMenuButton() {
-    	WebElement button = getAddMenuButton();
-    	button.click();
+        WebElement button = getAddMenuButton();
+        button.click();
     }
 
     public void clickLinkToReports() {
@@ -157,25 +157,25 @@ public class MenuItemsListPage {
     }
 
     public WebElement getAddMenuButton() {
-    	return WaitUtils.visibilityWait(driver, addMenuButton, 10);
+        return WaitUtils.visibilityWait(driver, addMenuButton, 10);
     }
 
     public WebElement getAddNewDishButton() {
-    	return WaitUtils.visibilityWait(driver, addNewDishButton, 10);
+        return WaitUtils.visibilityWait(driver, addNewDishButton, 10);
     }
 
     public void clickAddNewDishButton() {
-    	WebElement button = getAddNewDishButton();
-    	button.click();
+        WebElement button = getAddNewDishButton();
+        button.click();
     }
 
     public WebElement getAcceptOrderItemButton() {
-    	return WaitUtils.visibilityWait(driver, acceptOrderItemButton, 10);
+        return WaitUtils.visibilityWait(driver, acceptOrderItemButton, 10);
     }
 
     public void clickAcceptOrderButton() {
-    	WebElement button = getAcceptOrderItemButton();
-    	button.click();
+        WebElement button = getAcceptOrderItemButton();
+        button.click();
     }
 
     public WebElement getOrderItemsButton() {
@@ -238,5 +238,14 @@ public class MenuItemsListPage {
 
     public WebElement getLinkToTimeForPreparationReport() {
         return WaitUtils.visibilityWait(driver, linkToTimeForPreparationReport, 10);
+    }
+
+    public WebElement getReservationsButton() {
+        return WaitUtils.clickableWait(driver, reservationsButton, 10);
+    }
+
+    public void clickReservationButton() {
+        WebElement button = getReservationsButton();
+        button.click();
     }
 }

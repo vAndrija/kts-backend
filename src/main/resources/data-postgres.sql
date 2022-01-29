@@ -186,11 +186,11 @@ INSERT INTO notification (message, order_item_id, deleted) values
     ('Stavka porudzbine id 4 je u pripremi.', 4,false);
 INSERT INTO notification (message, order_item_id, deleted) values
     ('Stavka porudzbine id 5 je u pripremi.', 5, false);
-INSERT INTO notification (message, order_item_id, seen, deleted) values
-    ('Domaca kafa je pripremljena.', 6, false, false);
-INSERT INTO notification (message, order_item_id, seen, deleted) values
-    ('Baklava je u pripremi.', 7, false, false);
-INSERT INTO notification (message, order_item_id, seen, deleted) values
-    ('Krempita je u pipremi.', 8, false, false);
+INSERT INTO notification (message, order_item_id, deleted) values
+    ('Domaca kafa je pripremljena.', 6, false);
+INSERT INTO notification (message, order_item_id, deleted) values
+    ('Baklava je u pripremi.', 7, false);
+INSERT INTO notification (message, order_item_id, deleted) values
+    ('Krempita je u pipremi.', 8, false);
 
 
