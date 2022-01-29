@@ -88,9 +88,9 @@ public class MenuControllerIntegrationTests {
 
         HttpEntity<MenuDto> httpEntity = new HttpEntity<>(new MenuDto("Glavni", null,
                 null, null), headers);
-        ResponseEntity<Menu> responseEntity =
+        ResponseEntity<Object> responseEntity =
                 restTemplate.postForEntity("/api/v1/menu", httpEntity,
-                        Menu.class);
+                        Object.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertEquals(size, menuService.findAll().size());
@@ -183,9 +183,9 @@ public class MenuControllerIntegrationTests {
     public void updateMenu_InvalidMenuStartDateEndDate_ReturnsBadRequest() {
         HttpEntity<MenuDto> httpEntity = new HttpEntity<MenuDto>(new MenuDto("Glavni", null,
                 null, null), headers);
-        ResponseEntity<Menu> responseEntity =
+        ResponseEntity<Object> responseEntity =
                 restTemplate.exchange("/api/v1/menu/{id}", HttpMethod.PUT, httpEntity,
-                        Menu.class, 2);
+                        Object.class, 2);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
