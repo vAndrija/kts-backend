@@ -7,11 +7,15 @@ import com.kti.restaurant.model.enums.MenuItemType;
 import com.kti.restaurant.repository.MenuItemRepository;
 import com.kti.restaurant.service.contract.IMenuItemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
-import org.springframework.http.HttpHeaders;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class MenuItemService implements IMenuItemService {
@@ -70,17 +74,17 @@ public class MenuItemService implements IMenuItemService {
     }
 
     @Override
-    public Set<MenuItem> search(String search) {
+    public Set<MenuItem> search(String search, LocalDateTime localDateTime) {
         List<MenuItem> concatenated = new ArrayList<>();
-        concatenated.addAll(menuItemRepository.findByNameAndDescription(search));
-        concatenated.addAll(menuItemRepository.findByCategory(MenuItemCategory.findCategory(search)));
-        concatenated.addAll(menuItemRepository.findByType(MenuItemType.findType(search)));
+        concatenated.addAll(menuItemRepository.findByNameAndDescription(search, localDateTime));
+        concatenated.addAll(menuItemRepository.findByCategory(MenuItemCategory.findCategory(search), localDateTime));
+        concatenated.addAll(menuItemRepository.findByType(MenuItemType.findType(search), localDateTime));
         return new HashSet<>(concatenated);
     }
 
     @Override
-    public Set<MenuItem> filter(String filter) {
-        return new HashSet<>(menuItemRepository.findByCategory(MenuItemCategory.findCategory(filter)));
+    public Set<MenuItem> filter(String filter, LocalDateTime localDateTime) {
+        return new HashSet<>(menuItemRepository.findByCategory(MenuItemCategory.findCategory(filter), localDateTime));
     }
 
 
@@ -90,22 +94,25 @@ public class MenuItemService implements IMenuItemService {
     }
 
     @Override
-    public Page<MenuItem> filterPageable(String filter, Pageable pageable) {
-        return menuItemRepository.findByCategory(MenuItemCategory.findCategory(filter), pageable);
+    public Page<MenuItem> filterPageable(String filter, Pageable pageable, LocalDateTime localDateTime) {
+        return menuItemRepository.findByCategory(MenuItemCategory.findCategory(filter), localDateTime, pageable);
     }
 
     @Override
     public Page<MenuItem> findByMenu(Integer menuId, Pageable pageable) throws Exception {
         menuService.findById(menuId);
 
-        Page<MenuItem> page = menuItemRepository.findByMenu(menuId, pageable);
-        return page;
+        return menuItemRepository.findByMenu(menuId, pageable);
     }
 
     @Override
     public Page<MenuItem> findAll(Pageable pageable) {
-        Page<MenuItem> page = menuItemRepository.findAll(pageable);
-        return page;
+        return menuItemRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<MenuItem> findAllInActiveMenu(Pageable pageable, LocalDateTime localDateTime) {
+        return menuItemRepository.findAllInActiveMenu(localDateTime, pageable);
     }
 
     @Override

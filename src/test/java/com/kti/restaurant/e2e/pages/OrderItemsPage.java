@@ -185,4 +185,10 @@ public class OrderItemsPage {
         button.click();
     }
 
+
+//    public WebElement findByName(String name ){
+//        return WaitUtils.visibilityWait(webDriver, By.xpath("//div[@class='new-arrival-content order-item-card-na']/h4[contains(text(),'"+name+"')]/.."), 10).get(0);
+//    }
+
+
 }

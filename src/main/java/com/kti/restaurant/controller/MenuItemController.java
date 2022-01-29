@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,14 +82,14 @@ public class MenuItemController {
 
     @GetMapping(value = "/search/{search}")
     public ResponseEntity<?> searchMenuItems(@PathVariable("search") String s) {
-        List<MenuItemDto> menuItems = menuItemService.search(s).stream()
+        List<MenuItemDto> menuItems = menuItemService.search(s, LocalDateTime.now()).stream()
                 .map(menuItem -> this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem)).collect(Collectors.toList());
         return new ResponseEntity<>(menuItems, HttpStatus.OK);
     }
 
     @GetMapping(value = "/filter/{filter}")
     public ResponseEntity<?> filterMenuItems(@PathVariable("filter") String f) {
-        List<MenuItemDto> menuItems = menuItemService.filter(f).stream()
+        List<MenuItemDto> menuItems = menuItemService.filter(f, LocalDateTime.now()).stream()
                 .map(menuItem -> this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem)).collect(Collectors.toList());
         return new ResponseEntity<>(menuItems, HttpStatus.OK);
     }
@@ -97,7 +98,7 @@ public class MenuItemController {
     public ResponseEntity<?> filterMenuItemsPageable(@PathVariable("filter") String f, @RequestParam Integer page,
                                                      @RequestParam Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<MenuItemDto> menuItems = menuItemService.filterPageable(f, pageable).
+        Page<MenuItemDto> menuItems = menuItemService.filterPageable(f, pageable, LocalDateTime.now()).
                 map(menuItem -> this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem));
         return new ResponseEntity<>(menuItems, HttpStatus.OK);
     }
@@ -111,10 +112,18 @@ public class MenuItemController {
 
     @GetMapping(value = "/by-menu/{menuId}/search")
     public ResponseEntity<Page<MenuItemDto>> findMenuItemsByMenuIdAndSearchFilterParams(@RequestParam Integer page, @RequestParam Integer size,
-                                             @RequestParam String searchParam, @RequestParam String filter, @PathVariable Integer menuId) throws Exception {
+                                                                                        @RequestParam String searchParam, @RequestParam String filter, @PathVariable Integer menuId) throws Exception {
         Pageable pageable = PageRequest.of(page, size);
         Page<MenuItemDto> menuItems = menuItemService.searchAndFilterMenuItems(menuId, searchParam, filter, pageable)
                 .map(menuItem -> this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem));
+        return new ResponseEntity<>(menuItems, HttpStatus.OK);
+    }
+
+    @GetMapping("/by-active-menu")
+    public ResponseEntity<?> getMenuItemsInActiveMenu(@RequestParam Integer page, @RequestParam Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<MenuItemDto> menuItems = menuItemService.findAllInActiveMenu(pageable, LocalDateTime.now()).
+                map(menuItem -> this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem));
         return new ResponseEntity<>(menuItems, HttpStatus.OK);
     }
 }

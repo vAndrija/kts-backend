@@ -146,7 +146,7 @@ INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_use
 INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
     (0, '2022-11-18T13:00', 1830, 4, 8, false);
 INSERT INTO restaurant_order (status, date_of_order, price, table_id, waiter_users, deleted) values
-    (0, '2022-11-18T12:48', 810, 2, 7, false);
+    (0, '2022-11-18T12:48', 280, 2, 7, false);
 
 
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
@@ -173,6 +173,11 @@ INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook
 INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
     ('', 2, 1, 1, null, 4, 13, 1, false);
 
+INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
+    ('', 2, 1, 3, null, 5, 1, 3, false);
+INSERT INTO order_item (note, priority, quantity, status, bartender_users,  cook_users, menu_item_id, order_id, deleted) values
+    ('', 2, 1, 3, null, 4, 2, 3, false);
+
 INSERT INTO notification (message, order_item_id, deleted) values
     ('Napravljena je nova porudzbina.', null, false);
 INSERT INTO notification (message, order_item_id, deleted) values
@@ -181,4 +186,11 @@ INSERT INTO notification (message, order_item_id, deleted) values
     ('Stavka porudzbine id 4 je u pripremi.', 4,false);
 INSERT INTO notification (message, order_item_id, deleted) values
     ('Stavka porudzbine id 5 je u pripremi.', 5, false);
+INSERT INTO notification (message, order_item_id, seen, deleted) values
+    ('Domaca kafa je pripremljena.', 6, false, false);
+INSERT INTO notification (message, order_item_id, seen, deleted) values
+    ('Baklava je u pripremi.', 7, false, false);
+INSERT INTO notification (message, order_item_id, seen, deleted) values
+    ('Krempita je u pipremi.', 8, false, false);
+
 

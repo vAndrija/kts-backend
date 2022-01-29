@@ -124,7 +124,7 @@ INSERT INTO menu_item (name, description, type, category, menu_id, accepted, del
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
     ('strudla sa makom', 'strudla sa makom', 1, 4, 1, true, false, 5);
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
-    ('baklava', 'baklava sa orasima', 1, 4, 1, true, false, 5);
+    ('baklava', 'baklava sa orasima', 1, 4, 2, true, false, 5);
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
     ('krempita', 'krempita sa dodatkom visnje', 1, 4, 1, true, false, 5);
 INSERT INTO menu_item (name, description, type, category, menu_id, accepted, deleted, preparation_time) values
