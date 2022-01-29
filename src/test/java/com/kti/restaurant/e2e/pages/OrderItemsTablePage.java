@@ -15,19 +15,9 @@ public class OrderItemsTablePage {
     @FindBy(xpath = "//*[@formControlName=\"filterName\"]")
     private Select selectStatus;
 
-    @FindBy(xpath = "//tr[1]/td[7]")
-    private WebElement changeStatusButton;
-
-    @FindBy(xpath = "//*[@id=\"6\"]")
-    private WebElement newStatusButton;
-
-    @FindBy(name = "Pripremljeno")
-    private WebElement changedButton;
-
-    @FindBy(tagName = "tbody")
-    private WebElement tableBody;
-
-    public OrderItemsTablePage(WebDriver webDriver) { this.webDriver = webDriver; }
+    public OrderItemsTablePage(WebDriver webDriver) {
+        this.webDriver = webDriver;
+    }
 
     public Select getSelectStatus() {
         return new Select(WaitUtils.visibilityWait(webDriver, By.xpath("//*[@formControlName=\"filterName\"]"), 10).get(0));
@@ -43,34 +33,17 @@ public class OrderItemsTablePage {
         selectStatus.selectByVisibleText(selectStatusOption);
     }
 
-
-    public WebElement getStatusButton() {
-        return WaitUtils.visibilityWait(webDriver, changeStatusButton, 10);
-    }
-
-    public void clickStatusButton() {
-        WebElement button = getStatusButton();
-        button.click();
-    }
-
-    public WebElement getNewStatusButton() {
-        return WaitUtils.visibilityWait(webDriver, newStatusButton, 10);
-    }
-
-    public void clickNewStatusButton() {
-        WebElement button = getNewStatusButton();
-        button.click();
-    }
-    public WebElement getChangedButton() {
-        return WaitUtils.visibilityWait(webDriver, changedButton, 10);
-
-    }
-
-    public WebElement getTableBody() {
-        return WaitUtils.visibilityWait(webDriver, tableBody, 10);
-    }
-
     public List<WebElement> getRows() {
-        return getTableBody().findElements(By.tagName("tr"));
+        return  WaitUtils.visibilityWait(webDriver, By.xpath("//tbody/tr"), 10);
+    }
+
+    public WebElement getRow(String status, String id) {
+        WebElement element = WaitUtils.visibilityWait(webDriver, By.xpath("//tbody/tr/td[1][contains(text(),'" + id + "')]/.."
+                +"/td[7]//button[contains(text(),'" + status + "')]"), 10).get(0);
+        return  WaitUtils.clickableWait(webDriver, element, 10);
+    }
+
+    public WebElement getNewButton(String id) {
+        return WaitUtils.visibilityWait(webDriver, By.id(id), 10).get(0);
     }
 }

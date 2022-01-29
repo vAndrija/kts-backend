@@ -11,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -41,6 +43,11 @@ public class MenuController {
     @GetMapping("")
     public ResponseEntity<List<Menu>> getMenus() {
         return new ResponseEntity<>(menuService.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<Menu>> getActiveMenus(@RequestParam String date) {
+        return new ResponseEntity<>(menuService.findMenusForDate(LocalDateTime.parse(date)), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

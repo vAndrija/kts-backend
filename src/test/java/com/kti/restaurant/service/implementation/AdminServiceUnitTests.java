@@ -7,6 +7,7 @@ import com.kti.restaurant.model.Admin;
 import com.kti.restaurant.model.Role;
 import com.kti.restaurant.repository.AdminRepository;
 import com.kti.restaurant.repository.RoleRepository;
+import com.kti.restaurant.repository.SalaryRepository;
 import com.kti.restaurant.repository.UserRepository;
 import com.kti.restaurant.service.EmailService;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,9 @@ public class AdminServiceUnitTests {
 
     @InjectMocks
     private AdminService adminService;
+
+    @Mock
+    private SalaryRepository salaryRepository;
 
     @Mock
     private AdminRepository adminRepository;
@@ -79,6 +83,8 @@ public class AdminServiceUnitTests {
         when(userRepository.findByEmailAddress("milutin@zolotic.com"))
                 .thenReturn(null);
         when(adminRepository.save(any()))
+                .thenAnswer(a -> a.getArgument(0));
+        when(salaryRepository.save(any()))
                 .thenAnswer(a -> a.getArgument(0));
         Role adminRole = new Role();
         adminRole.setId(1L);

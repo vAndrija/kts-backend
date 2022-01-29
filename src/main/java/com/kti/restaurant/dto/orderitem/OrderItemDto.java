@@ -1,9 +1,7 @@
 package com.kti.restaurant.dto.orderitem;
 
-import com.kti.restaurant.model.enums.OrderItemStatus;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -14,7 +12,6 @@ public class OrderItemDto {
     @Min(value = 1, message = "Quantity should be greater than 0")
     private Integer quantity;
 
-    @NotEmpty(message = "Note should not be null or empty")
     private String note;
 
     @NotNull(message = "Status should not be null")

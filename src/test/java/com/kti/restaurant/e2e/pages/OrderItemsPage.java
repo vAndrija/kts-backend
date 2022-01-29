@@ -27,22 +27,22 @@ public class OrderItemsPage {
     @FindBy(id = "Sve")
     private WebElement allCategoryButton;
 
-    @FindBy(xpath = "//app-order-item-card[1]//div[1]/input")
+    @FindBy(xpath = "//app-order-item-card[1]//*[@formControlName=\"quantity\"]")
     private WebElement quantity;
 
-    @FindBy(xpath = "//app-order-item-card[1]//div[2]/input")
+    @FindBy(xpath = "//app-order-item-card[1]//*[@formControlName=\"priority\"]")
     private WebElement priority;
 
-    @FindBy(xpath = "//app-order-item-card[1]//div[3]/input")
+    @FindBy(xpath = "//app-order-item-card[1]//*[@formControlName=\"note\"]")
     private WebElement note;
 
     @FindBy(xpath = "//app-order-item-card[1]//div[4]/button")
     private WebElement addButton;
 
-    @FindBy(xpath = "//app-order-item-card[3]//div[1]/input")
+    @FindBy(xpath = "//app-order-item-card[3]//*[@formControlName=\"quantity\"]")
     private WebElement quantitySecond;
 
-    @FindBy(xpath = "//app-order-item-card[3]//div[2]/input")
+    @FindBy(xpath = "//app-order-item-card[3]//*[@formControlName=\"priority\"]")
     private WebElement prioritySecond;
 
     @FindBy(xpath = "//app-order-item-card[3]//div[4]/button")
@@ -184,5 +184,7 @@ public class OrderItemsPage {
         WebElement button = getAddButtonSecond();
         button.click();
     }
+
+
 
 }

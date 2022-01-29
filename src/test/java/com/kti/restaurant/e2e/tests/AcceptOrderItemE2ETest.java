@@ -1,7 +1,6 @@
 package com.kti.restaurant.e2e.tests;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
@@ -47,24 +46,21 @@ private WebDriver driver;
 		menuItemsListPage.clickAcceptOrderButton();
 		
 		assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/order/unaccepted-order-items", 10));
-		
-		String orderItemName = orderItemsPage.getOrderItemNameText();
-		
-		orderItemsPage.clickAcceptButton();
+	  int size = orderItemsPage.getRows().size();
+    
+		orderItemsPage.clickAcceptButton("coca cola");
 		
 		assertDoesNotThrow(() -> {
-        	orderItemsPage.getNotificationMessage();
+        	orderItemsPage.getNotificationMessage("Stavka: ");
         });
 		
-		assertNotEquals(orderItemName, orderItemsPage.getOrderItemNameText());
-		
+		assertDoesNotThrow(()-> {
+			orderItemsPage.getNumberOfRows(size - 1);
+		});
 	}
 	
 	@AfterEach
 	public void closeSelenium() {
 		driver.quit();
 	}
-	
-	
-	
 }

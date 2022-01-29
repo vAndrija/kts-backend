@@ -10,8 +10,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 
-import java.util.concurrent.TimeUnit;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MenuItemsListE2ETest {
@@ -39,31 +37,31 @@ public class MenuItemsListE2ETest {
     }
 
     @Test
-    public void ChooseMenuAndReviewMenuItemsTest() throws InterruptedException {
+    public void chooseMenuAndReviewMenuItemsTest() throws InterruptedException {
         menuItemsListPage.clickLoadMore();
 
         assertTrue(menuItemsListPage.getLoadedMenuItems(8).size() == 8);
 
-        menuItemsListPage.setSelectMenu("letnji");
+        menuItemsListPage.setSelectMenu("zimski");
         assertTrue(menuItemsListPage.getLoadedMenuItems(1).size() == 1);
     }
 
     @Test
-    public void SearchMenuItemsTest() {
+    public void searchMenuItemsTest() {
         menuItemsListPage.setSearchParamInputField("cola");
         menuItemsListPage.clickSearchButton();
         assertTrue(menuItemsListPage.getLoadedMenuItems(1).size() == 1);
     }
 
     @Test
-    public void FilterMenuItems() {
+    public void filterMenuItems() {
         menuItemsListPage.setCategorySelect("Glavno jelo");
         menuItemsListPage.clickSearchButton();
         assertTrue(menuItemsListPage.getLoadedMenuItems(4).size() == 4);
     }
 
     @Test
-    public void SearchAndFilterMenuItems() {
+    public void searchAndFilterMenuItems() {
         menuItemsListPage.setSearchParamInputField("strudla");
         menuItemsListPage.setCategorySelect("Dezert");
         menuItemsListPage.clickSearchButton();

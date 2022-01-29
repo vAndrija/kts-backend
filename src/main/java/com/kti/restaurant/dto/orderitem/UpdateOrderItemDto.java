@@ -2,20 +2,17 @@ package com.kti.restaurant.dto.orderitem;
 
 import com.kti.restaurant.model.enums.OrderItemStatus;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class UpdateOrderItemDto {
     @NotNull(message = "Quantity should not be null or empty")
     private Integer quantity;
 
-    @NotEmpty(message = "Note should not be null or empty")
     private String note;
 
     @NotNull(message = "Status should not be null")
     private OrderItemStatus status;
 
-    @NotNull(message = "Priority should not be null or empty")
     private Integer priority;
 
     @NotNull(message = "Menu item id should not be null or empty")

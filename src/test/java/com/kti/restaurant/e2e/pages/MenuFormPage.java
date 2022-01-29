@@ -1,5 +1,6 @@
 package com.kti.restaurant.e2e.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -17,23 +18,22 @@ public class MenuFormPage {
     @FindBy(xpath = "//*[@formControlName=\"period\"]")
     private WebElement period;
     
-    @FindBy(xpath = "//div[contains(text(), \"Menu added!\")]")
-    private WebElement notificationMessage;
-    
     @FindBy(className = "applyBtn")
     private WebElement applyButton;
     
     @FindBy(className = "btn")
     private WebElement submitButton;
     
+    @FindBy(xpath = "//div[@class='drp-calendar left']//div[@class='calendar-table']//tbody//td[5]")
+    private WebElement startDate;
+    
+    @FindBy(xpath = "//div[@class='drp-calendar right']//div[@class='calendar-table']//tbody//td[6]")
+    private WebElement endDate;
+    
+
+    
     public MenuFormPage(WebDriver driver) {
         this.driver = driver;
-    }
-
-    public void menuForm(String name, String period) {
-        this.setName(name);
-        this.setPeriod(period);
-        this.getSubmitButton().click();
     }
 
     public WebElement getName() {
@@ -46,25 +46,27 @@ public class MenuFormPage {
         nameElement.sendKeys(name);
     }
 
-    public WebElement getPeriod() {
-        return WaitUtils.visibilityWait(driver, period, 10);
+    public void clickStartDate() {
+    	WaitUtils.visibilityWait(driver, startDate, 10).click();
     }
-
-    public void setPeriod(String password) {
-        WebElement periodElement = getPeriod();
-        periodElement.clear();
-        periodElement.sendKeys(password);
+    
+    public void clickEndDate() {
+    	WaitUtils.visibilityWait(driver, endDate, 10).click();
     }
-
-    public WebElement getNotificationMessage() {
-    	return WaitUtils.visibilityWait(driver, notificationMessage, 10);
+    
+    public void clickPeriod() {
+    	WaitUtils.visibilityWait(driver, period, 10).click();
+    }
+    
+    public WebElement getNotificationMessage(String message) {
+    	return WaitUtils.presenceWait(driver, By.xpath(String.format("//div[contains(text(), '%s')]", message)), 10);
     }
     
     public boolean isButtonEnabled() {
-    	return submitButton.isEnabled();
+    	return this.submitButton.isEnabled();
     }
     
-    public WebElement getSubmitButton() {
+    private WebElement getSubmitButton() {
         return WaitUtils.clickableWait(driver, submitButton, 10);
     }
     
@@ -73,7 +75,7 @@ public class MenuFormPage {
     	button.click();
     }
     
-    public WebElement getApplyButton() {
+    private WebElement getApplyButton() {
         return WaitUtils.clickableWait(driver, applyButton, 10);
     }
     

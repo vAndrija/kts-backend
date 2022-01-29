@@ -2,11 +2,12 @@ package com.kti.restaurant.service.implementation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -33,10 +34,17 @@ public class NotificationServiceUnitTests {
 	
 	@BeforeEach
 	public void setup() {
-		Notification notification = new Notification("Poruka", new OrderItem(), false);
+		OrderItem oi = new OrderItem();
+		oi.setId(1);
+		
+		Notification notification = new Notification("Poruka", oi);
 		notification.setId(1);
 		
+		List<Notification> notifications = new ArrayList<Notification>();
+		notifications.add(notification);
+		
 		when(notificationRepository.findById(1)).thenReturn(Optional.of(notification));
+		when(notificationRepository.findAll()).thenReturn(notifications);
 	}
 	
 	@Test
@@ -56,44 +64,13 @@ public class NotificationServiceUnitTests {
 	}
 		
 	@Test
-	public void update_ValidId_ReturnsNotificationUpdated() throws Exception {
-		Notification notificationToUpdate = new Notification("Poruka", new OrderItem(), true);
-		notificationToUpdate.setId(1);
-		
-		when(notificationRepository.save(any())).thenReturn(notificationToUpdate);
-		
-		Notification notification = notificationService.update(notificationToUpdate, 1);
-		
-		assertEquals(notificationToUpdate.getSeen(), notification.getSeen());
-		assertEquals(notificationToUpdate.getMessage(), notification.getMessage());
-		
-	}
-	
-	@Test
-	public void update_InvalidId_ThrowsMissingEntityException() {
-		Exception exception = assertThrows(MissingEntityException.class, () -> {
-			notificationService.update(null, 2);
-		});
-		
-		assertEquals(message, exception.getMessage());
-	}
-	
-	@Test
 	public void delete_ValidId() {
 		notificationService.delete(1);
 		
-		Notification notification = new Notification("Poruka", new OrderItem(), false);
+		Notification notification = new Notification("Poruka", new OrderItem());
 		notification.setId(1);
 		
-		verify(notificationRepository, times(1)).findById(1);
+		verify(notificationRepository, times(1)).findAll();
 	} 
-	
-	@Test
-	public void delete_InvalidId_ThrowsMissingEntityException() {
-		Exception exception = assertThrows(MissingEntityException.class, () -> {
-			notificationService.delete(2);
-		});
-		
-		assertEquals(message, exception.getMessage());	
-	}
+
 }

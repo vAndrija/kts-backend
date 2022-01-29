@@ -12,16 +12,13 @@ import com.kti.restaurant.e2e.utils.WaitUtils;
 public class AcceptOrderItemPage {
 	 private WebDriver webDriver;
 	 
-	 @FindBy(xpath = "//div[contains(text(), 'Stavka')]")
-	 private WebElement notificationMessage;
-	 
-	 @FindBy(xpath = "//tr[1]/td[6]")
-	 private WebElement acceptOrderItemButton;
-	 
 	 @FindBy(xpath = "//tr[1]/td[2]")
 	 private WebElement orderItemName;
 	 	
-	 @FindBy(tagName = "tbody")
+	 @FindBy(xpath = "//div[contains(text(), 'Stavka')]")
+	 private WebElement notificationMessage;
+	 
+	 @FindBy(xpath = "//tbody")
 	 private WebElement tableBody;
 	 
 	 public AcceptOrderItemPage(WebDriver webDriver) {
@@ -29,27 +26,29 @@ public class AcceptOrderItemPage {
 	 }
 	 
 	 public WebElement getTableBody() {
-		 return WaitUtils.visibilityWait(webDriver, tableBody, 10);
+	        return WaitUtils.visibilityWait(webDriver, tableBody, 10);
 	 }
-
+	 
 	 public List<WebElement> getRows() {
 		 List<WebElement> elements = getTableBody().findElements(By.xpath("//tbody/tr"));
 	     return elements;
 	 }
+	 
 	 public String getOrderItemNameText() {
 		 return WaitUtils.visibilityWait(webDriver, orderItemName, 10).getText();
 	 }
 	 
-	 public WebElement getAcceptButton() {
-	     return WaitUtils.visibilityWait(webDriver, acceptOrderItemButton, 10);
+	 public void clickAcceptButton(String name) {
+		 WebElement button = webDriver.findElement(By.xpath(String.format("//tbody/tr/td[2]//h5[text() = '%s']/ancestor::tr/td[6]//button", name)));
+		 WebElement element = WaitUtils.clickableWait(webDriver, button, 10);
+		 element.click();
 	 }
 	 
-	 public void clickAcceptButton() {
-	     WebElement button = getAcceptButton();
-	     button.click();
+	 public WebElement getNotificationMessage(String message) {
+	    	return WaitUtils.presenceWait(webDriver, By.xpath(String.format("//div[contains(text(), '%s')]", message)), 10);
 	 }
 	 
-	 public WebElement getNotificationMessage() {
-		 return WaitUtils.visibilityWait(webDriver, notificationMessage, 10);
+	 public List<WebElement> getNumberOfRows(int number) {
+		 return WaitUtils.numberOfElementsWait(webDriver, By.xpath("//tbody/tr"), 10, number);
 	 }
 }

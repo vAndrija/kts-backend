@@ -283,13 +283,7 @@ public class OrderItemServiceIntegrationTests {
                 orderItemService.findByOrdersAndStatus(orders.getContent(), " "));
 
     }
-    
-    
-    @Test
-    public void checkIfServed_ValidStatus_ReturnsTrue() {
-        assertTrue(orderItemService.checkIfServed(2));
-    }
-    
+
     @Test
     public void checkIfServed_InvalidStatus_ReturnsFalse() {
         assertFalse(orderItemService.checkIfServed(1));

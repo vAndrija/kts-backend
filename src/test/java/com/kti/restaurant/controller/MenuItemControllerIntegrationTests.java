@@ -4,12 +4,15 @@ import com.kti.restaurant.dto.JwtAuthenticationRequest;
 import com.kti.restaurant.dto.menuitem.CreateMenuItemDto;
 import com.kti.restaurant.dto.menuitem.MenuItemDto;
 import com.kti.restaurant.dto.menuitem.UpdateMenuItemDto;
+import com.kti.restaurant.dto.priceitem.PriceItemDto;
 import com.kti.restaurant.exception.MissingEntityException;
+import com.kti.restaurant.model.Menu;
 import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
 import com.kti.restaurant.service.implementation.MenuItemService;
+import com.kti.restaurant.utils.GsonUtils;
 import com.kti.restaurant.utils.RestResponsePage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +25,10 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.*;
+import org.springframework.test.context.TestPropertySource;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -30,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource("classpath:application-test.properties")
 public class MenuItemControllerIntegrationTests {
 
     @Autowired
@@ -51,6 +58,7 @@ public class MenuItemControllerIntegrationTests {
         accessToken = responseEntity.getBody().getAccessToken();
         headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
     }
 
     @Test
@@ -77,16 +85,39 @@ public class MenuItemControllerIntegrationTests {
         menuItemService.delete(menuItem.getId());
     }
 
-    @Test
-    public void createMenuItem_InvalidMenuItemName_ReturnsBadRequest() {
+    @ParameterizedTest
+    @MethodSource("provideMenuItemForCreate")
+    public void createMenuItem_InvalidMenuItemName_ReturnsBadRequest(String name, String description, String category,
+                                                                     MenuItemType type,
+                                                                     Integer preparationTime, PriceItemDto priceItemDto,
+                                                                     String imageName, String bodyParameter, String errorMessage) {
         int size = menuItemService.findAll().size();
 
-        HttpEntity<CreateMenuItemDto> httpEntity = new HttpEntity<>(new CreateMenuItemDto("", "Jelo od mlevenog mesa i kiselog kupusa", MenuItemType.FOOD,
-                "Glavno jelo", 10, null, "slika"), headers);
-        ResponseEntity<MenuItem> responseEntity = restTemplate.postForEntity("/api/v1/menu-items", httpEntity, MenuItem.class);
+        ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() {
+        };
+
+        HttpEntity<String> httpEntity = new HttpEntity<>(GsonUtils.ToJson(new CreateMenuItemDto(name, description, type,
+                category, preparationTime, priceItemDto, imageName)), headers);
+        ResponseEntity<HashMap<String, String>> responseEntity = restTemplate.exchange("/api/v1/menu-items", HttpMethod.POST, httpEntity, responseType);
+
+        HashMap<String, String> body = responseEntity.getBody();
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(errorMessage, body.get(bodyParameter));
         assertEquals(size, menuItemService.findAll().size());
+    }
+
+    private static Stream<Arguments> provideMenuItemForCreate() {
+        return Stream.of(
+                Arguments.of("", "Jelo od mlevenog mesa i kiselog kupusa", "Glavno jelo", MenuItemType.FOOD, 10, null, "slika",
+                        "name", "Name should not be null or empty"),
+                Arguments.of("Sarma", "", "Glavno jelo", MenuItemType.FOOD, 10, null, "slika",
+                        "description", "Description should not be null or empty"),
+                Arguments.of("Sarma", "Jelo od mlevenog mesa i kiselog kupusa", null, MenuItemType.FOOD, 10, null, "slika",
+                        "category", "Category should not be null"),
+                Arguments.of("Sarma", "Jelo od mlevenog mesa i kiselog kupusa", "Glavno jelo", null, 10, null, "slika",
+                        "type", "Type should not be null")
+        );
     }
 
     @Test
@@ -148,13 +179,44 @@ public class MenuItemControllerIntegrationTests {
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
-    @Test
-    public void updateMenuItem_InvalidMenuItemName_ReturnsBadRequest() {
-        HttpEntity<UpdateMenuItemDto> httpEntity = new HttpEntity<>(new UpdateMenuItemDto("", "bezalkoholno gazirano pice", MenuItemType.DRINK,
-                "Bezalkoholno piće", 1, true, 2, "slika"), headers);
-        ResponseEntity<MenuItem> responseEntity = restTemplate.exchange("/api/v1/menu-items/{id}", HttpMethod.PUT, httpEntity, MenuItem.class, 1);
+    @ParameterizedTest
+    @MethodSource("provideMenuItemForUpdate")
+    public void updateMenuItem_InvalidMenuItemName_ReturnsBadRequest(String name, String description, String category,
+                                                                     MenuItemType type,
+                                                                     Integer preparationTime, Integer menu, boolean accepted,
+                                                                     String imageName, String bodyParameter, String errorMessage) {
+
+        ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() {
+        };
+
+        HttpEntity<String> httpEntity = new HttpEntity<>(GsonUtils.ToJson(new UpdateMenuItemDto(name, description, type,
+                category, menu, accepted, preparationTime, imageName)), headers);
+        ResponseEntity<HashMap<String, String>> responseEntity = restTemplate.exchange("/api/v1/menu-items/{id}", HttpMethod.PUT, httpEntity, responseType, 1);
+
+        HashMap<String, String> body = responseEntity.getBody();
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(errorMessage, body.get(bodyParameter));
+    }
+
+    private static Stream<Arguments> provideMenuItemForUpdate() {
+        return Stream.of(
+                Arguments.of("", "Jelo od mlevenog mesa i kiselog kupusa", "Glavno jelo", MenuItemType.FOOD, 1, 10, true, "slika",
+                        "name", "Name should not be null or empty"),
+                Arguments.of("Sarma", "", "Glavno jelo", MenuItemType.FOOD, 1, 10, true, "slika",
+                        "description", "Description should not be null or empty"),
+                Arguments.of("Sarma", "Jelo od mlevenog mesa i kiselog kupusa", "Glavno jelo", null, 1, 10, true, "slika",
+                        "type", "Type should not be null"),
+                Arguments.of("Sarma", "Jelo od mlevenog mesa i kiselog kupusa", null, MenuItemType.FOOD, 1, 10, true, "slika",
+                        "category", "Category should not be null"),
+                Arguments.of("Sarma", "Jelo od mlevenog mesa i kiselog kupusa", "Glavno jelo", MenuItemType.FOOD, 10, null, true, "slika",
+                        "menuId", "Menu id should not be null or empty"),
+                Arguments.of("Sarma", "Jelo od mlevenog mesa i kiselog kupusa", "Glavno jelo", MenuItemType.FOOD, null, null, true, "slika",
+                        "preparationTime", "Preparation time should not be null"),
+                Arguments.of("Sarma", "Jelo od mlevenog mesa i kiselog kupusa", "Glavno jelo", MenuItemType.FOOD, -1, 1, true, "slika",
+                        "preparationTime", "Preparation time should be bigger than 0")
+
+        );
     }
 
     @Test
@@ -181,7 +243,7 @@ public class MenuItemControllerIntegrationTests {
     @Test
     public void searchMenuItems_ValidSearchParameter_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<MenuItemDto[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/search/{search}", HttpMethod.GET, httpEntity,
+        ResponseEntity<MenuItemDto[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/search/?search={search}", HttpMethod.GET, httpEntity,
                 MenuItemDto[].class, "bezalkoholno");
 
         List<MenuItemDto> menuItems = List.of(responseEntity.getBody());
@@ -195,10 +257,10 @@ public class MenuItemControllerIntegrationTests {
     @Test
     public void searchMenuItems_InvalidSearchParameter_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<MenuItem[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/search/{search}", HttpMethod.GET, httpEntity,
-                MenuItem[].class, "abcd");
+        ResponseEntity<MenuItemDto[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/search/?search={search}", HttpMethod.GET, httpEntity,
+                MenuItemDto[].class, "abcd");
 
-        List<MenuItem> menuItems = List.of(responseEntity.getBody());
+        List<MenuItemDto> menuItems = List.of(responseEntity.getBody());
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(0, menuItems.size());
@@ -213,10 +275,9 @@ public class MenuItemControllerIntegrationTests {
         List<MenuItemDto> menuItems = List.of(responseEntity.getBody());
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(3, menuItems.size());
+        assertEquals(2, menuItems.size());
         assertEquals(MenuItemCategory.DESSERT, MenuItemCategory.findCategory(menuItems.get(0).getCategory()));
         assertEquals(MenuItemCategory.DESSERT, MenuItemCategory.findCategory(menuItems.get(1).getCategory()));
-        assertEquals(MenuItemCategory.DESSERT, MenuItemCategory.findCategory(menuItems.get(2).getCategory()));
     }
 
     @Test

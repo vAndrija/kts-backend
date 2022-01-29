@@ -46,6 +46,7 @@ public class CookServiceIntegrationTests {
         });
     }
 
+    @Rollback()
     @Test
     public void create_ValidCook_ReturnsCreatedCook() throws Exception {
         Cook cook = new Cook("Vojnovic", "Andrija", "213123123", "andrija@vojnvo.com", "21312311", true);

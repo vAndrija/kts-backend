@@ -7,6 +7,7 @@ import com.kti.restaurant.model.Bartender;
 import com.kti.restaurant.model.Role;
 import com.kti.restaurant.repository.BartenderRepository;
 import com.kti.restaurant.repository.RoleRepository;
+import com.kti.restaurant.repository.SalaryRepository;
 import com.kti.restaurant.repository.UserRepository;
 import com.kti.restaurant.service.EmailService;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,9 @@ public class BartenderServiceUnitTests {
 
     @InjectMocks
     private BartenderService bartenderService;
+
+    @Mock
+    private SalaryRepository salaryRepository;
 
     @Mock
     private BartenderRepository bartenderRepository;
@@ -84,6 +88,8 @@ public class BartenderServiceUnitTests {
         when(userRepository.findByEmailAddress("milutin@zolotic.com"))
                 .thenReturn(null);
         when(bartenderRepository.save(any()))
+                .thenAnswer(a -> a.getArgument(0));
+        when(salaryRepository.save(any()))
                 .thenAnswer(a -> a.getArgument(0));
         Role bartenderRole = new Role();
         bartenderRole.setId(2L);

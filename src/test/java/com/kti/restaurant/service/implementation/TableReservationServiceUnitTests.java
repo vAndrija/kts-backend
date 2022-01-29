@@ -40,7 +40,7 @@ public class TableReservationServiceUnitTests {
 	
 	@BeforeEach
 	private void setup() {
-		TableReservation reservation = new TableReservation("Ime", LocalDateTime.parse("2021-10-10T22:22"), new RestaurantTable());
+		TableReservation reservation = new TableReservation("Ime", LocalDateTime.parse("2021-10-10T22:22"),  LocalDateTime.parse("2021-10-10T23:22"), new RestaurantTable());
 		reservation.setId(1);
 		
 		when(reservationRepository.findById(1)).thenReturn(Optional.of(reservation));
@@ -66,7 +66,7 @@ public class TableReservationServiceUnitTests {
 	
 	@Test
 	public void create_ValidTableReservation_ReturnsCreatedTableReservation() throws Exception {
-		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-12-12T22:22"), new RestaurantTable());
+		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-12-12T22:22"),  LocalDateTime.parse("2021-12-12T23:22"), new RestaurantTable());
 		
 		when(reservationRepository.save(any())).thenReturn(reservationToUpdate);
 
@@ -78,11 +78,11 @@ public class TableReservationServiceUnitTests {
 	@Test
 	public void create_InvalidReservationTime_ThrowsBadLogicException() {
 		List<TableReservation> reservations = new ArrayList<TableReservation>();
-		reservations.add(new TableReservation("Ime", LocalDateTime.parse("2021-10-10T22:22"), new RestaurantTable()));
+		reservations.add(new TableReservation("Ime", LocalDateTime.parse("2021-10-10T22:22"), LocalDateTime.parse("2021-10-10T23:22"), new RestaurantTable()));
 		
 		when(reservationRepository.getTableReservationByDateAndTableId(any(), any(), any())).thenReturn(reservations);
 		
-		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-10-10T22:22"), new RestaurantTable());
+		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-10-10T22:22"),  LocalDateTime.parse("2021-10-10T22:52"), new RestaurantTable());
 		reservationToUpdate.setId(1);
 		
 		Exception exception = assertThrows(BadLogicException.class, () -> {
@@ -94,7 +94,7 @@ public class TableReservationServiceUnitTests {
 	
 	@Test
 	public void update_ValidId_ReturnsUpdatedTableReservation() throws Exception {
-		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-10-10T22:22"), new RestaurantTable());
+		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-10-10T22:22"),  LocalDateTime.parse("2021-10-10T23:22"), new RestaurantTable());
 		reservationToUpdate.setId(1);
 		
 		when(reservationRepository.save(any())).thenReturn(reservationToUpdate);
@@ -118,11 +118,11 @@ public class TableReservationServiceUnitTests {
 	@Test
 	public void update_InvalidReservationTime_ThrowsBadLogicException() {
 		List<TableReservation> reservations = new ArrayList<TableReservation>();
-		reservations.add(new TableReservation("Ime", LocalDateTime.parse("2021-10-10T22:22"), new RestaurantTable()));
+		reservations.add(new TableReservation("Ime", LocalDateTime.parse("2021-10-10T22:22"), LocalDateTime.parse("2021-10-10T23:22"), new RestaurantTable()));
 		
 		when(reservationRepository.getTableReservationByDateAndTableId(any(), any(), any())).thenReturn(reservations);
 		
-		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-10-10T22:22"), new RestaurantTable());
+		TableReservation reservationToUpdate = new TableReservation("NovoIme", LocalDateTime.parse("2021-10-10T22:22"), LocalDateTime.parse("2021-10-10T23:22"), new RestaurantTable());
 		reservationToUpdate.setId(1);
 		
 		Exception exception = assertThrows(BadLogicException.class, () -> {

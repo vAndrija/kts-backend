@@ -2,6 +2,7 @@ package com.kti.restaurant.dto.menu;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
 public class MenuDto {
@@ -9,17 +10,17 @@ public class MenuDto {
     private String name;
 
     @NotNull(message = "Start date should not be null or empty")
-    private LocalDateTime startDuration;
+    private LocalDateTime durationStart;
 
     @NotNull(message = "End date should not be null or empty")
-    private LocalDateTime endDuration;
+    private LocalDateTime durationEnd;
 
     private Integer id;
 
-    public MenuDto(String name, LocalDateTime startDuration, LocalDateTime endDuration, Integer id) {
+    public MenuDto(String name, LocalDateTime durationStart, LocalDateTime durationEnd, Integer id) {
         this.name = name;
-        this.startDuration = startDuration;
-        this.endDuration = endDuration;
+        this.durationStart = durationStart;
+        this.durationEnd = durationEnd;
         this.id = id;
     }
 
@@ -35,20 +36,20 @@ public class MenuDto {
         this.name = name;
     }
 
-    public LocalDateTime getStartDuration() {
-        return startDuration;
+    public LocalDateTime getDurationStart() {
+        return durationStart;
     }
 
-    public void setStartDuration(LocalDateTime startDuration) {
-        this.startDuration = startDuration;
+    public void setDurationStart(LocalDateTime durationStart) {
+        this.durationStart = durationStart;
     }
 
-    public LocalDateTime getEndDuration() {
-        return endDuration;
+    public LocalDateTime getDurationEnd() {
+        return durationEnd;
     }
 
-    public void setEndDuration(LocalDateTime endDuration) {
-        this.endDuration = endDuration;
+    public void setDurationEnd(LocalDateTime durationEnd) {
+        this.durationEnd = durationEnd;
     }
 
     public Integer getId() {

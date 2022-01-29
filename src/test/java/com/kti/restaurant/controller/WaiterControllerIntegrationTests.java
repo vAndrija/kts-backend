@@ -4,8 +4,10 @@ import com.kti.restaurant.dto.JwtAuthenticationRequest;
 import com.kti.restaurant.dto.waiter.WaiterCreateDto;
 import com.kti.restaurant.dto.waiter.WaiterDto;
 import com.kti.restaurant.dto.waiter.WaiterUpdateDto;
+import com.kti.restaurant.model.Salary;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.model.Waiter;
+import com.kti.restaurant.service.implementation.SalaryService;
 import com.kti.restaurant.service.implementation.WaiterService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +32,9 @@ public class WaiterControllerIntegrationTests {
 
     @Autowired
     private WaiterService waiterService;
+
+    @Autowired
+    private SalaryService salaryService;
 
     private String accessToken;
 
@@ -66,7 +71,7 @@ public class WaiterControllerIntegrationTests {
         List<Waiter> waiterList = waiterService.findAll();
         assertEquals(size + 1, waiterList.size());
         assertEquals("aleksamaric@gmail.com", waiterList.get(size).getEmailAddress());
-
+        salaryService.delete(waiterDto.getSalaryDto().getId());
         waiterService.delete(waiterDto.getId());
 
     }
@@ -204,7 +209,8 @@ public class WaiterControllerIntegrationTests {
         Waiter waiter = waiterService.create(new Waiter("Aleksa", "Maric",
                 "111111", "152487", "aleksamaric@gmail.com"));
         int size = waiterService.findAll().size();
-
+        Salary salaryToDelete = salaryService.findAll().get(salaryService.findAll().size()-1);
+        salaryService.delete(salaryToDelete.getId());
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<WaiterDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.DELETE, httpEntity,
                 WaiterDto.class, waiter.getId());
