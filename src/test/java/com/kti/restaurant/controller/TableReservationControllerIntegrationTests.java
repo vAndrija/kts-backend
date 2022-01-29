@@ -215,7 +215,7 @@ public class TableReservationControllerIntegrationTests {
         HttpEntity<TableReservationDto> httpEntity = new HttpEntity<TableReservationDto>(reservationDto, headers);
 
         ResponseEntity<TableReservationDto> entity = restTemplate
-                .exchange("/api/v1/table-reservations/1", HttpMethod.PUT, httpEntity, TableReservationDto.class);
+                .exchange("/api/v1/table-reservations/2", HttpMethod.PUT, httpEntity, TableReservationDto.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
     }

@@ -30,7 +30,7 @@ public class PriceItem {
 
     private LocalDate endDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private MenuItem menuItem;
 

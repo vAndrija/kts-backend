@@ -32,6 +32,15 @@ public class LoginE2ETest {
         loginPage.login("sarajovic@gmail.com", "123");
 
         assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/menu-items", 10));
+
+        loginPage.clickPersonalSettings();
+        loginPage.clickLogoutButton();
+
+        assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/auth/login", 10));
+
+        loginPage.login("anapopovic@gmail.com", "123");
+
+        assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/menu-items", 10));
     }
 
     @AfterEach
