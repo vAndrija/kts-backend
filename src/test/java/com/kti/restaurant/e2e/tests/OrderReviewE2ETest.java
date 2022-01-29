@@ -54,9 +54,6 @@ public class OrderReviewE2ETest {
 
         assertEquals(10, orderReviewPage.getRows(10).size());
 
-        orderReviewPage.clickDeleteButton();
-
-        assertEquals(9, orderReviewPage.getRows(9).size());
 
         orderReviewPage.clickCreateOrderButton();
         assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/order/order", 10));
