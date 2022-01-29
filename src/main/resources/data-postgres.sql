@@ -53,8 +53,8 @@ INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (45000
 INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (50000.00, '2021-10-05', '2022-10-05', 2, false);
 INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (60000.00, '2021-08-18', '2022-08-18', 3, false);
 INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (50000.00, '2021-11-18', '2022-11-18', 4, false);
-INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (65000.00, '2021-02-01', '2022-02-01', 5, false);
-INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (70000.00, '2021-01-05', '2022-01-05', 6, false);
+INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (65000.00, '2021-02-01', '2022-06-01', 5, false);
+INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (70000.00, '2021-01-05', '2022-06-05', 6, false);
 INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (62000.00, '2021-11-18', '2022-11-18', 7, false);
 INSERT INTO salary (value, start_date, end_date, user_id, deleted) values (62000.00, '2021-11-18', '2022-11-18', 8, false);
 
