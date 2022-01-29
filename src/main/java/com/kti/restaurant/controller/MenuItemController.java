@@ -80,9 +80,9 @@ public class MenuItemController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping(value = "/search/{search}")
-    public ResponseEntity<?> searchMenuItems(@PathVariable("search") String s) {
-        List<MenuItemDto> menuItems = menuItemService.search(s, LocalDateTime.now()).stream()
+    @GetMapping(value = "/search/")
+    public ResponseEntity<?> searchMenuItems(@RequestParam("search") String search) {
+        List<MenuItemDto> menuItems = menuItemService.search(search, LocalDateTime.now()).stream()
                 .map(menuItem -> this.menuItemMapper.fromMenuItemToMenuItemDto(menuItem)).collect(Collectors.toList());
         return new ResponseEntity<>(menuItems, HttpStatus.OK);
     }
