@@ -12,10 +12,10 @@ public class ChangePasswordPage {
     @FindBy(xpath = "//a[@class='nav-link']")
     private WebElement navBarLink;
 
-    @FindBy(xpath = "//*[contains(text(),'Promjena')]/..")
+    @FindBy(xpath = "(//*[contains(@class,'nav-item dropdown header-profile')])/*[2]/*[2]")
     private WebElement changePasswordNavLink;
 
-    @FindBy(xpath = "//*[contains(text(),'Odjavi')]/..")
+    @FindBy(xpath = "(//*[contains(@class,'nav-item dropdown header-profile')])/*[2]/*[3]")
     private WebElement logoutLink;
 
     @FindBy(xpath = "//input[@formcontrolname='password']")

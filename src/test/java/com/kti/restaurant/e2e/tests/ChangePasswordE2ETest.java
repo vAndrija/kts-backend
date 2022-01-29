@@ -21,7 +21,7 @@ public class ChangePasswordE2ETest {
     private ChangePasswordPage changePasswordPage;
     @BeforeEach
     public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver-lin");
+        System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
         driver = new ChromeDriver();
         loginPage = PageFactory.initElements(driver, LoginPage.class);
         changePasswordPage = PageFactory.initElements(driver,ChangePasswordPage.class);
