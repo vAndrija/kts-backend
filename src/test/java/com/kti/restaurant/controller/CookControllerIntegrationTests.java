@@ -5,8 +5,10 @@ import com.kti.restaurant.dto.cook.CookCreateDto;
 import com.kti.restaurant.dto.cook.CookDto;
 import com.kti.restaurant.dto.cook.CookUpdateDto;
 import com.kti.restaurant.model.Cook;
+import com.kti.restaurant.model.Salary;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.service.implementation.CookService;
+import com.kti.restaurant.service.implementation.SalaryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,9 @@ public class CookControllerIntegrationTests {
     private String accessToken;
 
     private HttpHeaders headers = new HttpHeaders();
+
+    @Autowired
+    private SalaryService salaryService;
 
     @BeforeEach
     public void login() {
@@ -64,7 +69,7 @@ public class CookControllerIntegrationTests {
         List<Cook> cookList = cookService.findAll();
         assertEquals(size + 1, cookList.size());
         assertEquals("aleksamaric6@gmail.com", cookList.get(size).getEmailAddress());
-
+        salaryService.delete(cookDto.getSalaryDto().getId());
         cookService.delete(cookDto.getId());
 
     }
@@ -192,7 +197,8 @@ public class CookControllerIntegrationTests {
         Cook cook = cookService.create(new Cook("Aleksa", "Maric",
                 "111111", "aleksamaric5@gmail.com", "152487", true));
         int size = cookService.findAll().size();
-
+        Salary salaryToDelete = salaryService.findAll().get(salaryService.findAll().size()-1);
+        salaryService.delete(salaryToDelete.getId());
         HttpEntity<CookUpdateDto> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<CookDto> responseEntity = restTemplate.exchange(URL_PREFIX + "/{id}", HttpMethod.DELETE, httpEntity,
                 CookDto.class, cook.getId());

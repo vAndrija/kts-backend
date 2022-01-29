@@ -17,6 +17,12 @@ public class LoginPage {
     @FindBy(className = "btn")
     private WebElement submitButton;
 
+    @FindBy(xpath = "//*[contains(text() ,'Lična podešavanja')]")
+    private WebElement personalSettings;
+
+    @FindBy(xpath = "//*[contains(text(),'Odjavite se')]")
+    private WebElement logoutButton;
+
     public LoginPage(WebDriver driver) {
         this.driver = driver;
     }
@@ -52,6 +58,19 @@ public class LoginPage {
         return WaitUtils.clickableWait(driver, submitButton, 10);
     }
 
+    public WebElement getPersonalSettings() {
+        return WaitUtils.visibilityWait(driver, personalSettings, 10);
+    }
 
+    public void clickPersonalSettings() {
+        getPersonalSettings().click();
+    }
 
+    public WebElement getLogoutButton() {
+        return WaitUtils.visibilityWait(driver, logoutButton, 10);
+    }
+
+    public void clickLogoutButton() {
+        getLogoutButton().click();
+    }
 }

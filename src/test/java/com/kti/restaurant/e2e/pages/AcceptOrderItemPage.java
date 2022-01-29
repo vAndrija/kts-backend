@@ -12,6 +12,9 @@ import com.kti.restaurant.e2e.utils.WaitUtils;
 public class AcceptOrderItemPage {
 	 private WebDriver webDriver;
 	 
+	 @FindBy(xpath = "//tr[1]/td[2]")
+	 private WebElement orderItemName;
+	 	
 	 @FindBy(xpath = "//div[contains(text(), 'Stavka')]")
 	 private WebElement notificationMessage;
 	 
@@ -31,15 +34,18 @@ public class AcceptOrderItemPage {
 	     return elements;
 	 }
 	 
-	
+	 public String getOrderItemNameText() {
+		 return WaitUtils.visibilityWait(webDriver, orderItemName, 10).getText();
+	 }
+	 
 	 public void clickAcceptButton(String name) {
 		 WebElement button = webDriver.findElement(By.xpath(String.format("//tbody/tr/td[2]//h5[text() = '%s']/ancestor::tr/td[6]//button", name)));
 		 WebElement element = WaitUtils.clickableWait(webDriver, button, 10);
 		 element.click();
 	 }
 	 
-	 public WebElement getNotificationMessage() {
-		 return WaitUtils.visibilityWait(webDriver, notificationMessage, 10);
+	 public WebElement getNotificationMessage(String message) {
+	    	return WaitUtils.presenceWait(webDriver, By.xpath(String.format("//div[contains(text(), '%s')]", message)), 10);
 	 }
 	 
 	 public List<WebElement> getNumberOfRows(int number) {

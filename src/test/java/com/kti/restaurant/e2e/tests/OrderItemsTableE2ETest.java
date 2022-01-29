@@ -52,12 +52,17 @@ public class OrderItemsTableE2ETest {
 
         assertEquals(2, orderItemsTablePage.getRows().size());
 
+        orderItemsTablePage.getRow("U pripremi", "6").click();
+        assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/order/order-items", 10));
+
+        orderItemsTablePage.getNewButton("6").click();
+        assertEquals("Pripremljeno", orderItemsTablePage.getRow("Pripremljeno", "6").getText());
 
     }
 
-//    @AfterEach
-//    public void tearDown() {
-//        driver.quit();
-//    }
+    @AfterEach
+    public void tearDown() {
+        driver.quit();
+    }
 
 }
