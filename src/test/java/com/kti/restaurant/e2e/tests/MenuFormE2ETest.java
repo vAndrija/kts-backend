@@ -38,28 +38,28 @@ public class MenuFormE2ETest {
         
         driver.manage().window().maximize();
         driver.get("http://localhost:4200/auth/login");
+        loginPage.login("sarajovic@gmail.com", "123");
+        assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/menu-items", 10));
 	}
 	
 	@Test
 	public void addNewMenu() {
-		loginPage.login("sarajovic@gmail.com", "123");
-        assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/menu-items", 10));
-
         menuItemsListPage.clickAddMenuButton();        
         assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/create-menu", 10));
         
         assertFalse(menuFormPage.isButtonEnabled());
         
         menuFormPage.setName("naziv");
-        
-        menuFormPage.setPeriod("2022-01-05T00:00:00+01:00 2022-02-23T23:00:00+01:00"); 
+        menuFormPage.clickPeriod();
+        menuFormPage.clickStartDate();
+        menuFormPage.clickEndDate();
         assertTrue(menuFormPage.isButtonEnabled());
-       
+        
         menuFormPage.clickApplyButton();
         menuFormPage.clickSubmitButton();
         
         assertDoesNotThrow(() -> {
-        	menuFormPage.getNotificationMessage();
+        	menuFormPage.getNotificationMessage("Meni naziv");
         });
 	}
 	
