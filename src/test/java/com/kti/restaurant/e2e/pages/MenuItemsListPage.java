@@ -24,7 +24,7 @@ public class MenuItemsListPage {
     @FindBy(className = "btn")
     private WebElement detailsButton;
     
-    @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[4]/a")
+    @FindBy(xpath = "//a[.='Kreiraj meni']")
     private WebElement addMenuButton;
 
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[4]/a")
@@ -39,6 +39,9 @@ public class MenuItemsListPage {
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[3]/a")
     private WebElement orderItemsButton;
 
+    @FindBy(xpath = "//a[.='Pregled menija']")
+    private WebElement menuReviewButton;
+    
     @FindBy(xpath = "//*[@formControlName=\"searchParam\"]")
     private WebElement searchParamInputField;
 
@@ -63,6 +66,11 @@ public class MenuItemsListPage {
 
     public void clickOnLinkToUnacceptedMenuItemSPage() {
         WebElement link = WaitUtils.visibilityWait(driver, linkToUnacceptedMenuItemsPage, 10);
+        link.click();
+    }
+    
+    public void clickOnLMenuPreviewPage() {
+        WebElement link = WaitUtils.visibilityWait(driver, menuReviewButton, 10);
         link.click();
     }
 

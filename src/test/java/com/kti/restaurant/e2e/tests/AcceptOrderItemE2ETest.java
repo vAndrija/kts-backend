@@ -1,7 +1,6 @@
 package com.kti.restaurant.e2e.tests;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
@@ -48,16 +47,12 @@ private WebDriver driver;
 		
 		assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/order/unaccepted-order-items", 10));
 		
-		String orderItemName = orderItemsPage.getOrderItemNameText();
 		
-		orderItemsPage.clickAcceptButton();
+		orderItemsPage.clickAcceptButton("coca cola");
 		
 		assertDoesNotThrow(() -> {
-        	orderItemsPage.getNotificationMessage();
+        	orderItemsPage.getNotificationMessage("Stavka: ");
         });
-		
-		assertNotEquals(orderItemName, orderItemsPage.getOrderItemNameText());
-		
 	}
 	
 	@AfterEach
