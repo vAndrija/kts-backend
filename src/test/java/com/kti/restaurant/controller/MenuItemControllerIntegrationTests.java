@@ -183,7 +183,7 @@ public class MenuItemControllerIntegrationTests {
     @Test
     public void searchMenuItems_ValidSearchParameter_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<MenuItemDto[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/search/{search}", HttpMethod.GET, httpEntity,
+        ResponseEntity<MenuItemDto[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/search/?search={search}", HttpMethod.GET, httpEntity,
                 MenuItemDto[].class, "bezalkoholno");
 
         List<MenuItemDto> menuItems = List.of(responseEntity.getBody());
@@ -197,10 +197,10 @@ public class MenuItemControllerIntegrationTests {
     @Test
     public void searchMenuItems_InvalidSearchParameter_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<MenuItem[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/search/{search}", HttpMethod.GET, httpEntity,
-                MenuItem[].class, "abcd");
+        ResponseEntity<MenuItemDto[]> responseEntity = restTemplate.exchange("/api/v1/menu-items/search/?search={search}", HttpMethod.GET, httpEntity,
+                MenuItemDto[].class, "abcd");
 
-        List<MenuItem> menuItems = List.of(responseEntity.getBody());
+        List<MenuItemDto> menuItems = List.of(responseEntity.getBody());
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(0, menuItems.size());
@@ -218,7 +218,6 @@ public class MenuItemControllerIntegrationTests {
         assertEquals(2, menuItems.size());
         assertEquals(MenuItemCategory.DESSERT, MenuItemCategory.findCategory(menuItems.get(0).getCategory()));
         assertEquals(MenuItemCategory.DESSERT, MenuItemCategory.findCategory(menuItems.get(1).getCategory()));
-        assertEquals(MenuItemCategory.DESSERT, MenuItemCategory.findCategory(menuItems.get(2).getCategory()));
     }
 
     @Test
