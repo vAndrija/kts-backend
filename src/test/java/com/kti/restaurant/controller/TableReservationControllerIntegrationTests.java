@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,7 @@ import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.service.implementation.RestaurantTableService;
 import com.kti.restaurant.service.implementation.TableReservationService;
 import com.kti.restaurant.utils.GsonUtils;
+import com.kti.restaurant.utils.RestResponsePage;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
@@ -90,13 +92,14 @@ public class TableReservationControllerIntegrationTests {
     public void getTableReservations_ReservationsExists_ReturnsOk() {
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(headers);
 
-        ResponseEntity<TableReservationDto[]> entity = restTemplate
-                .exchange("/api/v1/table-reservations", HttpMethod.GET, httpEntity, TableReservationDto[].class);
+        ParameterizedTypeReference<RestResponsePage<TableReservationDto>> responseType = new ParameterizedTypeReference<>() {};
+        ResponseEntity<RestResponsePage<TableReservationDto>> entity = restTemplate
+                .exchange("/api/v1/table-reservations/?page={page}&size={size}", HttpMethod.GET, httpEntity, responseType, 0, 8);
 
-        TableReservationDto[] reservations = entity.getBody();
+        List<TableReservationDto> reservations = entity.getBody().getContent();
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
-        assertEquals(2, reservations.length);
+        assertEquals(2, reservations.size());
 
     }
 
@@ -104,7 +107,7 @@ public class TableReservationControllerIntegrationTests {
     public void createTableReservation_ValidTableReservation_ReturnsCreated() throws Exception {
         int size = reservationService.findAll().size();
 
-        TableReservationDto reservation = new TableReservationDto("Nesto", 1, LocalDateTime.parse("2021-12-12T14:00"));
+        TableReservationDto reservation = new TableReservationDto("Nesto", 1, LocalDateTime.parse("2021-12-12T14:00"),  LocalDateTime.parse("2021-12-12T15:00"));
 
 
         HttpEntity<TableReservationDto> httpEntity = new HttpEntity<TableReservationDto>(reservation, headers);
@@ -127,7 +130,7 @@ public class TableReservationControllerIntegrationTests {
     public void createTableReservation_InvalidReservation_ReturnsBadRequest() {
         int size = reservationService.findAll().size();
 
-        TableReservationDto reservation = new TableReservationDto("Nesto", 1, LocalDateTime.parse("2021-11-18T16:00"));
+        TableReservationDto reservation = new TableReservationDto("Nesto", 1, LocalDateTime.parse("2021-11-18T16:00"),  LocalDateTime.parse("2021-11-18T17:22"));
 
         HttpEntity<TableReservationDto> httpEntity = new HttpEntity<TableReservationDto>(reservation, headers);
 
@@ -142,7 +145,7 @@ public class TableReservationControllerIntegrationTests {
     public void createTableReservation_NonexistentTableId_ReturnsNotFound() {
         int size = reservationService.findAll().size();
 
-        TableReservationDto reservation = new TableReservationDto("Nesto", -10, LocalDateTime.parse("2021-11-18T16:00"));
+        TableReservationDto reservation = new TableReservationDto("Nesto", -10, LocalDateTime.parse("2021-11-18T16:00"),  LocalDateTime.parse("2021-11-18T17:22"));
 
         HttpEntity<TableReservationDto> httpEntity = new HttpEntity<TableReservationDto>(reservation, headers);
 
@@ -155,10 +158,10 @@ public class TableReservationControllerIntegrationTests {
 
     @ParameterizedTest
     @MethodSource("provideTableReservationDtoForCreate")
-    public void createTableReservation_InvalidParameters_ReturnsBadRequest(String name, Integer id, LocalDateTime date, String bodyParameter, String errorMessage) {
+    public void createTableReservation_InvalidParameters_ReturnsBadRequest(String name, Integer id, LocalDateTime startDate, LocalDateTime endDate, String bodyParameter, String errorMessage) {
         int size = reservationService.findAll().size();
 
-        TableReservationDto reservation = new TableReservationDto(name, id, date);
+        TableReservationDto reservation = new TableReservationDto(name, id, startDate, endDate);
 
         HttpEntity<String> httpEntity = new HttpEntity<String>(GsonUtils.ToJson(reservation), headers);
 
@@ -178,16 +181,16 @@ public class TableReservationControllerIntegrationTests {
     private static Stream<Arguments> provideTableReservationDtoForCreate() {
 
         return Stream.of(
-                Arguments.of("Nesto", 1, null, "durationStart", "Start date should not be null or empty"),
-                Arguments.of("Nesto", null, LocalDateTime.parse("2021-11-18T16:00"), "tableId", "Table id should not be null"),
-                Arguments.of(null, 1, LocalDateTime.parse("2021-11-18T16:00"), "name", "Name should not be null or empty")
+                Arguments.of("Nesto", 1, null, LocalDateTime.parse("2021-10-10T22:22"), "durationStart", "Start date should not be null or empty"),
+                Arguments.of("Nesto", null, LocalDateTime.parse("2021-11-18T16:00"), LocalDateTime.parse("2021-10-10T22:22") ,"tableId", "Table id should not be null"),
+                Arguments.of(null, 1, LocalDateTime.parse("2021-11-18T16:00"), LocalDateTime.parse("2021-10-10T22:22"), "name", "Name should not be null or empty")
 
         );
     }
 
     @Test
     public void updateTableReservation_ValidReservation_ReturnsOk() throws Exception {
-        TableReservationDto reservationDto = new TableReservationDto(1, "Ime", 1, LocalDateTime.parse("2021-11-21T16:00"));
+        TableReservationDto reservationDto = new TableReservationDto(1, "Ime", 1, LocalDateTime.parse("2021-11-21T16:00"),  LocalDateTime.parse("2021-11-10T17:22"));
 
         TableReservation oldReservation = reservationService.findById(1);
 
@@ -207,7 +210,7 @@ public class TableReservationControllerIntegrationTests {
 
     @Test
     public void updateTableReservation_InvalidReservation_ReturnsBadRequest() {
-        TableReservationDto reservationDto = new TableReservationDto(1, "Ime", 1, LocalDateTime.parse("2021-11-18T16:00"));
+        TableReservationDto reservationDto = new TableReservationDto(1, "Ime", 1, LocalDateTime.parse("2021-11-18T16:00"), LocalDateTime.parse("2021-11-18T17:22"));
 
         HttpEntity<TableReservationDto> httpEntity = new HttpEntity<TableReservationDto>(reservationDto, headers);
 
@@ -221,7 +224,7 @@ public class TableReservationControllerIntegrationTests {
     public void updateTableReservation_NonexistentTableId_ReturnsNotFound() {
         int size = reservationService.findAll().size();
 
-        TableReservationDto reservation = new TableReservationDto("Nesto", -10, LocalDateTime.parse("2021-11-18T16:00"));
+        TableReservationDto reservation = new TableReservationDto("Nesto", -10, LocalDateTime.parse("2021-11-18T16:00"),  LocalDateTime.parse("2021-11-18T17:22"));
 
         HttpEntity<TableReservationDto> httpEntity = new HttpEntity<TableReservationDto>(reservation, headers);
 
@@ -234,10 +237,10 @@ public class TableReservationControllerIntegrationTests {
 
     @ParameterizedTest
     @MethodSource("provideTableReservationDtoForUpdate")
-    public void updateTableReservation_InvalidParameters_ReturnsBadRequest(String name, Integer id, LocalDateTime date, String bodyParameter, String errorMessage) {
+    public void updateTableReservation_InvalidParameters_ReturnsBadRequest(String name, Integer id, LocalDateTime startDate, LocalDateTime endDate, String bodyParameter, String errorMessage) {
         int size = reservationService.findAll().size();
 
-        TableReservationDto reservation = new TableReservationDto(name, id, date);
+        TableReservationDto reservation = new TableReservationDto(name, id, startDate, endDate);
 
         HttpEntity<String> httpEntity = new HttpEntity<String>(GsonUtils.ToJson(reservation), headers);
 
@@ -257,9 +260,9 @@ public class TableReservationControllerIntegrationTests {
     private static Stream<Arguments> provideTableReservationDtoForUpdate() {
 
         return Stream.of(
-                Arguments.of(null, 1, LocalDateTime.parse("2021-11-18T16:00"), "name", "Name should not be null or empty"),
-                Arguments.of("Nesto", 1, null, "durationStart", "Start date should not be null or empty"),
-                Arguments.of("Nesto", null, LocalDateTime.parse("2021-11-18T16:00"), "tableId", "Table id should not be null")
+                Arguments.of(null, 1, LocalDateTime.parse("2021-11-18T16:00"), LocalDateTime.parse("2021-11-10T17:22"), "name", "Name should not be null or empty"),
+                Arguments.of("Nesto", 1, null, LocalDateTime.parse("2021-10-10T22:22"), "durationStart", "Start date should not be null or empty"),
+                Arguments.of("Nesto", null, LocalDateTime.parse("2021-11-18T16:00"), LocalDateTime.parse("2021-11-18T17:22"), "tableId", "Table id should not be null")
         );
     }
 
@@ -267,7 +270,7 @@ public class TableReservationControllerIntegrationTests {
     public void deleteTableReservation_ValidId_ReturnsNoContent() throws Exception {
         RestaurantTable table = tableService.findById(3);
 
-        TableReservation reservation = new TableReservation("Novo ime", LocalDateTime.parse("2021-12-20T12:00"), table);
+        TableReservation reservation = new TableReservation("Novo ime", LocalDateTime.parse("2021-12-20T12:00"),  LocalDateTime.parse("2021-12-20T14:22"),table);
         TableReservation createdReservation = reservationService.create(reservation);
 
         int size = reservationService.findAll().size();
