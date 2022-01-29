@@ -3,6 +3,7 @@ package com.kti.restaurant.service.implementation;
 import com.kti.restaurant.exception.ConflictException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Bartender;
+import com.kti.restaurant.model.Salary;
 import com.kti.restaurant.model.User;
 import com.kti.restaurant.repository.BartenderRepository;
 import com.kti.restaurant.repository.RoleRepository;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,15 +26,18 @@ public class BartenderService implements IBartenderService {
     private RoleRepository roleRepository;
     private UserRepository userRepository;
     private EmailService emailService;
+    private SalaryService salaryService;
 
     @Autowired
     public BartenderService(BartenderRepository bartenderRepository, PasswordEncoder passwordEncoder,
-                            RoleRepository roleRepository,UserRepository userRepository,EmailService emailService) {
+                            RoleRepository roleRepository, UserRepository userRepository,
+                            EmailService emailService, SalaryService salaryService) {
         this.bartenderRepository = bartenderRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
+        this.salaryService = salaryService;
     }
 
     @Override
@@ -54,10 +59,12 @@ public class BartenderService implements IBartenderService {
         if (user != null)
             throw new ConflictException("Bartender with entered email already exists.");
         String tempPassword = UUID.randomUUID().toString();
-        emailService.sendRegistrationMail(entity.getEmailAddress(),"Nalog kreiran", tempPassword);
+        emailService.sendRegistrationMail(entity.getEmailAddress(), "Nalog kreiran", tempPassword);
         entity.setPassword(passwordEncoder.encode(tempPassword));
         entity.getRoles().add(roleRepository.getById(2L));
-        bartenderRepository.save(entity);
+        Bartender bartender = bartenderRepository.save(entity);
+        Salary salary = new Salary(45000.00, LocalDate.now(), LocalDate.now(), bartender);
+        salaryService.create(salary);
         return entity;
     }
 
