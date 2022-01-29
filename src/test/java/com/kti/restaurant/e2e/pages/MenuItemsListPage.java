@@ -33,7 +33,7 @@ public class MenuItemsListPage {
     @FindBy(xpath = "//a[.='Kreiraj stavku menija']")
     private WebElement addNewDishButton;
 
-    @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[3]/a")
+    @FindBy(xpath = "//a[.='Stavke porudžbine']")
     private WebElement orderItemsButton;
 
     @FindBy(xpath = "//*[@formControlName=\"searchParam\"]")
@@ -45,7 +45,7 @@ public class MenuItemsListPage {
     @FindBy(className = "btn-sm")
     private WebElement searchButton;
 
-    @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[2]/a")
+    @FindBy(xpath = "//a[.='Restoran']")
     private WebElement restaurantButton;
 
     @FindBy(xpath = "//*[@href=\"/menu/pending-menu-items\"]")
