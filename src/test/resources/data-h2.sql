@@ -93,8 +93,8 @@ INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate
 INSERT INTO restaurant_table (table_number, capacity, x_coordinate, y_coordinate, deleted) values (4, 4, 657, 152, false);
 
 
-INSERT INTO table_reservation (name, duration_start, table_id, deleted) values ('Milica Petric', '2021-11-18T16:00', 1, false);
-INSERT INTO table_reservation (name, duration_start, table_id, deleted) values ('Ana Jojic', '2021-11-20T19:00', 2, false);
+INSERT INTO table_reservation (name, duration_start, duration_end, table_id, deleted) values ('Milica Petric', '2021-11-18T16:00', '2021-11-18T18:00', 1, false);
+INSERT INTO table_reservation (name, duration_start, duration_end, table_id, deleted) values ('Ana Jojic', '2021-11-20T19:00', '2021-11-20T21:00', 2, false);
 
 
 INSERT INTO menu (name, duration_start, duration_end, deleted) values ('standardni', '2021-11-18T08:00', '2022-11-18T08:00', false);
