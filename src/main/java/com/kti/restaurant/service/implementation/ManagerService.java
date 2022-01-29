@@ -4,6 +4,7 @@ package com.kti.restaurant.service.implementation;
 import com.kti.restaurant.exception.ConflictException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Manager;
+import com.kti.restaurant.model.Salary;
 import com.kti.restaurant.model.User;
 import com.kti.restaurant.repository.ManagerRepository;
 import com.kti.restaurant.repository.RoleRepository;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,15 +27,18 @@ public class ManagerService implements IManagerService {
     private RoleRepository roleRepository;
     private UserRepository userRepository;
     private EmailService emailService;
+    private SalaryService salaryService;
 
     @Autowired
     public ManagerService(ManagerRepository managerRepository, PasswordEncoder passwordEncoder,
-                          RoleRepository roleRepository, UserRepository userRepository, EmailService emailService) {
+                          RoleRepository roleRepository,
+                          UserRepository userRepository, EmailService emailService, SalaryService salaryService) {
         this.managerRepository = managerRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
+        this.salaryService = salaryService;
     }
 
 
@@ -56,10 +61,12 @@ public class ManagerService implements IManagerService {
         if (user != null)
             throw new ConflictException("Manager with entered email already exists.");
         String tempPassword = UUID.randomUUID().toString();
-        emailService.sendRegistrationMail(entity.getEmailAddress(),"Nalog kreiran", tempPassword);
+        emailService.sendRegistrationMail(entity.getEmailAddress(), "Nalog kreiran", tempPassword);
         entity.setPassword(passwordEncoder.encode(tempPassword));
         entity.getRoles().add(roleRepository.getById(4L));
-        managerRepository.save(entity);
+        Manager manager = managerRepository.save(entity);
+        Salary salary = new Salary(45000.00, LocalDate.now(), LocalDate.now(), manager);
+        salaryService.create(salary);
         return entity;
     }
 
