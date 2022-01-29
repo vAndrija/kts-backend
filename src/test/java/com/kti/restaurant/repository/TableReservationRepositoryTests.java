@@ -21,14 +21,14 @@ public class TableReservationRepositoryTests {
 	private TableReservationRepository reservationRepository;
 	
 	@ParameterizedTest
-	@MethodSource("findTableReservationInDateRangeForTable")
-	public void getTableReservationByDateAndTableId(Integer id, LocalDateTime startDate, LocalDateTime endDate, int expected) {
+	@MethodSource("provideFindTableReservationInDateRangeForTable")
+	public void getTableReservationByDateAndTableId_ReturnsTableReservations(Integer id, LocalDateTime startDate, LocalDateTime endDate, int expected) {
 		List<TableReservation> reservations = reservationRepository.getTableReservationByDateAndTableId(id, startDate, endDate);
 		
 		assertEquals(expected, reservations.size());
 	}
 	
-	private static Stream<Arguments> findTableReservationInDateRangeForTable() {
+	private static Stream<Arguments> provideFindTableReservationInDateRangeForTable() {
 		
 		return Stream.of(
 				Arguments.of(1, LocalDateTime.parse("2021-11-18T00:00"), LocalDateTime.parse("2021-11-19T00:00"), 1),

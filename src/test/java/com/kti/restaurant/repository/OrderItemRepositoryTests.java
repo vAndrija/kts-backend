@@ -30,13 +30,13 @@ public class OrderItemRepositoryTests {
 
 
     @ParameterizedTest
-    @MethodSource("datesForFindOrderItemsByDate")
-    public void findOrderItemsByDate(LocalDateTime startDate, LocalDateTime endDate, int expected) {
+    @MethodSource("provideDatesForFindOrderItemsByDate")
+    public void findOrderItemsByDate_ReturnsOrderItems(LocalDateTime startDate, LocalDateTime endDate, int expected) {
         List<OrderItem> orderItems = orderItemRepository.findOrderItemsByDate(startDate, endDate);
         assertEquals(expected, orderItems.size());
     }
 
-    private static Stream<Arguments> datesForFindOrderItemsByDate() {
+    private static Stream<Arguments> provideDatesForFindOrderItemsByDate() {
         return Stream.of(
                 Arguments.of(LocalDateTime.parse("2022-11-18T08:00"), LocalDateTime.parse("2022-11-19T08:00"), 2),
                 Arguments.of(LocalDateTime.parse("2022-11-18T14:00"), LocalDateTime.parse("2021-01-01T14:00"), 0)
@@ -44,13 +44,13 @@ public class OrderItemRepositoryTests {
     }
 
     @ParameterizedTest
-    @MethodSource("datesAndMenuItemForFindSalesForMenuItem")
-    public void findSalesForMenuItem(LocalDateTime startDate, LocalDateTime endDate, Integer menuId, int expected) {
+    @MethodSource("provideDatesAndMenuItemForFindSalesForMenuItem")
+    public void findSalesForMenuItem_ReturnsOrderItems(LocalDateTime startDate, LocalDateTime endDate, Integer menuId, int expected) {
         List<OrderItem> orderItems = orderItemRepository.findSalesForMenuItem(startDate, endDate, menuId);
         assertEquals(expected, orderItems.size());
     }
 
-    private static Stream<Arguments> datesAndMenuItemForFindSalesForMenuItem() {
+    private static Stream<Arguments> provideDatesAndMenuItemForFindSalesForMenuItem() {
         return Stream.of(
                 Arguments.of(LocalDateTime.parse("2021-11-18T08:00"), LocalDateTime.parse("2021-11-19T23:00"), 1, 2),
                 Arguments.of(LocalDateTime.parse("2022-11-18T08:00"), LocalDateTime.parse("2022-11-01T23:00"), 1, 0),
@@ -59,13 +59,13 @@ public class OrderItemRepositoryTests {
     }
 
     @ParameterizedTest
-    @MethodSource("dateAndCookIdForFindByCookForDate")
-    public void findByCookForDate(LocalDateTime startDate, LocalDateTime endDate, Integer cookId, int expected) {
+    @MethodSource("provideDateAndCookIdForFindByCookForDate")
+    public void findByCookForDate_ReturnOrderItems(LocalDateTime startDate, LocalDateTime endDate, Integer cookId, int expected) {
         List<OrderItem> orderItems = orderItemRepository.findByCookForDate(cookId, startDate, endDate);
         assertEquals(expected, orderItems.size());
     }
 
-    private static Stream<Arguments> dateAndCookIdForFindByCookForDate() {
+    private static Stream<Arguments> provideDateAndCookIdForFindByCookForDate() {
         return Stream.of(
                 Arguments.of(LocalDateTime.parse("2021-11-18T08:00"), LocalDateTime.parse("2021-11-19T23:00"), 4, 2),
                 Arguments.of(LocalDateTime.parse("2025-11-18T08:00"), LocalDateTime.parse("2021-11-19T23:00"), 4, 0),
@@ -74,13 +74,13 @@ public class OrderItemRepositoryTests {
     }
 
     @ParameterizedTest
-    @MethodSource("dateAndBartenderIdForFindByBartenderForDate")
-    public void findByBartenderForDate(LocalDateTime startDate, LocalDateTime endDate, Integer bartenderId, int expected) {
+    @MethodSource("provideDateAndBartenderIdForFindByBartenderForDate")
+    public void findByBartenderForDate_ReturnsOrderItems(LocalDateTime startDate, LocalDateTime endDate, Integer bartenderId, int expected) {
         List<OrderItem> orderItems = orderItemRepository.findByBartenderForDate(bartenderId, startDate, endDate);
         assertEquals(expected, orderItems.size());
     }
 
-    private static Stream<Arguments> dateAndBartenderIdForFindByBartenderForDate() {
+    private static Stream<Arguments> provideDateAndBartenderIdForFindByBartenderForDate() {
         return Stream.of(
                 Arguments.of(LocalDateTime.parse("2022-11-18T08:00"), LocalDateTime.parse("2022-11-28T23:00"), 2, 1),
                 Arguments.of(LocalDateTime.parse("2022-12-22T08:00"), LocalDateTime.parse("2022-11-01T11:45"), 2, 0),
@@ -89,14 +89,14 @@ public class OrderItemRepositoryTests {
     }
 
     @ParameterizedTest
-    @MethodSource("cookIdBartenderIdForFindByEmployee")
-    public void findByEmployee(Integer id, int expected) {
+    @MethodSource("provideCookIdBartenderIdForFindByEmployee")
+    public void findByEmployee_ReturnsOrderItems(Integer id, int expected) {
         Page<OrderItem> orderItems = orderItemRepository.findByEmployee(PageRequest.of(0, 5), id);
         List<OrderItem> orderItemList = orderItems.getContent();
         assertEquals(expected, orderItemList.size());
     }
 
-    private static Stream<Arguments> cookIdBartenderIdForFindByEmployee() {
+    private static Stream<Arguments> provideCookIdBartenderIdForFindByEmployee() {
         return Stream.of(
                 Arguments.of(3, 2),
                 Arguments.of(2, 2),
@@ -106,14 +106,14 @@ public class OrderItemRepositoryTests {
 
 
     @ParameterizedTest
-    @MethodSource("employeeIdForFindByEmployee")
-    public void findOrderItemsByEmployee(Integer id, int expected) {
+    @MethodSource("provideEmployeeIdForFindByEmployee")
+    public void findOrderItemsByEmployee_OrderItems(Integer id, int expected) {
         Pageable pageable = PageRequest.of(0, 8);
         Page<OrderItem> orderItemPage = orderItemRepository.findByEmployee(pageable, id);
         assertEquals(expected, orderItemPage.getContent().size());
     }
 
-    private static Stream<Arguments> employeeIdForFindByEmployee() {
+    private static Stream<Arguments> provideEmployeeIdForFindByEmployee() {
         return Stream.of(
                 Arguments.of(2, 2),
                 Arguments.of(4, 2),
@@ -122,13 +122,13 @@ public class OrderItemRepositoryTests {
     }
 
     @ParameterizedTest
-    @MethodSource("orderIdForFindByOrder")
-    public void findOrderItemsByOrder(Integer id, int expected) {
+    @MethodSource("provideOrderIdForFindByOrder")
+    public void findOrderItemsByOrder_ReturnsOrderItems(Integer id, int expected) {
         List<OrderItem> orderItems = orderItemRepository.findByOrder(id);
         assertEquals(expected, orderItems.size());
     }
 
-    private static Stream<Arguments> orderIdForFindByOrder() {
+    private static Stream<Arguments> provideOrderIdForFindByOrder() {
         return Stream.of(
                 Arguments.of(1, 9),
                 Arguments.of(2, 2),
@@ -137,14 +137,14 @@ public class OrderItemRepositoryTests {
     }
 
     @ParameterizedTest
-    @MethodSource("employeeIdAndStatusForFindByEmployeeAndStatus")
-    public void findOrderItemsByEmployeeAndStatus(Integer id, OrderItemStatus status, int expected) {
+    @MethodSource("provideEmployeeIdAndStatusForFindByEmployeeAndStatus")
+    public void findOrderItemsByEmployeeAndStatus_ReturnsOrderItems(Integer id, OrderItemStatus status, int expected) {
         Pageable pageable = PageRequest.of(0, 8);
         Page<OrderItem> orderItems = orderItemRepository.findByEmployeeAndStatus(id, status, pageable);
         assertEquals(expected, orderItems.getContent().size());
     }
 
-    private static Stream<Arguments> employeeIdAndStatusForFindByEmployeeAndStatus() {
+    private static Stream<Arguments> provideEmployeeIdAndStatusForFindByEmployeeAndStatus() {
         return Stream.of(
                 Arguments.of(4, OrderItemStatus.PREPARATION, 2),
                 Arguments.of(3, OrderItemStatus.PREPARED, 1),
@@ -154,7 +154,7 @@ public class OrderItemRepositoryTests {
     
     @ParameterizedTest
     @MethodSource("provideExpectedUnacceptedOrderItems")
-    public void findUnacceptedOrderItems(int expected) {
+    public void findUnacceptedOrderItems_ReturnsOrderItems(int expected) {
         Pageable pageable = PageRequest.of(0, 8);
         Page<OrderItem> orderItems = orderItemRepository.findUnacceptedOrderItems(pageable);
         assertEquals(expected, orderItems.getContent().size());
@@ -168,13 +168,13 @@ public class OrderItemRepositoryTests {
 
 
     @ParameterizedTest
-    @MethodSource("orderIdForFindByOrderAndWaiter")
-    public void findOrderItemsByOrderAndWaiter(Integer id, int expected) {
+    @MethodSource("provideOrderIdForFindByOrderAndWaiter")
+    public void findOrderItemsByOrderAndWaiter_ReturnsOrderItems(Integer id, int expected) {
         List<OrderItem> orderItems = orderItemRepository.findByOrderForWaiter(id);
         assertEquals(expected, orderItems.size());
     }
 
-    private static Stream<Arguments> orderIdForFindByOrderAndWaiter() {
+    private static Stream<Arguments> provideOrderIdForFindByOrderAndWaiter() {
         return Stream.of(
                 Arguments.of(1, 2),
                 Arguments.of(2, 2),
@@ -183,13 +183,13 @@ public class OrderItemRepositoryTests {
     }
 
     @ParameterizedTest
-    @MethodSource("orderIdAndStatusForFindByOrderAndStatus")
-    public void findOrderItemsByOrderAndStatus(Integer id, OrderItemStatus status, int expected) {
+    @MethodSource("provideOrderIdAndStatusForFindByOrderAndStatus")
+    public void findOrderItemsByOrderAndStatus_ReturnsOrderItems(Integer id, OrderItemStatus status, int expected) {
         List<OrderItem> orderItems = orderItemRepository.findByOrderAndStatus(id, status);
         assertEquals(expected, orderItems.size());
     }
 
-    private static Stream<Arguments> orderIdAndStatusForFindByOrderAndStatus() {
+    private static Stream<Arguments> provideOrderIdAndStatusForFindByOrderAndStatus() {
         return Stream.of(
                 Arguments.of(1, OrderItemStatus.PREPARED , 2),
                 Arguments.of(2, OrderItemStatus.SERVED, 2)

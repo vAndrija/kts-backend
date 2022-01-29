@@ -24,13 +24,13 @@ public class MenuItemsListPage {
     @FindBy(className = "btn")
     private WebElement detailsButton;
 
-    @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[4]/a")
+    @FindBy(xpath = "//a[.='Kreiraj meni']")
     private WebElement addMenuButton;
 
-    @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[4]/a")
+    @FindBy(xpath = "//a[.='Porudžbine']")
     private WebElement orderButton;
 
-    @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[3]/a")
+    @FindBy(xpath = "//a[.='Kreiraj stavku menija']")
     private WebElement addNewDishButton;
 
     @FindBy(xpath = "//a[.='Preuzmite stavku porudžbine']")
@@ -54,7 +54,7 @@ public class MenuItemsListPage {
     @FindBy(xpath = "//a[.='Rezervacije']")
     private WebElement reservationsButton;
 
-    @FindBy(xpath = "//*[@href=\"/menu/pending-menu-items\"]")
+    @FindBy(xpath = "//a[.='Neodobrene stavke menija']]")
     private WebElement linkToUnacceptedMenuItemsPage;
 
     @FindBy(xpath = "//a[.='Izveštaji']")

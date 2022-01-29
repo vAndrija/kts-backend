@@ -1,6 +1,5 @@
 package com.kti.restaurant.e2e.tests;
 
-import com.kti.restaurant.e2e.pages.ChangePasswordPage;
 import com.kti.restaurant.e2e.pages.LoginPage;
 import com.kti.restaurant.e2e.pages.UpdateProfileInfoPage;
 import com.kti.restaurant.e2e.utils.WaitUtils;
@@ -8,11 +7,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UpdateProfileInformationsE2ETest {

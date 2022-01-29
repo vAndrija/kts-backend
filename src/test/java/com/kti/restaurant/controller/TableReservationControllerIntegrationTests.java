@@ -210,12 +210,12 @@ public class TableReservationControllerIntegrationTests {
 
     @Test
     public void updateTableReservation_InvalidReservation_ReturnsBadRequest() {
-        TableReservationDto reservationDto = new TableReservationDto(1, "Ime", 1, LocalDateTime.parse("2021-11-18T16:00"), LocalDateTime.parse("2021-11-18T17:22"));
+        TableReservationDto reservationDto = new TableReservationDto(2, "Ime", 1, LocalDateTime.parse("2021-11-18T17:22"), LocalDateTime.parse("2021-11-18T22:22"));
 
         HttpEntity<TableReservationDto> httpEntity = new HttpEntity<TableReservationDto>(reservationDto, headers);
 
         ResponseEntity<TableReservationDto> entity = restTemplate
-                .exchange("/api/v1/table-reservations/1", HttpMethod.PUT, httpEntity, TableReservationDto.class);
+                .exchange("/api/v1/table-reservations/2", HttpMethod.PUT, httpEntity, TableReservationDto.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, entity.getStatusCode());
     }

@@ -55,9 +55,9 @@ public class OrderItemsTableE2ETest {
 
     }
 
-//    @AfterEach
-//    public void tearDown() {
-//        driver.quit();
-//    }
+    @AfterEach
+    public void tearDown() {
+        driver.quit();
+    }
 
 }

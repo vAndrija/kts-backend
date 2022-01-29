@@ -25,14 +25,14 @@ public class OrderRepositoryTests {
     private OrderRepository orderRepository;
 
     @ParameterizedTest
-    @MethodSource("idAndStatusForFindByWaiterAndStatus")
-    public void findOrdersByWaiterAndStatus(Integer id, OrderStatus status, Integer expected) {
+    @MethodSource("provideIdAndStatusForFindByWaiterAndStatus")
+    public void findOrdersByWaiterAndStatus_ReturnsOrder(Integer id, OrderStatus status, Integer expected) {
         Pageable pageable = PageRequest.of(0, 8);
         Page<Order> orders = orderRepository.findByWaiterAndStatus(id, status, pageable);
         assertEquals(expected, orders.getContent().size());
     }
 
-    private static Stream<Arguments> idAndStatusForFindByWaiterAndStatus() {
+    private static Stream<Arguments> provideIdAndStatusForFindByWaiterAndStatus() {
         return Stream.of(
                 Arguments.of(7, OrderStatus.ORDERED, 2),
                 Arguments.of(70, OrderStatus.ORDERED, 0)
@@ -40,14 +40,14 @@ public class OrderRepositoryTests {
     }
 
     @ParameterizedTest
-    @MethodSource("idForFindByWaiter")
-    public void findOrdersByWaiter(Integer id, int expected) {
+    @MethodSource("provideIdForFindByWaiter")
+    public void findOrdersByWaiter_ReturnsOrderItems(Integer id, int expected) {
         Pageable pageable = PageRequest.of(0, 8);
         Page<Order> orders = orderRepository.findByWaiter(id, pageable);
         assertEquals(expected, orders.getContent().size());
     }
 
-    private static Stream<Arguments> idForFindByWaiter() {
+    private static Stream<Arguments> provideIdForFindByWaiter() {
         return Stream.of(
                 Arguments.of(8, 1),
                 Arguments.of(10, 0)
@@ -55,13 +55,13 @@ public class OrderRepositoryTests {
     }
 
     @ParameterizedTest
-    @MethodSource("idForFindByRestaurantTable")
-    public void findOrdersByRestaurantTable(Integer id, int expected) {
+    @MethodSource("provideIdForFindByRestaurantTable")
+    public void findOrdersByRestaurantTable_ReturnsOrders(Integer id, int expected) {
         List<Order> orders = orderRepository.findByRestaurantTable(id);
         assertEquals(expected, orders.size());
     }
 
-    private static Stream<Arguments> idForFindByRestaurantTable() {
+    private static Stream<Arguments> provideIdForFindByRestaurantTable() {
         return Stream.of(
                 Arguments.of(3, 1),
                 Arguments.of(11, 0)

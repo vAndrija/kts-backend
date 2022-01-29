@@ -4,13 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -30,7 +26,6 @@ import com.kti.restaurant.model.OrderItem;
 import com.kti.restaurant.model.UserTokenState;
 import com.kti.restaurant.service.implementation.NotificationService;
 import com.kti.restaurant.service.implementation.OrderItemService;
-import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
@@ -121,12 +116,11 @@ public class NotificationControllerIntegrationTests {
 	        assertEquals(size, notificationService.findAll().size());
 	    }
 	    
-	    @ParameterizedTest
-		@MethodSource("provideCreateNotificiationDto")
-	    public void createNotification_InvaliNotificationDto_ReturnsBadRequest(String message, Integer orderItemId, String bodyParameter, String errorMessage) {
+	    @Test
+	    public void createNotification_InvaliNotificationDto_ReturnsBadRequest() {
 	    	int size = notificationService.findAll().size();
 	    	
-	    	HttpEntity<CreateNotificationDto> httpEntity = new HttpEntity<>(new CreateNotificationDto(message, orderItemId), headers);
+	    	HttpEntity<CreateNotificationDto> httpEntity = new HttpEntity<>(new CreateNotificationDto(null, 1), headers);
 	    	
 	    	ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() { };
 			
@@ -137,17 +131,9 @@ public class NotificationControllerIntegrationTests {
 	    	
 	    	assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
 	    	assertEquals(size, notificationService.findAll().size());
-	    	assertEquals(errorMessage, body.get(bodyParameter));
+	    	assertEquals("Message should not be null or empty.", body.get("message"));
 	    }
 
-	    private static Stream<Arguments> provideCreateNotificiationDto() {
-			
-			return Stream.of(
-					Arguments.of(null, 1, "message", "Message should not be null or empty.")
-					);
-		}
-		
-	    
 	    @Test
 	    public void deleteNotification_ValidId_ReturnsNoContent() throws Exception {
 	    	OrderItem orderItem = orderItemService.findById(1);

@@ -1,6 +1,5 @@
 package com.kti.restaurant.repository;
 
-import com.kti.restaurant.model.Menu;
 import com.kti.restaurant.model.MenuItem;
 import com.kti.restaurant.model.enums.MenuItemCategory;
 import com.kti.restaurant.model.enums.MenuItemType;
@@ -15,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
@@ -30,14 +28,14 @@ public class MenuItemRepositoryTests {
     private MenuItemRepository menuItemRepository;
 
     @ParameterizedTest
-    @MethodSource("validNameAndDescription")
+    @MethodSource("provideValidNameAndDescription")
     public void findByNameAndDescription_ParamNameDescription_ReturnsMenuItems(String searchParam, Integer expectedSize, String expectedMenuItemName) {
         List<MenuItem> menuItems = menuItemRepository.findByNameAndDescription(searchParam, LocalDateTime.now());
         assertEquals(expectedSize, menuItems.size());
         assertEquals(expectedMenuItemName, menuItems.get(0).getName());
     }
 
-    private static Stream<Arguments> validNameAndDescription() {
+    private static Stream<Arguments> provideValidNameAndDescription() {
         return Stream.of(
                 Arguments.of("limun", 1, "limunada"),
                 Arguments.of("coca", 1, "coca cola"),
@@ -46,40 +44,40 @@ public class MenuItemRepositoryTests {
     }
 
     @ParameterizedTest
-    @MethodSource("validMenuItemCategory")
+    @MethodSource("provideValidMenuItemCategory")
     public void findByCategory_Category_ReturnsMenuItems(MenuItemCategory category, Integer exceptedSize) {
         List<MenuItem> menuItems = menuItemRepository.findByCategory(category, LocalDateTime.now());
         assertEquals(exceptedSize, menuItems.size());
     }
 
-    private static Stream<Arguments> validMenuItemCategory() {
+    private static Stream<Arguments> provideValidMenuItemCategory() {
         return Stream.of(
                 Arguments.of(MenuItemCategory.DESSERT, 2)
         );
     }
 
     @ParameterizedTest
-    @MethodSource("validMenuItemType")
+    @MethodSource("provideValidMenuItemType")
     public void findByType_Type_ReturnsMenuItems(MenuItemType type, Integer exceptedSize) {
         List<MenuItem> menuItems = menuItemRepository.findByType(type, LocalDateTime.now());
         assertEquals(exceptedSize, menuItems.size());
     }
 
-    private static Stream<Arguments> validMenuItemType() {
+    private static Stream<Arguments> provideValidMenuItemType() {
         return Stream.of(
                 Arguments.of(MenuItemType.FOOD, 8)
         );
     }
 
     @ParameterizedTest
-    @MethodSource("validMenuIdAndPageable")
+    @MethodSource("provideValidMenuIdAndPageable")
     public void findByMenu_MenuIdPageable_ReturnsMenuItems(Integer menuId, Pageable pageable) {
         Page<MenuItem> menuItems = menuItemRepository.findByMenu(menuId, pageable);
         assertEquals(pageable.getPageSize(), menuItems.getContent().size());
         assertEquals(menuId, menuItems.getContent().get(0).getMenu().getId());
     }
 
-    private static Stream<Arguments> validMenuIdAndPageable() {
+    private static Stream<Arguments> provideValidMenuIdAndPageable() {
         return Stream.of(
                 Arguments.of(1, PageRequest.of(0, 5)),
                 Arguments.of(1, PageRequest.of(1, 5))
@@ -87,16 +85,15 @@ public class MenuItemRepositoryTests {
     }
 
     @ParameterizedTest
-    @MethodSource("getMenuIdSearchParamFilterAndPageable")
+    @MethodSource("provideMenuIdSearchParamFilterAndPageable")
     public void searchAndFilterMenuItems_MenuIdSearchParamCategoryPageable_ReturnsMenuItems(Integer menuId, String searchParam,
-                                                                                            MenuItemCategory category, Pageable page, Integer sizeofReturnedList,
-                                                                                            String name, Integer indexOfMenuItem) {
+        MenuItemCategory category, Pageable page, Integer sizeofReturnedList, String name, Integer indexOfMenuItem) {
         Page<MenuItem> menuItems = menuItemRepository.searchAndFilterMenuItems(menuId, searchParam, category, page);
         assertEquals(sizeofReturnedList, menuItems.getContent().size());
         assertEquals(name, menuItems.getContent().get(indexOfMenuItem).getName());
     }
 
-    private static Stream<Arguments> getMenuIdSearchParamFilterAndPageable() {
+    private static Stream<Arguments> provideMenuIdSearchParamFilterAndPageable() {
         return Stream.of(
                 Arguments.of(1, "", null, PageRequest.of(0, 5), 5, "coca cola", 0),
                 Arguments.of(1, "cola", null, PageRequest.of(0, 5), 1, "coca cola", 0),
@@ -106,7 +103,7 @@ public class MenuItemRepositoryTests {
     }
 
     @Test
-    public void getMenuItemsInActiveMenuPageable_ReturnsMenuItems() {
+    public void findAllInActiveMenu_ReturnsMenuItems() {
         Page<MenuItem> menuItems = menuItemRepository.findAllInActiveMenu(LocalDateTime.now(), Pageable.unpaged());
         assertEquals(11, menuItems.getContent().size());
     }

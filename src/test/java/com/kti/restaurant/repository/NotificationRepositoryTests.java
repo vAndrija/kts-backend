@@ -23,9 +23,8 @@ public class NotificationRepositoryTests {
 	
 	@ParameterizedTest
 	@MethodSource("provideParametersForFindAll")
-	public void findAll(int expected) {
+	public void findAll_ReturnsNotifications(int expected) {
 		List<Notification> notifications = notificationRepository.findAll();
-		
 		assertEquals(expected, notifications.size());
 	}
 	
@@ -39,9 +38,8 @@ public class NotificationRepositoryTests {
 	
 	@ParameterizedTest
 	@MethodSource("provideParametersForFindNotificationsForWaiter")
-	public void findNotificationsForWaiter(int expected, int waiterId) {
+	public void findNotificationsForWaiter_ReturnsNotifications(int expected, int waiterId) {
 		List<Notification> notifications = notificationRepository.findNotificationsForWaiter(waiterId);
-		
 		assertEquals(expected, notifications.size());
 	}
 	
@@ -55,9 +53,8 @@ public class NotificationRepositoryTests {
 	
 	@ParameterizedTest
 	@MethodSource("provideParametersForFindNotificationsForBartenderAndCook")
-	public void findNotificationsForWaiter(int expected) {
+	public void findNotificationsForWaiter_ReturnsNotifications(int expected) {
 		List<Notification> notifications = notificationRepository.findNotificationsForCookAndBartender();
-		
 		assertEquals(expected, notifications.size());
 	}
 	

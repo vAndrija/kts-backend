@@ -35,7 +35,7 @@ public class MenuItemMapper {
 
     public MenuItem fromCreateMenuItemDtoToMenuItem(CreateMenuItemDto menuItemDto) {
         return new MenuItem(menuItemDto.getName(), menuItemDto.getDescription(), MenuItemCategory.findCategory(menuItemDto.getCategory()),
-                menuItemDto.getType(), menuItemDto.getPreparationTime());
+                menuItemDto.getType(), menuItemDto.getPreparationTime(), menuItemDto.getImageName());
     }
 
     public MenuItem fromUpdateMenuItemDtoToMenuItem(UpdateMenuItemDto menuItemDto) throws Exception {

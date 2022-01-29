@@ -90,7 +90,17 @@ public class MenuItem {
         this.preparationTime = preparationTime;
     }
 
-    public Long getVersion() {
+    public MenuItem(String name, String description, MenuItemCategory category, MenuItemType type,
+			Integer preparationTime, String imageName) {
+		this.name = name;
+		this.description = description;
+		this.category = category;
+		this.type = type;
+		this.preparationTime = preparationTime;
+		this.imageName = imageName;
+	}
+
+	public Long getVersion() {
         return version;
     }
 

@@ -23,26 +23,26 @@ public class SalaryRepositoryTests {
 
 
 	@ParameterizedTest
-	@MethodSource("validDatesForFindSalaryForDate")
-	public void findSalaryForDate(LocalDate date, int userId, double expected) {
+	@MethodSource("provideValidDatesForFindSalaryForDate")
+	public void findSalaryForDate_ReturnsSalaries(LocalDate date, int userId, double expected) {
 		Salary salary = salaryRepository.findSalaryForDate(date, userId);
 		assertEquals(expected, salary.getValue());
 	}
 
-	private static Stream<Arguments> validDatesForFindSalaryForDate() {
+	private static Stream<Arguments> provideValidDatesForFindSalaryForDate() {
 		return Stream.of(
 				Arguments.of(LocalDate.parse("2021-11-19"), 1, Double.valueOf(45000.00))
 		);
 	}
 
 	@ParameterizedTest
-	@MethodSource("invalidDatesForFindSalaryForDate")
-	public void findSalaryForDateInvalid(LocalDate date, int userId, Object expected) {
+	@MethodSource("provideInvalidDatesForFindSalaryForDate")
+	public void findSalaryForDateInvalid_ReturnsSalaries(LocalDate date, int userId, Object expected) {
 		Salary salary = salaryRepository.findSalaryForDate(date, userId);
 		assertEquals(expected, salary);
 	}
 
-	private static Stream<Arguments> invalidDatesForFindSalaryForDate() {
+	private static Stream<Arguments> provideInvalidDatesForFindSalaryForDate() {
 		return Stream.of(
 				Arguments.of(LocalDate.parse("2021-11-15"), 1, null),
 				Arguments.of(LocalDate.parse("2021-11-19"), 100, null)

@@ -56,10 +56,10 @@ public class OrderItemsWaiterE2ETest {
     }
 
 
-//    @AfterEach
-//    public void tearDown() {
-//        driver.quit();
-//    }
+    @AfterEach
+    public void tearDown() {
+        driver.quit();
+    }
 
 }
 

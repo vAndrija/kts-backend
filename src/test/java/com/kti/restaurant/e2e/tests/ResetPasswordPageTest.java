@@ -1,6 +1,5 @@
 package com.kti.restaurant.e2e.tests;
 
-import com.kti.restaurant.e2e.pages.LoginPage;
 import com.kti.restaurant.e2e.pages.ResetPasswordPage;
 import com.kti.restaurant.e2e.utils.WaitUtils;
 import org.junit.jupiter.api.AfterEach;

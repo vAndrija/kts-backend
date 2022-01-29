@@ -23,26 +23,26 @@ public class PriceItemRepositoryTests {
     private PriceItemRepository priceItemRepository;
 
     @ParameterizedTest
-    @MethodSource("validDatesForFindPriceItemForDate")
-    public void findPriceItemForDate(LocalDate date, int menuItemId, double expected) {
+    @MethodSource("provideValidDatesForFindPriceItemForDate")
+    public void findPriceItemForDate_ReturnsPriceItems(LocalDate date, int menuItemId, double expected) {
         PriceItem priceItem = priceItemRepository.findPriceItemForDate(date, menuItemId);
         assertEquals(expected, priceItem.getValue());
     }
 
-    private static Stream<Arguments> validDatesForFindPriceItemForDate() {
+    private static Stream<Arguments> provideValidDatesForFindPriceItemForDate() {
         return Stream.of(
                 Arguments.of(LocalDate.parse("2021-11-19"), 1, Double.valueOf(180.00))
         );
     }
 
     @ParameterizedTest
-    @MethodSource("invalidDatesForFindPriceItemForDate")
-    public void findPriceItemForDateInvalid(LocalDate date, int menuItemId, Object expected) {
+    @MethodSource("provideInvalidDatesForFindPriceItemForDate")
+    public void findPriceItemForDateInvalid_ReturnsPriceItems(LocalDate date, int menuItemId, Object expected) {
         PriceItem priceItem = priceItemRepository.findPriceItemForDate(date, menuItemId);
         assertEquals(expected, priceItem);
     }
 
-    private static Stream<Arguments> invalidDatesForFindPriceItemForDate() {
+    private static Stream<Arguments> provideInvalidDatesForFindPriceItemForDate() {
         return Stream.of(
                 Arguments.of(LocalDate.parse("2021-11-15"), 1, null),
                 Arguments.of(LocalDate.parse("2021-11-19"), 100, null)

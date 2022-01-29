@@ -22,13 +22,13 @@ public class MenuRepositoryTests {
     private MenuRepository menuRepository;
 
     @ParameterizedTest
-    @MethodSource("findActiveMenus")
+    @MethodSource("provideDatesForActiveMenus")
     public void findMenusForDate_Date_ReturnsMenus(LocalDateTime date, Integer expectedSize) {
         List<Menu> menuItems = menuRepository.findMenusForDate(date);
         assertEquals(expectedSize, menuItems.size());
     }
 
-    private static Stream<Arguments> findActiveMenus() {
+    private static Stream<Arguments> provideDatesForActiveMenus() {
         return Stream.of(
                 Arguments.of(LocalDateTime.of(2022, 1, 15, 14, 0), 1),
                 Arguments.of(LocalDateTime.of(2022, 8, 15, 14, 0), 1),
