@@ -23,16 +23,16 @@ public class MenuItemsListPage {
 
     @FindBy(className = "btn")
     private WebElement detailsButton;
-    
+
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[4]/a")
     private WebElement addMenuButton;
 
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[4]/a")
     private WebElement orderButton;
-    
+
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[3]/a")
     private WebElement addNewDishButton;
-    
+
     @FindBy(xpath = "//*[@id=\"menu\"]/li/div/li[5]/a")
     private WebElement acceptOrderItemButton;
 
@@ -53,6 +53,21 @@ public class MenuItemsListPage {
 
     @FindBy(xpath = "//*[@href=\"/menu/pending-menu-items\"]")
     private WebElement linkToUnacceptedMenuItemsPage;
+
+    @FindBy(xpath = "//a[.='Izveštaji']")
+    private WebElement linkToReports;
+
+    @FindBy(xpath = "//*[@href=\"/report/meal-drink-costs\"]")
+    private WebElement linkToCostsForMealDrinkReport;
+
+    @FindBy(xpath = "//*[@href=\"/report/meal-drink-sales\"]")
+    private WebElement linkToBenefitReport;
+
+    @FindBy(xpath = "//*[@href=\"/report/cost-benefit-ratio\"]")
+    private WebElement linkToCostBenefitRatioReport;
+
+    @FindBy(xpath = "//*[@href=\"/report/preparing-time\"]")
+    private WebElement linkToTimeForPreparationReport;
 
     public MenuItemsListPage(WebDriver driver) {
         this.driver = driver;
@@ -82,7 +97,27 @@ public class MenuItemsListPage {
     	WebElement button = getAddMenuButton();
     	button.click();
     }
-  
+
+    public void clickLinkToReports() {
+        getLinkToReports().click();
+    }
+
+    public void clickLinkToCostsForMealDrinkReport() {
+        getLinkToCostsForMealDrinkReport().click();
+    }
+
+    public void clickLinkToBenefitReport() {
+        getLinkToBenefitReport().click();
+    }
+
+    public void clickLinkToCostBenefitRatioReport() {
+        getLinkToCostBenefitRatioReport().click();
+    }
+
+    public void clickLinkToTimeForPreparationReport() {
+        getLinkToTimeForPreparationReport().click();
+    }
+
     public List<WebElement> getSelectOption(String option) {
         return WaitUtils.visibilityWait(driver, By.xpath("//option[contains(text(), '" + option + "')]"), 10);
     }
@@ -117,29 +152,29 @@ public class MenuItemsListPage {
         WebElement button = getOrderButton();
         button.click();
     }
-    
+
     public WebElement getAddMenuButton() {
     	return WaitUtils.visibilityWait(driver, addMenuButton, 10);
     }
-  
+
     public WebElement getAddNewDishButton() {
     	return WaitUtils.visibilityWait(driver, addNewDishButton, 10);
     }
-    
+
     public void clickAddNewDishButton() {
     	WebElement button = getAddNewDishButton();
     	button.click();
     }
-  
+
     public WebElement getAcceptOrderItemButton() {
     	return WaitUtils.visibilityWait(driver, acceptOrderItemButton, 10);
     }
-    
+
     public void clickAcceptOrderButton() {
     	WebElement button = getAcceptOrderItemButton();
     	button.click();
     }
-    
+
     public WebElement getOrderItemsButton() {
         return WaitUtils.visibilityWait(driver, orderItemsButton, 10);
     }
@@ -180,5 +215,25 @@ public class MenuItemsListPage {
     public void clickRestaurantButton() {
         WebElement button = getRestaurantButton();
         button.click();
+    }
+
+    public WebElement getLinkToReports() {
+        return WaitUtils.visibilityWait(driver, linkToReports, 10);
+    }
+
+    public WebElement getLinkToCostsForMealDrinkReport() {
+        return WaitUtils.visibilityWait(driver, linkToCostsForMealDrinkReport, 10);
+    }
+
+    public WebElement getLinkToBenefitReport() {
+        return WaitUtils.visibilityWait(driver, linkToBenefitReport, 10);
+    }
+
+    public WebElement getLinkToCostBenefitRatioReport() {
+        return WaitUtils.visibilityWait(driver, linkToCostBenefitRatioReport, 10);
+    }
+
+    public WebElement getLinkToTimeForPreparationReport() {
+        return WaitUtils.visibilityWait(driver, linkToTimeForPreparationReport, 10);
     }
 }
