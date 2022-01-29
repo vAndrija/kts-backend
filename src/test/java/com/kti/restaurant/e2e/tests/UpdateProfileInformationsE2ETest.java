@@ -30,7 +30,7 @@ public class UpdateProfileInformationsE2ETest {
         updateProfileInfoPage = PageFactory.initElements(driver,UpdateProfileInfoPage.class);
         driver.manage().window().maximize();
         driver.get("http://localhost:4200/auth/login");
-        loginPage.login("mirkomiric@gmail.com", "123");
+        loginPage.login("lukaperic@gmail.com", "123");
         assertTrue(WaitUtils.urlWait(driver, "http://localhost:4200/menu/menu-items", 10));
     }
 
