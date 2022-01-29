@@ -12,6 +12,9 @@ public class TableReservationDto {
 
     @NotNull(message = "Start date should not be null or empty")
     private LocalDateTime durationStart;
+    
+    @NotNull(message = "End date should not be null or empty")
+    private LocalDateTime durationEnd;
 
     @NotNull(message = "Table id should not be null")
     private Integer tableId;
@@ -20,16 +23,18 @@ public class TableReservationDto {
 
     }
 
-    public TableReservationDto(String name, Integer tableId, LocalDateTime durationStart) {
+    public TableReservationDto(String name, Integer tableId, LocalDateTime durationStart, LocalDateTime durationEnd) {
         this.name = name;
         this.tableId = tableId;
         this.durationStart = durationStart;
+        this.durationEnd = durationEnd;
     }
     
-    public TableReservationDto(Integer id, String name, Integer tableId, LocalDateTime durationStart) {
+    public TableReservationDto(Integer id, String name, Integer tableId, LocalDateTime durationStart, LocalDateTime durationEnd) {
         this.name = name;
         this.tableId = tableId;
         this.durationStart = durationStart;
+        this.durationEnd = durationEnd;
         this.id = id;
     }
 
@@ -63,5 +68,13 @@ public class TableReservationDto {
 
     public void setDurationStart(LocalDateTime durationStart) {
         this.durationStart = durationStart;
+    }
+    
+    public LocalDateTime getDurationEnd() {
+        return durationEnd;
+    }
+
+    public void setDurationEnd(LocalDateTime durationEnd) {
+        this.durationEnd = durationEnd;
     }
 }
