@@ -46,6 +46,7 @@ public class AdminServiceIntegrationTests {
         });
     }
 
+    @Rollback()
     @Test
     public void create_ValidAdmin_ReturnsCreatedAdmin() throws Exception {
         Admin admin = new Admin("Vojnovic", "Andrija", "213123123", "andrija@vojnvo.com", "21312311");

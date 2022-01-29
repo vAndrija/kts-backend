@@ -48,6 +48,7 @@ public class WaiterServiceIntegrationTests {
         });
     }
 
+
     @Test
     @Rollback
     public void create_UniqueEmail_ReturnsCreatedWaiter() throws Exception {

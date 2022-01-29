@@ -50,6 +50,7 @@ public class ManagerServiceIntegrationTests {
         });
     }
 
+    @Rollback()
     @Test
     public void create_ValidManager_ReturnsCreatedManager() throws Exception {
         Manager manager = new Manager("Vojnovic", "Andrija", "213123123", "andrija@vojnvo.com", "21312311");
