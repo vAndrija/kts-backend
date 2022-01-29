@@ -1,5 +1,5 @@
 #Dockerfile for Spring Boot,Java 16 - Build and running
-FROM maven:3.8.3-eclipse-temurin-16 AS MAVEN_BUILD
+FROM adoptopenjdk/maven-openjdk11:latest AS MAVEN_BUILD
 
 MAINTAINER Andrija Vojnovic
 
@@ -8,11 +8,14 @@ COPY src /build/src/
 
 WORKDIR /build/
 RUN mvn clean install -DskipTests
+# RUN mvn clean install
 
-FROM openjdk:16-alpine3.13
+FROM eclipse-temurin
 
 WORKDIR /app
 
 COPY --from=MAVEN_BUILD /build/target/restaurant-0.0.1-SNAPSHOT.jar /app/
+COPY --from=MAVEN_BUILD /build /app/
+
 
 ENTRYPOINT ["java", "-jar", "restaurant-0.0.1-SNAPSHOT.jar"]

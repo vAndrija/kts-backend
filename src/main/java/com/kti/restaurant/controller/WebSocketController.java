@@ -1,0 +1,32 @@
+package com.kti.restaurant.controller;
+
+import com.kti.restaurant.service.contract.INotificationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.stereotype.Controller;
+
+import java.util.Map;
+
+@Controller
+public class WebSocketController {
+
+    private INotificationService notificationService;
+
+	@Autowired
+    public WebSocketController(INotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
+
+    @MessageMapping("/send/orderItemStatus")
+    public Map<String, String> broadcastOrderItemStatusChanged(String message) {
+        return notificationService.broadcastOrderItemStatusChanged(message);
+    }
+    
+    @MessageMapping("/send/order")
+    public Map<String, String> broadcastOrderCreated(String message) {
+    	return notificationService.broadcastOrderCreated(message);
+    }
+    
+    
+    
+}
