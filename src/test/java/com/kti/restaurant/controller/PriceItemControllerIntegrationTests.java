@@ -198,6 +198,41 @@ public class PriceItemControllerIntegrationTests {
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
+    @ParameterizedTest
+    @MethodSource("providePriceItemForUpdate")
+    public void updatePriceItem_InvalidPriceItem_ReturnsBadRequest(Double value, LocalDate startDate, LocalDate endDate,
+                                                                   Integer menuItemId, Boolean isCurrent, Double preparationValue,
+                                                                   String bodyParameter, String errorMessage) {
+        ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() {
+        };
+
+        HttpEntity<String> httpEntity = new HttpEntity<>(GsonUtils.ToJson(new PriceItemDto(value, startDate,
+                endDate, menuItemId, isCurrent, preparationValue)), headers);
+        ResponseEntity<HashMap<String, String>> responseEntity = restTemplate.exchange(URL_PREFIX + "/1", HttpMethod.PUT, httpEntity, responseType);
+
+        HashMap<String, String> body = responseEntity.getBody();
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(errorMessage, body.get(bodyParameter));
+    }
+
+    private static Stream<Arguments> providePriceItemForUpdate() {
+        return Stream.of(
+                Arguments.of(null, LocalDate.parse("2021-11-05"), LocalDate.parse("2022-11-05"), 25, true,
+                        Double.valueOf(120), "value", "Value should not be null or empty"),
+                Arguments.of(Double.valueOf(-10), LocalDate.parse("2021-11-05"), LocalDate.parse("2022-11-05"), 25, true,
+                        Double.valueOf(120), "value", "Value should be bigger than 0"),
+                Arguments.of(Double.valueOf(200), LocalDate.parse("2021-11-05"), LocalDate.parse("2022-11-05"), null, true,
+                        Double.valueOf(120), "menuItemId", "Menu item id should not be null or empty"),
+                Arguments.of(Double.valueOf(200), LocalDate.parse("2021-11-05"), LocalDate.parse("2022-11-05"), 25, null,
+                        Double.valueOf(120), "isCurrent", "Is current should not be null or empty"),
+                Arguments.of(Double.valueOf(200), LocalDate.parse("2021-11-05"), LocalDate.parse("2022-11-05"), 25, true,
+                        null, "preparationValue", "Preparation value should not be null or empty"),
+                Arguments.of(Double.valueOf(200), LocalDate.parse("2021-11-05"), LocalDate.parse("2022-11-05"), 25, true,
+                        Double.valueOf(-20), "preparationValue", "Preparation value should be bigger than 0")
+        );
+    }
+
     @Test
     public void deletePriceItem_ValidPriceItemId_ReturnsNoContent() throws Exception {
         PriceItem priceItem = priceItemService.create(new PriceItem(null, LocalDate.parse("2021-11-18"),
