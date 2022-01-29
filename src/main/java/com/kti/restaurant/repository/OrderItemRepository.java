@@ -35,10 +35,14 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
 
     @Query("select oi from OrderItem oi where oi.cook.id=?1  and oi.status=?2  or  oi.bartender.id=?1 and oi.status=?2")
     Page<OrderItem> findByEmployeeAndStatus(Integer id, OrderItemStatus status, Pageable pageable);
+    
+    @Query("select oi from OrderItem oi join MenuItem m on oi.menuItem.id = m.id where oi.status=0")
+    Page<OrderItem> findUnacceptedOrderItems(Pageable pageable);
 
     @Query("select oi from OrderItem  oi join Order o on oi.order.id = o.id where oi.order.id=?1 and oi.status = 2 or oi.order.id=?1 and oi.status =3")
     List<OrderItem> findByOrderForWaiter(Integer id);
 
     @Query("select oi from OrderItem  oi join Order o on oi.order.id = o.id where oi.order.id=?1 and oi.status=?2")
     List<OrderItem> findByOrderAndStatus(Integer id, OrderItemStatus status);
+
 }

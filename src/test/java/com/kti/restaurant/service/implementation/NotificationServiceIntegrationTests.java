@@ -5,8 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -31,8 +35,9 @@ public class NotificationServiceIntegrationTests {
 	public void findAll_ValidNumberOfNotifications() {
 		List<Notification> notifications = notificationService.findAll();
 		
-		assertEquals(7, notifications.size());
+		assertEquals(6, notifications.size());
 	}
+	
 	
 	@Test
 	public void findById_ValidId_ReturnsExistingNotification() {
@@ -40,7 +45,6 @@ public class NotificationServiceIntegrationTests {
 		
 		assertEquals(Integer.valueOf(1), notification.getId());
 		assertEquals("Napravljena je nova porudzbina.", notification.getMessage());
-		assertEquals(true, notification.getSeen());
 	}
 	
 	@Test
@@ -55,53 +59,44 @@ public class NotificationServiceIntegrationTests {
 	@Test
 	@Rollback
 	public void create_ValidNotification_ReturnsCreatedNotification() throws Exception {
-		Notification notification = notificationService.create(new Notification("Poruka", new OrderItem(), false));
+		Notification notification = notificationService.create(new Notification("Poruka", null));
 		
 		assertEquals("Poruka", notification.getMessage());
-		assertEquals(false, notification.getSeen());
-	}
-	
-	@Test
-	@Rollback
-	public void update_ValidId_ReturnsUpdatedNotification() throws Exception {
-		Notification notification = new Notification("Nova poruka", new OrderItem(), false);
-		notification.setId(1);
-		
-		Notification notificationToUpdate = notificationService.update(notification, 1); 
-		
-		//Posto mozemo samo da update seen samo je to testirano.
-		assertEquals(false, notificationToUpdate.getSeen());
-	}
-	
-	@Test
-	public void update_InvalidId_ThrowsMissingEntityException() {		
-		Exception exception = assertThrows(MissingEntityException.class, () -> {
-			notificationService.update(null, 10);
-		});
-		
-		assertEquals(message, exception.getMessage());
 	}
 	
 	@Test
 	@Rollback
 	public void delete_ValidId() {
-		notificationService.delete(1);
+		notificationService.delete(3);
 		Exception exception = assertThrows(MissingEntityException.class, () -> {
-			notificationService.findById(1);
+			notificationService.findById(2);
 		});
 		
 		assertEquals(message, exception.getMessage());
 	}
 	
 	@Test
-	public void delete_InvalidId() {
-		Exception exception = assertThrows(MissingEntityException.class, () -> {
-			notificationService.delete(10);
-		});
+	public void getNotificationForCookAndBartender_ReturnsValidNotifications() {
+		List<Notification> notifications = notificationService.getNotificationsForCookAndBartender();
 		
-		assertEquals(message, exception.getMessage());
+		assertEquals(1, notifications.size());
 	}
 	
+	@ParameterizedTest
+	@MethodSource("provideParametersForGetNotificationForWaiter")
+	public void getNotificationForWaiter_ReturnsValidNotifications(int expected, int waiterId) {
+		List<Notification> notifications = notificationService.getNotificationForWaiter(waiterId);
+		
+		assertEquals(expected, notifications.size());
+	}
+	
+	private static Stream<Arguments> provideParametersForGetNotificationForWaiter() {
+		
+		return Stream.of(
+				Arguments.of(2, 8),
+				Arguments.of(4, 7)
+				);
+	}
 	
 	
 }

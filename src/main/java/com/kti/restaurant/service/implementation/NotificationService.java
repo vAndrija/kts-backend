@@ -57,26 +57,14 @@ public class NotificationService implements INotificationService {
     }
 
     @Override
-    public Notification update(Notification notification, Integer id) throws Exception {
-        Notification notificationToUpdate = this.findById(id);
-
-        notificationToUpdate.setSeen(notification.getSeen());
-
-        notificationRepository.save(notificationToUpdate);
-
-        return notificationToUpdate;
-    }
-
-    @Override
     public void delete(Integer id) {
-        this.findById(id);
-        notificationRepository.deleteById(id);
+    	for(Notification notification: this.findAll()) {
+    		if(notification.getOrderItem().getId() == id) {
+    			notificationRepository.deleteById(notification.getId());
+    		}
+    	}
     }
 
-    /* Poruka ce biti poslata svim klijentima koji su pretplatili na /socket-publisher topic,
-     * a poruka koja im se salje je messageConverted (simpMessagingTemplate.convertAndSend metoda).
-     * Na ovaj endpoint klijenti salju poruke, ruta na koju klijenti salju poruke je /send/message (parametar @MessageMapping anotacije)
-     */
     @Override
     public Map<String, String> broadcastOrderItemStatusChanged(String message) {
         Map<String, String> messageConverted = parseMessage(message);
@@ -85,7 +73,7 @@ public class NotificationService implements INotificationService {
             if (messageConverted.containsKey("status")) {
             	String status = messageConverted.get("status");
             	
-            	if (status.equalsIgnoreCase("Pripremljeno")) {
+            	if (status.equalsIgnoreCase("Pripremljeno") || status.equalsIgnoreCase("Preuzeto")) {
             		Integer orderItemId = Integer.parseInt(messageConverted.get("orderItemId"));
             		Integer waiterId = orderItemService.findByIdWithOrderAndWaiter(orderItemId).getOrder().getWaiter().getId();
             		
@@ -100,7 +88,7 @@ public class NotificationService implements INotificationService {
     @Override
     public Map<String, String> broadcastOrderCreated(String message) {
         Map<String, String> messageConverted = parseMessage(message);
-
+        
         if (messageConverted != null) {
             List<Bartender> bartenders = bartenderService.findAll();
             List<Cook> cooks = cookService.findAll();
@@ -128,5 +116,20 @@ public class NotificationService implements INotificationService {
         }
 
         return parsedMessage;
-    }   
+    }
+
+	@Override
+	public Notification update(Notification entity, Integer id) throws Exception {
+		return null;
+	}   
+	
+	@Override
+	public List<Notification> getNotificationForWaiter(Integer id) {
+		return notificationRepository.findNotificationsForWaiter(id);
+	}
+	
+	@Override 
+	public List<Notification> getNotificationsForCookAndBartender() {
+		return notificationRepository.findNotificationsForCookAndBartender();
+	}
 }

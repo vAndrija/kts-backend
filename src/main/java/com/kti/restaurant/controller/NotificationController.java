@@ -1,6 +1,6 @@
 package com.kti.restaurant.controller;
 
-import com.kti.restaurant.dto.notification.CreateUpdateNotificationDto;
+import com.kti.restaurant.dto.notification.CreateNotificationDto;
 import com.kti.restaurant.dto.notification.NotificationDto;
 import com.kti.restaurant.mapper.NotificationMapper;
 import com.kti.restaurant.model.Notification;
@@ -30,15 +30,26 @@ public class NotificationController {
         this.notificationMapper = notificationMapper;
     }
 
-    @GetMapping("")
+    @GetMapping("/waiter/{id}")
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
-    public ResponseEntity<List<NotificationDto>> getAllNotifications() {
-        List<NotificationDto> notificationDtos = notificationService.findAll().stream()
+    public ResponseEntity<List<NotificationDto>> getAllNotificationsForWaiter(@PathVariable Integer id) {
+        List<NotificationDto> notificationDtos = notificationService.getNotificationForWaiter(id).stream()
                 .map(notification -> this.notificationMapper.fromNotificationToNotificationDto(notification)).collect(Collectors.toList());
 
         return new ResponseEntity<>(notificationDtos, HttpStatus.OK);
     }
 
+    @GetMapping("/bartender-cook")
+    @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
+    public ResponseEntity<List<NotificationDto>> getAllNotificationsForCookAndBartender() {
+    	
+        List<NotificationDto> notificationDtos = notificationService.getNotificationsForCookAndBartender().stream()
+                .map(notification -> this.notificationMapper.fromNotificationToNotificationDto(notification)).collect(Collectors.toList());
+
+        return new ResponseEntity<>(notificationDtos, HttpStatus.OK);
+    }
+
+    
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
     public ResponseEntity<NotificationDto> getNotificationById(@PathVariable Integer id) throws Exception {
@@ -49,7 +60,7 @@ public class NotificationController {
 
     @PostMapping("")
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
-    public ResponseEntity<NotificationDto> createNotification(@Valid @RequestBody CreateUpdateNotificationDto notificationDto) throws Exception {
+    public ResponseEntity<NotificationDto> createNotification(@Valid @RequestBody CreateNotificationDto notificationDto) throws Exception {
         Notification notification = notificationService.create(notificationMapper.fromCreateNotificationDtoToNotification(notificationDto));
 
         if(notification != null) {
@@ -59,18 +70,12 @@ public class NotificationController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
-    public ResponseEntity<NotificationDto> updateNotification(@PathVariable Integer id) throws Exception {
-        Notification notification = notificationService.update(new Notification() {{ setSeen(Boolean.TRUE); }}, id);
-        
-        return new ResponseEntity<>(notificationMapper.fromNotificationToNotificationDto(notification), HttpStatus.OK);
-    }
-
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
     @PreAuthorize("hasAnyRole('COOK', 'BARTENDER', 'WAITER')")
     public ResponseEntity<?> deleteNotification(@PathVariable Integer id) throws Exception {
-        notificationService.delete(id);
+    	
+   		notificationService.delete(id);
+    	
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

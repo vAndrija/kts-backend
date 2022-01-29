@@ -14,7 +14,6 @@ public class OrderItemDto {
     @Min(value = 1, message = "Quantity should be greater than 0")
     private Integer quantity;
 
-    @NotEmpty(message = "Note should not be null or empty")
     private String note;
 
     @NotNull(message = "Status should not be null")

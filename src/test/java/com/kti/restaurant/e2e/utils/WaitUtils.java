@@ -42,6 +42,10 @@ public class WaitUtils {
 	public static List<WebElement> numberOfElementsWait(WebDriver driver, By locator, int wait, int number) {
 		return new WebDriverWait(driver, wait).until(ExpectedConditions.numberOfElementsToBe(locator, number));
 	}
+	
+	public static boolean textWait(WebDriver driver, WebElement element, String text, int wait) {
+		return new WebDriverWait(driver, wait).until(ExpectedConditions.textToBePresentInElement(element, text));
+	}
 
 	public static boolean isPresent(WebDriver driver, By locator) {
 
