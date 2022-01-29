@@ -5,10 +5,8 @@ import com.kti.restaurant.exception.ConflictException;
 import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Manager;
 import com.kti.restaurant.model.Role;
+import com.kti.restaurant.repository.*;
 import com.kti.restaurant.repository.ManagerRepository;
-import com.kti.restaurant.repository.ManagerRepository;
-import com.kti.restaurant.repository.RoleRepository;
-import com.kti.restaurant.repository.UserRepository;
 import com.kti.restaurant.service.EmailService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +30,9 @@ public class ManagerServiceUnitTests {
 
     @Mock
     private ManagerRepository managerRepository;
+
+    @Mock
+    private SalaryRepository salaryRepository;
 
     @Mock
     private UserRepository userRepository;
@@ -81,6 +82,8 @@ public class ManagerServiceUnitTests {
         when(userRepository.findByEmailAddress("milutin@zolotic.com"))
                 .thenReturn(null);
         when(managerRepository.save(any()))
+                .thenAnswer(a -> a.getArgument(0));
+        when(salaryRepository.save(any()))
                 .thenAnswer(a -> a.getArgument(0));
         Role managerRole = new Role();
         managerRole.setId(4L);

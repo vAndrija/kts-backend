@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MenuMapper {
     public Menu fromMenuDtoToMenu(MenuDto menuDto) {
-        return new Menu(menuDto.getName(), menuDto.getStartDuration(), menuDto.getEndDuration());
+        return new Menu(menuDto.getName(), menuDto.getDurationStart(), menuDto.getDurationEnd());
     }
 
     public MenuDto fromMenuToMenuDto(Menu menu) {

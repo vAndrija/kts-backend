@@ -5,6 +5,7 @@ import com.kti.restaurant.exception.MissingEntityException;
 import com.kti.restaurant.model.Role;
 import com.kti.restaurant.model.Waiter;
 import com.kti.restaurant.repository.RoleRepository;
+import com.kti.restaurant.repository.SalaryRepository;
 import com.kti.restaurant.repository.UserRepository;
 import com.kti.restaurant.repository.WaiterRepository;
 import com.kti.restaurant.service.EmailService;
@@ -33,6 +34,9 @@ public class WaiterServiceUnitTests {
 
     @Mock
     private WaiterRepository waiterRepository;
+
+    @Mock
+    private SalaryRepository salaryRepository;
 
     @Mock
     private RoleRepository roleRepository;
@@ -92,6 +96,8 @@ public class WaiterServiceUnitTests {
         List<Role> roles = new ArrayList<Role>();
         roles.add(role);
         waiterForCreate.setRoles(roles);
+        when(salaryRepository.save(any()))
+                .thenAnswer(a -> a.getArgument(0));
 
         when(userRepository.findByEmailAddress("anaperic@gmail.com")).thenReturn(null);
         when(waiterRepository.save(any()))

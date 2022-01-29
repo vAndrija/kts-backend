@@ -2,21 +2,30 @@ package com.kti.restaurant.controller;
 
 import com.kti.restaurant.dto.JwtAuthenticationRequest;
 import com.kti.restaurant.dto.discount.DiscountDto;
+import com.kti.restaurant.dto.menuitem.UpdateMenuItemDto;
 import com.kti.restaurant.model.Discount;
 import com.kti.restaurant.model.UserTokenState;
+import com.kti.restaurant.model.enums.MenuItemType;
 import com.kti.restaurant.service.implementation.DiscountService;
+import com.kti.restaurant.utils.GsonUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.client.RestClientException;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -44,6 +53,7 @@ public class DiscountControllerIntegrationTests {
 
         headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
     }
 
     @Test
@@ -125,32 +135,41 @@ public class DiscountControllerIntegrationTests {
         assertEquals(size, discountService.findAll().size());
     }
 
-    @Test
-    public void createDiscount_InvalidCurrentValue_ReturnsBadRequest() {
+    @ParameterizedTest
+    @MethodSource("provideDiscountForCreate")
+    public void createDiscount_InvalidDiscount_ReturnsBadRequest(Integer value, LocalDate startDate, LocalDate endDate,
+                                                                     Integer menuItemId, Boolean isCurrent,
+                                                                     String bodyParameter, String errorMessage) {
+
         int size = discountService.findAll().size();
 
-        HttpEntity<DiscountDto> httpEntity = new HttpEntity<DiscountDto>(new DiscountDto(10, LocalDate.parse("2021-11-11"),
-                LocalDate.parse("2022-05-11"), 5, null), headers);
-        ResponseEntity<Discount> responseEntity =
-                restTemplate.postForEntity("/api/v1/discount", httpEntity,
-                        Discount.class);
+        ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() {
+        };
+
+        HttpEntity<String> httpEntity = new HttpEntity<>(GsonUtils.ToJson(new DiscountDto(value, startDate, endDate,
+                menuItemId, isCurrent)), headers);
+        ResponseEntity<HashMap<String, String>> responseEntity = restTemplate.exchange("/api/v1/discount", HttpMethod.POST, httpEntity, responseType);
+
+        HashMap<String, String> body = responseEntity.getBody();
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(errorMessage, body.get(bodyParameter));
         assertEquals(size, discountService.findAll().size());
     }
 
-    @Test
-    public void createDiscount_InvalidDates_ReturnsBadRequest() {
-        int size = discountService.findAll().size();
-
-        HttpEntity<DiscountDto> httpEntity = new HttpEntity<DiscountDto>(new DiscountDto(10, LocalDate.parse("2022-05-11"),
-                LocalDate.parse("2021-11-11"),5, null), headers);
-        ResponseEntity<Discount> responseEntity =
-                restTemplate.postForEntity("/api/v1/discount", httpEntity,
-                        Discount.class);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertEquals(size, discountService.findAll().size());
+    private static Stream<Arguments> provideDiscountForCreate() {
+        return Stream.of(
+                Arguments.of(null, LocalDate.parse("2022-05-11"), LocalDate.parse("2022-11-11"), 5, true,
+                        "value", "Value should not be null"),
+                Arguments.of(10, null, LocalDate.parse("2022-11-11"), 5, true,
+                        "startDate", "Start date should not be null"),
+                Arguments.of(10, LocalDate.parse("2022-05-11"), null, 5, true,
+                        "endDate", "End date should not be null"),
+                Arguments.of(10, LocalDate.parse("2022-05-11"), LocalDate.parse("2022-11-11"), null, true,
+                        "menuItemId", "Menu item id should not be null"),
+                Arguments.of(10, LocalDate.parse("2022-05-11"), LocalDate.parse("2022-11-11"), 5, null,
+                        "isCurrent", "Is current should not be null")
+        );
     }
 
     @Test
@@ -184,15 +203,38 @@ public class DiscountControllerIntegrationTests {
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
-    @Test
-    public void updateDiscount_InvalidDiscountMenuItemIt_ReturnsBadRequest() {
-        HttpEntity<DiscountDto> httpEntity = new HttpEntity<DiscountDto>(new DiscountDto(15, LocalDate.parse("2021-11-11"),
-                LocalDate.parse("2022-05-11"), null, true), headers);
-        ResponseEntity<Discount> responseEntity =
-                restTemplate.exchange("/api/v1/discount/{id}", HttpMethod.PUT, httpEntity,
-                        Discount.class, 2);
+    @ParameterizedTest
+    @MethodSource("provideDiscountForUpdate")
+    public void updateDiscount_InvalidDiscount_ReturnsBadRequest(Integer value, LocalDate startDate, LocalDate endDate,
+                                                                 Integer menuItemId, Boolean isCurrent,
+                                                                 String bodyParameter, String errorMessage) {
+
+        ParameterizedTypeReference<HashMap<String, String>> responseType = new ParameterizedTypeReference<HashMap<String, String>>() {
+        };
+
+        HttpEntity<String> httpEntity = new HttpEntity<>(GsonUtils.ToJson(new DiscountDto(value, startDate, endDate,
+                menuItemId, isCurrent)), headers);
+        ResponseEntity<HashMap<String, String>> responseEntity = restTemplate.exchange("/api/v1/discount/{id}", HttpMethod.PUT, httpEntity, responseType, 1);
+
+        HashMap<String, String> body = responseEntity.getBody();
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(errorMessage, body.get(bodyParameter));
+    }
+
+    private static Stream<Arguments> provideDiscountForUpdate() {
+        return Stream.of(
+                Arguments.of(null, LocalDate.parse("2022-05-11"), LocalDate.parse("2022-11-11"), 5, true,
+                        "value", "Value should not be null"),
+                Arguments.of(10, null, LocalDate.parse("2022-11-11"), 5, true,
+                        "startDate", "Start date should not be null"),
+                Arguments.of(10, LocalDate.parse("2022-05-11"), null, 5, true,
+                        "endDate", "End date should not be null"),
+                Arguments.of(10, LocalDate.parse("2022-05-11"), LocalDate.parse("2022-11-11"), null, true,
+                        "menuItemId", "Menu item id should not be null"),
+                Arguments.of(10, LocalDate.parse("2022-05-11"), LocalDate.parse("2022-11-11"), 5, null,
+                        "isCurrent", "Is current should not be null")
+        );
     }
 
     @Test

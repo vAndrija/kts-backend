@@ -8,6 +8,7 @@ import com.kti.restaurant.model.Salary;
 import com.kti.restaurant.model.User;
 import com.kti.restaurant.repository.ManagerRepository;
 import com.kti.restaurant.repository.RoleRepository;
+import com.kti.restaurant.repository.SalaryRepository;
 import com.kti.restaurant.repository.UserRepository;
 import com.kti.restaurant.service.EmailService;
 import com.kti.restaurant.service.contract.IManagerService;
@@ -27,18 +28,18 @@ public class ManagerService implements IManagerService {
     private RoleRepository roleRepository;
     private UserRepository userRepository;
     private EmailService emailService;
-    private SalaryService salaryService;
+    private SalaryRepository salaryRepository;
 
     @Autowired
     public ManagerService(ManagerRepository managerRepository, PasswordEncoder passwordEncoder,
                           RoleRepository roleRepository,
-                          UserRepository userRepository, EmailService emailService, SalaryService salaryService) {
+                          UserRepository userRepository, EmailService emailService, SalaryRepository salaryRepository) {
         this.managerRepository = managerRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
-        this.salaryService = salaryService;
+        this.salaryRepository = salaryRepository;
     }
 
 
@@ -66,7 +67,7 @@ public class ManagerService implements IManagerService {
         entity.getRoles().add(roleRepository.getById(4L));
         Manager manager = managerRepository.save(entity);
         Salary salary = new Salary(45000.00, LocalDate.now(), LocalDate.now(), manager);
-        salaryService.create(salary);
+        salaryRepository.save(salary);
         return entity;
     }
 

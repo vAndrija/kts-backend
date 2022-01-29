@@ -37,7 +37,7 @@ public class MenuItemsListE2ETest {
     }
 
     @Test
-    public void ChooseMenuAndReviewMenuItemsTest() throws InterruptedException {
+    public void chooseMenuAndReviewMenuItemsTest() throws InterruptedException {
         menuItemsListPage.clickLoadMore();
 
         assertTrue(menuItemsListPage.getLoadedMenuItems(8).size() == 8);
@@ -47,21 +47,21 @@ public class MenuItemsListE2ETest {
     }
 
     @Test
-    public void SearchMenuItemsTest() {
+    public void searchMenuItemsTest() {
         menuItemsListPage.setSearchParamInputField("cola");
         menuItemsListPage.clickSearchButton();
         assertTrue(menuItemsListPage.getLoadedMenuItems(1).size() == 1);
     }
 
     @Test
-    public void FilterMenuItems() {
+    public void filterMenuItems() {
         menuItemsListPage.setCategorySelect("Glavno jelo");
         menuItemsListPage.clickSearchButton();
         assertTrue(menuItemsListPage.getLoadedMenuItems(4).size() == 4);
     }
 
     @Test
-    public void SearchAndFilterMenuItems() {
+    public void searchAndFilterMenuItems() {
         menuItemsListPage.setSearchParamInputField("strudla");
         menuItemsListPage.setCategorySelect("Dezert");
         menuItemsListPage.clickSearchButton();
