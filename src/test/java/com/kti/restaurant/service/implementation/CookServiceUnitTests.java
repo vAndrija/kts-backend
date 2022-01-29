@@ -6,6 +6,7 @@ import com.kti.restaurant.model.Cook;
 import com.kti.restaurant.model.Role;
 import com.kti.restaurant.repository.CookRepository;
 import com.kti.restaurant.repository.RoleRepository;
+import com.kti.restaurant.repository.SalaryRepository;
 import com.kti.restaurant.repository.UserRepository;
 import com.kti.restaurant.service.EmailService;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +31,9 @@ public class CookServiceUnitTests {
 
     @Mock
     private CookRepository cookRepository;
+
+    @Mock
+    private SalaryRepository salaryRepository;
 
     @Mock
     private UserRepository userRepository;
@@ -80,6 +84,8 @@ public class CookServiceUnitTests {
         when(userRepository.findByEmailAddress("milutin@zolotic.com"))
                 .thenReturn(null);
         when(cookRepository.save(any()))
+                .thenAnswer(a -> a.getArgument(0));
+        when(salaryRepository.save(any()))
                 .thenAnswer(a -> a.getArgument(0));
         Role CookRole = new Role();
         CookRole.setId(3L);

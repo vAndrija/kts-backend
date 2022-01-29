@@ -7,6 +7,7 @@ import com.kti.restaurant.model.Salary;
 import com.kti.restaurant.model.User;
 import com.kti.restaurant.model.Waiter;
 import com.kti.restaurant.repository.RoleRepository;
+import com.kti.restaurant.repository.SalaryRepository;
 import com.kti.restaurant.repository.UserRepository;
 import com.kti.restaurant.repository.WaiterRepository;
 import com.kti.restaurant.service.EmailService;
@@ -27,18 +28,18 @@ public class WaiterService implements IWaiterService {
     private RoleRepository roleRepository;
     private UserRepository userRepository;
     private EmailService emailService;
-    private SalaryService salaryService;
+    private SalaryRepository salaryRepository;
 
     @Autowired
     public WaiterService(WaiterRepository waiterRepository, PasswordEncoder passwordEncoder,
                          RoleRepository roleRepository, UserRepository userRepository,
-                         EmailService emailService, SalaryService salaryService) {
+                         EmailService emailService, SalaryRepository salaryRepository) {
         this.waiterRepository = waiterRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
-        this.salaryService = salaryService;
+        this.salaryRepository = salaryRepository;
     }
 
     @Override
@@ -65,7 +66,7 @@ public class WaiterService implements IWaiterService {
         entity.getRoles().add(roleRepository.getById(5L));
         Waiter waiter = waiterRepository.save(entity);
         Salary salary = new Salary(45000.00, LocalDate.now(), LocalDate.now(), waiter);
-        salaryService.create(salary);
+        salaryRepository.save(salary);
         return entity;
     }
 

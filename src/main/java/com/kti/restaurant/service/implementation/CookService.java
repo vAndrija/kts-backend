@@ -8,6 +8,7 @@ import com.kti.restaurant.model.Salary;
 import com.kti.restaurant.model.User;
 import com.kti.restaurant.repository.CookRepository;
 import com.kti.restaurant.repository.RoleRepository;
+import com.kti.restaurant.repository.SalaryRepository;
 import com.kti.restaurant.repository.UserRepository;
 import com.kti.restaurant.service.EmailService;
 import com.kti.restaurant.service.contract.ICookService;
@@ -28,18 +29,18 @@ public class CookService implements ICookService {
     private RoleRepository roleRepository;
     private UserRepository userRepository;
     private EmailService emailService;
-    private SalaryService salaryService;
+    private SalaryRepository salaryRepository;
 
     @Autowired
     public CookService(CookRepository cookRepository, @Lazy PasswordEncoder passwordEncoder,
                        RoleRepository roleRepository, UserRepository userRepository,
-                       EmailService emailService, SalaryService salaryService) {
+                       EmailService emailService, SalaryRepository salaryRepository) {
         this.cookRepository = cookRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.emailService = emailService;
-        this.salaryService = salaryService;
+        this.salaryRepository = salaryRepository;
     }
 
     @Override
@@ -66,7 +67,7 @@ public class CookService implements ICookService {
         entity.getRoles().add(roleRepository.getById(3L));
         Cook cook = cookRepository.save(entity);
         Salary salary = new Salary(45000.00, LocalDate.now(), LocalDate.now(), cook);
-        salaryService.create(salary);
+        salaryRepository.save(salary);
         return entity;
     }
 
